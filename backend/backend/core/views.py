@@ -14,6 +14,11 @@ from rest_framework.permissions import AllowAny
 
 from rest_framework.generics import RetrieveAPIView
 
+from .models import Enquiry
+from .enquiry_serializer import EnquirySerializer
+from rest_framework.permissions import AllowAny
+
+
 
 @api_view(["GET"])
 def trip_list(request):
@@ -83,3 +88,23 @@ def signup_view(request):
         "username": user.username,
         "role": "USER"
     }, status=201)
+
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def create_enquiry(request):
+    serializer = EnquirySerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+
+    enquiry = serializer.save()
+
+    # attach logged-in user if present
+    if request.user.is_authenticated:
+        enquiry.user = request.user
+        enquiry.save()
+
+    return Response(
+        {"message": "Enquiry submitted successfully"},
+        status=201
+    )
