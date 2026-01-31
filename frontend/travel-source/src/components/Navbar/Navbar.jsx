@@ -1,6 +1,8 @@
 import styles from "./Navbar.module.css";
+import {useNavigate} from "react-router-dom";
 
 const Navbar = () => {
+    const navigate = useNavigate();
   return (
     <header className={styles.navbar}>
       <div className={styles.container}>
@@ -12,14 +14,14 @@ const Navbar = () => {
               <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
-          <div className={styles.logo}>
+          <div className={styles.logo} onClick={() => navigate("/")}>
             <span className={styles.logoPrimary}>Travel</span>
             <span className={styles.logoAccent}>Professor</span>
           </div>
         </div>
 
         <nav className={styles.nav}>
-          <button className={styles.loginBtn}>
+          <button className={styles.loginBtn} onClick={() => navigate("/login")}>
             <span className={styles.btnText}>Get Started</span>
             <span className={styles.btnIcon}>
               <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
