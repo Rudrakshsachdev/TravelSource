@@ -99,6 +99,26 @@
   align-items: center;
 }
 
+.profileBtn {
+  background: transparent;
+  color: #1e3a8a;
+  border: 1px solid rgba(14, 165, 233, 0.3);
+  padding: 10px 20px;
+  border-radius: var(--radius-lg);
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  margin-right: 12px;
+}
+
+.profileBtn:hover {
+  background: rgba(14, 165, 233, 0.05);
+  border-color: #0ea5e9;
+  transform: translateY(-1px);
+}
+
 .loginBtn {
   position: relative;
   background: var(--accent-gradient);

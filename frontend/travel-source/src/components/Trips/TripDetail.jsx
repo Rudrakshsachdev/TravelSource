@@ -120,7 +120,7 @@ const TripDetail = () => {
                 ...formData,
             });
 
-            setSuccess("Enquiry submitted successfully!");
+            setSuccess("Thanks! We’ve received your enquiry and will contact you soon.");
             setFormData({
                 name: "",
                 email: "",
@@ -319,34 +319,21 @@ const TripDetail = () => {
                                 <div className={styles.highlights}>
                                     <h4 className={styles.highlightsTitle}>Trip Highlights</h4>
                                     <div className={styles.highlightsGrid}>
-                                        <div className={styles.highlightItem}>
-                                            <div className={styles.highlightIcon}>🏞️</div>
-                                            <div className={styles.highlightContent}>
-                                                <h5>Scenic Views</h5>
-                                                <p>Breathtaking landscapes and photo opportunities</p>
-                                            </div>
-                                        </div>
-                                        <div className={styles.highlightItem}>
-                                            <div className={styles.highlightIcon}>🏨</div>
-                                            <div className={styles.highlightContent}>
-                                                <h5>Premium Stays</h5>
-                                                <p>Comfortable accommodations in prime locations</p>
-                                            </div>
-                                        </div>
-                                        <div className={styles.highlightItem}>
-                                            <div className={styles.highlightIcon}>🍽️</div>
-                                            <div className={styles.highlightContent}>
-                                                <h5>Local Cuisine</h5>
-                                                <p>Authentic culinary experiences included</p>
-                                            </div>
-                                        </div>
-                                        <div className={styles.highlightItem}>
-                                            <div className={styles.highlightIcon}>👨‍🏫</div>
-                                            <div className={styles.highlightContent}>
-                                                <h5>Expert Guide</h5>
-                                                <p>Knowledgeable local guide throughout the trip</p>
-                                            </div>
-                                        </div>
+                                        {trip.highlights && trip.highlights.length > 0 ? (
+                                            trip.highlights.map((highlight, index) => (
+                                                <div key={index} className={styles.highlightItem}>
+                                                    <div className={styles.highlightIcon}>
+                                                        {highlight.icon || '📍'}
+                                                    </div>
+                                                    <div className={styles.highlightContent}>
+                                                        <h5>{highlight.title}</h5>
+                                                        <p>{highlight.description}</p>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <p className={styles.noData}>Stay tuned! We are finalizing the breathtaking highlights for this journey.</p>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -363,13 +350,23 @@ const TripDetail = () => {
                                         Daily Itinerary
                                     </h3>
                                     <div className={styles.itineraryContent}>
-                                        {trip.itinerary ? (
-                                            <p>{trip.itinerary}</p>
+                                        {trip.itinerary && Array.isArray(trip.itinerary) && trip.itinerary.length > 0 ? (
+                                            <div className={styles.itineraryDays}>
+                                                {trip.itinerary.map((day, index) => (
+                                                    <div key={index} className={styles.itineraryDay}>
+                                                        <div className={styles.dayNumber}>Day {index + 1}</div>
+                                                        <div className={styles.dayContent}>
+                                                            <h5 className={styles.dayTitle}>{day.title}</h5>
+                                                            <p className={styles.dayDescription}>{day.description}</p>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
                                         ) : (
                                             <div className={styles.emptyItinerary}>
-                                                <p>Detailed itinerary coming soon. Our travel experts are crafting the perfect daily schedule.</p>
+                                                <p>Detailed itinerary coming soon. Our travel experts are crafting the perfect daily schedule for you.</p>
                                                 <div className={styles.itineraryDays}>
-                                                    {Array.from({ length: trip.duration_days }, (_, i) => (
+                                                    {Array.from({ length: trip.duration_days || 3 }, (_, i) => (
                                                         <div key={i} className={styles.itineraryDay}>
                                                             <div className={styles.dayNumber}>Day {i + 1}</div>
                                                             <div className={styles.dayContent}>
@@ -399,21 +396,33 @@ const TripDetail = () => {
                                         <div className={styles.inclusionsColumn}>
                                             <h4>Included</h4>
                                             <ul>
-                                                <li>All accommodation as per itinerary</li>
-                                                <li>Meals as mentioned (Breakfast daily)</li>
-                                                <li>All transportation during the tour</li>
-                                                <li>Expert local guide services</li>
-                                                <li>Entrance fees to mentioned sites</li>
+                                                {trip.inclusions && trip.inclusions.length > 0 ? (
+                                                    trip.inclusions.map((item, index) => (
+                                                        <li key={index}>{item}</li>
+                                                    ))
+                                                ) : (
+                                                    <>
+                                                        <li>All accommodation as per itinerary</li>
+                                                        <li>Expert local guide services</li>
+                                                        <li>Selected meals and activities</li>
+                                                    </>
+                                                )}
                                             </ul>
                                         </div>
                                         <div className={styles.inclusionsColumn}>
                                             <h4>Not Included</h4>
                                             <ul>
-                                                <li>International flights</li>
-                                                <li>Travel insurance</li>
-                                                <li>Personal expenses</li>
-                                                <li>Optional activities</li>
-                                                <li>Tips and gratuities</li>
+                                                {trip.exclusions && trip.exclusions.length > 0 ? (
+                                                    trip.exclusions.map((item, index) => (
+                                                        <li key={index}>{item}</li>
+                                                    ))
+                                                ) : (
+                                                    <>
+                                                        <li>International flights</li>
+                                                        <li>Travel insurance</li>
+                                                        <li>Personal expenses</li>
+                                                    </>
+                                                )}
                                             </ul>
                                         </div>
                                     </div>

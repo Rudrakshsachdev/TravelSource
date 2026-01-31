@@ -70,13 +70,22 @@ export const signupUser = async (data) => {
 };
 
 export const submitEnquiry = async (data) => {
+  const token = localStorage.getItem("accessToken");
+  
+  const headers = {
+    "Content-Type": "application/json",
+  };
+  
+  // Include auth token if user is logged in
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   const response = await fetch(
     `${API_BASE_URL}/v1/enquiries/`,
     {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers,
       body: JSON.stringify(data),
     }
   );
@@ -88,4 +97,37 @@ export const submitEnquiry = async (data) => {
   }
 
   return result;
+};
+
+export const fetchMyEnquiries = async () => {
+  const token = localStorage.getItem("accessToken");
+
+  if (!token) {
+    throw new Error("Please log in to view your enquiries");
+  }
+
+  const response = await fetch(
+    `${API_BASE_URL}/v1/my-enquiries/`,
+    {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    }
+  );
+
+  // Handle expired/invalid token
+  if (response.status === 401) {
+    // Clear invalid token
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("role");
+    localStorage.removeItem("username");
+    throw new Error("Session expired. Please log in again.");
+  }
+
+  if (!response.ok) {
+    throw new Error("Failed to load enquiries");
+  }
+
+  return response.json();
 };

@@ -9,17 +9,17 @@ import { Navigate } from "react-router-dom";
 import { getAuthData } from "../utils/auth";
 
 const ProtectedRoute = ({ children, allowedRole }) => {
-  const auth = getAuthData();
+    const auth = getAuthData();
 
-  if (!auth) {
-    return <Navigate to="/login" replace />;
-  }
+    if (!auth) {
+        return <Navigate to="/login" replace />;
+    }
 
-  if (allowedRole && auth.role !== allowedRole) {
-    return <Navigate to="/" replace />;
-  }
+    if (allowedRole && auth.role?.toUpperCase() !== allowedRole?.toUpperCase()) {
+        return <Navigate to="/" replace />;
+    }
 
-  return children;
+    return children;
 };
 
 export default ProtectedRoute;

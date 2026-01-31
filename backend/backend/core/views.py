@@ -1,22 +1,17 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from .models import Trip
-from .serializers import TripSerializer
-
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
-from .auth_serializer import LoginSerializer
 
-from rest_framework.permissions import IsAuthenticated
+from .models import Trip, Enquiry
 
-from .signup_serializer import SignupSerializer
-from rest_framework.permissions import AllowAny
-
-from rest_framework.generics import RetrieveAPIView
-
-from .models import Enquiry
-from .enquiry_serializer import EnquirySerializer
-from rest_framework.permissions import AllowAny
+from .serializers import (
+    TripSerializer,
+    LoginSerializer,
+    SignupSerializer,
+    EnquirySerializer,
+    UserEnquirySerializer
+)
 
 
 
@@ -108,3 +103,12 @@ def create_enquiry(request):
         {"message": "Enquiry submitted successfully"},
         status=201
     )
+
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def my_enquiries(request):
+    enquiries = Enquiry.objects.filter(user=request.user).order_by("-created_at")
+    serializer = UserEnquirySerializer(enquiries, many=True)
+    return Response(serializer.data)
