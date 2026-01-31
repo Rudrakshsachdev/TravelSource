@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 from .signup_serializer import SignupSerializer
 from rest_framework.permissions import AllowAny
 
-
+from rest_framework.generics import RetrieveAPIView
 
 
 @api_view(["GET"])
@@ -20,6 +20,21 @@ def trip_list(request):
     trips = Trip.objects.filter(is_active=True)
     serializer = TripSerializer(trips, many=True)
     return Response(serializer.data)
+
+
+@api_view(["GET"])
+def trip_detail(request, pk):
+    try:
+        trip = Trip.objects.get(pk=pk, is_active=True)
+    except Trip.DoesNotExist:
+        return Response(
+            {"detail": "Trip not found"},
+            status=404
+        )
+
+    serializer = TripSerializer(trip)
+    return Response(serializer.data)
+
 
 @api_view(["GET"])
 def hello_api(request):

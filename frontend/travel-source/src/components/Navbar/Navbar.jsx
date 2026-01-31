@@ -1,8 +1,20 @@
 import styles from "./Navbar.module.css";
 import {useNavigate} from "react-router-dom";
+import {getAuthData, logout} from "../../utils/auth";
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const authData = getAuthData();
+
+    const handleLogout = () => {
+        logout();
+        navigate("/login");
+    };
+
+    const handlePrimaryAction = () => {
+      authData ? handleLogout() : navigate("/login");
+    };
+
   return (
     <header className={styles.navbar}>
       <div className={styles.container}>
@@ -21,8 +33,13 @@ const Navbar = () => {
         </div>
 
         <nav className={styles.nav}>
-          <button className={styles.loginBtn} onClick={() => navigate("/login")}>
-            <span className={styles.btnText}>Get Started</span>
+          {authData && (
+            <span className={styles.userGreeting}>
+              Hi, <span className={styles.username}>{authData.username}</span>
+            </span>
+          )}
+          <button className={styles.loginBtn} onClick={handlePrimaryAction}>
+            <span className={styles.btnText}>{authData ? "Logout" : "Get Started"}</span>
             <span className={styles.btnIcon}>
               <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M4.16699 10H15.8337" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>

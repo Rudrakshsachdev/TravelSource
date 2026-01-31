@@ -10,6 +10,20 @@ export const fetchTrips = async () => {
   return response.json();
 };
 
+
+export const fetchTripDetail = async (id) => {
+  const response = await fetch(
+    `${API_BASE_URL}/v1/trips/${id}/`
+  );
+
+  if (!response.ok) {
+    throw new Error("Trip not found");
+  }
+
+  return response.json();
+};
+
+
 export const loginUser = async (credentials) => {
   const response = await fetch(
     `${API_BASE_URL}/v1/auth/login/`,

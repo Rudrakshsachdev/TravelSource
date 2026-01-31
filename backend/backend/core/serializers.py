@@ -14,5 +14,7 @@ class TripSerializer(serializers.ModelSerializer):
             "duration_days",
             "price",
             "description",
+            "itinerary",
+            "image",
             "is_active",
         ]

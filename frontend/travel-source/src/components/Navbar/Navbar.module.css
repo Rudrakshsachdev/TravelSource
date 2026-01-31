@@ -170,6 +170,21 @@
   height: 14px;
 }
 
+.userGreeting {
+  font-family: var(--font-primary);
+  font-size: 0.95rem;
+  color: #475569;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.username {
+  font-weight: 700;
+  color: #1e3a8a;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .container {
@@ -231,5 +246,9 @@
   .loginBtn {
     padding: 12px;
     border-radius: 50%;
+  }
+
+  .userGreeting {
+    display: none;
   }
 }
