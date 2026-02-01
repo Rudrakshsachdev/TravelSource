@@ -1,10 +1,15 @@
 import { TripsList } from "../components/Trips";
-import { fetchTrips } from "../services/api";
-import { useEffect, useState } from "react";
-import TripCard from "../components/Trips/TripCard";
+import { Reviews } from "../components/Reviews";
+import { WhyChooseUs } from "../components/WhyChooseUs";
 
 const Home = () => {
-return <TripsList />
+  return (
+    <>
+      <TripsList />
+      <Reviews />
+      <WhyChooseUs />
+    </>
+  );
 };
 
 export default Home;
