@@ -10,8 +10,12 @@ from .serializers import (
     LoginSerializer,
     SignupSerializer,
     EnquirySerializer,
-    UserEnquirySerializer
+    UserEnquirySerializer,
+    AdminEnquirySerializer,
+    AdminTripSerializer,
 )
+
+from django.shortcuts import get_object_or_404
 
 
 
@@ -112,3 +116,62 @@ def my_enquiries(request):
     enquiries = Enquiry.objects.filter(user=request.user).order_by("-created_at")
     serializer = UserEnquirySerializer(enquiries, many=True)
     return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def admin_enquiries(request):
+    if request.user.profile.role != "ADMIN":
+        return Response(
+            {"detail": "Not authorized"},
+            status=403
+        )
+
+    enquiries = Enquiry.objects.all().order_by("-created_at")
+    serializer = AdminEnquirySerializer(enquiries, many=True)
+    return Response(serializer.data)
+
+
+
+@api_view(["GET", "POST"])
+@permission_classes([IsAuthenticated])
+def admin_trips(request):
+    if request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    if request.method == "GET":
+        trips = Trip.objects.all().order_by("-id")
+        serializer = AdminTripSerializer(trips, many=True)
+        return Response(serializer.data)
+
+    if request.method == "POST":
+        serializer = AdminTripSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=201)
+
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def admin_update_trip(request, pk):
+    if request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    trip = get_object_or_404(Trip, pk=pk)
+    serializer = AdminTripSerializer(trip, data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data)
+
+
+@api_view(["PATCH"])
+@permission_classes([IsAuthenticated])
+def admin_toggle_trip(request, pk):
+    if request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    trip = get_object_or_404(Trip, pk=pk)
+    trip.is_active = not trip.is_active
+    trip.save()
+
+    return Response({"is_active": trip.is_active})

@@ -1,33 +1,86 @@
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
+import ProtectedRoute from "./components/ProtectedRoute";
+
+// User pages
 import Home from "./pages/Home";
 import Login from "./pages/Login/Login";
-import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
 import Signup from "./pages/Signup/Signup";
-import ProtectedRoute from "./components/ProtectedRoute";
-import { TripDetail } from "./components/Trips";
 import Profile from "./pages/Profile/Profile";
+import { TripDetail } from "./components/Trips";
 
+// Admin
+import AdminLayout from "./admin/AdminLayout";
+import AdminDashboard from "./admin/AdminDashboard";
 
+import AdminEnquiries from "./admin/AdminEnquiries";
+import AdminTrips from "./admin/AdminTrips";
 
 function App() {
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<Home />} />
+    <Routes>
+      {/* USER ROUTES */}
+      <Route
+        path="/"
+        element={
+          <Layout>
+            <Home />
+          </Layout>
+        }
+      />
 
-        <Route path="/login" element={<Login />} />
+      <Route
+        path="/login"
+        element={
+          <Layout>
+            <Login />
+          </Layout>
+        }
+      />
 
-        <Route path="/signup" element={<Signup />} />
+      <Route
+        path="/signup"
+        element={
+          <Layout>
+            <Signup />
+          </Layout>
+        }
+      />
 
-        <Route path="/admin" element={<ProtectedRoute allowedRole="ADMIN"><AdminDashboard /></ProtectedRoute>} />
+      <Route
+        path="/trips/:id"
+        element={
+          <Layout>
+            <TripDetail />
+          </Layout>
+        }
+      />
 
-        <Route path="/trips/:id" element={<TripDetail />} />
+      <Route
+        path="/my-enquiries"
+        element={
+          <ProtectedRoute allowedRole="USER">
+            <Layout>
+              <Profile />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
 
-        <Route path="/my-enquiries" element={<ProtectedRoute allowedRole="USER"><Profile /></ProtectedRoute>} />
-
-      </Routes>
-    </Layout>
+      {/* ADMIN ROUTES (NO USER LAYOUT) */}
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute allowedRole="ADMIN">
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<AdminDashboard />} />
+        <Route path="enquiries" element={<AdminEnquiries />} />
+        <Route path="trips" element={<AdminTrips />} />
+      </Route>
+    </Routes>
   );
 }
 

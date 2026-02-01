@@ -131,3 +131,123 @@ export const fetchMyEnquiries = async () => {
 
   return response.json();
 };
+
+
+export const fetchAdminEnquiries = async () => {
+  const token = localStorage.getItem("accessToken");
+
+  const response = await fetch(
+    `${API_BASE_URL}/v1/admin/enquiries/`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (response.status === 401) {
+    localStorage.clear();
+    window.location.href = "/login";
+    throw new Error("Session expired");
+  }
+
+  if (!response.ok) {
+    throw new Error("Failed to load enquiries");
+  }
+
+  return response.json();
+};
+
+
+export const fetchAdminTrips = async () => {
+  const token = localStorage.getItem("accessToken");
+
+  const response = await fetch(
+    `${API_BASE_URL}/v1/admin/trips/`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (response.status === 401) {
+    localStorage.clear();
+    window.location.href = "/login";
+    throw new Error("Session expired");
+  }
+
+  if (!response.ok) {
+    throw new Error("Failed to load trips");
+  }
+
+  return response.json();
+};
+
+
+export const createTrip = async (data) => {
+  const token = localStorage.getItem("accessToken");
+
+  const response = await fetch(
+    `${API_BASE_URL}/v1/admin/trips/`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    }
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    const errorMessage = errorData.detail || JSON.stringify(errorData) || "Failed to create trip";
+    throw new Error(errorMessage);
+  }
+
+  return response.json();
+};
+
+export const toggleTrip = async (id) => {
+  const token = localStorage.getItem("accessToken");
+
+  const response = await fetch(
+    `${API_BASE_URL}/v1/admin/trips/${id}/toggle/`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to update trip");
+  }
+
+  return response.json();
+};
+
+
+export const updateTrip = async (id, data) => {
+  const token = localStorage.getItem("accessToken");
+
+  const response = await fetch(
+    `${API_BASE_URL}/v1/admin/trips/${id}/`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to update trip");
+  }
+
+  return response.json();
+};

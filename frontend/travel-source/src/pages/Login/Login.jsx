@@ -56,17 +56,17 @@ const Login = () => {
   return (
     <div className={styles.loginPage}>
       <div className={styles.backgroundOverlay}></div>
-      
+
       <div className={styles.container}>
         <div className={styles.headerSection}>
           <div className={styles.logoIcon}>
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
-          
+
           <h1 className={styles.heading}>Welcome Back</h1>
           <p className={styles.subtitle}>Sign in to continue your journey with Travel Professor</p>
         </div>
@@ -75,7 +75,7 @@ const Login = () => {
           {error && (
             <div className={styles.errorContainer}>
               <svg className={styles.errorIcon} viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd"/>
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
               </svg>
               <p className={styles.error}>{error}</p>
             </div>
@@ -84,7 +84,7 @@ const Login = () => {
           <div className={styles.inputGroup}>
             <div className={styles.inputIcon}>
               <svg viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"/>
+                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
               </svg>
             </div>
             <input
@@ -101,7 +101,7 @@ const Login = () => {
           <div className={styles.inputGroup}>
             <div className={styles.inputIcon}>
               <svg viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"/>
+                <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
               </svg>
             </div>
             <input
@@ -152,8 +152,8 @@ const Login = () => {
               <>
                 <span>Continue Your Journey</span>
                 <svg className={styles.buttonIcon} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M4.16699 10H15.8337" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M10.833 5L15.833 10L10.833 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M4.16699 10H15.8337" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M10.833 5L15.833 10L10.833 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </>
             )}
@@ -174,8 +174,8 @@ const Login = () => {
 
         <div className={styles.footer}>
           <p className={styles.footerText}>
-            By continuing, you agree to our 
-            <a href="/terms" className={styles.footerLink}> Terms of Service</a> and 
+            By continuing, you agree to our
+            <a href="/terms" className={styles.footerLink}> Terms of Service</a> and
             <a href="/privacy" className={styles.footerLink}> Privacy Policy</a>
           </p>
         </div>

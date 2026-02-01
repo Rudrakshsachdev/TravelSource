@@ -8,12 +8,12 @@ class Trip(models.Model):
     location = models.CharField(max_length=200)
     price = models.IntegerField()
     duration_days = models.IntegerField()
-    description = models.TextField()
+    description = models.TextField(blank=True)
     itinerary = models.JSONField(blank=True, null=True, help_text="List of daily itinerary objects")
     highlights = models.JSONField(blank=True, null=True, help_text="List of trip highlights")
     inclusions = models.JSONField(blank=True, null=True, help_text="List of included items")
     exclusions = models.JSONField(blank=True, null=True, help_text="List of excluded items")
-    image = models.URLField(blank=True)
+    image = models.URLField(blank=True, default="")
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
