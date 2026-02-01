@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import hello_api, trip_list, login_view, protected_test_view, signup_view, trip_detail, create_enquiry, my_enquiries, admin_enquiries, admin_trips, admin_trip_detail, admin_toggle_trip, admin_users, update_user_role, delete_user
+from .views import hello_api, trip_list, login_view, protected_test_view, signup_view, trip_detail, create_enquiry, my_enquiries, admin_enquiries, admin_trips, admin_trip_detail, admin_toggle_trip, admin_users, update_user_role, delete_user, contact_us, admin_contact_messages
 
 urlpatterns = [
     path("v1/hello/", hello_api),
@@ -17,4 +17,6 @@ urlpatterns = [
     path("v1/admin/users/", admin_users),
     path("v1/admin/users/<int:pk>/role/", update_user_role),
     path("v1/admin/users/<int:pk>/", delete_user),
+    path("v1/contact/", contact_us),
+    path("v1/admin/contact-messages/", admin_contact_messages),
 ]

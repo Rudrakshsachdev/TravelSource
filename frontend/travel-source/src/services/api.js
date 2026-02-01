@@ -363,3 +363,43 @@ export const deleteTrip = async (id) => {
 
   return true;
 };
+
+
+export const sendContactMessage = async (data) => {
+  const res = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/v1/contact/`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to send message");
+  }
+
+  return res.json();
+};
+
+
+export const fetchContactMessages = async () => {
+  const token = localStorage.getItem("accessToken");
+
+  const res = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/v1/admin/contact-messages/`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch contact messages");
+  }
+
+  return res.json();
+};

@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Trip, Enquiry
+from .models import Trip, Enquiry, ContactMessage
 
 from .serializers import (
     TripSerializer,
@@ -13,6 +13,7 @@ from .serializers import (
     UserEnquirySerializer,
     AdminEnquirySerializer,
     AdminTripSerializer,
+    ContactMessageSerializer,
 )
 
 from django.shortcuts import get_object_or_404
@@ -240,3 +241,29 @@ def delete_user(request, pk):
 
     user.delete()
     return Response({"detail": "User deleted"})
+
+
+
+@api_view(["POST"])
+def contact_us(request):
+    serializer = ContactMessageSerializer(data=request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(
+            {"message": "Message sent successfully"},
+            status=201
+        )
+
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def admin_contact_messages(request):
+    if request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    messages = ContactMessage.objects.all().order_by("-created_at")
+    serializer = ContactMessageSerializer(messages, many=True)
+    return Response(serializer.data)

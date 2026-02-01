@@ -6,3 +6,4 @@ from .user_enquiry_serializer import UserEnquirySerializer
 from .admin_enquiry_serializer import AdminEnquirySerializer
 from .admin_trip_serializer import AdminTripSerializer
 from .fetchuser_serializer import UserAdminSerializer
+from .contactmessage_serializer import ContactMessageSerializer

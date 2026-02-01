@@ -8,6 +8,7 @@ import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import Profile from "./pages/Profile/Profile";
 import { TripDetail } from "./components/Trips";
+import ContactUs from "./components/ContactUs/ContactUs";
 
 // Admin
 import AdminLayout from "./admin/AdminLayout";
@@ -16,6 +17,7 @@ import AdminDashboard from "./admin/AdminDashboard";
 import AdminEnquiries from "./admin/AdminEnquiries";
 import AdminTrips from "./admin/AdminTrips";
 import AdminUsers from "./admin/AdminUsers";
+import AdminContactMessage from "./admin/AdminContactMessage";  
 
 function App() {
   return (
@@ -68,6 +70,15 @@ function App() {
         }
       />
 
+      <Route
+        path="/contact"
+        element={
+          <Layout>
+            <ContactUs />
+          </Layout>
+        }
+      />
+
       {/* ADMIN ROUTES (NO USER LAYOUT) */}
       <Route
         path="/admin"
@@ -81,6 +92,7 @@ function App() {
         <Route path="enquiries" element={<AdminEnquiries />} />
         <Route path="trips" element={<AdminTrips />} />
         <Route path="users" element={<AdminUsers />} />
+        <Route path="contact-messages" element={<AdminContactMessage />} />
       </Route>
     </Routes>
   );
