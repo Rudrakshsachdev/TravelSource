@@ -267,3 +267,20 @@ def admin_contact_messages(request):
     messages = ContactMessage.objects.all().order_by("-created_at")
     serializer = ContactMessageSerializer(messages, many=True)
     return Response(serializer.data)
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def delete_contact_message(request, pk):
+    if request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+    
+    try:
+        message = ContactMessage.objects.get(pk=pk)
+        message.delete()
+        return Response(status=204)
+    except ContactMessage.DoesNotExist:
+        return Response({"detail": "Message not found"}, status=404)
+
+
+

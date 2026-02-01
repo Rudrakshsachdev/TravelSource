@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import styles from "./AdminContactMessage.module.css";
-import { fetchContactMessages } from "../services/api";
+import { fetchContactMessages, deleteContactMessage } from "../services/api";
 
 const AdminContactMessage = () => {
     const [messages, setMessages] = useState([]);
@@ -106,9 +106,14 @@ const AdminContactMessage = () => {
 
     const handleDelete = async (id) => {
         if (window.confirm("Are you sure you want to delete this message?")) {
-            // In a real app, you would have an API call here
-            setMessages(prev => prev.filter(msg => msg.id !== id));
-            setSelectedMessage(null);
+            try {
+                await deleteContactMessage(id);
+                setMessages(prev => prev.filter(msg => msg.id !== id));
+                setSelectedMessage(null);
+            } catch (err) {
+                console.error("Failed to delete message:", err);
+                alert("Failed to delete message. Please try again.");
+            }
         }
     };
 

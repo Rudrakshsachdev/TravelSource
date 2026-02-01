@@ -403,3 +403,23 @@ export const fetchContactMessages = async () => {
 
   return res.json();
 };
+
+
+export const deleteContactMessage = async (id) => {
+  const token = localStorage.getItem("accessToken");
+  const response = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/v1/admin/contact-messages/${id}/`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to delete contact message");
+  }
+
+  return true;
+};
