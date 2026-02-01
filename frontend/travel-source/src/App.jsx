@@ -15,6 +15,7 @@ import AdminDashboard from "./admin/AdminDashboard";
 
 import AdminEnquiries from "./admin/AdminEnquiries";
 import AdminTrips from "./admin/AdminTrips";
+import AdminUsers from "./admin/AdminUsers";
 
 function App() {
   return (
@@ -79,6 +80,7 @@ function App() {
         <Route index element={<AdminDashboard />} />
         <Route path="enquiries" element={<AdminEnquiries />} />
         <Route path="trips" element={<AdminTrips />} />
+        <Route path="users" element={<AdminUsers />} />
       </Route>
     </Routes>
   );

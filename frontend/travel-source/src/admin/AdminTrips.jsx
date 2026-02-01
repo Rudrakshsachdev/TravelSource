@@ -4,6 +4,8 @@ import {
     createTrip,
     toggleTrip,
     updateTrip,
+    deleteTrip,
+    uploadImageToCloudinary
 } from "../services/api";
 import styles from "./AdminTrips.module.css";
 
@@ -32,6 +34,7 @@ const AdminTrips = () => {
     const [highlights, setHighlights] = useState([]);
     const [inclusions, setInclusions] = useState([]);
     const [exclusions, setExclusions] = useState([]);
+    const [imageFile, setImageFile] = useState(null);
 
     const loadTrips = async () => {
         try {
@@ -152,6 +155,12 @@ const AdminTrips = () => {
         setError("");
 
         try {
+
+            let imageUrl = editingTrip?.image || "";
+
+            if (imageFile) {
+                imageUrl = await uploadImageToCloudinary(imageFile);
+            }
             // Clean up empty string items arrays
             const cleanInclusions = inclusions.filter(i => i.trim() !== "");
             const cleanExclusions = exclusions.filter(i => i.trim() !== "");
@@ -164,6 +173,7 @@ const AdminTrips = () => {
                 highlights,
                 inclusions: cleanInclusions,
                 exclusions: cleanExclusions,
+                image: imageUrl,
             };
 
             if (editingTrip) {
@@ -171,6 +181,9 @@ const AdminTrips = () => {
             } else {
                 await createTrip({ ...payload, is_active: true });
             }
+
+
+
 
             resetForm();
             loadTrips();
@@ -190,15 +203,21 @@ const AdminTrips = () => {
     const handleDeleteTrip = async (id) => {
         if (window.confirm("Are you sure you want to delete this trip?")) {
             // TODO: Add delete API call
-            console.log("Delete trip", id);
+            try {
+                await deleteTrip(id);
+                loadTrips(); // refresh list
+            } catch (err) {
+                alert("Failed to delete trip");
+                console.error(err);
+            }
         }
     };
 
     const filteredTrips = trips.filter(trip => {
         const matchesSearch = trip.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            trip.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            trip.description?.toLowerCase().includes(searchQuery.toLowerCase());
-        
+            trip.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            trip.description?.toLowerCase().includes(searchQuery.toLowerCase());
+
         if (selectedStatus === "all") return matchesSearch;
         if (selectedStatus === "active") return matchesSearch && trip.is_active;
         if (selectedStatus === "hidden") return matchesSearch && !trip.is_active;
@@ -234,7 +253,7 @@ const AdminTrips = () => {
                             Create and manage travel packages for your customers
                         </p>
                     </div>
-                    
+
                     <div className={styles.headerActions}>
                         <div className={styles.searchContainer}>
                             <svg className={styles.searchIcon} viewBox="0 0 20 20" fill="currentColor">
@@ -248,7 +267,7 @@ const AdminTrips = () => {
                                 className={styles.searchInput}
                             />
                         </div>
-                        
+
                         <button
                             className={styles.addButton}
                             onClick={() => {
@@ -266,7 +285,7 @@ const AdminTrips = () => {
 
                 {/* Stats Overview */}
                 <div className={styles.statsSection}>
-                    <div 
+                    <div
                         className={`${styles.statCard} ${selectedStatus === "all" ? styles.statCardActive : ''}`}
                         onClick={() => setSelectedStatus("all")}
                     >
@@ -280,7 +299,7 @@ const AdminTrips = () => {
                         <div className={styles.statSubtext}>All trips in system</div>
                     </div>
 
-                    <div 
+                    <div
                         className={`${styles.statCard} ${selectedStatus === "active" ? styles.statCardActive : ''}`}
                         onClick={() => setSelectedStatus("active")}
                     >
@@ -294,7 +313,7 @@ const AdminTrips = () => {
                         <div className={styles.statSubtext}>Visible to customers</div>
                     </div>
 
-                    <div 
+                    <div
                         className={`${styles.statCard} ${selectedStatus === "hidden" ? styles.statCardActive : ''}`}
                         onClick={() => setSelectedStatus("hidden")}
                     >
@@ -343,7 +362,7 @@ const AdminTrips = () => {
                                     </svg>
                                     Basic Information
                                 </h3>
-                                
+
                                 <div className={styles.formGrid}>
                                     <div className={styles.inputGroup}>
                                         <label className={styles.inputLabel}>
@@ -426,17 +445,17 @@ const AdminTrips = () => {
                                 </div>
 
                                 <div className={styles.inputGroup}>
-                                    <label className={styles.inputLabel}>Image URL</label>
+                                    <label className={styles.inputLabel}>Image Upload</label>
                                     <div className={styles.inputWrapper}>
                                         <svg className={styles.inputIcon} viewBox="0 0 20 20" fill="currentColor">
                                             <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
                                         </svg>
                                         <input
                                             className={styles.input}
+                                            type="file"
                                             name="image"
-                                            placeholder="https://example.com/image.jpg"
-                                            value={formData.image}
-                                            onChange={handleChange}
+                                            accept="image/*"
+                                            onChange={e => setImageFile(e.target.files[0])} // store file in state
                                         />
                                     </div>
                                 </div>
@@ -467,14 +486,14 @@ const AdminTrips = () => {
                                     </svg>
                                     Itinerary Builder
                                 </h3>
-                                
+
                                 <div className={styles.dynamicList}>
                                     {itinerary.map((day, idx) => (
                                         <div key={idx} className={styles.dynamicItem}>
                                             <div className={styles.dynamicItemHeader}>
                                                 <span className={styles.dayNumber}>Day {idx + 1}</span>
-                                                <button 
-                                                    type="button" 
+                                                <button
+                                                    type="button"
                                                     className={styles.removeButton}
                                                     onClick={() => removeItineraryDay(idx)}
                                                 >
@@ -500,9 +519,9 @@ const AdminTrips = () => {
                                             </div>
                                         </div>
                                     ))}
-                                    
-                                    <button 
-                                        type="button" 
+
+                                    <button
+                                        type="button"
                                         className={styles.addButtonSmall}
                                         onClick={addItineraryDay}
                                     >
@@ -522,14 +541,14 @@ const AdminTrips = () => {
                                     </svg>
                                     Trip Highlights
                                 </h3>
-                                
+
                                 <div className={styles.dynamicList}>
                                     {highlights.map((item, idx) => (
                                         <div key={idx} className={styles.dynamicItem}>
                                             <div className={styles.dynamicItemHeader}>
                                                 <span className={styles.highlightNumber}>Highlight {idx + 1}</span>
-                                                <button 
-                                                    type="button" 
+                                                <button
+                                                    type="button"
                                                     className={styles.removeButton}
                                                     onClick={() => removeHighlight(idx)}
                                                 >
@@ -554,9 +573,9 @@ const AdminTrips = () => {
                                             </div>
                                         </div>
                                     ))}
-                                    
-                                    <button 
-                                        type="button" 
+
+                                    <button
+                                        type="button"
                                         className={styles.addButtonSmall}
                                         onClick={addHighlight}
                                     >
@@ -577,7 +596,7 @@ const AdminTrips = () => {
                                         </svg>
                                         Inclusions
                                     </h3>
-                                    
+
                                     <div className={styles.dynamicListSimple}>
                                         {inclusions.map((item, idx) => (
                                             <div key={idx} className={styles.simpleItem}>
@@ -592,8 +611,8 @@ const AdminTrips = () => {
                                                         placeholder="Included item..."
                                                     />
                                                 </div>
-                                                <button 
-                                                    type="button" 
+                                                <button
+                                                    type="button"
                                                     className={styles.removeButtonSmall}
                                                     onClick={() => removeInclusion(idx)}
                                                 >
@@ -603,9 +622,9 @@ const AdminTrips = () => {
                                                 </button>
                                             </div>
                                         ))}
-                                        
-                                        <button 
-                                            type="button" 
+
+                                        <button
+                                            type="button"
                                             className={styles.addButtonSmall}
                                             onClick={addInclusion}
                                         >
@@ -624,7 +643,7 @@ const AdminTrips = () => {
                                         </svg>
                                         Exclusions
                                     </h3>
-                                    
+
                                     <div className={styles.dynamicListSimple}>
                                         {exclusions.map((item, idx) => (
                                             <div key={idx} className={styles.simpleItem}>
@@ -639,8 +658,8 @@ const AdminTrips = () => {
                                                         placeholder="Excluded item..."
                                                     />
                                                 </div>
-                                                <button 
-                                                    type="button" 
+                                                <button
+                                                    type="button"
                                                     className={styles.removeButtonSmall}
                                                     onClick={() => removeExclusion(idx)}
                                                 >
@@ -650,9 +669,9 @@ const AdminTrips = () => {
                                                 </button>
                                             </div>
                                         ))}
-                                        
-                                        <button 
-                                            type="button" 
+
+                                        <button
+                                            type="button"
                                             className={styles.addButtonSmall}
                                             onClick={addExclusion}
                                         >
@@ -717,7 +736,7 @@ const AdminTrips = () => {
                                             {trip.is_active ? "Active" : "Hidden"}
                                         </div>
                                     </div>
-                                    
+
                                     <div className={styles.tripContent}>
                                         <div className={styles.tripHeader}>
                                             <h4 className={styles.tripTitle}>{trip.title}</h4>
@@ -743,12 +762,12 @@ const AdminTrips = () => {
                                                 </span>
                                             </div>
                                         </div>
-                                        
+
                                         <p className={styles.tripDescription}>
                                             {trip.description?.substring(0, 150) || "No description provided..."}
                                             {trip.description?.length > 150 && "..."}
                                         </p>
-                                        
+
                                         <div className={styles.tripFeatures}>
                                             <div className={styles.feature}>
                                                 <span className={styles.featureLabel}>Itinerary Days:</span>
@@ -763,7 +782,7 @@ const AdminTrips = () => {
                                                 <span className={styles.featureValue}>{trip.inclusions?.length || 0}</span>
                                             </div>
                                         </div>
-                                        
+
                                         <div className={styles.tripActions}>
                                             <button
                                                 className={styles.editButton}
@@ -808,18 +827,18 @@ const AdminTrips = () => {
                         <div className={styles.emptyState}>
                             <div className={styles.emptyIcon}>
                                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                    <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                    <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </div>
                             <h3 className={styles.emptyTitle}>No Trips Found</h3>
                             <p className={styles.emptyText}>
-                                {searchQuery || selectedStatus !== "all" 
+                                {searchQuery || selectedStatus !== "all"
                                     ? "No trips match your current filters. Try adjusting your search or filters."
                                     : "You haven't created any trips yet. Get started by adding your first trip!"}
                             </p>
                             {(searchQuery || selectedStatus !== "all") && (
-                                <button 
+                                <button
                                     className={styles.clearFiltersButton}
                                     onClick={() => {
                                         setSearchQuery("");
@@ -830,7 +849,7 @@ const AdminTrips = () => {
                                 </button>
                             )}
                             {!showForm && !searchQuery && selectedStatus === "all" && (
-                                <button 
+                                <button
                                     className={styles.createFirstButton}
                                     onClick={() => setShowForm(true)}
                                 >

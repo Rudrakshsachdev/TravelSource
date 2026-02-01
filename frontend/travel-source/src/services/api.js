@@ -251,3 +251,115 @@ export const updateTrip = async (id, data) => {
 
   return response.json();
 };
+
+
+
+export const uploadImageToCloudinary = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append(
+    "upload_preset",
+    import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+  );
+
+  const response = await fetch(
+    `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Image upload failed");
+  }
+
+  const data = await response.json();
+  return data.secure_url;
+};
+
+
+//const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+// 🔹 Fetch all users (ADMIN)
+export const fetchUsers = async () => {
+  const token = localStorage.getItem("accessToken");
+
+  const res = await fetch(`${API_BASE_URL}/v1/admin/users/`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch users");
+  }
+
+  return res.json();
+};
+
+// 🔹 Update user role
+export const updateUserRole = async (userId, role) => {
+  const token = localStorage.getItem("accessToken");
+
+  const res = await fetch(
+    `${API_BASE_URL}/v1/admin/users/${userId}/role/`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ role }),
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to update role");
+  }
+
+  return res.json();
+};
+
+// 🔹 Delete user
+export const deleteUser = async (userId) => {
+  const token = localStorage.getItem("accessToken");
+
+  const res = await fetch(
+    `${API_BASE_URL}/v1/admin/users/${userId}/`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to delete user");
+  }
+
+  return true;
+};
+
+
+
+export const deleteTrip = async (id) => {
+  const token = localStorage.getItem("accessToken");
+
+  const res = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/v1/admin/trips/${id}/`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to delete trip");
+  }
+
+  return true;
+};

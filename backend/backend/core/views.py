@@ -17,7 +17,8 @@ from .serializers import (
 
 from django.shortcuts import get_object_or_404
 
-
+from django.contrib.auth.models import User
+from .serializers import UserAdminSerializer
 
 @api_view(["GET"])
 def trip_list(request):
@@ -151,17 +152,23 @@ def admin_trips(request):
         return Response(serializer.data, status=201)
 
 
-@api_view(["PUT"])
+@api_view(["PUT", "DELETE"])
 @permission_classes([IsAuthenticated])
-def admin_update_trip(request, pk):
+def admin_trip_detail(request, pk):
     if request.user.profile.role != "ADMIN":
         return Response({"detail": "Not authorized"}, status=403)
 
     trip = get_object_or_404(Trip, pk=pk)
-    serializer = AdminTripSerializer(trip, data=request.data)
-    serializer.is_valid(raise_exception=True)
-    serializer.save()
-    return Response(serializer.data)
+
+    if request.method == "PUT":
+        serializer = AdminTripSerializer(trip, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    if request.method == "DELETE":
+        trip.delete()
+        return Response({"detail": "Trip deleted successfully"}, status=204)
 
 
 @api_view(["PATCH"])
@@ -175,3 +182,61 @@ def admin_toggle_trip(request, pk):
     trip.save()
 
     return Response({"is_active": trip.is_active})
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def admin_users(request):
+    if request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    users = User.objects.all().order_by("-date_joined")
+    serializer = UserAdminSerializer(users, many=True)
+    return Response(serializer.data)
+
+
+
+
+@api_view(["PATCH"])
+@permission_classes([IsAuthenticated])
+def update_user_role(request, pk):
+    if request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    user = get_object_or_404(User, pk=pk)
+
+    if user == request.user:
+        return Response(
+            {"detail": "You cannot change your own role"},
+            status=400
+        )
+
+    role = request.data.get("role")
+
+    if role not in ["USER", "ADMIN"]:
+        return Response({"detail": "Invalid role"}, status=400)
+
+    user.profile.role = role
+    user.profile.save()
+
+    return Response({"role": role})
+
+
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def delete_user(request, pk):
+    if request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    user = get_object_or_404(User, pk=pk)
+
+    if user == request.user:
+        return Response(
+            {"detail": "You cannot delete yourself"},
+            status=400
+        )
+
+    user.delete()
+    return Response({"detail": "User deleted"})
