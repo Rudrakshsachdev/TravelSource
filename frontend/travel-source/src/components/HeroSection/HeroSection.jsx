@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import styles from "./HeroSection.module.css";
 
 const PIN_SVG = (
@@ -64,7 +65,45 @@ const LOCATIONS = [
   { name: "Paris", className: "locParis" },
 ];
 
+const TYPING_PHRASES = [
+  "Simply Superb",
+  "Truly Magical",
+  "Deeply Inspiring",
+  "Utterly Unforgettable",
+  "Wonderfully Wild",
+];
+
 const HeroSection = () => {
+  const [typedText, setTypedText] = useState("");
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const current = TYPING_PHRASES[phraseIndex];
+
+    if (!isDeleting && typedText === current) {
+      const t = setTimeout(() => setIsDeleting(true), 1800);
+      return () => clearTimeout(t);
+    }
+    if (isDeleting && typedText === "") {
+      const t = setTimeout(() => {
+        setIsDeleting(false);
+        setPhraseIndex((i) => (i + 1) % TYPING_PHRASES.length);
+      }, 400);
+      return () => clearTimeout(t);
+    }
+
+    const delay = isDeleting ? 55 : 90;
+    const t = setTimeout(() => {
+      setTypedText(
+        isDeleting
+          ? current.slice(0, typedText.length - 1)
+          : current.slice(0, typedText.length + 1),
+      );
+    }, delay);
+    return () => clearTimeout(t);
+  }, [typedText, phraseIndex, isDeleting]);
+
   const scrollToTrips = () => {
     const tripsSection = document.getElementById("trips");
     if (tripsSection) {
@@ -151,11 +190,9 @@ const HeroSection = () => {
 
       {/* ── Center Content ── */}
       <div className={styles.centerContent}>
-        <div className={styles.badge}>
-          <svg viewBox="0 0 20 20" fill="currentColor">
-            <path d="M10 2L2 7l8 5 8-5-8-5zM2 17l8 5 8-5M2 12l8 5 8-5" />
-          </svg>
-          Travel
+        {/* ── Speech Bubble ── */}
+        <div className={styles.travelBubble}>
+          <span className={styles.travelBubbleText}>travel</span>
         </div>
 
         <h1 className={styles.brandTitle}>
@@ -165,7 +202,12 @@ const HeroSection = () => {
         </h1>
 
         <p className={styles.subtitle}>
-          A <em>Simply Superb</em> Travel Agency Experience
+          A{" "}
+          <span className={styles.typewriterGroup}>
+            <em className={styles.typewriterText}>{typedText}</em>
+            <span className={styles.cursor} aria-hidden="true" />
+          </span>{" "}
+          Travel Agency Experience
         </p>
 
         <button className={styles.ctaButton} onClick={scrollToTrips}>

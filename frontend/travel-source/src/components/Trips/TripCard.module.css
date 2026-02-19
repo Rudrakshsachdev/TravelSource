@@ -1,154 +1,142 @@
 /* ═══════════════════════════════════════════════════════════════
    TripCard — Travel Professor
-   Premium teal palette matching TripsList, Hero & Navbar
+   Premium teal design system · Cohesive with Hero + Navbar
    ═══════════════════════════════════════════════════════════════ */
 
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=Montserrat:wght@400;500;600;700&display=swap");
+
+/* ─── Design Tokens ─────────────────────────────────────────── */
 :root {
-  /* Teal Palette — synced with TripsList + Hero + Navbar */
-  --color-obsidian: #1a3a35;
-  --color-charcoal: #2d5c54;
-  --color-steel: #3d7a70;
-  --color-silver: #b8ddd6;
-  --color-ivory: #e8f6f3;
-  --color-snow: #ffffff;
-  --color-accent: #3f9e8f;
-  --color-accent-light: #7ecfc0;
-  --color-accent-dark: #2e8b7a;
-  --color-accent-glow: rgba(63, 158, 143, 0.15);
-  --color-accent-gradient: linear-gradient(135deg, #3f9e8f 0%, #5fb8a8 100%);
-  --color-accent-border: rgba(63, 158, 143, 0.25);
-  --color-accent-subtle: rgba(63, 158, 143, 0.06);
+  --card-accent: #3f9e8f;
+  --card-accent-light: #7ecfc0;
+  --card-accent-dark: #2e8b7a;
+  --card-obsidian: #1a3a35;
+  --card-charcoal: #2d5c54;
+  --card-steel: #3d7a70;
+  --card-silver: #b8ddd6;
+  --card-ivory: #e8f6f3;
+  --card-snow: #ffffff;
 
-  /* Shadows */
-  --shadow-luxury: 0 8px 40px rgba(26, 58, 53, 0.1);
-  --shadow-accent: 0 4px 20px rgba(63, 158, 143, 0.2);
-  --shadow-elevated: 0 20px 60px rgba(26, 58, 53, 0.15);
-  --shadow-subtle: 0 2px 16px rgba(26, 58, 53, 0.06);
-  --shadow-card: 0 4px 24px rgba(26, 58, 53, 0.08);
-  --shadow-card-hover: 0 20px 50px rgba(26, 58, 53, 0.14),
-    0 0 0 1px rgba(63, 158, 143, 0.12);
+  --card-gradient: linear-gradient(135deg, #3f9e8f 0%, #5fb8a8 100%);
+  --card-gradient-deep: linear-gradient(
+    160deg,
+    #2e8b7a 0%,
+    #3f9e8f 60%,
+    #7ecfc0 100%
+  );
 
-  /* Radii */
-  --radius-pill: 1000px;
-  --radius-xl: 24px;
-  --radius-lg: 20px;
-  --radius-md: 12px;
-  --radius-sm: 6px;
+  --card-shadow-rest:
+    0 2px 12px rgba(26, 58, 53, 0.07), 0 1px 3px rgba(26, 58, 53, 0.05);
+  --card-shadow-hover:
+    0 18px 48px rgba(26, 58, 53, 0.16), 0 6px 16px rgba(26, 58, 53, 0.08);
+  --card-shadow-accent: 0 6px 24px rgba(63, 158, 143, 0.28);
 
-  /* Transitions */
-  --transition-luxury: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-smooth: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-quick: all 0.2s ease;
+  --card-radius: 20px;
+  --card-radius-inner: 12px;
+  --card-radius-pill: 1000px;
+  --card-radius-sm: 6px;
 
-  /* Typography */
-  --font-display: "Playfair Display", "Cormorant Garamond", Georgia, serif;
-  --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, Oxygen, Ubuntu, sans-serif;
+  --card-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --card-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-primary: "Inter", -apple-system, sans-serif;
   --font-accent: "Montserrat", -apple-system, sans-serif;
 }
 
-/* ─── Base Card ────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   CARD SHELL
+   ═══════════════════════════════════════════════════════════════ */
 .ultraLuxuryCard {
   position: relative;
-  background: var(--color-snow);
-  border-radius: var(--radius-xl);
+  background: var(--card-snow);
+  border-radius: var(--card-radius);
   overflow: hidden;
   cursor: pointer;
-  transition: var(--transition-luxury);
-  transform-origin: center;
+  transition:
+    transform 0.4s var(--card-ease),
+    box-shadow 0.4s var(--card-ease),
+    border-color 0.3s ease;
   height: 100%;
-  min-height: 580px;
+  min-height: 590px;
   display: flex;
   flex-direction: column;
-  border: 1px solid rgba(63, 158, 143, 0.1);
-  box-shadow: var(--shadow-card);
+  border: 1px solid rgba(63, 158, 143, 0.12);
+  box-shadow: var(--card-shadow-rest);
+  will-change: transform;
 }
 
-.ultraLuxuryCard::before {
+/* Accent stripe at top of card */
+.ultraLuxuryCard::after {
   content: "";
   position: absolute;
-  inset: -1px;
-  border-radius: var(--radius-xl);
-  background: conic-gradient(
-    from var(--border-angle, 0deg),
-    transparent 0%,
-    var(--color-accent) 8%,
-    var(--color-accent-light) 16%,
-    transparent 24%,
-    transparent 100%
-  );
-  z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--card-gradient);
+  z-index: 5;
   opacity: 0;
-  transition: opacity 0.5s ease;
-  animation: rotateBorder 6s linear infinite;
+  transition: opacity 0.35s ease;
+  border-radius: var(--card-radius) var(--card-radius) 0 0;
 }
 
-.ultraLuxuryCard:hover::before {
-  opacity: 0.7;
+.ultraLuxuryCard:hover::after {
+  opacity: 1;
 }
 
-@property --border-angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-
-@keyframes rotateBorder {
-  to {
-    --border-angle: 360deg;
-  }
+/* Deprecated conic border — replaced by stripe + shadow */
+.ultraLuxuryCard::before {
+  display: none;
 }
 
 .ultraLuxuryCard:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-7px);
+  box-shadow: var(--card-shadow-hover);
+  border-color: rgba(63, 158, 143, 0.2);
 }
 
 .ultraLuxuryCard.cardHovered {
   z-index: 10;
 }
 
-/* ─── Card Glow ────────────────────────────────────────────── */
+/* ─── Depth Glow ────────────────────────────────────────────── */
 .cardGlow {
   position: absolute;
-  top: -20px;
-  left: -20px;
-  width: calc(100% + 40px);
-  height: calc(100% + 40px);
-  filter: blur(60px);
+  bottom: -30px;
+  left: 10%;
+  width: 80%;
+  height: 80px;
+  border-radius: 50%;
+  filter: blur(28px);
   opacity: 0;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.45s ease;
   z-index: -1;
+  pointer-events: none;
 }
 
 .ultraLuxuryCard:hover .cardGlow {
-  opacity: 0.08;
+  opacity: 0.18;
 }
 
-/* ─── Card Border ──────────────────────────────────────────── */
+/* ─── cardBorder (kept for JSX, visually minimal) ──────────── */
 .cardBorder {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: var(--radius-xl);
-  border: 1px solid rgba(63, 158, 143, 0.08);
+  inset: 0;
+  border-radius: var(--card-radius);
   pointer-events: none;
-  z-index: 10;
-  transition: var(--transition-smooth);
+  z-index: 4;
 }
 
-.ultraLuxuryCard:hover .cardBorder {
-  border-color: rgba(63, 158, 143, 0.18);
-}
-
-/* ─── Card Header / Image ──────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   IMAGE AREA
+   ═══════════════════════════════════════════════════════════════ */
 .cardHeader {
   position: relative;
-  height: 260px;
+  height: 280px;
   overflow: hidden;
-  z-index: 2;
+  border-radius: var(--card-radius) var(--card-radius) 0 0;
+  flex-shrink: 0;
 }
 
 .imageContainer {
@@ -157,42 +145,50 @@
   height: 100%;
 }
 
+/* Placeholder while image loads */
 .imagePlaceholder {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(
+    135deg,
+    var(--card-ivory) 0%,
+    var(--card-silver) 100%
+  );
   z-index: 1;
-  background: linear-gradient(135deg, var(--color-ivory) 0%, var(--color-silver) 100%);
 }
 
 .placeholderIcon {
-  font-size: 3.5rem;
-  opacity: 0.5;
-  animation: placeholderPulse 2.5s ease-in-out infinite;
+  font-size: 3rem;
+  opacity: 0.4;
+  animation: iconPulse 2.5s ease-in-out infinite;
 }
 
-@keyframes placeholderPulse {
-  0%, 100% { opacity: 0.3; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(1.08); }
+@keyframes iconPulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(1.04);
+  }
 }
 
+/* Photo */
 .cardImage {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition:
-    transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94),
     filter 0.5s ease;
-  opacity: 1;
-  filter: brightness(0.95) saturate(1.05);
+  filter: brightness(0.92) saturate(1.1);
 }
 
 .cardImage.imageLoaded {
@@ -200,398 +196,430 @@
 }
 
 .ultraLuxuryCard:hover .cardImage {
-  transform: scale(1.08);
-  filter: brightness(1) saturate(1.15);
+  transform: scale(1.07);
+  filter: brightness(0.98) saturate(1.18);
 }
 
+/* Overlay: subtle dark vignette that deepens on hover */
 .imageOverlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(26, 58, 53, 0.05) 0%,
-    transparent 30%,
-    transparent 50%,
-    rgba(26, 58, 53, 0.45) 100%
+    rgba(26, 58, 53, 0.04) 0%,
+    transparent 25%,
+    transparent 55%,
+    rgba(26, 58, 53, 0.5) 100%
   );
   z-index: 2;
   pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.ultraLuxuryCard:hover .imageOverlay {
+  opacity: 1.2;
 }
 
 .imageGradient {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 50%;
-  background: linear-gradient(to top, rgba(26, 58, 53, 0.3) 0%, transparent 100%);
-  z-index: 3;
-  pointer-events: none;
+  display: none;
 }
 
-/* ─── Luxury Badge ─────────────────────────────────────────── */
+/* ─── Luxury Badge ──────────────────────────────────────────── */
 .luxuryBadge {
   position: absolute;
-  top: 1.25rem;
-  left: 1.25rem;
+  top: 1.1rem;
+  left: 1.1rem;
+  z-index: 6;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  background: var(--color-snow);
-  padding: 0.45rem 1.1rem;
-  border-radius: var(--radius-pill);
-  z-index: 4;
-  box-shadow: 0 4px 16px rgba(26, 58, 53, 0.15);
-  overflow: hidden;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 0.35rem 0.9rem 0.35rem 0.6rem;
+  border-radius: var(--card-radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 2px 12px rgba(26, 58, 53, 0.12);
+  transform: translateY(0);
+  transition:
+    transform 0.3s var(--card-ease-spring),
+    box-shadow 0.3s ease;
 }
 
+.ultraLuxuryCard:hover .luxuryBadge {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(26, 58, 53, 0.16);
+}
+
+/* Shimmer sweep on badge */
 .luxuryBadge::after {
   content: "";
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 60%;
-  height: 100%;
+  inset: 0;
+  border-radius: var(--card-radius-pill);
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(63, 158, 143, 0.15),
+    rgba(63, 158, 143, 0.12),
     transparent
   );
-  animation: badgeShimmer 4s ease-in-out infinite;
+  transform: translateX(-100%);
+  animation: badgeSweep 5s ease-in-out infinite;
 }
 
-@keyframes badgeShimmer {
-  0% { left: -100%; }
-  50%, 100% { left: 150%; }
+@keyframes badgeSweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  40%,
+  100% {
+    transform: translateX(200%);
+  }
 }
 
 .badgeIcon {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
+  line-height: 1;
 }
 
 .badgeText {
   font-family: var(--font-accent);
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   font-weight: 700;
-  color: var(--color-accent-dark);
-  letter-spacing: 1.5px;
+  color: var(--card-accent-dark);
+  letter-spacing: 1.8px;
   text-transform: uppercase;
   position: relative;
   z-index: 2;
 }
 
 .badgeGlow {
-  position: absolute;
-  inset: 0;
-  background: rgba(63, 158, 143, 0.06);
-  border-radius: var(--radius-pill);
-  z-index: 0;
+  display: none;
 }
 
-/* ─── Quick View Button ────────────────────────────────────── */
+/* ─── Quick View ────────────────────────────────────────────── */
 .quickViewButton {
   position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(63, 158, 143, 0.15);
-  border-radius: 50%;
+  top: 1.1rem;
+  right: 1.1rem;
+  z-index: 6;
+  width: 38px;
+  height: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-obsidian);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  color: var(--card-obsidian);
   cursor: pointer;
-  transition: var(--transition-smooth);
-  z-index: 4;
+  transition: all 0.3s var(--card-ease);
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(-6px) scale(0.9);
 }
 
 .ultraLuxuryCard:hover .quickViewButton {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 .quickViewButton:hover {
-  background: var(--color-accent);
-  border-color: var(--color-accent);
-  color: var(--color-snow);
+  background: var(--card-accent);
+  border-color: var(--card-accent);
+  color: var(--card-snow);
+  box-shadow: var(--card-shadow-accent);
   transform: scale(1.08);
-  box-shadow: 0 4px 16px rgba(63, 158, 143, 0.3);
 }
 
 .quickViewIcon {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 }
 
-/* ─── Card Content ─────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   CARD CONTENT
+   ═══════════════════════════════════════════════════════════════ */
 .cardContent {
   position: relative;
-  padding: 1.75rem 1.75rem 1.5rem;
+  padding: 1.6rem 1.75rem 1.5rem;
   flex: 1;
   display: flex;
   flex-direction: column;
+  background: var(--card-snow);
   z-index: 2;
-  background: var(--color-snow);
 }
 
-/* ─── Card Meta ────────────────────────────────────────────── */
+/* ─── Meta Row (category + duration) ───────────────────────── */
 .cardMeta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.1rem;
 }
 
 .categoryTag {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.4rem 0.85rem;
-  background: var(--color-ivory);
-  border: 1px solid rgba(63, 158, 143, 0.12);
-  border-radius: var(--radius-pill);
-  transition: var(--transition-quick);
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  background: var(--card-ivory);
+  border: 1px solid rgba(63, 158, 143, 0.15);
+  border-radius: var(--card-radius-pill);
+  transition: all 0.25s ease;
 }
 
 .ultraLuxuryCard:hover .categoryTag {
-  background: rgba(63, 158, 143, 0.08);
-  border-color: rgba(63, 158, 143, 0.2);
+  background: rgba(63, 158, 143, 0.09);
+  border-color: rgba(63, 158, 143, 0.25);
 }
 
 .categoryIcon {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+  line-height: 1;
 }
 
 .categoryText {
   font-family: var(--font-accent);
-  font-size: 0.65rem;
-  font-weight: 600;
-  color: var(--color-accent-dark);
-  letter-spacing: 1.2px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--card-accent-dark);
+  letter-spacing: 1.4px;
   text-transform: uppercase;
 }
 
 .duration {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
 }
 
 .durationIcon {
-  width: 15px;
-  height: 15px;
-  color: var(--color-steel);
-  opacity: 0.7;
+  width: 13px;
+  height: 13px;
+  color: var(--card-steel);
+  opacity: 0.65;
 }
 
 .durationText {
   font-family: var(--font-accent);
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 600;
-  color: var(--color-steel);
-  letter-spacing: 1px;
+  color: var(--card-steel);
+  letter-spacing: 0.8px;
   text-transform: uppercase;
 }
 
-/* ─── Card Title ───────────────────────────────────────────── */
+/* ─── Title ─────────────────────────────────────────────────── */
 .cardTitle {
   font-family: var(--font-display);
-  font-size: 1.55rem;
+  font-size: 1.5rem;
   font-weight: 600;
-  color: var(--color-obsidian);
-  line-height: 1.25;
-  margin-bottom: 0.85rem;
+  color: var(--card-obsidian);
+  line-height: 1.3;
+  margin-bottom: 0.35rem;
+  padding-bottom: 0.75rem;
   position: relative;
-  transition: color 0.35s ease;
+  letter-spacing: -0.01em;
+  transition: color 0.3s ease;
 }
 
 .ultraLuxuryCard:hover .cardTitle {
-  color: var(--color-charcoal);
+  color: var(--card-charcoal);
 }
 
+/* Animated underline from title */
 .titleLine {
   position: absolute;
-  bottom: -0.4rem;
+  bottom: 0;
   left: 0;
-  width: 32px;
-  height: 2px;
-  background: var(--color-accent-gradient);
-  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 1.5px;
+  width: 28px;
+  background: var(--card-gradient);
   border-radius: 2px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .ultraLuxuryCard:hover .titleLine {
-  width: 80px;
+  width: 72px;
 }
 
-/* ─── Location ─────────────────────────────────────────────── */
+/* ─── Location ──────────────────────────────────────────────── */
 .location {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  margin-bottom: 1.1rem;
+  margin-top: 0.65rem;
+  margin-bottom: 1rem;
 }
 
 .locationIcon {
-  width: 16px;
-  height: 16px;
-  color: var(--color-accent);
-  opacity: 0.8;
+  width: 14px;
+  height: 14px;
+  color: var(--card-accent);
+  flex-shrink: 0;
 }
 
 .locationText {
   font-family: var(--font-primary);
-  font-size: 0.88rem;
+  font-size: 0.83rem;
   font-weight: 500;
-  color: var(--color-steel);
+  color: var(--card-steel);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* ─── Card Description ─────────────────────────────────────── */
+/* ─── Description ───────────────────────────────────────────── */
 .cardDescription {
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.1rem;
   flex: 1;
 }
 
 .cardDescription p {
   font-family: var(--font-primary);
-  font-size: 0.88rem;
-  line-height: 1.6;
-  color: var(--color-steel);
+  font-size: 0.84rem;
+  line-height: 1.65;
+  color: var(--card-steel);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
   margin: 0;
 }
 
-/* ─── Luxury Features ──────────────────────────────────────── */
+/* ─── Features ──────────────────────────────────────────────── */
 .luxuryFeatures {
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
-  margin-bottom: 1.5rem;
+  gap: 0.45rem;
+  margin-bottom: 1.35rem;
+  padding: 0.9rem 1rem;
+  background: var(--card-ivory);
+  border-radius: var(--card-radius-inner);
+  border: 1px solid rgba(63, 158, 143, 0.08);
+  transition: border-color 0.25s ease;
+}
+
+.ultraLuxuryCard:hover .luxuryFeatures {
+  border-color: rgba(63, 158, 143, 0.16);
 }
 
 .feature {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  opacity: 0.85;
-  transition: all 0.25s ease;
-}
-
-.ultraLuxuryCard:hover .feature {
-  opacity: 1;
-}
-
-.feature:hover {
-  transform: translateX(4px);
+  gap: 0.55rem;
 }
 
 .featureIcon {
-  width: 20px;
-  height: 20px;
-  min-width: 20px;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-accent-gradient);
+  background: var(--card-gradient);
   border-radius: 50%;
-  font-family: var(--font-accent);
-  font-size: 0.6rem;
+  font-size: 0.55rem;
   font-weight: 700;
-  color: var(--color-snow);
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.feature:hover .featureIcon {
-  box-shadow: 0 0 12px rgba(63, 158, 143, 0.3);
-  transform: scale(1.1);
+  color: var(--card-snow);
+  font-family: var(--font-accent);
+  flex-shrink: 0;
 }
 
 .featureText {
   font-family: var(--font-primary);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 500;
-  color: var(--color-charcoal);
+  color: var(--card-charcoal);
+  line-height: 1;
 }
 
-/* ─── Card Footer ──────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   CARD FOOTER  —  price + CTA
+   ═══════════════════════════════════════════════════════════════ */
 .cardFooter {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   margin-top: auto;
-  padding-top: 1.25rem;
+  padding-top: 1.1rem;
   border-top: 1px solid rgba(63, 158, 143, 0.1);
+  gap: 0.75rem;
 }
 
+/* Price */
 .priceSection {
   flex: 1;
+  min-width: 0;
 }
 
 .priceLabel {
   font-family: var(--font-accent);
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   font-weight: 600;
-  color: var(--color-steel);
-  letter-spacing: 1.5px;
+  color: var(--card-steel);
+  letter-spacing: 1.6px;
   text-transform: uppercase;
+  margin-bottom: 0.15rem;
   opacity: 0.75;
-  margin-bottom: 0.2rem;
 }
 
 .priceAmount {
   font-family: var(--font-display);
-  font-size: 1.85rem;
+  font-size: 1.9rem;
   font-weight: 700;
-  color: var(--color-obsidian);
   line-height: 1;
-  margin-bottom: 0.15rem;
-  transition: color 0.35s ease;
+  margin-bottom: 0.12rem;
+  color: var(--card-obsidian);
+  transition: color 0.3s ease;
+  letter-spacing: -0.02em;
 }
 
 .ultraLuxuryCard:hover .priceAmount {
-  color: var(--color-accent-dark);
+  color: var(--card-accent-dark);
 }
 
 .pricePer {
   font-family: var(--font-accent);
-  font-size: 0.62rem;
+  font-size: 0.58rem;
   font-weight: 500;
-  color: var(--color-steel);
-  letter-spacing: 1px;
+  color: var(--card-steel);
+  letter-spacing: 1.2px;
   text-transform: uppercase;
-  opacity: 0.65;
+  opacity: 0.6;
 }
 
-/* ─── Book Button ──────────────────────────────────────────── */
+/* ─── Explore / Book Button ─────────────────────────────────── */
 .bookButton {
   position: relative;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.85rem 1.75rem;
-  background: var(--color-obsidian);
+  gap: 0.55rem;
+  padding: 0.8rem 1.5rem;
+  background: var(--card-gradient);
   border: none;
-  border-radius: var(--radius-pill);
+  border-radius: var(--card-radius-pill);
   font-family: var(--font-accent);
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--color-snow);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--card-snow);
   letter-spacing: 1.2px;
   text-transform: uppercase;
   cursor: pointer;
-  transition: var(--transition-smooth);
+  transition:
+    transform 0.3s var(--card-ease),
+    box-shadow 0.3s ease,
+    background 0.3s ease;
   overflow: hidden;
+  white-space: nowrap;
+  flex-shrink: 0;
   z-index: 1;
 }
 
+/* Shimmer sweep */
 .bookButton::before {
   content: "";
   position: absolute;
@@ -602,7 +630,7 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.15),
+    rgba(255, 255, 255, 0.25),
     transparent
   );
   transition: left 0.5s ease;
@@ -613,9 +641,13 @@
 }
 
 .bookButton:hover {
-  background: var(--color-charcoal);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(26, 58, 53, 0.25);
+  box-shadow: var(--card-shadow-accent);
+  background: var(--card-gradient-deep);
+}
+
+.bookButton:active {
+  transform: translateY(0) scale(0.97);
 }
 
 .bookText {
@@ -624,39 +656,42 @@
 }
 
 .bookArrow {
-  width: 14px;
-  height: 14px;
-  transition: transform 0.3s ease;
+  width: 13px;
+  height: 13px;
   z-index: 2;
+  transition: transform 0.25s ease;
 }
 
 .bookButton:hover .bookArrow {
-  transform: translateX(4px);
+  transform: translateX(3px);
 }
 
 .buttonGlow {
   position: absolute;
   inset: 0;
-  background: var(--color-accent);
-  border-radius: var(--radius-pill);
-  filter: blur(16px);
+  background: var(--card-accent-light);
+  border-radius: var(--card-radius-pill);
+  filter: blur(14px);
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: 0;
 }
 
 .bookButton:hover .buttonGlow {
-  opacity: 0.15;
+  opacity: 0.18;
 }
 
-/* ─── Additional Info ──────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   ADDITIONAL INFO  —  difficulty + rating
+   ═══════════════════════════════════════════════════════════════ */
 .additionalInfo {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1.25rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid rgba(63, 158, 143, 0.08);
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(63, 158, 143, 0.07);
+  gap: 0.5rem;
 }
 
 .difficulty,
@@ -667,100 +702,109 @@
 .difficultyLabel,
 .ratingLabel {
   font-family: var(--font-accent);
-  font-size: 0.6rem;
-  font-weight: 600;
-  color: var(--color-steel);
-  letter-spacing: 1.5px;
+  font-size: 0.56rem;
+  font-weight: 700;
+  color: var(--card-steel);
+  letter-spacing: 1.6px;
   text-transform: uppercase;
-  opacity: 0.7;
-  margin-bottom: 0.4rem;
+  opacity: 0.65;
+  margin-bottom: 0.35rem;
 }
 
 .difficultyLevels {
   display: flex;
-  gap: 0.3rem;
-  margin-bottom: 0.25rem;
+  gap: 0.25rem;
+  margin-bottom: 0.2rem;
+  align-items: center;
 }
 
 .difficultyDot {
-  width: 8px;
-  height: 8px;
-  background: rgba(63, 158, 143, 0.12);
+  width: 7px;
+  height: 7px;
+  background: rgba(63, 158, 143, 0.15);
   border-radius: 50%;
-  transition: var(--transition-smooth);
+  transition: transform 0.2s ease;
 }
 
 .difficultyDot.difficultyActive {
-  background: var(--color-accent-gradient);
-  box-shadow: 0 0 6px rgba(63, 158, 143, 0.35);
-  animation: dotPulse 2.5s ease-in-out infinite;
+  background: var(--card-gradient);
+  box-shadow: 0 0 5px rgba(63, 158, 143, 0.3);
+  animation: dotPulse 3s ease-in-out infinite;
 }
 
-.difficultyDot.difficultyActive:nth-child(2) { animation-delay: 0.15s; }
-.difficultyDot.difficultyActive:nth-child(3) { animation-delay: 0.3s; }
-.difficultyDot.difficultyActive:nth-child(4) { animation-delay: 0.45s; }
-.difficultyDot.difficultyActive:nth-child(5) { animation-delay: 0.6s; }
+.difficultyDot.difficultyActive:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.difficultyDot.difficultyActive:nth-child(3) {
+  animation-delay: 0.4s;
+}
+.difficultyDot.difficultyActive:nth-child(4) {
+  animation-delay: 0.6s;
+}
+.difficultyDot.difficultyActive:nth-child(5) {
+  animation-delay: 0.8s;
+}
 
 @keyframes dotPulse {
-  0%, 100% { box-shadow: 0 0 6px rgba(63, 158, 143, 0.35); }
-  50% { box-shadow: 0 0 14px rgba(63, 158, 143, 0.6); }
+  0%,
+  100% {
+    box-shadow: 0 0 4px rgba(63, 158, 143, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(63, 158, 143, 0.55);
+  }
 }
 
 .difficultyText {
   font-family: var(--font-accent);
-  font-size: 0.65rem;
-  font-weight: 600;
-  color: var(--color-accent);
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--card-accent);
   letter-spacing: 1px;
   text-transform: uppercase;
 }
 
+/* Stars */
 .stars {
   display: flex;
-  gap: 0.15rem;
-  margin-bottom: 0.25rem;
+  gap: 0.1rem;
+  margin-bottom: 0.2rem;
 }
 
 .star {
-  width: 14px;
-  height: 14px;
-  color: var(--color-accent);
+  width: 12px;
+  height: 12px;
+  color: var(--card-accent);
 }
 
 .ratingText {
   font-family: var(--font-accent);
-  font-size: 0.65rem;
-  font-weight: 600;
-  color: var(--color-accent);
-  letter-spacing: 1px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--card-accent);
+  letter-spacing: 0.8px;
 }
 
-/* ─── Hover Effects ────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   HOVER SWEEP EFFECTS
+   ═══════════════════════════════════════════════════════════════ */
 .hoverEffect {
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 50%;
-  height: 100%;
+  inset: 0;
   background: linear-gradient(
-    90deg,
+    135deg,
     transparent 0%,
-    rgba(63, 158, 143, 0.03) 50%,
+    rgba(63, 158, 143, 0.025) 50%,
     transparent 100%
   );
   opacity: 0;
   pointer-events: none;
   z-index: 3;
+  transition: opacity 0.4s ease;
 }
 
 .ultraLuxuryCard:hover .hoverEffect {
   opacity: 1;
-  animation: lightSweep 2.5s ease-in-out infinite;
-}
-
-@keyframes lightSweep {
-  0% { left: -50%; }
-  100% { left: 150%; }
 }
 
 .hoverLight {
@@ -769,61 +813,54 @@
   left: 0;
   width: 100%;
   height: 100%;
-  filter: blur(80px);
   opacity: 0;
-  transition: opacity 0.5s ease;
   pointer-events: none;
   z-index: 0;
 }
 
-.ultraLuxuryCard:hover .hoverLight {
-  opacity: 0.04;
-}
-
-/* ─── Loading State ────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   LOADING STATE
+   ═══════════════════════════════════════════════════════════════ */
 .loadingOverlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--color-snow);
+  inset: 0;
+  background: var(--card-snow);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
+  z-index: 20;
 }
 
 .loadingSpinner {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   position: relative;
 }
 
 .spinnerCircle {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 2px solid rgba(63, 158, 143, 0.12);
-  border-top: 2px solid var(--color-accent);
+  inset: 0;
+  border: 2px solid rgba(63, 158, 143, 0.1);
+  border-top-color: var(--card-accent);
   border-radius: 50%;
-  animation: spinnerRotate 0.9s linear infinite;
+  animation: spin 0.85s linear infinite;
 }
 
-@keyframes spinnerRotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-/* ─── Responsive ───────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════ */
 @media (max-width: 1200px) {
   .ultraLuxuryCard {
-    min-height: 540px;
+    min-height: 560px;
   }
   .cardHeader {
-    height: 220px;
+    height: 255px;
   }
   .cardTitle {
     font-size: 1.4rem;
@@ -832,32 +869,31 @@
 
 @media (max-width: 768px) {
   .ultraLuxuryCard {
-    min-height: 500px;
+    min-height: 520px;
   }
   .cardHeader {
-    height: 200px;
+    height: 230px;
   }
   .cardContent {
-    padding: 1.5rem;
+    padding: 1.4rem 1.5rem 1.25rem;
   }
   .cardTitle {
     font-size: 1.3rem;
   }
   .priceAmount {
-    font-size: 1.6rem;
+    font-size: 1.7rem;
   }
   .bookButton {
     padding: 0.75rem 1.35rem;
-    font-size: 0.65rem;
   }
 }
 
 @media (max-width: 480px) {
   .ultraLuxuryCard {
-    min-height: 440px;
+    min-height: 480px;
   }
   .cardHeader {
-    height: 175px;
+    height: 205px;
   }
   .cardContent {
     padding: 1.25rem;
@@ -865,7 +901,7 @@
   .cardFooter {
     flex-direction: column;
     align-items: stretch;
-    gap: 1.25rem;
+    gap: 1rem;
   }
   .bookButton {
     width: 100%;
@@ -874,6 +910,6 @@
   .additionalInfo {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
+    gap: 0.85rem;
   }
 }
