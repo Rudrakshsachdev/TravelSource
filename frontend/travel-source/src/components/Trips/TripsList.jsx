@@ -794,71 +794,673 @@ const TripsList = () => {
                 </div>
               )}
 
-              {/* Newsletter CTA */}
-              <div className={styles.luxuryNewsletter}>
-                <div className={styles.newsletterContainer}>
-                  <div className={styles.newsletterIcon}>
-                    <div className={styles.newsletterGlow}></div>
+              {/* Travel Stats Section */}
+              <div className={styles.travelStatsSection}>
+                <div className={styles.statsGrid}>
+                  <div className={styles.statItem}>
+                    <div className={styles.statIconWrap}>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M17 21V19C17 17.9 16.1 17 15 17H9C7.9 17 7 17.9 7 19V21"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <circle
+                          cx="12"
+                          cy="9"
+                          r="4"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                        />
+                        <path
+                          d="M23 21V19C23 18 22.3 17.1 21 16.7"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M16 3.1C17.3 3.5 18 4.4 18 5.5C18 6.6 17.3 7.5 16 7.9"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div className={styles.statNumber}>10,000+</div>
+                    <div className={styles.statLabel}>Happy Travelers</div>
+                  </div>
+
+                  <div className={styles.statDivider}></div>
+
+                  <div className={styles.statItem}>
+                    <div className={styles.statIconWrap}>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12 2L14.4 8.3H21.2L15.9 12.1L17.9 18.4L12 14.6L6.1 18.4L8.1 12.1L2.8 8.3H9.6L12 2Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </div>
+                    <div className={styles.statNumber}>4.9</div>
+                    <div className={styles.statLabel}>Average Rating</div>
+                  </div>
+
+                  <div className={styles.statDivider}></div>
+
+                  <div className={styles.statItem}>
+                    <div className={styles.statIconWrap}>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="9"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                        />
+                        <path
+                          d="M16.24 7.76L14.12 14.12L7.76 16.24L9.88 9.88L16.24 7.76Z"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+                      </svg>
+                    </div>
+                    <div className={styles.statNumber}>120+</div>
+                    <div className={styles.statLabel}>Curated Trips</div>
+                  </div>
+
+                  <div className={styles.statDivider}></div>
+
+                  <div className={styles.statItem}>
+                    <div className={styles.statIconWrap}>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="9"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                        />
+                        <ellipse
+                          cx="12"
+                          cy="12"
+                          rx="3.5"
+                          ry="9"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                        />
+                        <path
+                          d="M3 12H21"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M4.5 7.5C7 8.5 10 9 12 9C14 9 17 8.5 19.5 7.5"
+                          stroke="currentColor"
+                          strokeWidth="1.3"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M4.5 16.5C7 15.5 10 15 12 15C14 15 17 15.5 19.5 16.5"
+                          stroke="currentColor"
+                          strokeWidth="1.3"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </div>
+                    <div className={styles.statNumber}>25</div>
+                    <div className={styles.statLabel}>Countries Covered</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Featured Destination Highlight */}
+              <div className={styles.featuredDestination}>
+                {/* Left — content */}
+                <div className={styles.featuredContent}>
+                  <div className={styles.featuredEyebrow}>
                     <svg
-                      viewBox="0 0 48 48"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M12 2l2.09 6.43H21l-5.47 3.97 2.09 6.43L12 14.86l-5.62 3.97 2.09-6.43L3 8.43h6.91L12 2z" />
+                    </svg>
+                    <span>Featured This Month</span>
+                  </div>
+
+                  <h2 className={styles.featuredTitle}>
+                    Bali{" "}
+                    <span className={styles.featuredTitleAccent}>Escape</span>
+                  </h2>
+
+                  <p className={styles.featuredDescription}>
+                    Drift into lush rice terraces, sacred temple ceremonies, and
+                    sun-drenched volcanic shores. Our Bali Escape is a curated
+                    14-day immersion into the Island of the Gods — blending
+                    barefoot luxury with authentic cultural encounters.
+                  </p>
+
+                  <div className={styles.featuredTags}>
+                    <span className={styles.featuredTag}>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="9"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                        />
+                        <path
+                          d="M12 6v6l4 2"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                      14 Days
+                    </span>
+                    <span className={styles.featuredTag}>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                        />
+                        <path
+                          d="M12 8v4l3 3"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                      Indonesia
+                    </span>
+                    <span className={styles.featuredTag}>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12 2L14.4 8.3H21.2L15.9 12.1L17.9 18.4L12 14.6L6.1 18.4L8.1 12.1L2.8 8.3H9.6L12 2Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                      4.9 Rated
+                    </span>
+                  </div>
+
+                  <button
+                    className={styles.featuredCTA}
+                    onClick={() => navigate("/trips")}
+                  >
+                    <span>View Details</span>
+                    <svg
+                      viewBox="0 0 20 20"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z"
+                        d="M4 10H16M16 10L11 5M16 10L11 15"
                         stroke="currentColor"
-                        strokeWidth="2"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Right — visual panel */}
+                <div className={styles.featuredVisual}>
+                  <div className={styles.featuredVisualGlow}></div>
+
+                  {/* Floating decoration rings */}
+                  <div
+                    className={styles.featuredRing}
+                    style={{
+                      width: "220px",
+                      height: "220px",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%,-50%)",
+                    }}
+                  ></div>
+                  <div
+                    className={styles.featuredRing}
+                    style={{
+                      width: "320px",
+                      height: "320px",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%,-50%)",
+                      opacity: "0.35",
+                    }}
+                  ></div>
+                  <div
+                    className={styles.featuredRing}
+                    style={{
+                      width: "420px",
+                      height: "420px",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%,-50%)",
+                      opacity: "0.18",
+                    }}
+                  ></div>
+
+                  {/* Location pin center */}
+                  <div className={styles.featuredPin}>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
                       <path
-                        d="M24 12V24L32 28"
-                        stroke="currentColor"
-                        strokeWidth="2"
+                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                        fill="currentColor"
                       />
                     </svg>
                   </div>
 
-                  <div className={styles.newsletterContent}>
-                    <div className={styles.newsletterTitle}>
-                      <h3>Stay Ahead of the Journey</h3>
-                      <p>
-                        Receive exclusive access to new destinations and private
-                        offers
-                      </p>
-                    </div>
+                  {/* Floating info chips */}
+                  <div
+                    className={`${styles.featuredChip} ${styles.featuredChipTop}`}
+                  >
+                    <span className={styles.featuredChipDot}></span>
+                    <span>Ubud · Rice Terraces</span>
+                  </div>
+                  <div
+                    className={`${styles.featuredChip} ${styles.featuredChipBottom}`}
+                  >
+                    <span className={styles.featuredChipDot}></span>
+                    <span>Seminyak · Beach Club</span>
+                  </div>
+                  <div
+                    className={`${styles.featuredChip} ${styles.featuredChipLeft}`}
+                  >
+                    <span className={styles.featuredChipDot}></span>
+                    <span>Tanah Lot · Temples</span>
+                  </div>
+                </div>
+              </div>
 
-                    <form className={styles.newsletterForm}>
-                      <div className={styles.formGroup}>
-                        <input
-                          type="email"
-                          placeholder="Enter your email address"
-                          className={styles.newsletterInput}
+              {/* Featured Destination 2 — Santorini (visual LEFT, content RIGHT) */}
+              <div
+                className={`${styles.featuredDestination} ${styles.featuredDestinationAlt}`}
+              >
+                {/* Left — visual panel */}
+                <div
+                  className={`${styles.featuredVisual} ${styles.featuredVisualSantorini}`}
+                >
+                  <div className={styles.featuredVisualGlow}></div>
+                  <div
+                    className={styles.featuredRing}
+                    style={{
+                      width: "220px",
+                      height: "220px",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%,-50%)",
+                    }}
+                  ></div>
+                  <div
+                    className={styles.featuredRing}
+                    style={{
+                      width: "320px",
+                      height: "320px",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%,-50%)",
+                      opacity: "0.35",
+                    }}
+                  ></div>
+                  <div
+                    className={styles.featuredRing}
+                    style={{
+                      width: "420px",
+                      height: "420px",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%,-50%)",
+                      opacity: "0.18",
+                    }}
+                  ></div>
+                  <div className={styles.featuredPin}>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </div>
+                  <div
+                    className={`${styles.featuredChip} ${styles.featuredChipTop}`}
+                  >
+                    <span className={styles.featuredChipDot}></span>
+                    <span>Oia · Caldera Views</span>
+                  </div>
+                  <div
+                    className={`${styles.featuredChip} ${styles.featuredChipBottom}`}
+                  >
+                    <span className={styles.featuredChipDot}></span>
+                    <span>Perissa · Black Beach</span>
+                  </div>
+                  <div
+                    className={`${styles.featuredChip} ${styles.featuredChipLeft}`}
+                  >
+                    <span className={styles.featuredChipDot}></span>
+                    <span>Fira · Sunset Terrace</span>
+                  </div>
+                </div>
+
+                {/* Right — content panel */}
+                <div className={styles.featuredContent}>
+                  <div className={styles.featuredEyebrow}>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M12 2l2.09 6.43H21l-5.47 3.97 2.09 6.43L12 14.86l-5.62 3.97 2.09-6.43L3 8.43h6.91L12 2z" />
+                    </svg>
+                    <span>Editor&apos;s Pick</span>
+                  </div>
+                  <h2 className={styles.featuredTitle}>
+                    Santorini{" "}
+                    <span className={styles.featuredTitleAccent}>Reverie</span>
+                  </h2>
+                  <p className={styles.featuredDescription}>
+                    Perched above the cobalt Aegean, whitewashed domes catch the
+                    golden hour light while volcanic cliffs plunge into crystal
+                    waters below. Our Santorini Reverie is a 10-day odyssey
+                    through Greece&apos;s most iconic island — intimate,
+                    unhurried, and utterly breathtaking.
+                  </p>
+                  <div className={styles.featuredTags}>
+                    <span className={styles.featuredTag}>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="9"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
                         />
-                        <div className={styles.inputBorder}></div>
-                      </div>
-                      <button type="submit" className={styles.newsletterButton}>
-                        <span className={styles.buttonText}>Subscribe</span>
-                        <span className={styles.buttonArrow}>
-                          <svg
-                            viewBox="0 0 20 20"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M4 10H16M16 10L13 6M16 10L13 14"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </span>
-                      </button>
-                    </form>
+                        <path
+                          d="M12 6v6l4 2"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                      10 Days
+                    </span>
+                    <span className={styles.featuredTag}>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                        />
+                        <path
+                          d="M12 8v4l3 3"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                      Greece
+                    </span>
+                    <span className={styles.featuredTag}>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12 2L14.4 8.3H21.2L15.9 12.1L17.9 18.4L12 14.6L6.1 18.4L8.1 12.1L2.8 8.3H9.6L12 2Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                      4.8 Rated
+                    </span>
+                  </div>
+                  <button
+                    className={styles.featuredCTA}
+                    onClick={() => navigate("/trips")}
+                  >
+                    <span>View Details</span>
+                    <svg
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M4 10H16M16 10L11 5M16 10L11 15"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
 
-                    <p className={styles.newsletterDisclaimer}>
-                      By subscribing, you agree to our Privacy Policy.
-                      Unsubscribe at any time.
-                    </p>
+              {/* Featured Destination 3 — Kyoto (visual RIGHT, content LEFT) */}
+              <div className={styles.featuredDestination}>
+                {/* Left — content */}
+                <div className={styles.featuredContent}>
+                  <div className={styles.featuredEyebrow}>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M12 2l2.09 6.43H21l-5.47 3.97 2.09 6.43L12 14.86l-5.62 3.97 2.09-6.43L3 8.43h6.91L12 2z" />
+                    </svg>
+                    <span>Signature Journey</span>
+                  </div>
+                  <h2 className={styles.featuredTitle}>
+                    Kyoto{" "}
+                    <span className={styles.featuredTitleAccent}>in Bloom</span>
+                  </h2>
+                  <p className={styles.featuredDescription}>
+                    Follow the path of silk-robed geisha through stone lantern
+                    alleys as cherry blossoms drift overhead. Our Kyoto in Bloom
+                    is a 12-day cultural immersion into Japan&apos;s ancient
+                    capital — where zen gardens, hidden tea houses, and
+                    thousand-year-old shrines await at every turn.
+                  </p>
+                  <div className={styles.featuredTags}>
+                    <span className={styles.featuredTag}>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle
+                          cx="12"
+                          cy="12"
+                          r="9"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                        />
+                        <path
+                          d="M12 6v6l4 2"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                      12 Days
+                    </span>
+                    <span className={styles.featuredTag}>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                        />
+                        <path
+                          d="M12 8v4l3 3"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                      Japan
+                    </span>
+                    <span className={styles.featuredTag}>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M12 2L14.4 8.3H21.2L15.9 12.1L17.9 18.4L12 14.6L6.1 18.4L8.1 12.1L2.8 8.3H9.6L12 2Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                      5.0 Rated
+                    </span>
+                  </div>
+                  <button
+                    className={styles.featuredCTA}
+                    onClick={() => navigate("/trips")}
+                  >
+                    <span>View Details</span>
+                    <svg
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M4 10H16M16 10L11 5M16 10L11 15"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Right — visual panel */}
+                <div
+                  className={`${styles.featuredVisual} ${styles.featuredVisualKyoto}`}
+                >
+                  <div className={styles.featuredVisualGlow}></div>
+                  <div
+                    className={styles.featuredRing}
+                    style={{
+                      width: "220px",
+                      height: "220px",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%,-50%)",
+                    }}
+                  ></div>
+                  <div
+                    className={styles.featuredRing}
+                    style={{
+                      width: "320px",
+                      height: "320px",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%,-50%)",
+                      opacity: "0.35",
+                    }}
+                  ></div>
+                  <div
+                    className={styles.featuredRing}
+                    style={{
+                      width: "420px",
+                      height: "420px",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%,-50%)",
+                      opacity: "0.18",
+                    }}
+                  ></div>
+                  <div className={styles.featuredPin}>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </div>
+                  <div
+                    className={`${styles.featuredChip} ${styles.featuredChipTop}`}
+                  >
+                    <span className={styles.featuredChipDot}></span>
+                    <span>Arashiyama · Bamboo</span>
+                  </div>
+                  <div
+                    className={`${styles.featuredChip} ${styles.featuredChipBottom}`}
+                  >
+                    <span className={styles.featuredChipDot}></span>
+                    <span>Fushimi · Shrine Gates</span>
+                  </div>
+                  <div
+                    className={`${styles.featuredChip} ${styles.featuredChipLeft}`}
+                  >
+                    <span className={styles.featuredChipDot}></span>
+                    <span>Gion · Geisha District</span>
                   </div>
                 </div>
               </div>

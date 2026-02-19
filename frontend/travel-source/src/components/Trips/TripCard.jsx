@@ -184,9 +184,31 @@ const TripCard = ({ trip, index }) => {
           <div className={styles.imageOverlay}></div>
         </div>
 
+        {/* Floating Price Badge */}
+        <div className={styles.priceFloat}>
+          <div className={styles.priceFloatLabel}>From</div>
+          <div className={styles.priceFloatDivider}></div>
+          <div>
+            <div className={styles.priceFloatAmount}>
+              {formatPrice(trip.price)}
+            </div>
+            <div className={styles.priceFloatPer}>per person</div>
+          </div>
+        </div>
+
         {/* Luxury Badge */}
         <div className={styles.luxuryBadge}>
-          <span className={styles.badgeIcon}>✨</span>
+          <span className={styles.badgeIcon}>
+            <svg
+              width="10"
+              height="10"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M12 2L14.2451 8.90983H21.5106L15.6327 13.1803L17.8779 20.0902L12 15.8197L6.12215 20.0902L8.36729 13.1803L2.48944 8.90983H9.75486L12 2Z" />
+            </svg>
+          </span>
           <span className={styles.badgeText}>{luxuryBadge}</span>
           <div className={styles.badgeGlow}></div>
         </div>
@@ -317,36 +339,7 @@ const TripCard = ({ trip, index }) => {
           )}
         </div>
 
-        {/* Price & Booking */}
-        <div className={styles.cardFooter}>
-          <div className={styles.priceSection}>
-            <div className={styles.priceLabel}>STARTING FROM</div>
-            <div className={styles.priceAmount}>{formatPrice(trip.price)}</div>
-            <div className={styles.pricePer}>PER PERSON</div>
-          </div>
-
-          <button className={styles.bookButton}>
-            <span className={styles.bookText}>EXPLORE JOURNEY</span>
-            <span className={styles.bookArrow}>
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M5 12H19M19 12L12 5M19 12L12 19"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
-            <div className={styles.buttonGlow}></div>
-          </button>
-        </div>
-
-        {/* Additional Info */}
+        {/* Difficulty + Rating */}
         <div className={styles.additionalInfo}>
           <div className={styles.difficulty}>
             <div className={styles.difficultyLabel}>DIFFICULTY</div>
@@ -383,6 +376,29 @@ const TripCard = ({ trip, index }) => {
             </div>
             <div className={styles.ratingText}>4.8/5</div>
           </div>
+        </div>
+
+        {/* CTA */}
+        <div className={styles.cardFooter}>
+          <button className={styles.bookButton}>
+            <span className={styles.bookText}>EXPLORE JOURNEY</span>
+            <span className={styles.bookArrow}>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 12H19M19 12L12 5M19 12L12 19"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+            <div className={styles.buttonGlow}></div>
+          </button>
         </div>
       </div>
 
