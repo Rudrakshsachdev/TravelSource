@@ -74,7 +74,9 @@ const Navbar = () => {
   return (
     <>
       {/* Luxury Top Bar */}
-      <div className={styles.topBar}>
+      <div
+        className={`${styles.topBar} ${isScrolled ? styles.topBarHidden : ""}`}
+      >
         <div className={styles.topBarContent}>
           <span className={styles.topBarText}>
             <span className={styles.topBarStar}>✦</span>
@@ -164,12 +166,15 @@ const Navbar = () => {
             <div className={styles.userActions}>
               {authData && (
                 <div className={styles.userSection}>
-                  <div className={styles.userWelcome}>
-                    <span className={styles.welcomeText}>Welcome</span>
-                    <div className={styles.userBadge}>
+                  <span className={styles.userDivider}></span>
+                  <div className={styles.userProfile}>
+                    <div className={styles.avatarRing}>
                       <span className={styles.userInitial}>
                         {authData.username.charAt(0).toUpperCase()}
                       </span>
+                    </div>
+                    <div className={styles.userInfo}>
+                      <span className={styles.userGreeting}>Hello,</span>
                       <span className={styles.userName}>
                         {authData.username}
                       </span>
