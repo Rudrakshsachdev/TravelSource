@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Trip, Enquiry, ContactMessage
+from .models import Trip, Enquiry, ContactMessage, Booking
 
 from .serializers import (
     TripSerializer,
@@ -14,12 +14,23 @@ from .serializers import (
     AdminEnquirySerializer,
     AdminTripSerializer,
     ContactMessageSerializer,
+    BookingCreateSerializer,
+    BookingListSerializer,
 )
 
 from django.shortcuts import get_object_or_404
 
 from django.contrib.auth.models import User
 from .serializers import UserAdminSerializer
+
+import uuid
+from django.conf import settings
+from .utils import generate_easebuzz_hash
+import razorpay
+
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.conf import settings
 
 @api_view(["GET"])
 def trip_list(request):
@@ -284,3 +295,142 @@ def delete_contact_message(request, pk):
 
 
 
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def create_booking(request):
+    try:
+        trip_id = request.data.get("trip")
+        persons = int(request.data.get("persons", 1))
+
+        if persons <= 0:
+            return Response({"error": "Invalid Number of persons"}, status=400)
+        
+        trip = Trip.objects.get(id=trip_id)
+
+        total_amount = trip.price * persons
+
+        booking = Booking.objects.create(
+            user = request.user,
+
+            trip = trip,
+
+            full_name = request.data.get("full_name"),
+
+            email = request.data.get("email"),
+
+            phone = request.data.get("phone"),
+
+            persons = persons,
+
+            total_amount = total_amount,
+
+        )
+
+        serializer = BookingCreateSerializer(booking)
+
+        return Response(serializer.data, status=201)
+
+    except Trip.DoesNotExist:
+        return Response({"error": "Trip not found"}, status=404)
+        
+    except Exception as e:
+        return Response({"error" : str(e)}, status=404)
+
+
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def user_bookings(request):
+    bookings = Booking.objects.filter(user=request.user).order_by("-created_at")
+
+    serializer = BookingListSerializer(bookings, many=True)
+    
+    return Response(serializer.data)
+
+
+    
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def admin_bookings(request):
+    if request.user.profile.role != "ADMIN":
+        return Response({"error": "Unauthorized"}, status=403)
+
+    bookings = Booking.objects.select_related("trip", "user").order_by("-created_at")
+    serializer = BookingCreateSerializer(bookings, many=True)
+    return Response(serializer.data)
+
+
+
+
+
+@api_view(["PATCH"])
+@permission_classes([IsAuthenticated])
+def update_booking_status(request, pk):
+    if request.user.profile.role != "ADMIN":
+        return Response({"error": "Unauthorized"}, status=403)
+
+    try:
+        booking = Booking.objects.get(pk=pk)
+
+        new_status = request.data.get("status")
+
+        if new_status not in ["APPROVED", "DECLINED"]:
+            return Response({"error": "Invalid status"}, status=400)
+
+        booking.status = new_status
+        booking.admin_note = request.data.get("admin_note", "")
+        booking.save()
+
+        if new_status == "APPROVED":
+            subject = "Your Booking is Confirmed | Travel Professor",
+
+            html_content = render_to_string(
+                "booking_approved.html",
+                {
+                    "full_name": booking.full_name,
+                    "trip_title": booking.trip.title,
+                    "persons": booking.persons,
+                    "total_amount": booking.total_amount,
+                },
+            )
+        else:
+            subject = "Booking Update | Travel Professor",
+
+            html_content = render_to_string(
+                "booking_declined.html",
+                {
+                    "full_name": booking.full_name,
+                    "trip_title": booking.trip.title,
+                    "persons": booking.persons,
+                    "total_amount": booking.total_amount,
+                },
+            )
+        
+        text_content = "Please view this email in HTML Format."
+
+        email = EmailMultiAlternatives(
+            subject,
+            text_content,
+            settings.DEFAULT_FROM_EMAIL,
+            [booking.email],
+        )
+
+        email = EmailMultiAlternatives(
+            subject,
+            text_content,
+            settings.DEFAULT_FROM_EMAIL,
+            [booking.email],
+        )
+
+        email.attach_alternative(html_content, "text/html")
+        email.send()
+
+
+        serializer = BookingCreateSerializer(booking)
+        return Response(serializer.data)
+
+    except Booking.DoesNotExist:
+        return Response({"error": "Booking not found"}, status=404)

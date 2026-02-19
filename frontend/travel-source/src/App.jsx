@@ -9,6 +9,7 @@ import Signup from "./pages/Signup/Signup";
 import Profile from "./pages/Profile/Profile";
 import { TripDetail } from "./components/Trips";
 import ContactUs from "./components/ContactUs/ContactUs";
+import MyBookings from "./pages/MyBookings/MyBookings";
 
 // Admin
 import AdminLayout from "./admin/AdminLayout";
@@ -17,7 +18,8 @@ import AdminDashboard from "./admin/AdminDashboard";
 import AdminEnquiries from "./admin/AdminEnquiries";
 import AdminTrips from "./admin/AdminTrips";
 import AdminUsers from "./admin/AdminUsers";
-import AdminContactMessage from "./admin/AdminContactMessage";  
+import AdminContactMessage from "./admin/AdminContactMessage";
+import AdminBookings from "./admin/AdminBookings";
 
 function App() {
   return (
@@ -66,6 +68,26 @@ function App() {
             <Layout>
               <Profile />
             </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/my-bookings"
+        element={
+          <ProtectedRoute allowedRole="USER">
+            <Layout>
+              <MyBookings />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/bookings"
+        element={
+          <ProtectedRoute allowedRole="ADMIN">
+            <AdminBookings />
           </ProtectedRoute>
         }
       />

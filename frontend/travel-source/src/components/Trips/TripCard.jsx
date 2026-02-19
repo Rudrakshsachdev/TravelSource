@@ -1,137 +1,406 @@
-// this component is used to display the details of a single trip in the list of trips
-
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import styles from "./TripCard.module.css";
 
-const TripCard = ({ trip }) => {
+const TripCard = ({ trip, index }) => {
   const navigate = useNavigate();
+  const [isHovered, setIsHovered] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
-  // Generate a unique gradient based on trip ID for consistent colors
-  const getTripGradient = (id) => {
-    const gradients = [
-      'linear-gradient(135deg, #1e3a8a 0%, #0ea5e9 100%)',
-      'linear-gradient(135deg, #0f766e 0%, #14b8a6 100%)',
-      'linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%)',
-      'linear-gradient(135deg, #c2410c 0%, #ea580c 100%)',
-      'linear-gradient(135deg, #be185d 0%, #ec4899 100%)',
-      'linear-gradient(135deg, #0369a1 0%, #38bdf8 100%)'
-    ];
-    return gradients[id % gradients.length];
+  // Luxury gradient based on trip category
+  const getLuxuryGradient = (category) => {
+    const gradients = {
+      luxury: "linear-gradient(135deg, #FFD700 0%, #FFC107 50%, #B8860B 100%)",
+      adventure:
+        "linear-gradient(135deg, #00B4D8 0%, #0077B6 50%, #0096C7 100%)",
+      cultural:
+        "linear-gradient(135deg, #C77DFF 0%, #9D4EDD 50%, #7B2CBF 100%)",
+      beach: "linear-gradient(135deg, #00BBF9 0%, #00A6FB 50%, #0582CA 100%)",
+      mountain:
+        "linear-gradient(135deg, #48CAE4 0%, #0096C7 50%, #0077B6 100%)",
+      urban: "linear-gradient(135deg, #6A040F 0%, #9D0208 50%, #D00000 100%)",
+      default: "linear-gradient(135deg, #FFD700 0%, #FFED4E 50%, #FFD700 100%)",
+    };
+    return gradients[category?.toLowerCase()] || gradients.default;
   };
 
+  // Premium format price
   const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
     }).format(price);
   };
 
-  const getTripTypeIcon = (title) => {
-    // Determine icon based on trip title keywords
+  // Luxury trip type icon
+  const getLuxuryIcon = (category, title) => {
     const titleLower = title.toLowerCase();
-    if (titleLower.includes('beach') || titleLower.includes('sea') || titleLower.includes('ocean')) {
-      return '🏖️';
-    } else if (titleLower.includes('mountain') || titleLower.includes('hiking') || titleLower.includes('trek')) {
-      return '⛰️';
-    } else if (titleLower.includes('city') || titleLower.includes('urban')) {
-      return '🏙️';
-    } else if (titleLower.includes('cultural') || titleLower.includes('heritage')) {
-      return '🏛️';
-    } else if (titleLower.includes('adventure') || titleLower.includes('sports')) {
-      return '🚴';
-    } else {
-      return '🧳';
-    }
+    const iconMap = {
+      luxury: "🏰",
+      adventure: "⛰️",
+      cultural: "🏛️",
+      beach: "🏖️",
+      mountain: "❄️",
+      urban: "🏙️",
+      safari: "🦁",
+      cruise: "🛳️",
+      wellness: "🧘",
+      culinary: "🍽️",
+    };
+
+    if (category) return iconMap[category.toLowerCase()] || "✨";
+
+    if (titleLower.includes("beach") || titleLower.includes("island"))
+      return "🏖️";
+    if (titleLower.includes("mountain") || titleLower.includes("alpine"))
+      return "❄️";
+    if (titleLower.includes("city") || titleLower.includes("urban"))
+      return "🏙️";
+    if (titleLower.includes("cultural") || titleLower.includes("heritage"))
+      return "🏛️";
+    if (titleLower.includes("adventure") || titleLower.includes("expedition"))
+      return "⛰️";
+    if (titleLower.includes("luxury") || titleLower.includes("premium"))
+      return "🏰";
+    if (titleLower.includes("safari") || titleLower.includes("wildlife"))
+      return "🦁";
+    if (titleLower.includes("cruise") || titleLower.includes("yacht"))
+      return "🛳️";
+    if (titleLower.includes("wellness") || titleLower.includes("spa"))
+      return "🧘";
+    if (titleLower.includes("culinary") || titleLower.includes("food"))
+      return "🍽️";
+
+    return "✨";
   };
 
-  const tripTypeIcon = getTripTypeIcon(trip.title);
-  const tripGradient = getTripGradient(trip.id);
+  // Luxury badge text based on trip features
+  const getLuxuryBadge = (trip) => {
+    if (trip.price > 10000) return "EXCLUSIVE";
+    if (trip.duration_days > 10) return "EXTENDED";
+    if (trip.category === "luxury") return "PREMIUM";
+    return "FEATURED";
+  };
+
+  // Difficulty level with visual indicator
+  const getDifficultyLevel = (title) => {
+    const titleLower = title.toLowerCase();
+    if (titleLower.includes("extreme") || titleLower.includes("challenging"))
+      return { level: 5, text: "EXTREME" };
+    if (titleLower.includes("moderate") || titleLower.includes("intermediate"))
+      return { level: 3, text: "MODERATE" };
+    return { level: 1, text: "LEISURE" };
+  };
+
+  // Generate luxury image URL (using placeholder with index for variety)
+  const getLuxuryImage = () => {
+    const images = [
+      "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&w=800&q=80",
+    ];
+    return images[index % images.length];
+  };
+
+  // Get proper image URL (handle backend relative URLs)
+  const getImageUrl = () => {
+    if (!trip.image || trip.image.trim() === "") return getLuxuryImage();
+    // If it's already a full URL (Cloudinary, etc.), use it directly
+    if (trip.image.startsWith("http")) return trip.image;
+    // Otherwise, prepend the backend URL for relative paths
+    const backendUrl =
+      import.meta.env.VITE_API_BASE_URL?.replace("/api", "") ||
+      "http://localhost:8000";
+    return `${backendUrl}${trip.image}`;
+  };
+
+  const luxuryGradient = getLuxuryGradient(trip.category);
+  const luxuryIcon = getLuxuryIcon(trip.category, trip.title);
+  const luxuryBadge = getLuxuryBadge(trip);
+  const difficulty = getDifficultyLevel(trip.title);
+  const [currentImage, setCurrentImage] = useState(getImageUrl());
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
+
+  const handleImageError = () => {
+    // Fall back to placeholder images if the original fails
+    setCurrentImage(getLuxuryImage());
+  };
+
+  const handleCardClick = () => {
+    navigate(`/trips/${trip.id}`);
+  };
 
   return (
     <div
-      className={styles.card}
-      onClick={() => navigate(`/trips/${trip.id}`)}
+      className={`${styles.ultraLuxuryCard} ${isHovered ? styles.cardHovered : ""} ${isLoading ? styles.cardLoading : ""}`}
+      onClick={handleCardClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      data-aos="fade-up"
+      data-aos-delay={(index % 3) * 100}
     >
-      <div className={styles.cardHeader} style={{ background: tripGradient }}>
-        <div className={styles.headerContent}>
-          <div className={styles.tripTypeIcon}>
-            {tripTypeIcon}
-          </div>
-          <div className={styles.headerText}>
-            <span className={styles.featuredBadge}>
-              <svg viewBox="0 0 20 20" fill="currentColor">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-              Featured
-            </span>
-            <h3 className={styles.title}>{trip.title}</h3>
-            <div className={styles.location}>
-              <svg viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-              </svg>
-              <span>{trip.location}</span>
+      {/* Card Glow Effect */}
+      <div
+        className={styles.cardGlow}
+        style={{ background: luxuryGradient }}
+      ></div>
+
+      {/* Card Border */}
+      <div className={styles.cardBorder}></div>
+
+      {/* Card Header with Image */}
+      <div className={styles.cardHeader}>
+        <div className={styles.imageContainer}>
+          {!imageLoaded && (
+            <div
+              className={styles.imagePlaceholder}
+              style={{ background: luxuryGradient }}
+            >
+              <div className={styles.placeholderIcon}>{luxuryIcon}</div>
             </div>
-          </div>
+          )}
+          <img
+            src={currentImage}
+            alt={trip.title}
+            className={`${styles.cardImage} ${imageLoaded ? styles.imageLoaded : ""}`}
+            loading="lazy"
+            onLoad={handleImageLoad}
+            onError={handleImageError}
+          />
+          <div className={styles.imageOverlay}></div>
         </div>
-        <div className={styles.gradientOverlay}></div>
+
+        {/* Luxury Badge */}
+        <div className={styles.luxuryBadge}>
+          <span className={styles.badgeIcon}>✨</span>
+          <span className={styles.badgeText}>{luxuryBadge}</span>
+          <div className={styles.badgeGlow}></div>
+        </div>
+
+        {/* Quick View */}
+        <button
+          className={styles.quickViewButton}
+          onClick={(e) => {
+            e.stopPropagation();
+            // Handle quick view modal
+          }}
+        >
+          <span className={styles.quickViewIcon}>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 4.5C7 4.5 2.73 7.61 1 12C2.73 16.39 7 19.5 12 19.5C17 19.5 21.27 16.39 23 12C21.27 7.61 17 4.5 12 4.5Z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+        </button>
       </div>
 
+      {/* Card Content */}
       <div className={styles.cardContent}>
-        <div className={styles.description}>
-          <p>{trip.description}</p>
+        {/* Category & Duration */}
+        <div className={styles.cardMeta}>
+          <div className={styles.categoryTag}>
+            <span className={styles.categoryIcon}>{luxuryIcon}</span>
+            <span className={styles.categoryText}>
+              {trip.category ? trip.category.toUpperCase() : "PREMIUM"}
+            </span>
+          </div>
+          <div className={styles.duration}>
+            <span className={styles.durationIcon}>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M12 6V12L16 14"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+            <span className={styles.durationText}>
+              {trip.duration_days} DAYS
+            </span>
+          </div>
         </div>
 
-        <div className={styles.metaInfo}>
-          <div className={styles.metaItem}>
-            <div className={styles.metaIcon}>
-              <svg viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <div className={styles.metaContent}>
-              <span className={styles.metaLabel}>Duration</span>
-              <span className={styles.metaValue}>{trip.duration_days} Days</span>
-            </div>
-          </div>
+        {/* Title */}
+        <h3 className={styles.cardTitle}>
+          {trip.title}
+          <span className={styles.titleLine}></span>
+        </h3>
 
-          <div className={styles.metaItem}>
-            <div className={styles.metaIcon}>
-              <svg viewBox="0 0 20 20" fill="currentColor">
-                <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <div className={styles.metaContent}>
-              <span className={styles.metaLabel}>Price</span>
-              <span className={styles.price}>{formatPrice(trip.price)}</span>
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.actionBar}>
-          <button className={styles.viewButton}>
-            <span>View Details</span>
-            <svg className={styles.buttonIcon} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4.16699 10H15.8337" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M10.833 5L15.833 10L10.833 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        {/* Location */}
+        <div className={styles.location}>
+          <span className={styles.locationIcon}>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M12 22C16 18 20 14.4183 20 10C20 5.58172 16.4183 2 12 2C7.58172 2 4 5.58172 4 10C4 14.4183 8 18 12 22Z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
+          </span>
+          <span className={styles.locationText}>{trip.location}</span>
+        </div>
+
+        {/* Description */}
+        <div className={styles.cardDescription}>
+          <p>
+            {trip.description.length > 120
+              ? `${trip.description.substring(0, 120)}...`
+              : trip.description}
+          </p>
+        </div>
+
+        {/* Luxury Features */}
+        <div className={styles.luxuryFeatures}>
+          {["Private Guide", "Luxury Accommodation", "Fine Dining"].map(
+            (feature, i) => (
+              <div key={i} className={styles.feature}>
+                <span className={styles.featureIcon}>✓</span>
+                <span className={styles.featureText}>{feature}</span>
+              </div>
+            ),
+          )}
+        </div>
+
+        {/* Price & Booking */}
+        <div className={styles.cardFooter}>
+          <div className={styles.priceSection}>
+            <div className={styles.priceLabel}>STARTING FROM</div>
+            <div className={styles.priceAmount}>{formatPrice(trip.price)}</div>
+            <div className={styles.pricePer}>PER PERSON</div>
+          </div>
+
+          <button className={styles.bookButton}>
+            <span className={styles.bookText}>EXPLORE JOURNEY</span>
+            <span className={styles.bookArrow}>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 12H19M19 12L12 5M19 12L12 19"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+            <div className={styles.buttonGlow}></div>
           </button>
         </div>
 
-        <div className={styles.footerInfo}>
+        {/* Additional Info */}
+        <div className={styles.additionalInfo}>
           <div className={styles.difficulty}>
-            <div className={styles.difficultyIndicator}></div>
-            <span className={styles.difficultyText}>Moderate</span>
+            <div className={styles.difficultyLabel}>DIFFICULTY</div>
+            <div className={styles.difficultyLevels}>
+              {[1, 2, 3, 4, 5].map((level) => (
+                <div
+                  key={level}
+                  className={`${styles.difficultyDot} ${level <= difficulty.level ? styles.difficultyActive : ""}`}
+                ></div>
+              ))}
+            </div>
+            <div className={styles.difficultyText}>{difficulty.text}</div>
           </div>
+
           <div className={styles.rating}>
-            <svg viewBox="0 0 20 20" fill="currentColor">
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
-            <span>4.8</span>
+            <div className={styles.ratingLabel}>RATING</div>
+            <div className={styles.stars}>
+              {[1, 2, 3, 4, 5].map((star) => (
+                <span key={star} className={styles.star}>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 2L14.2451 8.90983H21.5106L15.6327 13.1803L17.8779 20.0902L12 15.8197L6.12215 20.0902L8.36729 13.1803L2.48944 8.90983H9.75486L12 2Z"
+                      fill={star <= 4 ? "currentColor" : "none"}
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                    />
+                  </svg>
+                </span>
+              ))}
+            </div>
+            <div className={styles.ratingText}>4.8/5</div>
           </div>
         </div>
       </div>
+
+      {/* Hover Effect Elements */}
+      <div className={styles.hoverEffect}></div>
+      <div
+        className={styles.hoverLight}
+        style={{ background: luxuryGradient }}
+      ></div>
+
+      {/* Loading State */}
+      {isLoading && (
+        <div className={styles.loadingOverlay}>
+          <div className={styles.loadingSpinner}>
+            <div className={styles.spinnerCircle}></div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

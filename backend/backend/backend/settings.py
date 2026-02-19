@@ -14,6 +14,8 @@ from pathlib import Path
 
 from datetime import timedelta
 
+import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -142,3 +144,9 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
+
+
+# razorpay settings
+RAZORPAY_KEY_ID = "rzp_test_xxxxx"
+RAZORPAY_KEY_SECRET = "xxxxxxxx"
+

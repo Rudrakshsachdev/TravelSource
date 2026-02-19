@@ -40,36 +40,6 @@ const AdminEnquiries = () => {
     }
   };
 
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case "pending":
-        return (
-          <svg className={styles.statusIcon} viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-          </svg>
-        );
-      case "responded":
-        return (
-          <svg className={styles.statusIcon} viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-          </svg>
-        );
-      case "booked":
-        return (
-          <svg className={styles.statusIcon} viewBox="0 0 20 20" fill="currentColor">
-            <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.584 1.032 2.79 1.032s2.228-.383 2.79-1.031a1 1 0 00-1.51-1.31c-.163.187-.452.377-.843.504v-1.941a4.535 4.535 0 001.676-.662C13.398 9.766 14 8.991 14 8c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 5.092V5z" clipRule="evenodd" />
-          </svg>
-        );
-      default:
-        return (
-          <svg className={styles.statusIcon} viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z" clipRule="evenodd" />
-          </svg>
-        );
-    }
-  };
-
   const handleStatusUpdate = async (id, newStatus) => {
     // TODO: Add API call to update status
     setEnquiries(prev => prev.map(enquiry =>
@@ -128,6 +98,41 @@ const AdminEnquiries = () => {
     { id: "booked", label: "Booked", count: stats.booked },
   ];
 
+  const handleExportCSV = () => {
+    if (enquiries.length === 0) {
+      alert("No enquiries to export.");
+      return;
+    }
+
+    const headers = ["ID", "Customer Name", "Email", "Phone", "Trip Title", "Message", "Status", "Date", "Time"];
+
+    const csvRows = [
+      headers.join(","),
+      ...enquiries.map(enquiry => [
+        enquiry.id,
+        `"${enquiry.name.replace(/"/g, '""')}"`,
+        `"${enquiry.email.replace(/"/g, '""')}"`,
+        `"${(enquiry.phone || "").replace(/"/g, '""')}"`,
+        `"${enquiry.trip_title.replace(/"/g, '""')}"`,
+        `"${(enquiry.message || "").replace(/"/g, '""')}"`,
+        `"${enquiry.status || "pending"}"`,
+        `"${new Date(enquiry.created_at).toLocaleDateString()}"`,
+        `"${new Date(enquiry.created_at).toLocaleTimeString()}"`
+      ].join(","))
+    ];
+
+    const csvString = csvRows.join("\n");
+    const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `enquiries_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   if (loading) {
     return (
       <div className={styles.loadingContainer}>
@@ -146,9 +151,6 @@ const AdminEnquiries = () => {
         <h3 className={styles.errorTitle}>Error Loading Enquiries</h3>
         <p className={styles.errorText}>{error}</p>
         <button className={styles.retryButton} onClick={loadEnquiries}>
-          <svg className={styles.retryIcon} viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
-          </svg>
           Try Again
         </button>
       </div>
@@ -157,11 +159,9 @@ const AdminEnquiries = () => {
 
   return (
     <div className={styles.dashboard}>
-      {/* Background Overlay */}
       <div className={styles.backgroundOverlay}></div>
 
       <div className={styles.container}>
-        {/* Header */}
         <div className={styles.header}>
           <div>
             <h1 className={styles.pageTitle}>Enquiry Management</h1>
@@ -178,7 +178,11 @@ const AdminEnquiries = () => {
               Refresh
             </button>
 
-            <button className={styles.exportButton}>
+            <button
+              className={styles.exportButton}
+              onClick={handleExportCSV}
+              disabled={enquiries.length === 0}
+            >
               <svg className={styles.exportIcon} viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
               </svg>
@@ -187,7 +191,6 @@ const AdminEnquiries = () => {
           </div>
         </div>
 
-        {/* Stats Overview */}
         <div className={styles.statsSection}>
           {statusOptions.map((stat) => (
             <div
@@ -213,7 +216,6 @@ const AdminEnquiries = () => {
           ))}
         </div>
 
-        {/* Toolbar */}
         <div className={styles.toolbar}>
           <div className={styles.searchContainer}>
             <svg className={styles.searchIcon} viewBox="0 0 20 20" fill="currentColor">
@@ -261,7 +263,6 @@ const AdminEnquiries = () => {
           </div>
         </div>
 
-        {/* Enquiries Table */}
         <div className={styles.tableContainer}>
           <div className={styles.tableHeader}>
             <div className={styles.tableHeaderCell} style={{ width: '60px' }}>
@@ -389,27 +390,18 @@ const AdminEnquiries = () => {
 
                   <div className={styles.tableCell} style={{ width: '120px' }}>
                     <div className={styles.actionButtons}>
-                      <button
-                        className={styles.viewButton}
-                        title="View Details"
-                      >
+                      <button className={styles.viewButton} title="View Details">
                         <svg className={styles.viewIcon} viewBox="0 0 20 20" fill="currentColor">
                           <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
                           <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
                         </svg>
                       </button>
-                      <button
-                        className={styles.replyButton}
-                        title="Reply"
-                      >
+                      <button className={styles.replyButton} title="Reply">
                         <svg className={styles.replyIcon} viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M7.707 3.293a1 1 0 010 1.414L5.414 7H11a7 7 0 017 7v2a1 1 0 11-2 0v-2a5 5 0 00-5-5H5.414l2.293 2.293a1 1 0 11-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
                       </button>
-                      <button
-                        className={styles.deleteButton}
-                        title="Delete"
-                      >
+                      <button className={styles.deleteButton} title="Delete">
                         <svg className={styles.deleteIcon} viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
                         </svg>
@@ -448,7 +440,6 @@ const AdminEnquiries = () => {
           )}
         </div>
 
-        {/* Pagination */}
         {sortedEnquiries.length > 0 && (
           <div className={styles.pagination}>
             <div className={styles.paginationInfo}>
@@ -464,9 +455,7 @@ const AdminEnquiries = () => {
               <div className={styles.pageNumbers}>
                 <span className={styles.pageNumberActive}>1</span>
                 <span className={styles.pageNumber}>2</span>
-                <span className={styles.pageNumber}>3</span>
                 <span className={styles.pageNumber}>...</span>
-                <span className={styles.pageNumber}>10</span>
               </div>
               <button className={styles.paginationButton}>
                 Next

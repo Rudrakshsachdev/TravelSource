@@ -423,3 +423,93 @@ export const deleteContactMessage = async (id) => {
 
   return true;
 };
+
+
+
+export const createBooking = async (data) => {
+  const token = localStorage.getItem("accessToken");
+
+  const res = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/v1/bookings/create/`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to create booking");
+  }
+
+  return res.json();
+};
+
+
+
+export const fetchMyBookings = async () => {
+  const token = localStorage.getItem("accessToken");
+
+  const res = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/v1/bookings/my/`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch bookings");
+  }
+
+  return res.json();
+};
+
+
+
+export const fetchAdminBookings = async () => {
+  const token = localStorage.getItem("accessToken");
+
+  const res = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/v1/admin/bookings/`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch admin bookings");
+  }
+
+  return res.json();
+};
+
+
+export const updateBookingStatus = async (id, status) => {
+  const token = localStorage.getItem("accessToken");
+
+  const res = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/v1/admin/bookings/${id}/status/`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ status }),
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to update booking status");
+  }
+
+  return res.json();
+};
+

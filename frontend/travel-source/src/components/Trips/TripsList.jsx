@@ -1,13 +1,11 @@
-/*
-this component is used to display the list of trips
-*/
-
 import { useEffect, useState } from "react";
 import { fetchTrips } from "../../services/api";
 import { TripCard } from ".";
 import styles from "./TripsList.module.css";
+import { useNavigate } from "react-router-dom";
 
 const TripsList = () => {
+  const navigate = useNavigate();
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -33,12 +31,14 @@ const TripsList = () => {
   }, []);
 
   // Filter and sort trips
-  const filteredTrips = trips.filter(trip => {
+  const filteredTrips = trips.filter((trip) => {
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      return trip.title.toLowerCase().includes(query) ||
-             trip.location.toLowerCase().includes(query) ||
-             trip.description.toLowerCase().includes(query);
+      return (
+        trip.title.toLowerCase().includes(query) ||
+        trip.location.toLowerCase().includes(query) ||
+        trip.description.toLowerCase().includes(query)
+      );
     }
     return true;
   });
@@ -55,7 +55,7 @@ const TripsList = () => {
       case "duration-short":
         return a.duration_days - b.duration_days;
       default:
-        return 0; // featured order (original order)
+        return 0;
     }
   });
 
@@ -67,7 +67,7 @@ const TripsList = () => {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleSearch = (e) => {
@@ -89,26 +89,77 @@ const TripsList = () => {
 
   if (loading) {
     return (
-      <div className={styles.loadingContainer}>
-        <div className={styles.loadingAnimation}>
-          <div className={styles.planeWrapper}>
-            <div className={styles.plane}>
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M22 2L11 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+      <div className={styles.luxuryLoading}>
+        <div className={styles.loadingContainer}>
+          <div className={styles.loadingOrbit}>
+            <div className={styles.orbitCenter}>
+              <div className={styles.orbitLogo}>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 2L2 7L12 12L22 7L12 2Z"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M2 17L12 22L22 17"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M2 12L12 17L22 12"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
             </div>
-            <div className={styles.cloud}></div>
-            <div className={styles.cloud} style={{ left: '40%', top: '30%' }}></div>
-            <div className={styles.cloud} style={{ left: '70%', top: '50%' }}></div>
+            <div className={styles.orbitPoint}></div>
+            <div className={styles.orbitPoint}></div>
+            <div className={styles.orbitPoint}></div>
           </div>
-          <h2 className={styles.loadingTitle}>Charting Your Course</h2>
-          <p className={styles.loadingSubtitle}>Discovering extraordinary travel experiences just for you...</p>
-          <div className={styles.loadingProgress}>
-            <div className={styles.progressBar}>
-              <div className={styles.progressFill}></div>
+
+          <div className={styles.loadingText}>
+            <h2 className={styles.loadingTitle}>
+              <span className={styles.titleWord}>Curating</span>
+              <span className={styles.titleWord}>Extraordinary</span>
+              <span className={styles.titleWord}>Journeys</span>
+            </h2>
+            <p className={styles.loadingSubtitle}>
+              Accessing our global collection of premium travel experiences...
+            </p>
+          </div>
+
+          <div className={styles.loadingStats}>
+            <div className={styles.loadingStat}>
+              <div className={styles.statNumber} data-count="100">
+                0
+              </div>
+              <div className={styles.statLabel}>Destinations</div>
             </div>
-            <span className={styles.progressText}>Loading amazing trips</span>
+            <div className={styles.loadingDivider}></div>
+            <div className={styles.loadingStat}>
+              <div className={styles.statNumber} data-count="500">
+                0
+              </div>
+              <div className={styles.statLabel}>Experiences</div>
+            </div>
+            <div className={styles.loadingDivider}></div>
+            <div className={styles.loadingStat}>
+              <div className={styles.statNumber} data-count="24">
+                0
+              </div>
+              <div className={styles.statLabel}>Hours</div>
+            </div>
           </div>
         </div>
       </div>
@@ -117,39 +168,117 @@ const TripsList = () => {
 
   if (error) {
     return (
-      <div className={styles.errorContainer}>
-        <div className={styles.errorCard}>
-          <div className={styles.errorIllustration}>
-            <div className={styles.compass}>
-              <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="40" stroke="currentColor" strokeWidth="2"/>
-                <path d="M50 10V90" stroke="currentColor" strokeWidth="2"/>
-                <path d="M10 50H90" stroke="currentColor" strokeWidth="2"/>
-                <path d="M30 30L70 70" stroke="currentColor" strokeWidth="2"/>
-                <path d="M30 70L70 30" stroke="currentColor" strokeWidth="2"/>
-                <circle cx="50" cy="50" r="8" fill="currentColor"/>
-              </svg>
+      <div className={styles.luxuryError}>
+        <div className={styles.errorScene}>
+          <div className={styles.errorGlobe}>
+            <div className={styles.globeLines}>
+              {[...Array(8)].map((_, i) => (
+                <div
+                  key={i}
+                  className={styles.globeLine}
+                  style={{ transform: `rotate(${i * 45}deg)` }}
+                ></div>
+              ))}
             </div>
-            <div className={styles.errorSymbol}>!</div>
+            <div className={styles.globeCenter}>
+              <div className={styles.errorSymbol}>!</div>
+            </div>
           </div>
-          <h2 className={styles.errorTitle}>Navigation Error</h2>
-          <p className={styles.errorMessage}>We're having trouble loading the travel routes. Please check your connection and try again.</p>
-          <div className={styles.errorActions}>
-            <button 
-              className={styles.primaryErrorButton} 
-              onClick={() => window.location.reload()}
-            >
-              <svg viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd"/>
-              </svg>
-              Retry Connection
-            </button>
-            <button 
-              className={styles.secondaryErrorButton}
-              onClick={() => navigate('/')}
-            >
-              Return Home
-            </button>
+
+          <div className={styles.errorContent}>
+            <h2 className={styles.errorTitle}>
+              <span className={styles.errorTitleMain}>Navigation Error</span>
+              <span className={styles.errorTitleSub}>
+                Unable to Access Travel Portfolio
+              </span>
+            </h2>
+
+            <div className={styles.errorCard}>
+              <p className={styles.errorMessage}>
+                Our global concierge network is experiencing temporary
+                connectivity issues. Our team is already working to restore
+                access to our premium travel collection.
+              </p>
+
+              <div className={styles.errorActions}>
+                <button
+                  className={styles.errorBtnPrimary}
+                  onClick={() => window.location.reload()}
+                >
+                  <span className={styles.btnIcon}>
+                    <svg
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M17.5 2.5V7.5H12.5"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M2.5 17.5V12.5H7.5"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M17.5 7.5L13.75 3.75C12.6825 2.6825 11.265 2 9.75 2C6.0225 2 3 5.0225 3 8.75C3 9.3525 3.085 9.935 3.2425 10.4875"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M2.5 12.5L6.25 16.25C7.3175 17.3175 8.735 18 10.25 18C13.9775 18 17 14.9775 17 11.25C17 10.6475 16.915 10.065 16.7575 9.5125"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  <span className={styles.btnText}>Retrieve Collection</span>
+                </button>
+
+                <button
+                  className={styles.errorBtnSecondary}
+                  onClick={() => navigate("/contact")}
+                >
+                  <span className={styles.btnIcon}>
+                    <svg
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M2.5 5.83333L9.0755 10.05C9.635 10.4242 10.365 10.4242 10.9245 10.05L17.5 5.83333M4.16667 15.8333H15.8333C16.7538 15.8333 17.5 15.0871 17.5 14.1667V5.83333C17.5 4.91286 16.7538 4.16667 15.8333 4.16667H4.16667C3.24619 4.16667 2.5 4.91286 2.5 5.83333V14.1667C2.5 15.0871 3.24619 15.8333 4.16667 15.8333Z"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  <span className={styles.btnText}>Contact Concierge</span>
+                </button>
+              </div>
+            </div>
+
+            <div className={styles.errorFooter}>
+              <div className={styles.errorStatus}>
+                <div className={styles.statusIndicator}></div>
+                <span className={styles.statusText}>
+                  24/7 Support Available
+                </span>
+              </div>
+              <a href="tel:+18005551234" className={styles.errorContact}>
+                +1 (800) 555-1234
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -157,250 +286,723 @@ const TripsList = () => {
   }
 
   return (
-    <div className={styles.tripsPage}>
-      {/* Animated Background Elements */}
-      <div className={styles.backgroundAnimation}>
-        <div className={styles.floatingShape} style={{ top: '10%', left: '5%', animationDelay: '0s' }}></div>
-        <div className={styles.floatingShape} style={{ top: '20%', right: '8%', animationDelay: '1s' }}></div>
-        <div className={styles.floatingShape} style={{ bottom: '30%', left: '15%', animationDelay: '2s' }}></div>
+    <div className={styles.luxuryTripsPage}>
+      {/* Luxury Background Elements */}
+      <div className={styles.luxuryBackground}>
+        <div className={styles.backgroundGlow}></div>
+        <div className={styles.backgroundGrid}></div>
+        {/* Enhanced floating particles */}
+        <div className={styles.floatingElement}></div>
+        <div className={styles.floatingElement}></div>
+        <div className={styles.floatingElement}></div>
+        <div className={styles.floatingElement}></div>
+        <div className={styles.floatingElement}></div>
+        <div className={styles.floatingElement}></div>
+        <div className={styles.orbitRing}></div>
+        <div className={styles.orbitRing}></div>
       </div>
 
-      {/* Hero Section */}
-      <div className={styles.heroSection}>
-        <div className={styles.heroBackground}>
-          <div className={styles.heroGradient}></div>
-          <div className={styles.heroPattern}></div>
-        </div>
-        
-        <div className={styles.heroContent}>
-          <div className={styles.heroText}>
+      {/* Luxury Hero Section */}
+      <section className={styles.luxuryHero}>
+        <div className={styles.heroContainer}>
+          {/* Hero Content */}
+          <div className={styles.heroContent}>
+            <div className={styles.heroBadge}>
+              <span className={styles.badgeText}>PREMIUM COLLECTION</span>
+              <div className={styles.badgeGlow}></div>
+            </div>
+
             <h1 className={styles.heroTitle}>
-              <span className={styles.heroTitleLine}>Discover</span>
-              <span className={styles.heroTitleLine}>Extraordinary</span>
-              <span className={styles.heroTitleLine}>Journeys</span>
+              <span className={styles.titleLine}>
+                <span className={styles.titleNumber}>01</span>
+                <span className={styles.titleText}>Discover</span>
+              </span>
+              <span className={styles.titleLine}>
+                <span className={styles.titleNumber}>02</span>
+                <span className={styles.titleText}>Extraordinary</span>
+              </span>
+              <span className={styles.titleLine}>
+                <span className={styles.titleNumber}>03</span>
+                <span className={styles.titleText}>Journeys</span>
+              </span>
             </h1>
+
             <p className={styles.heroSubtitle}>
-              Where every destination tells a story, and every journey creates memories that last a lifetime.
+              Exclusive access to the world's most captivating destinations,
+              meticulously curated by our global network of travel connoisseurs.
             </p>
-            
+
             {/* Interactive Stats */}
-            <div className={styles.interactiveStats}>
-              <div className={styles.statCard}>
-                <div className={styles.statNumber} data-count={trips.length}>{trips.length}</div>
+            <div className={styles.heroStats}>
+              <div className={styles.statItem}>
+                <div className={styles.statNumberWrapper}>
+                  <span className={styles.statNumber} data-count={trips.length}>
+                    0
+                  </span>
+                  <span className={styles.statPlus}>+</span>
+                </div>
                 <div className={styles.statLabel}>Curated Experiences</div>
+                <div className={styles.statLine}></div>
               </div>
-              <div className={styles.statCard}>
-                <div className={styles.statNumber} data-count="50">50</div>
-                <div className={styles.statLabel}>Destinations</div>
+
+              <div className={styles.statDivider}></div>
+
+              <div className={styles.statItem}>
+                <div className={styles.statNumberWrapper}>
+                  <span className={styles.statNumber} data-count="50">
+                    0
+                  </span>
+                  <span className={styles.statPlus}>+</span>
+                </div>
+                <div className={styles.statLabel}>Global Destinations</div>
+                <div className={styles.statLine}></div>
               </div>
-              <div className={styles.statCard}>
-                <div className={styles.statNumber} data-count="98">100</div>
-                <div className={styles.statLabel}>Happy Travelers</div>
+
+              <div className={styles.statDivider}></div>
+
+              <div className={styles.statItem}>
+                <div className={styles.statNumberWrapper}>
+                  <span className={styles.statNumber} data-count="100">
+                    0
+                  </span>
+                  <span className={styles.statPercent}>%</span>
+                </div>
+                <div className={styles.statLabel}>Client Satisfaction</div>
+                <div className={styles.statLine}></div>
               </div>
             </div>
           </div>
 
-          {/* Search and Filter Section */}
-          <div className={styles.searchSection}>
+          {/* Luxury Search Section */}
+          <div className={styles.luxurySearch}>
+            <div className={styles.searchHeader}>
+              <div className={styles.searchTitle}>
+                <span className={styles.searchTitleNumber}>01</span>
+                <h3 className={styles.searchTitleText}>
+                  Find Your Perfect Journey
+                </h3>
+              </div>
+              <div className={styles.searchSubtitle}>
+                Filter by destination, experience, or preference
+              </div>
+            </div>
+
             <div className={styles.searchContainer}>
-              <div className={styles.searchIcon}>
-                <svg viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd"/>
-                </svg>
-              </div>
-              <input
-                type="text"
-                className={styles.searchInput}
-                placeholder="Search destinations, activities, or themes..."
-                value={searchQuery}
-                onChange={handleSearch}
-              />
-              {searchQuery && (
-                <button className={styles.clearSearch} onClick={() => setSearchQuery("")}>
-                  <svg viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd"/>
-                  </svg>
-                </button>
-              )}
-            </div>
-
-            <div className={styles.filterControls}>
-              <div className={styles.sortControl}>
-                <label htmlFor="sort-select" className={styles.sortLabel}>
-                  <svg viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zm0 4a1 1 0 000 2h5a1 1 0 000-2H3zm0 4a1 1 0 100 2h4a1 1 0 100-2H3zm10 5a1 1 0 102 0v-5.586l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 101.414 1.414L13 10.414V16z" clipRule="evenodd"/>
-                  </svg>
-                  Sort By:
-                </label>
-                <select 
-                  id="sort-select" 
-                  className={styles.sortSelect}
-                  value={sortBy}
-                  onChange={handleSortChange}
-                >
-                  <option value="featured">Featured</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="duration-short">Duration: Short to Long</option>
-                  <option value="duration-long">Duration: Long to Short</option>
-                </select>
-              </div>
-
-              <div className={styles.filterButtons}>
-                <button 
-                  className={`${styles.filterButton} ${activeFilter === "all" ? styles.filterButtonActive : ''}`}
-                  onClick={() => setActiveFilter("all")}
-                >
-                  All Trips
-                </button>
-                <button 
-                  className={`${styles.filterButton} ${activeFilter === "adventure" ? styles.filterButtonActive : ''}`}
-                  onClick={() => setActiveFilter("adventure")}
-                >
-                  Adventure
-                </button>
-                <button 
-                  className={`${styles.filterButton} ${activeFilter === "luxury" ? styles.filterButtonActive : ''}`}
-                  onClick={() => setActiveFilter("luxury")}
-                >
-                  Luxury
-                </button>
-                <button 
-                  className={`${styles.filterButton} ${activeFilter === "cultural" ? styles.filterButtonActive : ''}`}
-                  onClick={() => setActiveFilter("cultural")}
-                >
-                  Cultural
-                </button>
-              </div>
-
-              {(searchQuery || activeFilter !== "all" || sortBy !== "featured") && (
-                <button className={styles.clearFiltersButton} onClick={clearFilters}>
-                  Clear Filters
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className={styles.mainContent}>
-        <div className={styles.contentHeader}>
-          <div className={styles.resultsInfo}>
-            <h2 className={styles.resultsTitle}>
-              Available Journeys
-              <span className={styles.resultsCount}> ({sortedTrips.length} trips)</span>
-            </h2>
-            <p className={styles.resultsSubtitle}>
-              {searchQuery ? `Showing results for "${searchQuery}"` : "Explore our handpicked journeys, designed to inspire."}
-            </p>
-          </div>
-
-          <div className={styles.viewControls}>
-            <button className={styles.viewToggle}>
-              <svg viewBox="0 0 20 20" fill="currentColor">
-                <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
-              </svg>
-            </button>
-            <button className={styles.viewToggle}>
-              <svg viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {sortedTrips.length > 0 ? (
-          <>
-            {/* Trips Grid */}
-            <div className={styles.grid}>
-              {currentTrips.map((trip) => (
-                <TripCard key={trip.id} trip={trip} />
-              ))}
-            </div>
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className={styles.pagination}>
-                <button 
-                  className={`${styles.pageButton} ${currentPage === 1 ? styles.disabled : ''}`}
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  disabled={currentPage === 1}
-                >
-                  <svg viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd"/>
-                  </svg>
-                </button>
-
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                  <button
-                    key={page}
-                    className={`${styles.pageButton} ${currentPage === page ? styles.active : ''}`}
-                    onClick={() => handlePageChange(page)}
+              <div className={styles.searchInputWrapper}>
+                <div className={styles.searchIcon}>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    {page}
-                  </button>
-                ))}
-
-                <button 
-                  className={`${styles.pageButton} ${currentPage === totalPages ? styles.disabled : ''}`}
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                >
-                  <svg viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"/>
+                    <circle
+                      cx="11"
+                      cy="11"
+                      r="8"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                    />
+                    <path
+                      d="M16.5 16.5L21 21"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />
                   </svg>
-                </button>
+                </div>
+                <input
+                  type="text"
+                  className={styles.searchInput}
+                  placeholder="Search destinations, experiences, or activities..."
+                  value={searchQuery}
+                  onChange={handleSearch}
+                />
+                {searchQuery && (
+                  <button
+                    className={styles.searchClear}
+                    onClick={() => setSearchQuery("")}
+                    aria-label="Clear search"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                      />
+                      <path
+                        d="M15 9L9 15"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                      />
+                      <path
+                        d="M9 9L15 15"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </button>
+                )}
+                <div className={styles.searchBorder}></div>
+              </div>
 
-                <div className={styles.pageInfo}>
-                  Showing {indexOfFirstTrip + 1}-{Math.min(indexOfLastTrip, sortedTrips.length)} of {sortedTrips.length} trips
+              {/* Filter Controls */}
+              <div className={styles.filterControls}>
+                <div className={styles.filterSection}>
+                  <div className={styles.filterTitle}>
+                    <span className={styles.filterIcon}>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M4 6H20"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M7 12H17"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M10 18H14"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </span>
+                    Filter By Category
+                  </div>
+                  <div className={styles.filterButtons}>
+                    {[
+                      "all",
+                      "luxury",
+                      "adventure",
+                      "cultural",
+                      "beach",
+                      "mountain",
+                    ].map((filter) => (
+                      <button
+                        key={filter}
+                        className={`${styles.filterButton} ${activeFilter === filter ? styles.filterButtonActive : ""}`}
+                        onClick={() => setActiveFilter(filter)}
+                      >
+                        <span className={styles.filterButtonText}>
+                          {filter.charAt(0).toUpperCase() + filter.slice(1)}
+                        </span>
+                        <span className={styles.filterButtonUnderline}></span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className={styles.sortSection}>
+                  <div className={styles.sortTitle}>
+                    <span className={styles.sortIcon}>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M8 6H21"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M8 12H21"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M8 18H21"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M3 6H3.01"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M3 12H3.01"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M3 18H3.01"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </span>
+                    Sort Journeys
+                  </div>
+                  <div className={styles.sortSelectWrapper}>
+                    <select
+                      className={styles.sortSelect}
+                      value={sortBy}
+                      onChange={handleSortChange}
+                    >
+                      <option value="featured">Featured First</option>
+                      <option value="price-low">Price: Low to High</option>
+                      <option value="price-high">Price: High to Low</option>
+                      <option value="duration-short">Duration: Shortest</option>
+                      <option value="duration-long">Duration: Longest</option>
+                      <option value="popular">Most Popular</option>
+                    </select>
+                    <div className={styles.selectArrow}>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6 9L12 15L18 9"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                {(searchQuery ||
+                  activeFilter !== "all" ||
+                  sortBy !== "featured") && (
+                  <button
+                    className={styles.clearAllButton}
+                    onClick={clearFilters}
+                  >
+                    <span className={styles.clearIcon}>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M18 6L6 18"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M6 6L18 18"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </span>
+                    Clear All Filters
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Main Content Section */}
+      <section className={styles.mainContent}>
+        <div className={styles.contentContainer}>
+          {/* Content Header */}
+          <div className={styles.contentHeader}>
+            <div className={styles.headerLeft}>
+              <div className={styles.resultsTitle}>
+                <span className={styles.resultsBadge}>SELECTED COLLECTION</span>
+                <h2 className={styles.resultsHeading}>
+                  Premium Journeys
+                  <span className={styles.resultsCount}>
+                    {" "}
+                    ({sortedTrips.length})
+                  </span>
+                </h2>
+              </div>
+              <p className={styles.resultsSubtitle}>
+                {searchQuery
+                  ? `Found ${sortedTrips.length} journeys matching "${searchQuery}"`
+                  : "Handpicked experiences from our global portfolio"}
+              </p>
+            </div>
+
+            <div className={styles.headerRight}>
+              <div className={styles.viewControls}>
+                <button className={styles.viewButton}>
+                  <span className={styles.viewIcon}>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <rect
+                        x="3"
+                        y="3"
+                        width="7"
+                        height="7"
+                        rx="1"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                      />
+                      <rect
+                        x="14"
+                        y="3"
+                        width="7"
+                        height="7"
+                        rx="1"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                      />
+                      <rect
+                        x="3"
+                        y="14"
+                        width="7"
+                        height="7"
+                        rx="1"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                      />
+                      <rect
+                        x="14"
+                        y="14"
+                        width="7"
+                        height="7"
+                        rx="1"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                      />
+                    </svg>
+                  </span>
+                  Grid
+                </button>
+                <button className={styles.viewButton}>
+                  <span className={styles.viewIcon}>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <rect
+                        x="3"
+                        y="4"
+                        width="18"
+                        height="4"
+                        rx="1"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                      />
+                      <rect
+                        x="3"
+                        y="10"
+                        width="18"
+                        height="4"
+                        rx="1"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                      />
+                      <rect
+                        x="3"
+                        y="16"
+                        width="18"
+                        height="4"
+                        rx="1"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                      />
+                    </svg>
+                  </span>
+                  List
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Trips Grid */}
+          {sortedTrips.length > 0 ? (
+            <>
+              <div className={styles.tripsGrid}>
+                {currentTrips.map((trip, index) => (
+                  <div
+                    key={trip.id}
+                    className={styles.tripCardWrapper}
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <TripCard trip={trip} index={index} />
+                  </div>
+                ))}
+              </div>
+
+              {/* Luxury Pagination */}
+              {totalPages > 1 && (
+                <div className={styles.luxuryPagination}>
+                  <div className={styles.paginationInfo}>
+                    Showing{" "}
+                    <span className={styles.infoNumber}>
+                      {indexOfFirstTrip + 1}
+                    </span>{" "}
+                    -
+                    <span className={styles.infoNumber}>
+                      {" "}
+                      {Math.min(indexOfLastTrip, sortedTrips.length)}
+                    </span>{" "}
+                    of
+                    <span className={styles.infoNumber}>
+                      {" "}
+                      {sortedTrips.length}
+                    </span>{" "}
+                    journeys
+                  </div>
+
+                  <div className={styles.paginationControls}>
+                    <button
+                      className={`${styles.pageButton} ${styles.pageButtonPrev} ${currentPage === 1 ? styles.pageButtonDisabled : ""}`}
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                    >
+                      <span className={styles.pageButtonIcon}>
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M15 6L9 12L15 18"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </span>
+                      Previous
+                    </button>
+
+                    <div className={styles.pageNumbers}>
+                      {Array.from(
+                        { length: Math.min(5, totalPages) },
+                        (_, i) => {
+                          let pageNumber;
+                          if (totalPages <= 5) {
+                            pageNumber = i + 1;
+                          } else if (currentPage <= 3) {
+                            pageNumber = i + 1;
+                          } else if (currentPage >= totalPages - 2) {
+                            pageNumber = totalPages - 4 + i;
+                          } else {
+                            pageNumber = currentPage - 2 + i;
+                          }
+
+                          return (
+                            <button
+                              key={pageNumber}
+                              className={`${styles.pageNumber} ${currentPage === pageNumber ? styles.pageNumberActive : ""}`}
+                              onClick={() => handlePageChange(pageNumber)}
+                            >
+                              {pageNumber}
+                            </button>
+                          );
+                        },
+                      )}
+
+                      {totalPages > 5 && currentPage < totalPages - 2 && (
+                        <>
+                          <span className={styles.pageDots}>...</span>
+                          <button
+                            className={styles.pageNumber}
+                            onClick={() => handlePageChange(totalPages)}
+                          >
+                            {totalPages}
+                          </button>
+                        </>
+                      )}
+                    </div>
+
+                    <button
+                      className={`${styles.pageButton} ${styles.pageButtonNext} ${currentPage === totalPages ? styles.pageButtonDisabled : ""}`}
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                      <span className={styles.pageButtonIcon}>
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M9 6L15 12L9 18"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Newsletter CTA */}
+              <div className={styles.luxuryNewsletter}>
+                <div className={styles.newsletterContainer}>
+                  <div className={styles.newsletterIcon}>
+                    <div className={styles.newsletterGlow}></div>
+                    <svg
+                      viewBox="0 0 48 48"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
+                      <path
+                        d="M24 12V24L32 28"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      />
+                    </svg>
+                  </div>
+
+                  <div className={styles.newsletterContent}>
+                    <div className={styles.newsletterTitle}>
+                      <h3>Stay Ahead of the Journey</h3>
+                      <p>
+                        Receive exclusive access to new destinations and private
+                        offers
+                      </p>
+                    </div>
+
+                    <form className={styles.newsletterForm}>
+                      <div className={styles.formGroup}>
+                        <input
+                          type="email"
+                          placeholder="Enter your email address"
+                          className={styles.newsletterInput}
+                        />
+                        <div className={styles.inputBorder}></div>
+                      </div>
+                      <button type="submit" className={styles.newsletterButton}>
+                        <span className={styles.buttonText}>Subscribe</span>
+                        <span className={styles.buttonArrow}>
+                          <svg
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M4 10H16M16 10L13 6M16 10L13 14"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </span>
+                      </button>
+                    </form>
+
+                    <p className={styles.newsletterDisclaimer}>
+                      By subscribing, you agree to our Privacy Policy.
+                      Unsubscribe at any time.
+                    </p>
+                  </div>
                 </div>
               </div>
-            )}
-          </>
-        ) : (
-          <div className={styles.noResults}>
-            <div className={styles.noResultsIllustration}>
-              <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M50 100C50 73.4903 71.4903 52 98 52C124.51 52 146 73.4903 146 100" stroke="currentColor" strokeWidth="4"/>
-                <path d="M100 150C133.137 150 160 123.137 160 90C160 56.8629 133.137 30 100 30C66.8629 30 40 56.8629 40 90C40 123.137 66.8629 150 100 150Z" stroke="currentColor" strokeWidth="4"/>
-                <circle cx="98" cy="100" r="8" fill="currentColor"/>
-                <path d="M180 100C180 143.078 145.078 178 102 178C58.9218 178 24 143.078 24 100C24 56.9218 58.9218 22 102 22C145.078 22 180 56.9218 180 100Z" stroke="currentColor" strokeWidth="2" strokeDasharray="8 8"/>
-              </svg>
-            </div>
-            <h3 className={styles.noResultsTitle}>No Journeys Found</h3>
-            <p className={styles.noResultsMessage}>
-              {searchQuery 
-                ? `We couldn't find any trips matching "${searchQuery}". Try different keywords or browse all available trips.`
-                : "Our travel collection is currently being updated. Check back soon for new adventures!"}
-            </p>
-            {searchQuery && (
-              <button className={styles.noResultsAction} onClick={clearFilters}>
-                View All Trips
-              </button>
-            )}
-          </div>
-        )}
+            </>
+          ) : (
+            <div className={styles.noResults}>
+              <div className={styles.noResultsIllustration}>
+                <div className={styles.compassAnimation}>
+                  <div className={styles.compassRing}>
+                    <div className={styles.compassNeedle}></div>
+                  </div>
+                </div>
+              </div>
 
-        {/* Newsletter CTA */}
-        <div className={styles.newsletterCTA}>
-          <div className={styles.newsletterContent}>
-            <div className={styles.newsletterIcon}>
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2"/>
-                <path d="M12 6V12L16 14" stroke="currentColor" strokeWidth="2"/>
-              </svg>
+              <div className={styles.noResultsContent}>
+                <h3 className={styles.noResultsTitle}>Journey Not Found</h3>
+                <p className={styles.noResultsMessage}>
+                  {searchQuery
+                    ? `Our global portfolio doesn't contain journeys matching "${searchQuery}". 
+                       Try broadening your search or explore our featured collections.`
+                    : "Our premium journey collection is currently being updated. Please check back shortly."}
+                </p>
+
+                <div className={styles.noResultsActions}>
+                  {searchQuery && (
+                    <button
+                      className={styles.noResultsButton}
+                      onClick={clearFilters}
+                    >
+                      View All Journeys
+                    </button>
+                  )}
+                  <button
+                    className={styles.noResultsButtonSecondary}
+                    onClick={() => navigate("/contact")}
+                  >
+                    Contact Our Concierge
+                  </button>
+                </div>
+              </div>
             </div>
-            <div className={styles.newsletterText}>
-              <h3>Never Miss an Adventure</h3>
-              <p>Subscribe to our newsletter for exclusive deals and new destinations</p>
-            </div>
-            <div className={styles.newsletterForm}>
-              <input type="email" placeholder="Your email address" />
-              <button>Subscribe</button>
-            </div>
-          </div>
+          )}
         </div>
+      </section>
+
+      {/* Floating CTA */}
+      <div className={styles.floatingCTA}>
+        <button className={styles.floatingButton}>
+          <span className={styles.floatingIcon}>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              />
+              <path
+                d="M12 8V16"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <path
+                d="M8 12H16"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+            </svg>
+          </span>
+          <span className={styles.floatingText}>Create Custom Journey</span>
+        </button>
       </div>
     </div>
   );
