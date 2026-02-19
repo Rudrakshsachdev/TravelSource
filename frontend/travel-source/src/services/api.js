@@ -489,3 +489,24 @@ export const fetchRecommendedTrips = async (excludeIds = []) => {
   if (!res.ok) throw new Error("Failed to fetch recommendations");
   return res.json();
 };
+
+/** Fetch all reviews from the backend (newest first). */
+export const fetchReviews = async () => {
+  const res = await fetch(`${API_BASE_URL}/v1/reviews/`);
+  if (!res.ok) throw new Error("Failed to fetch reviews");
+  return res.json();
+};
+
+/** Submit a new review. Payload: { name, country, trip, rating, review } */
+export const submitReview = async (data) => {
+  const res = await fetch(`${API_BASE_URL}/v1/reviews/create/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(JSON.stringify(err));
+  }
+  return res.json();
+};

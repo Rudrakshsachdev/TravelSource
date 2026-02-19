@@ -8,3 +8,4 @@ from .admin_trip_serializer import AdminTripSerializer
 from .fetchuser_serializer import UserAdminSerializer
 from .contactmessage_serializer import ContactMessageSerializer
 from .Booking_serializer import BookingCreateSerializer, BookingListSerializer
+from .review_serializer import ReviewSerializer

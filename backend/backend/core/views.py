@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Trip, Enquiry, ContactMessage, Booking, TripView
+from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review
 
 from .serializers import (
     TripSerializer,
@@ -16,6 +16,7 @@ from .serializers import (
     ContactMessageSerializer,
     BookingCreateSerializer,
     BookingListSerializer,
+    ReviewSerializer,
 )
 
 from django.shortcuts import get_object_or_404
@@ -38,6 +39,24 @@ def trip_list(request):
     serializer = TripSerializer(trips, many=True)
     return Response(serializer.data)
 
+# ─── Reviews ──────────────────────────────────────────────────────────────────
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def list_reviews(request):
+    reviews = Review.objects.all()
+    serializer = ReviewSerializer(reviews, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def create_review(request):
+    serializer = ReviewSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
 
 @api_view(["GET"])
 def trip_detail(request, pk):

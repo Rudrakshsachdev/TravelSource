@@ -85,6 +85,21 @@ class TripView(models.Model):
         return f"{self.user.username} viewed {self.trip.title}"
 
 
+class Review(models.Model):
+    name = models.CharField(max_length=100)
+    country = models.CharField(max_length=100, default="India")
+    trip = models.CharField(max_length=200)
+    rating = models.PositiveSmallIntegerField(default=5)
+    review = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.name} — {self.trip} ({self.rating}★)"
+
+
 class Booking(models.Model):
     STATUS_CHOICES = (
     ("PENDING", "Pending"),

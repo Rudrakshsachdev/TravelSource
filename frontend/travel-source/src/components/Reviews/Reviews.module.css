@@ -774,3 +774,262 @@
 .reviewCard {
   animation: fadeInUp 0.55s ease both;
 }
+
+/* ─── Review Modal ───────────────────────────────────── */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 31, 29, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modalCard {
+  background: #fff;
+  border-radius: 24px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 540px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow:
+    0 32px 80px rgba(12, 31, 29, 0.35),
+    0 0 0 1px rgba(63, 158, 143, 0.2);
+  animation: fadeInUp 0.3s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.75rem;
+}
+
+.modalTitle {
+  font-family: var(--rv-font-display, "Playfair Display"), serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--rv-obsidian, #1a3a35);
+  margin: 0;
+}
+
+.modalClose {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.modalClose:hover {
+  background: #f0faf8;
+  color: var(--rv-obsidian, #1a3a35);
+}
+
+.modalRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.modalField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.modalLabel {
+  font-family: var(--rv-font-accent, "Montserrat"), sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rv-obsidian, #1a3a35);
+}
+
+.modalInput,
+.modalTextarea {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  border: 1.5px solid #d1d5db;
+  border-radius: 10px;
+  font-family: var(--rv-font-primary, "Inter"), sans-serif;
+  font-size: 0.9rem;
+  color: #1f2937;
+  background: #f9fafb;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+  outline: none;
+  box-sizing: border-box;
+}
+.modalInput:focus,
+.modalTextarea:focus {
+  border-color: var(--rv-accent, #3f9e8f);
+  box-shadow: 0 0 0 3px rgba(63, 158, 143, 0.15);
+  background: #fff;
+}
+.modalTextarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.inputError {
+  border-color: #e05252 !important;
+}
+
+.fieldError {
+  font-family: var(--rv-font-primary, "Inter"), sans-serif;
+  font-size: 0.75rem;
+  color: #e05252;
+  margin-top: 2px;
+}
+
+.submitErrorMsg {
+  font-family: var(--rv-font-primary, "Inter"), sans-serif;
+  font-size: 0.82rem;
+  color: #e05252;
+  background: #fff5f5;
+  border: 1px solid #fbcece;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 1rem;
+}
+
+/* ─── Star picker ─────────────────── */
+.starPicker {
+  display: flex;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.starBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  color: #d1d5db;
+  transition:
+    color 0.15s,
+    transform 0.15s;
+  display: flex;
+  align-items: center;
+}
+.starBtn svg {
+  width: 28px;
+  height: 28px;
+}
+.starBtn:hover,
+.starBtnFilled {
+  color: #f59e0b;
+  transform: scale(1.15);
+}
+
+/* ─── Submit button ───────────────── */
+.modalSubmitBtn {
+  width: 100%;
+  padding: 0.8rem 1.5rem;
+  background: var(
+    --rv-accent-gradient,
+    linear-gradient(135deg, #3f9e8f, #5fb8a8)
+  );
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  font-family: var(--rv-font-accent, "Montserrat"), sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+  margin-top: 0.5rem;
+}
+.modalSubmitBtn:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+.modalSubmitBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── Success state ───────────────── */
+.successState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+  gap: 1rem;
+  text-align: center;
+}
+
+.successIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(
+    --rv-accent-gradient,
+    linear-gradient(135deg, #3f9e8f, #5fb8a8)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+.successIcon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.successTitle {
+  font-family: var(--rv-font-display, "Playfair Display"), serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--rv-obsidian, #1a3a35);
+  margin: 0;
+}
+
+.successText {
+  font-family: var(--rv-font-primary, "Inter"), sans-serif;
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ─── Modal responsive ────────────── */
+@media (max-width: 540px) {
+  .modalCard {
+    padding: 1.5rem 1.25rem;
+    border-radius: 16px;
+  }
+  .modalRow {
+    grid-template-columns: 1fr;
+  }
+}
