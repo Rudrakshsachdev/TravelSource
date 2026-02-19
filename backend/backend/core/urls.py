@@ -1,10 +1,19 @@
 from django.urls import path
-from .views import hello_api, trip_list, login_view, protected_test_view, signup_view, trip_detail, create_enquiry, my_enquiries, admin_enquiries, admin_trips, admin_trip_detail, admin_toggle_trip, admin_users, update_user_role, delete_user, contact_us, admin_contact_messages, delete_contact_message, create_booking, user_bookings, admin_bookings, update_booking_status
+from .views import (
+    hello_api, trip_list, login_view, protected_test_view, signup_view,
+    trip_detail, create_enquiry, my_enquiries, admin_enquiries, admin_trips,
+    admin_trip_detail, admin_toggle_trip, admin_users, update_user_role,
+    delete_user, contact_us, admin_contact_messages, delete_contact_message,
+    create_booking, user_bookings, admin_bookings, update_booking_status,
+    record_trip_view, recommended_trips,
+)
 
 urlpatterns = [
     path("v1/hello/", hello_api),
     path("v1/trips/", trip_list),
+    path("v1/trips/recommended/", recommended_trips),
     path("v1/trips/<int:pk>/", trip_detail),
+    path("v1/trips/<int:pk>/view/", record_trip_view),
     path("v1/auth/login/", login_view),
     path("v1/auth/signup/", signup_view),
     path("v1/auth/protected/", protected_test_view),

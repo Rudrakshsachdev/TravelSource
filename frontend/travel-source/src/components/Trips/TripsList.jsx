@@ -3,6 +3,8 @@ import { fetchTrips } from "../../services/api";
 import { TripCard } from ".";
 import styles from "./TripsList.module.css";
 import { useNavigate } from "react-router-dom";
+import usePersonalization from "../../hooks/usePersonalization";
+import PersonalizationSection from "./PersonalizationSection";
 
 const TripsList = () => {
   const navigate = useNavigate();
@@ -14,6 +16,15 @@ const TripsList = () => {
   const [sortBy, setSortBy] = useState("featured");
   const [currentPage, setCurrentPage] = useState(1);
   const tripsPerPage = 6;
+
+  const {
+    interests,
+    setInterests,
+    recommended,
+    recentlyViewed,
+    loadingRec,
+    recordView,
+  } = usePersonalization(trips);
 
   useEffect(() => {
     const loadTrips = async () => {
@@ -678,7 +689,7 @@ const TripsList = () => {
                     className={styles.tripCardWrapper}
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <TripCard trip={trip} index={index} />
+                    <TripCard trip={trip} index={index} onView={recordView} />
                   </div>
                 ))}
               </div>
@@ -793,6 +804,16 @@ const TripsList = () => {
                   </div>
                 </div>
               )}
+
+              {/* Personalization Section */}
+              <PersonalizationSection
+                interests={interests}
+                setInterests={setInterests}
+                recommended={recommended}
+                recentlyViewed={recentlyViewed}
+                loadingRec={loadingRec}
+                recordView={recordView}
+              />
 
               {/* Travel Stats Section */}
               <div className={styles.travelStatsSection}>

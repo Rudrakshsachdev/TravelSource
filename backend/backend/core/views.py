@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Trip, Enquiry, ContactMessage, Booking
+from .models import Trip, Enquiry, ContactMessage, Booking, TripView
 
 from .serializers import (
     TripSerializer,
@@ -434,3 +434,65 @@ def update_booking_status(request, pk):
 
     except Booking.DoesNotExist:
         return Response({"error": "Booking not found"}, status=404)
+
+
+# ─── Personalization ─────────────────────────────────────────────────────────
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def record_trip_view(request, pk):
+    """Record that the authenticated user viewed a trip."""
+    trip = get_object_or_404(Trip, pk=pk, is_active=True)
+    TripView.objects.update_or_create(
+        user=request.user,
+        trip=trip,
+        defaults={},
+    )
+    return Response({"status": "recorded"}, status=200)
+
+
+@api_view(["GET"])
+def recommended_trips(request):
+    """
+    Return up to 6 recommended trips.
+    - Logged-in users: exclude already-viewed trips, prefer similar price range.
+    - Anonymous users: accept ?exclude=1,2,3 of client-tracked IDs via query param.
+    Returns full TripSerializer data.
+    """
+    active_trips = Trip.objects.filter(is_active=True)
+
+    # Collect IDs to exclude
+    exclude_ids = set()
+
+    if request.user.is_authenticated:
+        viewed_ids = list(
+            TripView.objects.filter(user=request.user)
+            .values_list("trip_id", flat=True)
+        )
+        exclude_ids.update(viewed_ids)
+
+        # Price-similarity boost: average price of viewed trips
+        if viewed_ids:
+            viewed_trips = active_trips.filter(pk__in=viewed_ids)
+            avg_price = sum(t.price for t in viewed_trips) / len(viewed_trips)
+            # Prefer trips within 40% of average viewed price
+            lo, hi = avg_price * 0.6, avg_price * 1.4
+            candidates = active_trips.exclude(pk__in=exclude_ids).filter(
+                price__gte=lo, price__lte=hi
+            )[:6]
+            if candidates.count() < 3:
+                # fallback: any non-viewed trip
+                candidates = active_trips.exclude(pk__in=exclude_ids)[:6]
+        else:
+            candidates = active_trips[:6]
+    else:
+        # Anonymous: use exclude query param
+        raw = request.query_params.get("exclude", "")
+        try:
+            exclude_ids = {int(x) for x in raw.split(",") if x.strip().isdigit()}
+        except ValueError:
+            exclude_ids = set()
+        candidates = active_trips.exclude(pk__in=exclude_ids)[:6]
+
+    serializer = TripSerializer(candidates, many=True)
+    return Response(serializer.data)

@@ -71,6 +71,20 @@ class ContactMessage(models.Model):
         return f"{self.name} - {self.email}"
     
 
+class TripView(models.Model):
+    """Tracks which trips a logged-in user has viewed, used for recommendations."""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="trip_views")
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name="views")
+    viewed_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("user", "trip")
+        ordering = ["-viewed_at"]
+
+    def __str__(self):
+        return f"{self.user.username} viewed {self.trip.title}"
+
+
 class Booking(models.Model):
     STATUS_CHOICES = (
     ("PENDING", "Pending"),

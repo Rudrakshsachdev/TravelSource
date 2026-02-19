@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import styles from "./TripCard.module.css";
 
-const TripCard = ({ trip, index }) => {
+const TripCard = ({ trip, index, onView }) => {
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -141,6 +141,7 @@ const TripCard = ({ trip, index }) => {
   };
 
   const handleCardClick = () => {
+    if (onView) onView(trip.id);
     navigate(`/trips/${trip.id}`);
   };
 
