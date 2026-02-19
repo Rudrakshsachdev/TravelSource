@@ -302,78 +302,9 @@ const TripsList = () => {
         <div className={styles.orbitRing}></div>
       </div>
 
-      {/* Luxury Hero Section */}
-      <section className={styles.luxuryHero}>
-        <div className={styles.heroContainer}>
-          {/* Hero Content */}
-          <div className={styles.heroContent}>
-            <div className={styles.heroBadge}>
-              <span className={styles.badgeText}>PREMIUM COLLECTION</span>
-              <div className={styles.badgeGlow}></div>
-            </div>
-
-            <h1 className={styles.heroTitle}>
-              <span className={styles.titleLine}>
-                <span className={styles.titleNumber}>01</span>
-                <span className={styles.titleText}>Discover</span>
-              </span>
-              <span className={styles.titleLine}>
-                <span className={styles.titleNumber}>02</span>
-                <span className={styles.titleText}>Extraordinary</span>
-              </span>
-              <span className={styles.titleLine}>
-                <span className={styles.titleNumber}>03</span>
-                <span className={styles.titleText}>Journeys</span>
-              </span>
-            </h1>
-
-            <p className={styles.heroSubtitle}>
-              Exclusive access to the world's most captivating destinations,
-              meticulously curated by our global network of travel connoisseurs.
-            </p>
-
-            {/* Interactive Stats */}
-            <div className={styles.heroStats}>
-              <div className={styles.statItem}>
-                <div className={styles.statNumberWrapper}>
-                  <span className={styles.statNumber} data-count={trips.length}>
-                    0
-                  </span>
-                  <span className={styles.statPlus}>+</span>
-                </div>
-                <div className={styles.statLabel}>Curated Experiences</div>
-                <div className={styles.statLine}></div>
-              </div>
-
-              <div className={styles.statDivider}></div>
-
-              <div className={styles.statItem}>
-                <div className={styles.statNumberWrapper}>
-                  <span className={styles.statNumber} data-count="50">
-                    0
-                  </span>
-                  <span className={styles.statPlus}>+</span>
-                </div>
-                <div className={styles.statLabel}>Global Destinations</div>
-                <div className={styles.statLine}></div>
-              </div>
-
-              <div className={styles.statDivider}></div>
-
-              <div className={styles.statItem}>
-                <div className={styles.statNumberWrapper}>
-                  <span className={styles.statNumber} data-count="100">
-                    0
-                  </span>
-                  <span className={styles.statPercent}>%</span>
-                </div>
-                <div className={styles.statLabel}>Client Satisfaction</div>
-                <div className={styles.statLine}></div>
-              </div>
-            </div>
-          </div>
-
-          {/* Luxury Search Section */}
+      {/* Search & Filter Section */}
+      <section className={styles.searchSection}>
+        <div className={styles.searchSectionContainer}>
           <div className={styles.luxurySearch}>
             <div className={styles.searchHeader}>
               <div className={styles.searchTitle}>

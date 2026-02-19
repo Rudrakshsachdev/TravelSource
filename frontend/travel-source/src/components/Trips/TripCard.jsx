@@ -8,19 +8,19 @@ const TripCard = ({ trip, index }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  // Luxury gradient based on trip category
+  // Teal-themed gradient based on trip category
   const getLuxuryGradient = (category) => {
     const gradients = {
-      luxury: "linear-gradient(135deg, #FFD700 0%, #FFC107 50%, #B8860B 100%)",
+      luxury: "linear-gradient(135deg, #3f9e8f 0%, #5fb8a8 50%, #2e8b7a 100%)",
       adventure:
-        "linear-gradient(135deg, #00B4D8 0%, #0077B6 50%, #0096C7 100%)",
+        "linear-gradient(135deg, #2d8a7e 0%, #48b5a0 50%, #1a6b5a 100%)",
       cultural:
-        "linear-gradient(135deg, #C77DFF 0%, #9D4EDD 50%, #7B2CBF 100%)",
-      beach: "linear-gradient(135deg, #00BBF9 0%, #00A6FB 50%, #0582CA 100%)",
+        "linear-gradient(135deg, #5aab9e 0%, #3f9e8f 50%, #2e8b7a 100%)",
+      beach: "linear-gradient(135deg, #7ecfc0 0%, #5fb8a8 50%, #3f9e8f 100%)",
       mountain:
-        "linear-gradient(135deg, #48CAE4 0%, #0096C7 50%, #0077B6 100%)",
-      urban: "linear-gradient(135deg, #6A040F 0%, #9D0208 50%, #D00000 100%)",
-      default: "linear-gradient(135deg, #FFD700 0%, #FFED4E 50%, #FFD700 100%)",
+        "linear-gradient(135deg, #1a6b5a 0%, #2d8a7e 50%, #3f9e8f 100%)",
+      urban: "linear-gradient(135deg, #2d5c54 0%, #3d7a70 50%, #3f9e8f 100%)",
+      default: "linear-gradient(135deg, #3f9e8f 0%, #7ecfc0 50%, #3f9e8f 100%)",
     };
     return gradients[category?.toLowerCase()] || gradients.default;
   };
