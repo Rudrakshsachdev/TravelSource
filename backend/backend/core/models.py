@@ -100,6 +100,21 @@ class Review(models.Model):
         return f"{self.name} — {self.trip} ({self.rating}★)"
 
 
+class SiteStat(models.Model):
+    """Key-value stats editable from Django admin (e.g. trips_completed)."""
+    key = models.CharField(max_length=80, unique=True, help_text="Stat identifier, e.g. trips_completed")
+    label = models.CharField(max_length=120, help_text="Display label shown on frontend")
+    value = models.PositiveIntegerField(default=0)
+    icon = models.CharField(max_length=10, blank=True, default="📊", help_text="Emoji icon for display")
+
+    class Meta:
+        verbose_name = "Site Stat"
+        verbose_name_plural = "Site Stats"
+
+    def __str__(self):
+        return f"{self.label}: {self.value}"
+
+
 class Booking(models.Model):
     STATUS_CHOICES = (
     ("PENDING", "Pending"),

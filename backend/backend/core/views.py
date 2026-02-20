@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review
+from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat
 
 from .serializers import (
     TripSerializer,
@@ -17,6 +17,7 @@ from .serializers import (
     BookingCreateSerializer,
     BookingListSerializer,
     ReviewSerializer,
+    SiteStatSerializer,
 )
 
 from django.shortcuts import get_object_or_404
@@ -514,4 +515,35 @@ def recommended_trips(request):
         candidates = active_trips.exclude(pk__in=exclude_ids)[:6]
 
     serializer = TripSerializer(candidates, many=True)
+    return Response(serializer.data)
+
+
+# ─── Site Stats (public, read-only) ──────────────────────────────────────────
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def site_stats(request):
+    """Return all site stats for public display (animated counters, etc.)."""
+    stats = SiteStat.objects.all()
+    serializer = SiteStatSerializer(stats, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET", "PATCH"])
+@permission_classes([IsAuthenticated])
+def admin_site_stats(request, pk=None):
+    """Admin: list all stats (GET) or update a single stat value (PATCH)."""
+    if not hasattr(request.user, "profile") or request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    if request.method == "GET":
+        stats = SiteStat.objects.all()
+        serializer = SiteStatSerializer(stats, many=True)
+        return Response(serializer.data)
+
+    # PATCH — update value of a single stat
+    stat = get_object_or_404(SiteStat, pk=pk)
+    serializer = SiteStatSerializer(stat, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
     return Response(serializer.data)

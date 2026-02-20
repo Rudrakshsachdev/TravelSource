@@ -1,7 +1,13 @@
 from django.contrib import admin
-from .models import Trip, Profile, Enquiry
+from .models import Trip, Profile, Enquiry, SiteStat
 # Register your models here.
 admin.site.register(Trip)
+
+@admin.register(SiteStat)
+class SiteStatAdmin(admin.ModelAdmin):
+    list_display = ("key", "label", "value", "icon")
+    list_editable = ("value",)
+    search_fields = ("key", "label")
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):

@@ -26,7 +26,8 @@
   --wcu-radius-md: 12px;
   --wcu-radius-sm: 8px;
   --wcu-font-display: "Playfair Display", Georgia, serif;
-  --wcu-font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --wcu-font-body:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --wcu-font-accent: "Montserrat", -apple-system, sans-serif;
 }
 
@@ -42,8 +43,16 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 15% 80%, rgba(63, 158, 143, 0.07) 0%, transparent 55%),
-    radial-gradient(ellipse at 85% 15%, rgba(126, 207, 192, 0.06) 0%, transparent 55%);
+    radial-gradient(
+      ellipse at 15% 80%,
+      rgba(63, 158, 143, 0.07) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse at 85% 15%,
+      rgba(126, 207, 192, 0.06) 0%,
+      transparent 55%
+    );
   pointer-events: none;
   z-index: 0;
 }
@@ -185,7 +194,9 @@
   background: var(--wcu-white);
   border-radius: var(--wcu-radius-md);
   border: 1px solid var(--wcu-accent-border);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .statItem:hover {
@@ -242,7 +253,10 @@
   border-radius: var(--wcu-radius-md);
   padding: 22px 24px;
   border: 1.5px solid rgba(63, 158, 143, 0.12);
-  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
   cursor: pointer;
   position: relative;
   overflow: hidden;
@@ -273,7 +287,11 @@
 
 .featureCardActive {
   border-color: var(--wcu-accent);
-  background: linear-gradient(135deg, rgba(63, 158, 143, 0.04) 0%, transparent 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(63, 158, 143, 0.04) 0%,
+    transparent 100%
+  );
 }
 
 .featureCardActive::after {
@@ -322,7 +340,9 @@
   width: 20px;
   height: 20px;
   color: rgba(63, 158, 143, 0.3);
-  transition: color 0.25s ease, transform 0.25s ease;
+  transition:
+    color 0.25s ease,
+    transform 0.25s ease;
 }
 
 .featureCard:hover .featureArrow {
@@ -364,7 +384,10 @@
   gap: 8px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
   box-shadow: 0 4px 18px rgba(26, 58, 53, 0.25);
   position: relative;
   overflow: hidden;
@@ -451,7 +474,11 @@
 .imageOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(26, 58, 53, 0.7) 0%, transparent 55%);
+  background: linear-gradient(
+    to top,
+    rgba(26, 58, 53, 0.7) 0%,
+    transparent 55%
+  );
   opacity: 0;
   transition: opacity 0.3s ease;
   display: flex;
@@ -527,8 +554,140 @@
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(63, 158, 143, 0.08) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(63, 158, 143, 0.08) 0%,
+    transparent 70%
+  );
   filter: blur(16px);
+}
+
+/* --- Feature Highlights (sub-bullets) --- */
+.featureHighlights {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.featureHighlightItem {
+  font-family: var(--wcu-font-body);
+  font-size: 0.82rem;
+  color: var(--wcu-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.5;
+}
+
+.featureCheckmark {
+  color: var(--wcu-accent);
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+/* --- Animated Counter Section --- */
+.counterSection {
+  margin-bottom: 72px;
+  text-align: center;
+}
+
+.counterHeader {
+  margin-bottom: 36px;
+}
+
+.counterIcon {
+  font-size: 2.2rem;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.counterTitle {
+  font-family: var(--wcu-font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--wcu-text);
+  margin: 0 0 10px 0;
+}
+
+.counterSubtitle {
+  font-family: var(--wcu-font-body);
+  font-size: 1rem;
+  color: var(--wcu-text-muted);
+  margin: 0;
+  max-width: 540px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.counterGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .counterGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.counterCard {
+  background: var(--wcu-white);
+  border-radius: var(--wcu-radius-lg);
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px solid var(--wcu-accent-border);
+  box-shadow: var(--wcu-shadow-sm);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.counterCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--wcu-accent-gradient);
+}
+
+.counterCard:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--wcu-shadow-md);
+}
+
+.counterEmoji {
+  font-size: 1.6rem;
+}
+
+.counterValue {
+  font-family: var(--wcu-font-display);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--wcu-text);
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.counterLabel {
+  font-family: var(--wcu-font-body);
+  font-size: 0.82rem;
+  color: var(--wcu-text-muted);
+  font-weight: 500;
+  letter-spacing: 0.3px;
 }
 
 /* --- Trust Section --- */
@@ -574,7 +733,9 @@
   background: var(--wcu-white);
   border-radius: var(--wcu-radius-md);
   border: 1px solid var(--wcu-accent-border);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .trustBadge:hover {
@@ -632,6 +793,14 @@
   .gallerySection {
     margin-bottom: 48px;
   }
+
+  .counterSection {
+    margin-bottom: 48px;
+  }
+
+  .counterValue {
+    font-size: 1.8rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -670,5 +839,22 @@
   .galleryGrid {
     grid-template-columns: 1fr;
     gap: 16px;
+  }
+
+  .counterSection {
+    margin-bottom: 36px;
+  }
+
+  .counterGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .counterValue {
+    font-size: 1.6rem;
+  }
+
+  .counterCard {
+    padding: 20px 14px;
   }
 }

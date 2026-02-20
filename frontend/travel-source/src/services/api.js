@@ -510,3 +510,12 @@ export const submitReview = async (data) => {
   }
   return res.json();
 };
+
+// ─── Site Stats (public) ────────────────────────────────────────────────────
+
+/** Fetch all public site stats (animated counters, trips completed, etc.) */
+export const fetchSiteStats = async () => {
+  const res = await fetch(`${API_BASE_URL}/v1/site-stats/`);
+  if (!res.ok) throw new Error("Failed to fetch site stats");
+  return res.json();
+};

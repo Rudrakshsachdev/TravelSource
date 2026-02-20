@@ -7,6 +7,7 @@ from .views import (
     create_booking, user_bookings, admin_bookings, update_booking_status,
     record_trip_view, recommended_trips,
     list_reviews, create_review,
+    site_stats, admin_site_stats,
 )
 
 urlpatterns = [
@@ -36,5 +37,8 @@ urlpatterns = [
     path("v1/admin/bookings/<int:pk>/status/", update_booking_status),
     path("v1/reviews/", list_reviews),
     path("v1/reviews/create/", create_review),
+    path("v1/site-stats/", site_stats),
+    path("v1/admin/site-stats/", admin_site_stats),
+    path("v1/admin/site-stats/<int:pk>/", admin_site_stats),
 ]
 

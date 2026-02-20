@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import styles from "./WhyChooseUs.module.css";
+import { fetchSiteStats } from "../../services/api";
 
 const features = [
   {
@@ -30,6 +31,18 @@ const features = [
       "Tailored journeys that match your preferences, pace, and travel style.",
     color: "#7ecfc0",
   },
+  {
+    icon: "✈️",
+    title: "Customizable Travel Packages",
+    description:
+      "Tailor-made itineraries, flexible dates, and add-ons & upgrades available to suit your needs.",
+    color: "#3f9e8f",
+    highlights: [
+      "Tailor-made itineraries",
+      "Flexible dates",
+      "Add-ons & upgrades available",
+    ],
+  },
 ];
 
 const images = [
@@ -45,6 +58,64 @@ const images = [
 const WhyChooseUs = () => {
   const [hoveredImage, setHoveredImage] = useState(null);
   const [activeFeature, setActiveFeature] = useState(0);
+  const [siteStats, setSiteStats] = useState([]);
+  const [animatedValues, setAnimatedValues] = useState({});
+  const counterRef = useRef(null);
+  const hasAnimated = useRef(false);
+
+  // Fetch stats from backend
+  useEffect(() => {
+    fetchSiteStats()
+      .then((data) => setSiteStats(data))
+      .catch(() => {});
+  }, []);
+
+  // Animate counters when they scroll into view
+  const animateCounters = useCallback(() => {
+    if (hasAnimated.current || siteStats.length === 0) return;
+    hasAnimated.current = true;
+
+    const duration = 2000;
+    const fps = 60;
+    const totalFrames = Math.round((duration / 1000) * fps);
+    let frame = 0;
+
+    const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
+
+    const counter = setInterval(() => {
+      frame++;
+      const progress = easeOutQuart(frame / totalFrames);
+
+      const newValues = {};
+      siteStats.forEach((stat) => {
+        newValues[stat.key] = Math.round(stat.value * progress);
+      });
+      setAnimatedValues(newValues);
+
+      if (frame >= totalFrames) {
+        clearInterval(counter);
+        const finalValues = {};
+        siteStats.forEach((stat) => {
+          finalValues[stat.key] = stat.value;
+        });
+        setAnimatedValues(finalValues);
+      }
+    }, 1000 / fps);
+  }, [siteStats]);
+
+  useEffect(() => {
+    const node = counterRef.current;
+    if (!node || siteStats.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) animateCounters();
+      },
+      { threshold: 0.3 },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [siteStats, animateCounters]);
 
   return (
     <section className={styles.section}>
@@ -134,6 +205,16 @@ const WhyChooseUs = () => {
                   <p className={styles.featureDescription}>
                     {feature.description}
                   </p>
+                  {feature.highlights && (
+                    <ul className={styles.featureHighlights}>
+                      {feature.highlights.map((item, i) => (
+                        <li key={i} className={styles.featureHighlightItem}>
+                          <span className={styles.featureCheckmark}>✓</span>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
 
                   <div className={styles.featureArrow}>
                     <svg viewBox="0 0 20 20" fill="currentColor">
@@ -243,6 +324,32 @@ const WhyChooseUs = () => {
             ></div>
           </div>
         </div>
+
+        {/* Animated Stats Counter */}
+        {siteStats.length > 0 && (
+          <div className={styles.counterSection} ref={counterRef}>
+            <div className={styles.counterHeader}>
+              <span className={styles.counterIcon}>📊</span>
+              <h3 className={styles.counterTitle}>Our Journey in Numbers</h3>
+              <p className={styles.counterSubtitle}>
+                Real-time stats that reflect our commitment to exceptional
+                travel experiences
+              </p>
+            </div>
+            <div className={styles.counterGrid}>
+              {siteStats.map((stat) => (
+                <div key={stat.key} className={styles.counterCard}>
+                  <span className={styles.counterEmoji}>{stat.icon}</span>
+                  <span className={styles.counterValue}>
+                    {animatedValues[stat.key] ?? 0}
+                    {stat.key === "satisfaction_rate" ? "%" : "+"}
+                  </span>
+                  <span className={styles.counterLabel}>{stat.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Trust Badges */}
         <div className={styles.trustSection}>
