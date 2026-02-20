@@ -1,7 +1,7 @@
 import styles from "./Navbar.module.css";
 import { useNavigate } from "react-router-dom";
 import { getAuthData, logout } from "../../utils/auth";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import logoIcon from "../../assets/logo-icon.svg";
 
 const Navbar = () => {
@@ -12,6 +12,7 @@ const Navbar = () => {
   const [activeHover, setActiveHover] = useState(null);
   const menuRef = useRef(null);
   const timeoutRef = useRef(null);
+  const rafRef = useRef(null);
 
   // Luxury destinations for the dropdown
   const destinations = [
@@ -28,26 +29,44 @@ const Navbar = () => {
     { id: 6, name: "Paris", country: "France", type: "Haute Couture" },
   ];
 
-  useEffect(() => {
-    const handleScroll = () => {
+  // Throttled scroll via rAF to avoid layout thrashing
+  const handleScroll = useCallback(() => {
+    if (rafRef.current) return;
+    rafRef.current = requestAnimationFrame(() => {
       setIsScrolled(window.scrollY > 10);
-    };
+      rafRef.current = null;
+    });
+  }, []);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMenuOpen]);
+
+  useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setIsMenuOpen(false);
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("mousedown", handleClickOutside);
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, []);
+  }, [handleScroll]);
 
   const handleLogout = () => {
     logout();
