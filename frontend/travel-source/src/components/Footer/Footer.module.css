@@ -1,0 +1,453 @@
+/* ═══════════════════════════════════════════════════════════════
+   Footer — Travel Professor
+   Teal / aqua palette matching Navbar, Hero & WhyChooseUs
+   ═══════════════════════════════════════════════════════════════ */
+
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Montserrat:wght@400;500;600;700&display=swap");
+
+.footer {
+  --ft-bg: #1a3a35;
+  --ft-bg-lighter: #1f4a43;
+  --ft-text: rgba(255, 255, 255, 0.75);
+  --ft-text-dim: rgba(255, 255, 255, 0.45);
+  --ft-text-bright: #ffffff;
+  --ft-accent: #7ecfc0;
+  --ft-accent-dark: #3f9e8f;
+  --ft-accent-glow: rgba(126, 207, 192, 0.15);
+  --ft-border: rgba(255, 255, 255, 0.08);
+  --ft-font-display: "Playfair Display", Georgia, serif;
+  --ft-font-body:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --ft-font-accent: "Montserrat", -apple-system, sans-serif;
+  --ft-radius: 12px;
+
+  background: var(--ft-bg);
+  color: var(--ft-text);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle radial ambient glow */
+.footer::before {
+  content: "";
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(126, 207, 192, 0.06) 0%,
+    transparent 70%
+  );
+  top: -200px;
+  left: -100px;
+  pointer-events: none;
+}
+
+.footer::after {
+  content: "";
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(63, 158, 143, 0.05) 0%,
+    transparent 70%
+  );
+  bottom: -150px;
+  right: -80px;
+  pointer-events: none;
+}
+
+/* ── Top Accent Line ── */
+.topAccent {
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--ft-accent-dark) 30%,
+    var(--ft-accent) 50%,
+    var(--ft-accent-dark) 70%,
+    transparent 100%
+  );
+}
+
+/* ── Container ── */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 64px 24px 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Upper Grid ── */
+.upper {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr 0.8fr 1.2fr;
+  gap: 48px;
+  padding-bottom: 48px;
+}
+
+/* ── Brand Column ── */
+.brandCol {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--ft-text-bright);
+}
+
+.logoIcon {
+  font-size: 1.4rem;
+  color: var(--ft-accent);
+  line-height: 1;
+}
+
+.logoText {
+  display: flex;
+  flex-direction: column;
+}
+
+.logoTitle {
+  font-family: var(--ft-font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+  color: var(--ft-text-bright);
+}
+
+.logoTagline {
+  font-family: var(--ft-font-accent);
+  font-size: 0.62rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  color: var(--ft-accent);
+  margin-top: 2px;
+}
+
+.brandDesc {
+  font-family: var(--ft-font-body);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--ft-text);
+  margin: 0;
+}
+
+/* ── Socials ── */
+.socials {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.socialLink {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--ft-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ft-text);
+  background: transparent;
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease,
+    background 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.socialLink svg {
+  width: 17px;
+  height: 17px;
+}
+
+.socialLink:hover {
+  color: var(--ft-text-bright);
+  background: var(--ft-accent-glow);
+  border-color: rgba(126, 207, 192, 0.3);
+  transform: translateY(-3px);
+}
+
+/* ── Link Columns ── */
+.linksCol {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.colTitle {
+  font-family: var(--ft-font-accent);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  color: var(--ft-text-bright);
+  margin: 0 0 4px 0;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.colTitle::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 28px;
+  height: 2px;
+  background: var(--ft-accent);
+  border-radius: 2px;
+}
+
+.linksList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footerLink {
+  font-family: var(--ft-font-body);
+  font-size: 0.88rem;
+  color: var(--ft-text);
+  text-decoration: none;
+  transition:
+    color 0.25s ease,
+    transform 0.25s ease;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.footerLink:hover {
+  color: var(--ft-accent);
+  transform: translateX(4px);
+}
+
+/* ── Contact Column ── */
+.contactCol {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.contactList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--ft-font-body);
+  font-size: 0.88rem;
+  color: var(--ft-text);
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.contactItem:hover {
+  color: var(--ft-accent);
+}
+
+.contactIcon {
+  width: 16px;
+  height: 16px;
+  color: var(--ft-accent);
+  flex-shrink: 0;
+}
+
+/* ── Newsletter ── */
+.newsletter {
+  margin-top: 8px;
+}
+
+.newsletterLabel {
+  font-family: var(--ft-font-accent);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--ft-text-bright);
+  margin: 0 0 10px 0;
+}
+
+.newsletterForm {
+  display: flex;
+  gap: 0;
+  border-radius: var(--ft-radius);
+  overflow: hidden;
+  border: 1px solid var(--ft-border);
+  transition: border-color 0.3s ease;
+}
+
+.newsletterForm:focus-within {
+  border-color: rgba(126, 207, 192, 0.4);
+}
+
+.newsletterInput {
+  flex: 1;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  outline: none;
+  color: var(--ft-text-bright);
+  font-family: var(--ft-font-body);
+  font-size: 0.82rem;
+  min-width: 0;
+}
+
+.newsletterInput::placeholder {
+  color: var(--ft-text-dim);
+}
+
+.newsletterBtn {
+  padding: 10px 16px;
+  background: var(--ft-accent-dark);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ft-text-bright);
+  transition: background 0.3s ease;
+}
+
+.newsletterBtn:hover {
+  background: var(--ft-accent);
+}
+
+.newsletterBtn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ── Divider ── */
+.divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--ft-border) 20%,
+    var(--ft-border) 80%,
+    transparent 100%
+  );
+}
+
+/* ── Bottom Bar ── */
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 0;
+  gap: 16px;
+}
+
+.copyright {
+  font-family: var(--ft-font-body);
+  font-size: 0.8rem;
+  color: var(--ft-text-dim);
+  margin: 0;
+}
+
+.bottomLinks {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bottomLink {
+  font-family: var(--ft-font-body);
+  font-size: 0.78rem;
+  color: var(--ft-text-dim);
+  cursor: pointer;
+  transition: color 0.25s ease;
+}
+
+.bottomLink:hover {
+  color: var(--ft-accent);
+}
+
+.bottomDot {
+  color: var(--ft-text-dim);
+  font-size: 0.7rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+  .upper {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  .brandCol {
+    grid-column: 1 / -1;
+    max-width: 500px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 48px 20px 0;
+  }
+
+  .upper {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .brandCol {
+    max-width: 100%;
+  }
+
+  .bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+    padding: 20px 0;
+  }
+
+  .bottomLinks {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 36px 16px 0;
+  }
+
+  .upper {
+    gap: 28px;
+  }
+
+  .socials {
+    gap: 8px;
+  }
+
+  .socialLink {
+    width: 36px;
+    height: 36px;
+  }
+
+  .copyright {
+    font-size: 0.74rem;
+  }
+}
