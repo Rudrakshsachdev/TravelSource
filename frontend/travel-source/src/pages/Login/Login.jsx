@@ -58,6 +58,23 @@ const Login = () => {
     <div className={styles.loginPage}>
       <div className={styles.backgroundOverlay}></div>
 
+      {/* ── Travel-Themed Background Effects ── */}
+      <div className={styles.vignetteOverlay} />
+      <div className={styles.worldMapOverlay} />
+      <div className={styles.routeLinesOverlay} />
+      <div className={styles.compassOverlay} />
+      <div className={styles.coordGridOverlay} />
+      <div className={styles.noiseOverlay} />
+      <div className={styles.particlesLayer}>
+        {[1, 2, 3, 4, 5, 6].map((n) => (
+          <span
+            key={n}
+            className={`${styles.particle} ${styles[`particle${n}`]}`}
+          />
+        ))}
+      </div>
+      <div className={styles.decorRing} />
+
       <div className={styles.container}>
         {/* Header */}
         <div className={styles.headerSection}>
