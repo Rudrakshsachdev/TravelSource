@@ -526,3 +526,10 @@ export const fetchInternationalTrips = async () => {
   if (!res.ok) throw new Error("Failed to fetch international trips");
   return res.json();
 };
+
+/** Fetch India trips + section config for the scrolling showcase */
+export const fetchIndiaTrips = async () => {
+  const res = await fetch(`${API_BASE_URL}/v1/trips/india/`);
+  if (!res.ok) throw new Error("Failed to fetch India trips");
+  return res.json();
+};

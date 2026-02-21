@@ -1,23 +1,25 @@
 from django.contrib import admin
-from .models import Trip, Profile, Enquiry, SiteStat, InternationalSectionConfig
+from .models import Trip, Profile, Enquiry, SiteStat, InternationalSectionConfig, IndiaSectionConfig
 # Register your models here.
 
 
 @admin.register(Trip)
 class TripAdmin(admin.ModelAdmin):
     list_display = (
-        "title", "location", "country", "price", "is_active",
+        "title", "location", "country", "state", "price", "is_active",
         "is_international", "show_in_international_section", "display_order",
+        "is_india_trip", "show_in_india_section", "india_display_order",
     )
-    list_filter = ("is_active", "is_international", "show_in_international_section")
+    list_filter = ("is_active", "is_international", "show_in_international_section", "is_india_trip", "show_in_india_section")
     list_editable = (
         "is_international", "show_in_international_section", "display_order",
+        "is_india_trip", "show_in_india_section", "india_display_order",
     )
-    search_fields = ("title", "location", "country")
+    search_fields = ("title", "location", "country", "state")
     ordering = ("display_order", "-id")
     fieldsets = (
         (None, {
-            "fields": ("title", "location", "country", "price", "duration_days", "image"),
+            "fields": ("title", "location", "country", "state", "price", "duration_days", "image"),
         }),
         ("Details", {
             "fields": ("description", "short_description", "itinerary", "highlights", "inclusions", "exclusions"),
@@ -25,6 +27,10 @@ class TripAdmin(admin.ModelAdmin):
         ("International Showcase", {
             "fields": ("is_international", "show_in_international_section", "display_order"),
             "description": "Control how this trip appears in the International Trips scrolling section.",
+        }),
+        ("India Showcase", {
+            "fields": ("is_india_trip", "show_in_india_section", "india_display_order", "india_featured_priority"),
+            "description": "Control how this trip appears in the India Trips scrolling section.",
         }),
         ("Status", {
             "fields": ("is_active",),
@@ -40,6 +46,19 @@ class InternationalSectionConfigAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         # Only allow one instance (singleton)
         return not InternationalSectionConfig.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(IndiaSectionConfig)
+class IndiaSectionConfigAdmin(admin.ModelAdmin):
+    list_display = ("title", "is_enabled", "scroll_speed")
+    list_editable = ("is_enabled", "scroll_speed")
+
+    def has_add_permission(self, request):
+        # Only allow one instance (singleton)
+        return not IndiaSectionConfig.objects.exists()
 
     def has_delete_permission(self, request, obj=None):
         return False

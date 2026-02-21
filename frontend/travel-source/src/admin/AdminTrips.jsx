@@ -32,6 +32,11 @@ const AdminTrips = () => {
     is_international: false,
     show_in_international_section: false,
     display_order: 0,
+    state: "",
+    is_india_trip: false,
+    show_in_india_section: false,
+    india_display_order: 0,
+    india_featured_priority: 0,
   });
 
   // Dynamic Lists State
@@ -133,6 +138,11 @@ const AdminTrips = () => {
       show_in_international_section:
         trip.show_in_international_section || false,
       display_order: trip.display_order || 0,
+      state: trip.state || "",
+      is_india_trip: trip.is_india_trip || false,
+      show_in_india_section: trip.show_in_india_section || false,
+      india_display_order: trip.india_display_order || 0,
+      india_featured_priority: trip.india_featured_priority || 0,
     });
 
     // Safe parsing / defaulting for JSON fields
@@ -159,6 +169,11 @@ const AdminTrips = () => {
       is_international: false,
       show_in_international_section: false,
       display_order: 0,
+      state: "",
+      is_india_trip: false,
+      show_in_india_section: false,
+      india_display_order: 0,
+      india_featured_priority: 0,
     });
     setItinerary([]);
     setHighlights([]);
@@ -189,6 +204,8 @@ const AdminTrips = () => {
         price: Number(formData.price),
         duration_days: Number(formData.duration_days),
         display_order: Number(formData.display_order) || 0,
+        india_display_order: Number(formData.india_display_order) || 0,
+        india_featured_priority: Number(formData.india_featured_priority) || 0,
         itinerary,
         highlights,
         inclusions: cleanInclusions,
@@ -767,6 +784,180 @@ const AdminTrips = () => {
                 </div>
               </div>
 
+              {/* SECTION: India Showcase Settings */}
+              <div className={styles.formSection}>
+                <h3 className={styles.sectionTitle}>
+                  <svg
+                    className={styles.sectionIcon}
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  India Showcase
+                </h3>
+
+                <div className={styles.formGrid}>
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>State / Region</label>
+                    <div className={styles.inputWrapper}>
+                      <svg
+                        className={styles.inputIcon}
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <input
+                        className={styles.input}
+                        name="state"
+                        placeholder="e.g. Rajasthan, Kerala, Himachal Pradesh"
+                        value={formData.state}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label
+                      className={styles.inputLabel}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        name="is_india_trip"
+                        checked={formData.is_india_trip}
+                        onChange={handleCheckboxChange}
+                        style={{
+                          width: "18px",
+                          height: "18px",
+                          accentColor: "#3f9e8f",
+                        }}
+                      />
+                      India Trip
+                    </label>
+                    <span
+                      style={{
+                        fontSize: "0.8rem",
+                        color: "#6b7280",
+                        marginTop: "4px",
+                      }}
+                    >
+                      Mark this trip as an Indian destination
+                    </span>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label
+                      className={styles.inputLabel}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        name="show_in_india_section"
+                        checked={formData.show_in_india_section}
+                        onChange={handleCheckboxChange}
+                        style={{
+                          width: "18px",
+                          height: "18px",
+                          accentColor: "#3f9e8f",
+                        }}
+                      />
+                      Show in Scrolling Section
+                    </label>
+                    <span
+                      style={{
+                        fontSize: "0.8rem",
+                        color: "#6b7280",
+                        marginTop: "4px",
+                      }}
+                    >
+                      Display in the auto-scrolling India showcase
+                    </span>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Display Order</label>
+                    <div className={styles.inputWrapper}>
+                      <svg
+                        className={styles.inputIcon}
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" />
+                      </svg>
+                      <input
+                        className={styles.input}
+                        name="india_display_order"
+                        type="number"
+                        placeholder="0"
+                        value={formData.india_display_order}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <span
+                      style={{
+                        fontSize: "0.8rem",
+                        color: "#6b7280",
+                        marginTop: "4px",
+                      }}
+                    >
+                      Lower number appears first in the scrolling section
+                    </span>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>
+                      Featured Priority
+                    </label>
+                    <div className={styles.inputWrapper}>
+                      <svg
+                        className={styles.inputIcon}
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <input
+                        className={styles.input}
+                        name="india_featured_priority"
+                        type="number"
+                        placeholder="0"
+                        value={formData.india_featured_priority}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <span
+                      style={{
+                        fontSize: "0.8rem",
+                        color: "#6b7280",
+                        marginTop: "4px",
+                      }}
+                    >
+                      Higher number = more prominent placement
+                    </span>
+                  </div>
+                </div>
+              </div>
+
               {/* SECTION 2: Itinerary */}
               <div className={styles.formSection}>
                 <h3 className={styles.sectionTitle}>
@@ -1187,6 +1378,21 @@ const AdminTrips = () => {
                             }}
                           >
                             🌍 International
+                          </span>
+                        )}
+                        {trip.is_india_trip && (
+                          <span
+                            className={styles.metaItem}
+                            style={{
+                              background: "rgba(255,153,51,0.1)",
+                              color: "#d97706",
+                              padding: "2px 8px",
+                              borderRadius: "12px",
+                              fontSize: "0.75rem",
+                              fontWeight: 600,
+                            }}
+                          >
+                            🇮🇳 India
                           </span>
                         )}
                       </div>

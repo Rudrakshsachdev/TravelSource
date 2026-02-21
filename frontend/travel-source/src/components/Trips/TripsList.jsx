@@ -8,6 +8,7 @@ import PersonalizationSection from "./PersonalizationSection";
 import PanoramaBanner from "./PanoramaBanner";
 import CinematicPanorama from "./CinematicPanorama";
 import InternationalTrips from "./InternationalTrips";
+import IndiaTrips from "./IndiaTrips";
 import CategoryNav from "./CategoryNav";
 
 const TripsList = () => {
@@ -329,6 +330,9 @@ const TripsList = () => {
 
       {/* International Trips Scrolling Showcase */}
       <InternationalTrips />
+
+      {/* India Trips Scrolling Showcase */}
+      <IndiaTrips />
 
       {/* Search & Filter Section */}
       <section className={styles.searchSection}>

@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig
+from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig
 
 from .serializers import (
     TripSerializer,
@@ -20,6 +20,8 @@ from .serializers import (
     SiteStatSerializer,
     InternationalTripSerializer,
     InternationalSectionConfigSerializer,
+    IndiaTripSerializer,
+    IndiaSectionConfigSerializer,
 )
 
 from django.shortcuts import get_object_or_404
@@ -590,6 +592,50 @@ def admin_international_config(request):
         return Response(serializer.data)
 
     serializer = InternationalSectionConfigSerializer(config, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data)
+
+
+# ─── India Trips ──────────────────────────────────────────────────────────────
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def india_trips(request):
+    """Return active India trips for the scrolling showcase section."""
+    config = IndiaSectionConfig.load()
+    if not config.is_enabled:
+        return Response({"config": {"is_enabled": False}, "trips": []})
+
+    trips = Trip.objects.filter(
+        is_active=True,
+        is_india_trip=True,
+        show_in_india_section=True,
+    ).order_by("india_display_order", "-id")
+
+    config_serializer = IndiaSectionConfigSerializer(config)
+    trip_serializer = IndiaTripSerializer(trips, many=True)
+
+    return Response({
+        "config": config_serializer.data,
+        "trips": trip_serializer.data,
+    })
+
+
+@api_view(["GET", "PATCH"])
+@permission_classes([IsAuthenticated])
+def admin_india_config(request):
+    """Admin: get or update the India section configuration."""
+    if not hasattr(request.user, "profile") or request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    config = IndiaSectionConfig.load()
+
+    if request.method == "GET":
+        serializer = IndiaSectionConfigSerializer(config)
+        return Response(serializer.data)
+
+    serializer = IndiaSectionConfigSerializer(config, data=request.data, partial=True)
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(serializer.data)

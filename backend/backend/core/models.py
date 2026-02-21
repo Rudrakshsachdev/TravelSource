@@ -23,6 +23,13 @@ class Trip(models.Model):
     show_in_international_section = models.BooleanField(default=False, help_text="Show in the scrolling international section")
     display_order = models.IntegerField(default=0, help_text="Order in the international section (lower = first)")
 
+    # India showcase fields
+    state = models.CharField(max_length=100, blank=True, default="", help_text="State/Region for India trips")
+    is_india_trip = models.BooleanField(default=False, help_text="Mark as India trip")
+    show_in_india_section = models.BooleanField(default=False, help_text="Show in the scrolling India section")
+    india_display_order = models.IntegerField(default=0, help_text="Order in the India section (lower = first)")
+    india_featured_priority = models.IntegerField(default=0, help_text="Featured priority (higher = more prominent)")
+
     def __str__(self):
         return self.title
 
@@ -175,6 +182,31 @@ class InternationalSectionConfig(models.Model):
 
     def __str__(self):
         return f"International Section ({'Enabled' if self.is_enabled else 'Disabled'})"
+
+    def save(self, *args, **kwargs):
+        # Enforce singleton: always use pk=1
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+
+class IndiaSectionConfig(models.Model):
+    """Singleton settings for the India Trips showcase section."""
+    is_enabled = models.BooleanField(default=True, help_text="Enable the India trips scrolling section")
+    title = models.CharField(max_length=200, default="Explore India Trips")
+    subtitle = models.CharField(max_length=300, blank=True, default="", help_text="Optional subtitle below the heading")
+    scroll_speed = models.PositiveIntegerField(default=60, help_text="Animation duration in seconds (higher = slower)")
+
+    class Meta:
+        verbose_name = "India Section Config"
+        verbose_name_plural = "India Section Config"
+
+    def __str__(self):
+        return f"India Section ({'Enabled' if self.is_enabled else 'Disabled'})"
 
     def save(self, *args, **kwargs):
         # Enforce singleton: always use pk=1
