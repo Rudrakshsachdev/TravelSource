@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import usePersonalization from "../../hooks/usePersonalization";
 import PersonalizationSection from "./PersonalizationSection";
 import PanoramaBanner from "./PanoramaBanner";
+import CinematicPanorama from "./CinematicPanorama";
 
 const TripsList = () => {
   const navigate = useNavigate();
@@ -316,6 +317,9 @@ const TripsList = () => {
 
       {/* Cinematic Panorama Banner */}
       <PanoramaBanner />
+
+      {/* Cinematic Panoramic Hero with Sliding Background */}
+      <CinematicPanorama />
 
       {/* Search & Filter Section */}
       <section className={styles.searchSection}>
