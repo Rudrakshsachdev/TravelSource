@@ -16,6 +16,13 @@ class Trip(models.Model):
     image = models.URLField(blank=True, default="")
     is_active = models.BooleanField(default=True)
 
+    # International showcase fields
+    country = models.CharField(max_length=100, blank=True, default="", help_text="Country name for international trips")
+    short_description = models.CharField(max_length=300, blank=True, default="", help_text="Short tagline for card overlay")
+    is_international = models.BooleanField(default=False, help_text="Mark as international trip")
+    show_in_international_section = models.BooleanField(default=False, help_text="Show in the scrolling international section")
+    display_order = models.IntegerField(default=0, help_text="Order in the international section (lower = first)")
+
     def __str__(self):
         return self.title
 
@@ -153,3 +160,28 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"{self.full_name} - {self.trip.title} ({self.status})"
+
+
+class InternationalSectionConfig(models.Model):
+    """Singleton settings for the International Trips showcase section."""
+    is_enabled = models.BooleanField(default=True, help_text="Enable the international trips scrolling section")
+    title = models.CharField(max_length=200, default="Explore International Trips")
+    subtitle = models.CharField(max_length=300, blank=True, default="", help_text="Optional subtitle below the heading")
+    scroll_speed = models.PositiveIntegerField(default=60, help_text="Animation duration in seconds (higher = slower)")
+
+    class Meta:
+        verbose_name = "International Section Config"
+        verbose_name_plural = "International Section Config"
+
+    def __str__(self):
+        return f"International Section ({'Enabled' if self.is_enabled else 'Disabled'})"
+
+    def save(self, *args, **kwargs):
+        # Enforce singleton: always use pk=1
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj

@@ -8,12 +8,14 @@ from .views import (
     record_trip_view, recommended_trips,
     list_reviews, create_review,
     site_stats, admin_site_stats,
+    international_trips, admin_international_config,
 )
 
 urlpatterns = [
     path("v1/hello/", hello_api),
     path("v1/trips/", trip_list),
     path("v1/trips/recommended/", recommended_trips),
+    path("v1/trips/international/", international_trips),
     path("v1/trips/<int:pk>/", trip_detail),
     path("v1/trips/<int:pk>/view/", record_trip_view),
     path("v1/auth/login/", login_view),
@@ -40,5 +42,6 @@ urlpatterns = [
     path("v1/site-stats/", site_stats),
     path("v1/admin/site-stats/", admin_site_stats),
     path("v1/admin/site-stats/<int:pk>/", admin_site_stats),
+    path("v1/admin/international-config/", admin_international_config),
 ]
 

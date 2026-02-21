@@ -155,7 +155,7 @@ const BookingPage = () => {
               <h2 className={styles.tripTitle}>{trip.title}</h2>
 
               <div className={styles.tripMeta}>
-                {trip.duration && (
+                {trip.duration_days && (
                   <div className={styles.metaItem}>
                     <svg
                       viewBox="0 0 20 20"
@@ -169,7 +169,7 @@ const BookingPage = () => {
                         clipRule="evenodd"
                       />
                     </svg>
-                    <span>{trip.duration}</span>
+                    <span>{trip.duration_days} Days</span>
                   </div>
                 )}
 
@@ -187,7 +187,10 @@ const BookingPage = () => {
                         clipRule="evenodd"
                       />
                     </svg>
-                    <span>{trip.location}</span>
+                    <span>
+                      {trip.location}
+                      {trip.country ? `, ${trip.country}` : ""}
+                    </span>
                   </div>
                 )}
               </div>

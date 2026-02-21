@@ -519,3 +519,10 @@ export const fetchSiteStats = async () => {
   if (!res.ok) throw new Error("Failed to fetch site stats");
   return res.json();
 };
+
+/** Fetch international trips + section config for the scrolling showcase */
+export const fetchInternationalTrips = async () => {
+  const res = await fetch(`${API_BASE_URL}/v1/trips/international/`);
+  if (!res.ok) throw new Error("Failed to fetch international trips");
+  return res.json();
+};

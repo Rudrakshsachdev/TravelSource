@@ -10,3 +10,4 @@ from .contactmessage_serializer import ContactMessageSerializer
 from .Booking_serializer import BookingCreateSerializer, BookingListSerializer
 from .review_serializer import ReviewSerializer
 from .sitestat_serializer import SiteStatSerializer
+from .international_trip_serializer import InternationalTripSerializer, InternationalSectionConfigSerializer

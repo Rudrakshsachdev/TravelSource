@@ -20,4 +20,9 @@ class TripSerializer(serializers.ModelSerializer):
             "exclusions",
             "image",
             "is_active",
+            "country",
+            "short_description",
+            "is_international",
+            "show_in_international_section",
+            "display_order",
         ]

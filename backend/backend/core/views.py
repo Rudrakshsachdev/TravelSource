@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat
+from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig
 
 from .serializers import (
     TripSerializer,
@@ -18,6 +18,8 @@ from .serializers import (
     BookingListSerializer,
     ReviewSerializer,
     SiteStatSerializer,
+    InternationalTripSerializer,
+    InternationalSectionConfigSerializer,
 )
 
 from django.shortcuts import get_object_or_404
@@ -544,6 +546,50 @@ def admin_site_stats(request, pk=None):
     # PATCH — update value of a single stat
     stat = get_object_or_404(SiteStat, pk=pk)
     serializer = SiteStatSerializer(stat, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data)
+
+
+# ─── International Trips ─────────────────────────────────────────────────────
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def international_trips(request):
+    """Return active international trips for the scrolling showcase section."""
+    config = InternationalSectionConfig.load()
+    if not config.is_enabled:
+        return Response({"config": {"is_enabled": False}, "trips": []})
+
+    trips = Trip.objects.filter(
+        is_active=True,
+        is_international=True,
+        show_in_international_section=True,
+    ).order_by("display_order", "-id")
+
+    config_serializer = InternationalSectionConfigSerializer(config)
+    trip_serializer = InternationalTripSerializer(trips, many=True)
+
+    return Response({
+        "config": config_serializer.data,
+        "trips": trip_serializer.data,
+    })
+
+
+@api_view(["GET", "PATCH"])
+@permission_classes([IsAuthenticated])
+def admin_international_config(request):
+    """Admin: get or update the international section configuration."""
+    if not hasattr(request.user, "profile") or request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    config = InternationalSectionConfig.load()
+
+    if request.method == "GET":
+        serializer = InternationalSectionConfigSerializer(config)
+        return Response(serializer.data)
+
+    serializer = InternationalSectionConfigSerializer(config, data=request.data, partial=True)
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(serializer.data)

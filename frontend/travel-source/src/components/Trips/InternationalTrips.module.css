@@ -1,0 +1,665 @@
+/* ═══════════════════════════════════════════════════════════════
+   InternationalTrips — Horizontally Auto-Scrolling Showcase
+   Travel Professor · Premium Teal Design System
+   ═══════════════════════════════════════════════════════════════ */
+
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800;900&display=swap");
+
+/* ─── Keyframes ─────────────────────────────────────────────── */
+
+@keyframes scrollTrack {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes orbFloat {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(20px, -15px) scale(1.08);
+  }
+}
+
+@keyframes orbFloat2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-15px, 20px) scale(1.05);
+  }
+}
+
+@keyframes dotPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.6);
+  }
+}
+
+/* ─── Section Shell ─────────────────────────────────────────── */
+
+.section {
+  position: relative;
+  width: 100%;
+  padding: 80px 0 90px;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    #f4fbfa 0%,
+    #eaf7f4 30%,
+    #e0f3ef 70%,
+    #f4fbfa 100%
+  );
+}
+
+/* ─── Background Decoration ─────────────────────────────────── */
+
+.bgDecor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.bgOrb1 {
+  position: absolute;
+  top: -60px;
+  right: -80px;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(63, 158, 143, 0.1) 0%,
+    transparent 70%
+  );
+  animation: orbFloat 12s ease-in-out infinite;
+  will-change: transform;
+}
+
+.bgOrb2 {
+  position: absolute;
+  bottom: -40px;
+  left: -60px;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(126, 207, 192, 0.08) 0%,
+    transparent 70%
+  );
+  animation: orbFloat2 15s ease-in-out infinite;
+  will-change: transform;
+}
+
+.bgLine {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(63, 158, 143, 0.1) 30%,
+    rgba(63, 158, 143, 0.1) 70%,
+    transparent 100%
+  );
+}
+
+/* ─── Header ────────────────────────────────────────────────── */
+
+.header {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 48px;
+  padding: 0 24px;
+  opacity: 0;
+  transform: translateY(32px);
+}
+
+.section.visible .header {
+  animation: fadeUp 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family:
+    "Montserrat",
+    -apple-system,
+    sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #3f9e8f;
+  margin-bottom: 14px;
+}
+
+.labelDot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3f9e8f;
+  animation: dotPulse 2s ease-in-out infinite;
+}
+
+.title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 700;
+  color: #1a3a35;
+  line-height: 1.2;
+  margin: 0 0 12px;
+}
+
+.subtitle {
+  font-family:
+    "Inter",
+    -apple-system,
+    sans-serif;
+  font-size: 1rem;
+  color: #3d7a70;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ─── Track Wrapper ─────────────────────────────────────────── */
+
+.trackWrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.section.visible .trackWrapper {
+  animation: fadeUp 0.7s 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Edge gradient fades */
+.edgeFadeLeft,
+.edgeFadeRight {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.edgeFadeLeft {
+  left: 0;
+  background: linear-gradient(90deg, #f0f9f7 0%, transparent 100%);
+}
+
+.edgeFadeRight {
+  right: 0;
+  background: linear-gradient(-90deg, #f0f9f7 0%, transparent 100%);
+}
+
+/* ─── Scrolling Track ───────────────────────────────────────── */
+
+.track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  animation: scrollTrack linear infinite;
+  will-change: transform;
+  padding: 16px 0 24px;
+}
+
+/* ─── Card ──────────────────────────────────────────────────── */
+
+.card {
+  flex-shrink: 0;
+  width: 320px;
+  background: #ffffff;
+  border-radius: 22px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow:
+    0 2px 16px rgba(26, 58, 53, 0.07),
+    0 1px 4px rgba(26, 58, 53, 0.04);
+  transition:
+    transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, box-shadow;
+  border: 1px solid rgba(63, 158, 143, 0.1);
+}
+
+.card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow:
+    0 20px 48px rgba(26, 58, 53, 0.16),
+    0 8px 20px rgba(63, 158, 143, 0.12);
+}
+
+.card:focus-visible {
+  outline: 2px solid #3f9e8f;
+  outline-offset: 3px;
+}
+
+/* ─── Card Image ────────────────────────────────────────────── */
+
+.cardImageWrap {
+  position: relative;
+  width: 100%;
+  height: 210px;
+  overflow: hidden;
+}
+
+.cardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover .cardImage {
+  transform: scale(1.08);
+}
+
+/* gradient overlay on image */
+.cardOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 40%,
+    rgba(26, 58, 53, 0.55) 100%
+  );
+  pointer-events: none;
+}
+
+/* ─── Country Badge ─────────────────────────────────────────── */
+
+.countryBadge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 1000px;
+  font-family:
+    "Montserrat",
+    -apple-system,
+    sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #1a3a35;
+  letter-spacing: 0.04em;
+  border: 1px solid rgba(63, 158, 143, 0.15);
+}
+
+.countryBadge svg {
+  color: #3f9e8f;
+  flex-shrink: 0;
+}
+
+/* ─── Price Tag ─────────────────────────────────────────────── */
+
+.priceTag {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, #3f9e8f 0%, #2e8b7a 100%);
+  border-radius: 1000px;
+  font-family:
+    "Montserrat",
+    -apple-system,
+    sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.01em;
+  box-shadow: 0 4px 16px rgba(63, 158, 143, 0.35);
+}
+
+.priceDuration {
+  font-size: 0.65rem;
+  font-weight: 500;
+  opacity: 0.8;
+  margin-left: 2px;
+}
+
+/* ─── Card Body ─────────────────────────────────────────────── */
+
+.cardBody {
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cardTitle {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a3a35;
+  margin: 0;
+  line-height: 1.3;
+  /* clamp to 2 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardDesc {
+  font-family:
+    "Inter",
+    -apple-system,
+    sans-serif;
+  font-size: 0.82rem;
+  color: #3d7a70;
+  line-height: 1.5;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family:
+    "Montserrat",
+    -apple-system,
+    sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #3f9e8f;
+  margin-top: 6px;
+  transition: gap 0.3s ease;
+}
+
+.card:hover .cardCta {
+  gap: 10px;
+}
+
+.cardCta svg {
+  transition: transform 0.3s ease;
+}
+
+.card:hover .cardCta svg {
+  transform: translateX(3px);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Large desktops */
+@media (min-width: 1600px) {
+  .section {
+    padding: 100px 0 110px;
+  }
+
+  .card {
+    width: 360px;
+  }
+
+  .cardImageWrap {
+    height: 240px;
+  }
+
+  .edgeFadeLeft,
+  .edgeFadeRight {
+    width: 120px;
+  }
+}
+
+/* Tablets */
+@media (max-width: 1024px) {
+  .section {
+    padding: 64px 0 72px;
+  }
+
+  .header {
+    margin-bottom: 36px;
+  }
+
+  .card {
+    width: 280px;
+  }
+
+  .cardImageWrap {
+    height: 185px;
+  }
+
+  .track {
+    gap: 20px;
+  }
+
+  /* Slightly slower on tablet */
+  .track {
+    animation-duration: inherit;
+  }
+}
+
+/* Mobile landscape / small tablets */
+@media (max-width: 768px) {
+  .section {
+    padding: 52px 0 60px;
+  }
+
+  .header {
+    margin-bottom: 28px;
+  }
+
+  .card {
+    width: 260px;
+  }
+
+  .cardImageWrap {
+    height: 170px;
+  }
+
+  .cardBody {
+    padding: 14px 16px 16px;
+  }
+
+  .cardTitle {
+    font-size: 1rem;
+  }
+
+  .edgeFadeLeft,
+  .edgeFadeRight {
+    width: 48px;
+  }
+
+  .track {
+    gap: 16px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .section {
+    padding: 40px 0 48px;
+  }
+
+  .header {
+    margin-bottom: 22px;
+    padding: 0 16px;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+  }
+
+  .card {
+    width: 240px;
+  }
+
+  .cardImageWrap {
+    height: 155px;
+  }
+
+  .cardBody {
+    padding: 12px 14px 14px;
+  }
+
+  .cardTitle {
+    font-size: 0.95rem;
+  }
+
+  .cardDesc {
+    font-size: 0.78rem;
+    -webkit-line-clamp: 1;
+  }
+
+  .priceTag {
+    font-size: 0.78rem;
+    padding: 5px 11px;
+  }
+
+  .edgeFadeLeft,
+  .edgeFadeRight {
+    width: 32px;
+  }
+
+  .track {
+    gap: 14px;
+    padding: 12px 0 18px;
+  }
+
+  /* Slightly slower scroll on mobile for calmer feel */
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+  .card {
+    width: 220px;
+  }
+
+  .cardImageWrap {
+    height: 140px;
+  }
+
+  .cardBody {
+    padding: 10px 12px 12px;
+  }
+
+  .cardTitle {
+    font-size: 0.9rem;
+  }
+
+  .priceTag {
+    font-size: 0.72rem;
+    padding: 4px 10px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ACCESSIBILITY — Reduced Motion
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none !important;
+    /* Fallback: allow manual horizontal scroll */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+  }
+
+  .card {
+    scroll-snap-align: start;
+  }
+
+  .bgOrb1,
+  .bgOrb2 {
+    animation: none;
+  }
+
+  .labelDot {
+    animation: none;
+  }
+
+  .header,
+  .trackWrapper {
+    opacity: 1;
+    transform: none;
+    animation: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PRINT
+   ═══════════════════════════════════════════════════════════════ */
+
+@media print {
+  .section {
+    padding: 24px 0;
+    background: #fff;
+  }
+
+  .bgDecor,
+  .edgeFadeLeft,
+  .edgeFadeRight {
+    display: none;
+  }
+
+  .track {
+    animation: none !important;
+    flex-wrap: wrap;
+    gap: 12px;
+    width: auto;
+  }
+
+  .card {
+    width: 200px;
+    box-shadow: 0 0 1px #ccc;
+  }
+}

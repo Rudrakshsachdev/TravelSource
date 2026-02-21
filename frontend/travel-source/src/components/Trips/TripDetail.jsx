@@ -289,7 +289,9 @@ const TripDetail = () => {
                 <span className={styles.tripTypeIcon}>
                   {getTripTypeIcon(trip.title)}
                 </span>
-                <span className={styles.tripTypeLabel}>Adventure</span>
+                <span className={styles.tripTypeLabel}>
+                  {trip.is_international ? "International" : "Adventure"}
+                </span>
               </div>
               <div className={styles.heroMeta}>
                 <div className={styles.metaItem}>
@@ -300,7 +302,10 @@ const TripDetail = () => {
                       clipRule="evenodd"
                     />
                   </svg>
-                  <span>{trip.location}</span>
+                  <span>
+                    {trip.location}
+                    {trip.country ? `, ${trip.country}` : ""}
+                  </span>
                 </div>
                 <div className={styles.metaItem}>
                   <svg viewBox="0 0 20 20" fill="currentColor">
@@ -317,8 +322,8 @@ const TripDetail = () => {
 
             <h1 className={styles.heroTitle}>{trip.title}</h1>
             <p className={styles.heroSubtitle}>
-              An unforgettable journey filled with amazing experiences and
-              breathtaking views
+              {trip.short_description ||
+                "An unforgettable journey filled with amazing experiences and breathtaking views"}
             </p>
 
             <div className={styles.heroStats}>

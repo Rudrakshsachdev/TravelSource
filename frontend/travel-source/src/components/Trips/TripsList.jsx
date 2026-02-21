@@ -7,6 +7,7 @@ import usePersonalization from "../../hooks/usePersonalization";
 import PersonalizationSection from "./PersonalizationSection";
 import PanoramaBanner from "./PanoramaBanner";
 import CinematicPanorama from "./CinematicPanorama";
+import InternationalTrips from "./InternationalTrips";
 
 const TripsList = () => {
   const navigate = useNavigate();
@@ -50,6 +51,7 @@ const TripsList = () => {
       return (
         trip.title.toLowerCase().includes(query) ||
         trip.location.toLowerCase().includes(query) ||
+        (trip.country || "").toLowerCase().includes(query) ||
         trip.description.toLowerCase().includes(query)
       );
     }
@@ -320,6 +322,9 @@ const TripsList = () => {
 
       {/* Cinematic Panoramic Hero with Sliding Background */}
       <CinematicPanorama />
+
+      {/* International Trips Scrolling Showcase */}
+      <InternationalTrips />
 
       {/* Search & Filter Section */}
       <section className={styles.searchSection}>

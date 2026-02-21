@@ -316,7 +316,10 @@ const TripCard = ({ trip, index, onView }) => {
               />
             </svg>
           </span>
-          <span className={styles.locationText}>{trip.location}</span>
+          <span className={styles.locationText}>
+            {trip.location}
+            {trip.country ? `, ${trip.country}` : ""}
+          </span>
         </div>
 
         {/* Description */}

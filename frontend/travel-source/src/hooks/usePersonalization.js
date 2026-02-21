@@ -92,7 +92,7 @@ export const INTEREST_OPTIONS = [
 
 function scoreTrip(trip, interests, avgViewedPrice) {
   const text =
-    `${trip.title} ${trip.location} ${trip.description || ""}`.toLowerCase();
+    `${trip.title} ${trip.location} ${trip.country || ""} ${trip.description || ""}`.toLowerCase();
   let score = 0;
 
   // Interest keyword matching
