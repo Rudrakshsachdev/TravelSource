@@ -303,7 +303,7 @@ const TripsList = () => {
   }
 
   return (
-    <div className={styles.luxuryTripsPage}>
+    <div id="trips" className={styles.luxuryTripsPage}>
       {/* Luxury Background Elements */}
       <div className={styles.luxuryBackground}>
         <div className={styles.backgroundGlow}></div>
@@ -553,33 +553,33 @@ const TripsList = () => {
                 {(searchQuery ||
                   activeFilter !== "all" ||
                   sortBy !== "featured") && (
-                  <button
-                    className={styles.clearAllButton}
-                    onClick={clearFilters}
-                  >
-                    <span className={styles.clearIcon}>
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M18 6L6 18"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                        />
-                        <path
-                          d="M6 6L18 18"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                        />
-                      </svg>
-                    </span>
-                    Clear All Filters
-                  </button>
-                )}
+                    <button
+                      className={styles.clearAllButton}
+                      onClick={clearFilters}
+                    >
+                      <span className={styles.clearIcon}>
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M18 6L6 18"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                          />
+                          <path
+                            d="M6 6L18 18"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                      </span>
+                      Clear All Filters
+                    </button>
+                  )}
               </div>
             </div>
           </div>

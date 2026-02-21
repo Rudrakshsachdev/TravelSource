@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getAuthData, logout } from "../../utils/auth";
 import { useState, useEffect, useRef, useCallback } from "react";
 import logoIcon from "../../assets/logo-icon.svg";
+import { fetchTrips } from "../../services/api";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -14,20 +15,9 @@ const Navbar = () => {
   const timeoutRef = useRef(null);
   const rafRef = useRef(null);
 
-  // Luxury destinations for the dropdown
-  const destinations = [
-    { id: 1, name: "Swiss Alps", country: "Switzerland", type: "Luxury Ski" },
-    { id: 2, name: "Santorini", country: "Greece", type: "Honeymoon" },
-    { id: 3, name: "Kyoto", country: "Japan", type: "Cultural" },
-    { id: 4, name: "Safari", country: "Kenya", type: "Adventure" },
-    {
-      id: 5,
-      name: "Maldives",
-      country: "Indian Ocean",
-      type: "Private Island",
-    },
-    { id: 6, name: "Paris", country: "France", type: "Haute Couture" },
-  ];
+  const [destinations, setDestinations] = useState([]);
+  const [tripsRaw, setTripsRaw] = useState([]);
+  const [loadingDestinations, setLoadingDestinations] = useState(true);
 
   // Throttled scroll via rAF to avoid layout thrashing
   const handleScroll = useCallback(() => {
@@ -51,6 +41,38 @@ const Navbar = () => {
   }, [isMenuOpen]);
 
   useEffect(() => {
+    const loadDestinations = async () => {
+      try {
+        const trips = await fetchTrips();
+        setTripsRaw(trips);
+
+        // Extract unique destinations based on location name
+        const uniqueLocations = [];
+        const seen = new Set();
+
+        trips.forEach((trip) => {
+          const locName = trip.location;
+          if (!seen.has(locName)) {
+            seen.add(locName);
+            uniqueLocations.push({
+              id: trip.id,
+              name: trip.location,
+              country: trip.country || "Global",
+              type: trip.category || "Premium",
+            });
+          }
+        });
+
+        setDestinations(uniqueLocations.slice(0, 6)); // Keep top 6 for the grid layout
+      } catch (err) {
+        console.error("Failed to load navbar destinations:", err);
+      } finally {
+        setLoadingDestinations(false);
+      }
+    };
+
+    loadDestinations();
+
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setIsMenuOpen(false);
@@ -294,9 +316,7 @@ const Navbar = () => {
                     key={dest.id}
                     className={styles.destinationCard}
                     onClick={() =>
-                      handleNavigation(
-                        `/destinations/${dest.name.toLowerCase()}`,
-                      )
+                      handleNavigation(`/trips/${dest.id}`)
                     }
                   >
                     <div className={styles.destinationNumber}>0{dest.id}</div>
@@ -327,8 +347,8 @@ const Navbar = () => {
               </div>
 
               <div className={styles.dropdownFooter}>
-                <button className={styles.viewAllBtn}>
-                  VIEW ALL 47 DESTINATIONS
+                <button className={styles.viewAllBtn} onClick={() => handleNavigation("/#trips")}>
+                  VIEW ALL {tripsRaw.length} JOURNEYS
                   <span className={styles.viewAllArrow}>
                     <svg
                       viewBox="0 0 16 16"
@@ -381,15 +401,15 @@ const Navbar = () => {
           <nav className={styles.mobileNav}>
             <div className={styles.mobileNavSection}>
               <div className={styles.mobileNavTitle}>EXPLORE</div>
-              {destinations.slice(0, 3).map((dest) => (
+              {destinations.slice(0, 4).map((dest, index) => (
                 <button
                   key={dest.id}
                   className={styles.mobileNavItem}
                   onClick={() =>
-                    handleNavigation(`/destinations/${dest.name.toLowerCase()}`)
+                    handleNavigation(`/trips/${dest.id}`)
                   }
                 >
-                  <span className={styles.mobileItemNumber}>0{dest.id}</span>
+                  <span className={styles.mobileItemNumber}>0{index + 1}</span>
                   <span className={styles.mobileItemText}>{dest.name}</span>
                   <span className={styles.mobileItemArrow}>
                     <svg
