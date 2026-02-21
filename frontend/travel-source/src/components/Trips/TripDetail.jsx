@@ -14,8 +14,12 @@ const TripDetail = () => {
   const [travelers, setTravelers] = useState(1);
   const [isSticky, setIsSticky] = useState(false);
   const [showFloatingButton, setShowFloatingButton] = useState(false);
+  const [parallaxOffset, setParallaxOffset] = useState(0);
+  const [revealedSections, setRevealedSections] = useState(new Set());
   const bookingCardRef = useRef(null);
   const heroRef = useRef(null);
+  const quickInfoRef = useRef(null);
+  const contentRef = useRef(null);
 
   useEffect(() => {
     const loadTrip = async () => {
@@ -61,6 +65,42 @@ const TripDetail = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Parallax effect for hero image
+  useEffect(() => {
+    const handleParallax = () => {
+      if (heroRef.current) {
+        const scrollY = window.scrollY;
+        const heroHeight = heroRef.current.offsetHeight;
+        if (scrollY < heroHeight) {
+          setParallaxOffset(scrollY * 0.3);
+        }
+      }
+    };
+    window.addEventListener("scroll", handleParallax, { passive: true });
+    return () => window.removeEventListener("scroll", handleParallax);
+  }, []);
+
+  // Intersection Observer for scroll reveal animations
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setRevealedSections(
+              (prev) => new Set([...prev, entry.target.dataset.reveal]),
+            );
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -60px 0px" },
+    );
+
+    const elements = document.querySelectorAll("[data-reveal]");
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, [trip, activeTab]);
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat("en-IN", {
@@ -148,7 +188,7 @@ const TripDetail = () => {
       setTimeout(() => {
         setSuccess("");
       }, 5000);
-    } catch (err) {
+    } catch {
       alert("Failed to submit enquiry");
     } finally {
       setSubmitting(false);
@@ -260,6 +300,13 @@ const TripDetail = () => {
 
   return (
     <div className={styles.tripDetailPage}>
+      {/* Ambient Background Orbs */}
+      <div className={styles.ambientOrbs}>
+        <div className={styles.ambientOrb1} />
+        <div className={styles.ambientOrb2} />
+        <div className={styles.ambientOrb3} />
+      </div>
+
       {/* Hero Section */}
       <div className={styles.heroSection} ref={heroRef}>
         <div className={styles.heroImage}>
@@ -269,18 +316,71 @@ const TripDetail = () => {
               "https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
             }
             alt={trip.title}
+            style={{ transform: `translateY(${parallaxOffset}px) scale(1.05)` }}
           />
           <div className={styles.imageOverlay}></div>
-          <button className={styles.backButton} onClick={() => navigate("/")}>
-            <svg viewBox="0 0 20 20" fill="currentColor">
-              <path
-                fillRule="evenodd"
-                d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
-            Back
-          </button>
+          <div className={styles.heroVignette}></div>
+
+          {/* Breadcrumb Navigation */}
+          <div className={styles.heroBreadcrumb}>
+            <button className={styles.backButton} onClick={() => navigate("/")}>
+              <svg viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  fillRule="evenodd"
+                  d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              Back
+            </button>
+            <nav className={styles.breadcrumbNav}>
+              <span
+                className={styles.breadcrumbItem}
+                onClick={() => navigate("/")}
+              >
+                Home
+              </span>
+              <span className={styles.breadcrumbSep}>›</span>
+              <span
+                className={styles.breadcrumbItem}
+                onClick={() => navigate("/trips")}
+              >
+                Trips
+              </span>
+              <span className={styles.breadcrumbSep}>›</span>
+              <span className={styles.breadcrumbCurrent}>{trip.title}</span>
+            </nav>
+          </div>
+
+          {/* Experience Badges */}
+          <div className={styles.experienceBadges}>
+            <div className={styles.expBadge}>
+              <svg viewBox="0 0 20 20" fill="currentColor">
+                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+              </svg>
+              <span>Small Group</span>
+            </div>
+            <div className={styles.expBadge}>
+              <svg viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  fillRule="evenodd"
+                  d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span>Expert Guide</span>
+            </div>
+            <div className={styles.expBadge}>
+              <svg viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  fillRule="evenodd"
+                  d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span>Photo Worthy</span>
+            </div>
+          </div>
 
           {/* Hero Content - Now inside the image overlay */}
           <div className={styles.heroContent}>
@@ -342,36 +442,165 @@ const TripDetail = () => {
             </div>
           </div>
         </div>
+
+        {/* Scroll Indicator */}
+        <div className={styles.scrollIndicator}>
+          <div className={styles.scrollMouse}>
+            <div className={styles.scrollWheel}></div>
+          </div>
+          <span>Scroll to explore</span>
+        </div>
+      </div>
+
+      {/* Quick Info Strip */}
+      <div
+        className={styles.quickInfoStrip}
+        ref={quickInfoRef}
+        data-reveal="quickInfo"
+      >
+        <div
+          className={`${styles.quickInfoInner} ${revealedSections.has("quickInfo") ? styles.revealed : ""}`}
+        >
+          <div className={styles.quickInfoItem}>
+            <div className={styles.quickInfoIcon}>
+              <svg viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 9.586V6z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <div className={styles.quickInfoText}>
+              <span className={styles.quickInfoLabel}>Duration</span>
+              <span className={styles.quickInfoValue}>
+                {trip.duration_days} Days
+              </span>
+            </div>
+          </div>
+          <div className={styles.quickInfoDivider} />
+          <div className={styles.quickInfoItem}>
+            <div className={styles.quickInfoIcon}>
+              <svg viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  fillRule="evenodd"
+                  d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <div className={styles.quickInfoText}>
+              <span className={styles.quickInfoLabel}>Destination</span>
+              <span className={styles.quickInfoValue}>{trip.location}</span>
+            </div>
+          </div>
+          <div className={styles.quickInfoDivider} />
+          <div className={styles.quickInfoItem}>
+            <div className={styles.quickInfoIcon}>
+              <svg viewBox="0 0 20 20" fill="currentColor">
+                <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <div className={styles.quickInfoText}>
+              <span className={styles.quickInfoLabel}>Starting From</span>
+              <span className={styles.quickInfoValue}>
+                {formatPrice(trip.price)}
+              </span>
+            </div>
+          </div>
+          <div className={styles.quickInfoDivider} />
+          <div className={styles.quickInfoItem}>
+            <div className={styles.quickInfoIcon}>
+              <svg viewBox="0 0 20 20" fill="currentColor">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+            </div>
+            <div className={styles.quickInfoText}>
+              <span className={styles.quickInfoLabel}>Rating</span>
+              <span className={styles.quickInfoValue}>4.8 / 5.0</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className={styles.mainContent}>
         {/* Left Column - Content */}
-        <div className={styles.contentColumn}>
+        <div
+          className={styles.contentColumn}
+          ref={contentRef}
+          data-reveal="content"
+        >
           {/* Tabs Navigation */}
           <div className={styles.tabs}>
             <button
               className={`${styles.tab} ${activeTab === "overview" ? styles.activeTab : ""}`}
               onClick={() => setActiveTab("overview")}
             >
-              Overview
+              <svg
+                className={styles.tabIcon}
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span>Overview</span>
             </button>
             <button
               className={`${styles.tab} ${activeTab === "itinerary" ? styles.activeTab : ""}`}
               onClick={() => setActiveTab("itinerary")}
             >
-              Itinerary
+              <svg
+                className={styles.tabIcon}
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                <path
+                  fillRule="evenodd"
+                  d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span>Itinerary</span>
             </button>
             <button
               className={`${styles.tab} ${activeTab === "inclusions" ? styles.activeTab : ""}`}
               onClick={() => setActiveTab("inclusions")}
             >
-              Inclusions
+              <svg
+                className={styles.tabIcon}
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span>Inclusions</span>
             </button>
             <button
               className={`${styles.tab} ${activeTab === "reviews" ? styles.activeTab : ""}`}
               onClick={() => setActiveTab("reviews")}
             >
-              Reviews
+              <svg
+                className={styles.tabIcon}
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <span>Reviews</span>
             </button>
           </div>
 
@@ -575,8 +804,17 @@ const TripDetail = () => {
         <div
           className={`${styles.bookingColumn} ${isSticky ? styles.sticky : ""}`}
           ref={bookingCardRef}
+          data-reveal="booking"
         >
-          <div className={styles.bookingCard}>
+          <div
+            className={`${styles.bookingCard} ${revealedSections.has("booking") ? styles.revealed : ""}`}
+          >
+            {/* Urgency Badge */}
+            <div className={styles.urgencyBadge}>
+              <span className={styles.urgencyDot}></span>
+              <span>Limited Availability — Book Now</span>
+            </div>
+
             <div className={styles.bookingHeader}>
               <h3>Book This Adventure</h3>
               <div className={styles.priceDisplay}>
@@ -727,7 +965,7 @@ const TripDetail = () => {
                 <svg viewBox="0 0 20 20" fill="currentColor">
                   <path
                     fillRule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                     clipRule="evenodd"
                   />
                 </svg>
@@ -737,7 +975,7 @@ const TripDetail = () => {
                 <svg viewBox="0 0 20 20" fill="currentColor">
                   <path
                     fillRule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 9.586V6z"
                     clipRule="evenodd"
                   />
                 </svg>
@@ -745,11 +983,7 @@ const TripDetail = () => {
               </div>
               <div className={styles.guarantee}>
                 <svg viewBox="0 0 20 20" fill="currentColor">
-                  <path
-                    fillRule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clipRule="evenodd"
-                  />
+                  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                 </svg>
                 <span>24/7 Support</span>
               </div>
@@ -768,7 +1002,7 @@ const TripDetail = () => {
               <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
               <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
             </svg>
-            Book Now
+            Book Now — {formatPrice(trip.price)}
           </button>
         </div>
       )}
