@@ -5,6 +5,7 @@ import styles from "./TripsList.module.css";
 import { useNavigate } from "react-router-dom";
 import usePersonalization from "../../hooks/usePersonalization";
 import PersonalizationSection from "./PersonalizationSection";
+import PanoramaBanner from "./PanoramaBanner";
 
 const TripsList = () => {
   const navigate = useNavigate();
@@ -312,6 +313,9 @@ const TripsList = () => {
         <div className={styles.orbitRing}></div>
         <div className={styles.orbitRing}></div>
       </div>
+
+      {/* Cinematic Panorama Banner */}
+      <PanoramaBanner />
 
       {/* Search & Filter Section */}
       <section className={styles.searchSection}>

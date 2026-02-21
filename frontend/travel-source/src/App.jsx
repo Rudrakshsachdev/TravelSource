@@ -10,6 +10,7 @@ import Profile from "./pages/Profile/Profile";
 import { TripDetail } from "./components/Trips";
 import ContactUs from "./components/ContactUs/ContactUs";
 import MyBookings from "./pages/MyBookings/MyBookings";
+import BookingPage from "./pages/Booking/BookingPage";
 
 // Admin
 import AdminLayout from "./admin/AdminLayout";
@@ -57,6 +58,15 @@ function App() {
         element={
           <Layout>
             <TripDetail />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/trips/:id/book"
+        element={
+          <Layout>
+            <BookingPage />
           </Layout>
         }
       />

@@ -1,14 +1,7 @@
-
-
-
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchTripDetail, submitEnquiry } from "../../services/api";
 import styles from "./TripDetail.module.css";
-
-import BookingForm from "../BookingForm/BookingForm";
-import { getAuthData } from "../../utils/auth";
-import { createBooking } from "../../services/api";
 
 const TripDetail = () => {
   const { id } = useParams();
@@ -23,33 +16,6 @@ const TripDetail = () => {
   const [showFloatingButton, setShowFloatingButton] = useState(false);
   const bookingCardRef = useRef(null);
   const heroRef = useRef(null);
-
-  const authData = getAuthData();
-
-  const handleSubmitBooking = async (data) => {
-    if (!authData) {
-      navigate("/login");
-      return;
-    }
-
-    try {
-      const bookingPayload = {
-        trip: trip.id,
-        full_name: data.full_name,
-        email: data.email,
-        phone: data.phone,
-        persons: data.persons,
-        total_amount: trip.price * data.persons,
-      };
-
-      const booking = await createBooking(bookingPayload);
-
-      console.log("Booking created:", booking);
-      alert("Booking created successfully. Proceeding to payment...");
-    } catch (err) {
-      alert("Failed to create booking. Please try again.");
-    }
-  };
 
   useEffect(() => {
     const loadTrip = async () => {
@@ -740,10 +706,10 @@ const TripDetail = () => {
                 </form>
               )}
 
-              {/* Booking Form */}
-              <BookingForm trip={trip} onSubmit={handleSubmitBooking} />
-
-              <button className={styles.secondaryCTA}>
+              <button
+                className={styles.secondaryCTA}
+                onClick={() => navigate(`/trips/${id}/book`)}
+              >
                 <svg viewBox="0 0 20 20" fill="currentColor">
                   <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
                 </svg>
@@ -791,9 +757,7 @@ const TripDetail = () => {
         <div className={styles.floatingButtonContainer}>
           <button
             className={styles.floatingButton}
-            onClick={() => {
-              bookingCardRef.current?.scrollIntoView({ behavior: "smooth" });
-            }}
+            onClick={() => navigate(`/trips/${id}/book`)}
           >
             <svg viewBox="0 0 20 20" fill="currentColor">
               <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
