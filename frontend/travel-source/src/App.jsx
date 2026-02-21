@@ -94,15 +94,6 @@ function App() {
       />
 
       <Route
-        path="/admin/bookings"
-        element={
-          <ProtectedRoute allowedRole="ADMIN">
-            <AdminBookings />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
         path="/contact"
         element={
           <Layout>
@@ -123,6 +114,7 @@ function App() {
         <Route index element={<AdminDashboard />} />
         <Route path="enquiries" element={<AdminEnquiries />} />
         <Route path="trips" element={<AdminTrips />} />
+        <Route path="bookings" element={<AdminBookings />} />
         <Route path="users" element={<AdminUsers />} />
         <Route path="contact-messages" element={<AdminContactMessage />} />
       </Route>

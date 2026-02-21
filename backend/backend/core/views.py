@@ -383,7 +383,7 @@ def admin_bookings(request):
         return Response({"error": "Unauthorized"}, status=403)
 
     bookings = Booking.objects.select_related("trip", "user").order_by("-created_at")
-    serializer = BookingCreateSerializer(bookings, many=True)
+    serializer = BookingListSerializer(bookings, many=True)
     return Response(serializer.data)
 
 
@@ -453,7 +453,7 @@ def update_booking_status(request, pk):
         email.send()
 
 
-        serializer = BookingCreateSerializer(booking)
+        serializer = BookingListSerializer(booking)
         return Response(serializer.data)
 
     except Booking.DoesNotExist:
