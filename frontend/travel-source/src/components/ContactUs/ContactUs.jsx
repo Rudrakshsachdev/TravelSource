@@ -159,7 +159,7 @@ const ContactUs = () => {
       await sendContactMessage(formData);
       setSuccess("Your message has been sent successfully!");
       setFormData({ name: "", email: "", phone: "", message: "" });
-      
+
       // Reset success message after 5 seconds
       setTimeout(() => {
         setSuccess("");
@@ -175,35 +175,35 @@ const ContactUs = () => {
     {
       icon: (
         <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
         </svg>
       ),
       title: "Email Us",
       details: "hello@travelprofessor.com",
       description: "We typically reply within 2-4 hours",
-      color: "#3B82F6"
+      color: "#7ecfc0"
     },
     {
       icon: (
         <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+          <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
         </svg>
       ),
       title: "Call Us",
       details: "+1 (555) 123-4567",
       description: "Mon-Fri, 9 AM - 6 PM IST",
-      color: "#10B981"
+      color: "#3f9e8f"
     },
     {
       icon: (
         <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
         </svg>
       ),
       title: "Visit Us",
       details: "123 Travel Street, Mumbai",
       description: "India - 400001",
-      color: "#8B5CF6"
+      color: "#1a3a35"
     }
   ];
 
@@ -226,7 +226,7 @@ const ContactUs = () => {
     <section className={styles.section}>
       {/* Background Overlay - Matching Reviews section */}
       <div className={styles.backgroundOverlay}></div>
-      
+
       <div className={styles.container}>
         <div className={styles.header}>
           <div>
@@ -239,7 +239,7 @@ const ContactUs = () => {
               Our travel experts are ready to help you create unforgettable memories
             </p>
           </div>
-          
+
           <div className={styles.stats}>
             <div className={styles.statItem}>
               <div className={styles.statNumber}>24/7</div>
@@ -261,12 +261,12 @@ const ContactUs = () => {
           <div className={styles.infoColumn}>
             <div className={styles.contactCards}>
               {contactInfo.map((info, index) => (
-                <div 
+                <div
                   key={index}
                   className={styles.contactCard}
                   style={{ borderTop: `4px solid ${info.color}` }}
                 >
-                  <div 
+                  <div
                     className={styles.contactIcon}
                     style={{ backgroundColor: `${info.color}15` }}
                   >
@@ -291,7 +291,7 @@ const ContactUs = () => {
                 </svg>
                 Frequently Asked Questions
               </h3>
-              
+
               <div className={styles.faqList}>
                 {faqs.map((faq, index) => (
                   <div key={index} className={styles.faqItem}>
@@ -300,7 +300,7 @@ const ContactUs = () => {
                   </div>
                 ))}
               </div>
-              
+
               <button className={styles.faqButton}>
                 <svg className={styles.buttonIcon} viewBox="0 0 20 20" fill="currentColor">
                   <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
@@ -334,7 +334,7 @@ const ContactUs = () => {
 
           {/* Right Column - Contact Form */}
           <div className={styles.formColumn}>
-            <div 
+            <div
               className={styles.formCard}
               ref={formRef}
             >
@@ -348,7 +348,7 @@ const ContactUs = () => {
               <form className={styles.form} onSubmit={handleSubmit}>
                 <div className={styles.formRow}>
                   <div className={styles.formGroup}>
-                    <label 
+                    <label
                       className={`${styles.formLabel} ${activeField === 'name' ? styles.active : ''}`}
                       htmlFor="name"
                     >
@@ -372,7 +372,7 @@ const ContactUs = () => {
                   </div>
 
                   <div className={styles.formGroup}>
-                    <label 
+                    <label
                       className={`${styles.formLabel} ${activeField === 'email' ? styles.active : ''}`}
                       htmlFor="email"
                     >
@@ -398,7 +398,7 @@ const ContactUs = () => {
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label 
+                  <label
                     className={`${styles.formLabel} ${activeField === 'phone' ? styles.active : ''}`}
                     htmlFor="phone"
                   >
@@ -421,7 +421,7 @@ const ContactUs = () => {
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label 
+                  <label
                     className={`${styles.formLabel} ${activeField === 'message' ? styles.active : ''}`}
                     htmlFor="message"
                   >
@@ -468,8 +468,8 @@ const ContactUs = () => {
                 )}
 
                 <div className={styles.formFooter}>
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     disabled={loading}
                     className={styles.submitButton}
                   >
@@ -489,10 +489,10 @@ const ContactUs = () => {
                       </>
                     )}
                   </button>
-                  
+
                   <p className={styles.formNote}>
-                    By submitting this form, you agree to our 
-                    <a href="/privacy" className={styles.privacyLink}> Privacy Policy</a>. 
+                    By submitting this form, you agree to our
+                    <a href="/privacy" className={styles.privacyLink}> Privacy Policy</a>.
                     We'll never share your information with third parties.
                   </p>
                 </div>
@@ -503,7 +503,7 @@ const ContactUs = () => {
             <div className={styles.chatWidget}>
               <div className={styles.chatHeader}>
                 <div className={styles.agentAvatar}>
-                  <img 
+                  <img
                     src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80"
                     alt="Travel Expert"
                   />
