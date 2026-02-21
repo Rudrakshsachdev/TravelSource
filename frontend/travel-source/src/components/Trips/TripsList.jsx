@@ -8,6 +8,7 @@ import PersonalizationSection from "./PersonalizationSection";
 import PanoramaBanner from "./PanoramaBanner";
 import CinematicPanorama from "./CinematicPanorama";
 import InternationalTrips from "./InternationalTrips";
+import CategoryNav from "./CategoryNav";
 
 const TripsList = () => {
   const navigate = useNavigate();
@@ -322,6 +323,9 @@ const TripsList = () => {
 
       {/* Cinematic Panoramic Hero with Sliding Background */}
       <CinematicPanorama />
+
+      {/* Category Navigation Bar */}
+      <CategoryNav />
 
       {/* International Trips Scrolling Showcase */}
       <InternationalTrips />
