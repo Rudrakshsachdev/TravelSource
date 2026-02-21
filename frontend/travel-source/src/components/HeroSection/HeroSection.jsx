@@ -188,6 +188,15 @@ const HeroSection = () => {
       {/* ── Decorative Ring ── */}
       <div className={styles.decorRing} />
 
+      {/* ── Destination Highlight (Semi-circle) ── */}
+      <div className={styles.destinationHighlight}>
+        <div className={styles.highlightMap} />
+        <div className={styles.highlightContent}>
+          <div className={styles.highlightPin}>{PIN_SVG}</div>
+          <span className={styles.destinationName}>Paris</span>
+        </div>
+      </div>
+
       {/* ── Center Content ── */}
       <div className={styles.centerContent}>
         {/* ── Speech Bubble ── */}
