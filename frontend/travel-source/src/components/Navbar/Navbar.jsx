@@ -122,7 +122,7 @@ const Navbar = () => {
           <span className={styles.topBarText}>
             <span className={styles.topBarStar}>✦</span>
             <span className={styles.topBarMainText}>
-              CURATING EXTRAORDINARY JOURNEYS SINCE 2005
+              CURATING EXTRAORDINARY JOURNEYS SINCE 2021
             </span>
             <span className={styles.topBarStar}>✦</span>
           </span>
@@ -177,10 +177,10 @@ const Navbar = () => {
 
               <button
                 className={styles.navLink}
-                onClick={() => handleNavigation("/experiences")}
+                onClick={() => handleNavigation("/my-bookings")}
               >
                 <span className={styles.linkNumber}>02</span>
-                <span className={styles.linkText}>EXPERIENCES</span>
+                <span className={styles.linkText}>MY BOOKINGS</span>
                 <span className={styles.linkUnderline}></span>
               </button>
 
