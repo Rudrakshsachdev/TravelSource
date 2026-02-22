@@ -53,3 +53,33 @@
 .form button:active {
   transform: scale(0.98);
 }
+
+.dateField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.dateField label {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: 4px;
+}
+
+.dateField input {
+  background: #0f172a;
+  color: white;
+  border: none;
+  padding: 12px 14px;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.dateField input::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}

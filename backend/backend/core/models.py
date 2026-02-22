@@ -163,6 +163,7 @@ class Booking(models.Model):
 
     admin_note = models.TextField(blank=True, null=True)
     
+    travel_date = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -7,6 +7,7 @@ const BookingForm = ({ trip, onSubmit }) => {
     email: "",
     phone: "",
     persons: 1,
+    travel_date: "",
   });
 
   const handleChange = (e) => {
@@ -59,10 +60,23 @@ const BookingForm = ({ trip, onSubmit }) => {
           name="persons"
           type="number"
           min="1"
+          placeholder="Number of Persons"
           value={formData.persons}
           onChange={handleChange}
           required
         />
+
+        <div className={styles.dateField}>
+          <label htmlFor="travel_date">Travel Date</label>
+          <input
+            id="travel_date"
+            name="travel_date"
+            type="date"
+            value={formData.travel_date}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
         <div className={styles.total}>
           Total Amount: <strong>₹{totalAmount}</strong>

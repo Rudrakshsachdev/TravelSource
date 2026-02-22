@@ -344,6 +344,8 @@ def create_booking(request):
             email = request.data.get("email"),
 
             phone = request.data.get("phone"),
+            
+            travel_date = request.data.get("travel_date"),
 
             persons = persons,
 
