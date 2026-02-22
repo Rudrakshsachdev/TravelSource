@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../../services/api";
 import styles from "./Login.module.css";
 
@@ -294,13 +294,13 @@ const Login = () => {
           </div>
           <p className={styles.footerText}>
             By signing in, you agree to our{" "}
-            <a href="/terms" className={styles.footerLink}>
+            <Link to="/terms" className={styles.footerLink}>
               Terms
-            </a>{" "}
+            </Link>{" "}
             and{" "}
-            <a href="/privacy" className={styles.footerLink}>
+            <Link to="/privacy" className={styles.footerLink}>
               Privacy Policy
-            </a>
+            </Link>
           </p>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { signupUser } from "../../services/api";
 import styles from "./Signup.module.css";
 
@@ -348,13 +348,13 @@ const Signup = () => {
             />
             <label htmlFor="terms" className={styles.termsLabel}>
               I agree to the{" "}
-              <a href="/terms" className={styles.termsLink}>
+              <Link to="/terms" className={styles.termsLink}>
                 Terms of Service
-              </a>{" "}
+              </Link>{" "}
               and{" "}
-              <a href="/privacy" className={styles.termsLink}>
+              <Link to="/privacy" className={styles.termsLink}>
                 Privacy Policy
-              </a>
+              </Link>
             </label>
           </div>
 

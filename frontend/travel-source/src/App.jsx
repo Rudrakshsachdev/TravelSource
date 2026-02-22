@@ -12,6 +12,9 @@ import ContactUs from "./components/ContactUs/ContactUs";
 import MyBookings from "./pages/MyBookings/MyBookings";
 import BookingPage from "./pages/Booking/BookingPage";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
+import TermsOfService from "./pages/Legal/TermsOfService";
+import RefundPolicy from "./pages/Legal/RefundPolicy";
 
 // Admin
 import AdminLayout from "./admin/AdminLayout";
@@ -108,6 +111,33 @@ function App() {
         element={
           <Layout>
             <ContactUs />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/privacy"
+        element={
+          <Layout>
+            <PrivacyPolicy />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/terms"
+        element={
+          <Layout>
+            <TermsOfService />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/refund-policy"
+        element={
+          <Layout>
+            <RefundPolicy />
           </Layout>
         }
       />

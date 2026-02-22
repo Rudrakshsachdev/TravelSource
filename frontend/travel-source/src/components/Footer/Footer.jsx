@@ -249,11 +249,11 @@ const Footer = () => {
             © {currentYear} Travel Professor. All rights reserved.
           </p>
           <div className={styles.bottomLinks}>
-            <span className={styles.bottomLink}>Privacy Policy</span>
+            <Link to="/privacy" className={styles.bottomLink}>Privacy Policy</Link>
             <span className={styles.bottomDot}>·</span>
-            <span className={styles.bottomLink}>Terms of Service</span>
+            <Link to="/terms" className={styles.bottomLink}>Terms of Service</Link>
             <span className={styles.bottomDot}>·</span>
-            <span className={styles.bottomLink}>Refund Policy</span>
+            <Link to="/refund-policy" className={styles.bottomLink}>Refund Policy</Link>
           </div>
           <button
             className={styles.backToTop}
