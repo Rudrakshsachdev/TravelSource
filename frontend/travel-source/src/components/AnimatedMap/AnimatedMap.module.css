@@ -1,0 +1,263 @@
+.animatedMapSection {
+  position: relative;
+  width: 100%;
+  padding: 100px 0 110px;
+  background: white;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animatedMapSection.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Decorative top border accent — Matching IndiaTrips */
+.topAccent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #7ecfc0 15%,
+    #3f9e8f 35%,
+    #2e8b7a 50%,
+    #3f9e8f 65%,
+    #7ecfc0 85%,
+    transparent 100%
+  );
+  z-index: 2;
+}
+
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 700px;
+}
+
+.mapContainer {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  aspect-ratio: 1000 / 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.mapGif {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.9;
+}
+
+.svgOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.routePath {
+  stroke-dasharray: 8, 8;
+  stroke-dashoffset: 1000;
+  animation: dashAnimation 40s linear infinite;
+  opacity: 0.8;
+}
+
+@keyframes dashAnimation {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.airplaneGroup {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.airplane {
+  opacity: 0;
+  animation: airplaneFadeIn 12s linear infinite;
+}
+
+@keyframes airplaneFadeIn {
+  0%, 100% {
+    opacity: 0;
+  }
+  5%, 95% {
+    opacity: 1;
+  }
+}
+
+/* Content Overlay */
+.content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  align-items: center;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+/* Label Row — Matching IndiaTrips */
+.labelRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.labelLine {
+  display: block;
+  width: 48px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #3f9e8f 50%, transparent);
+  opacity: 0.5;
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--hero-font-accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #3f9e8f;
+}
+
+.labelDot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3f9e8f;
+  animation: dotPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.5);
+  }
+}
+
+.title {
+  font-family: var(--hero-font-display);
+  font-size: clamp(2.8rem, 6vw, 4.2rem);
+  font-weight: 700;
+  color: #1a3a35;
+  line-height: 1.05;
+  margin: 0;
+  letter-spacing: -1px;
+}
+
+.description {
+  font-family: var(--hero-font-body);
+  font-size: clamp(1.1rem, 1.8vw, 1.25rem);
+  color: #3d7a70;
+  line-height: 1.6;
+  max-width: 650px;
+  margin: 0;
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  padding: 40px 80px;
+  background: white;
+  border-radius: 32px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.03);
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.statNumber {
+  font-family: var(--hero-font-display);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--hero-text);
+}
+
+.statLabel {
+  font-family: var(--hero-font-body);
+  font-size: 0.85rem;
+  color: var(--hero-text-light);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 500;
+}
+
+.statDivider {
+  width: 1px;
+  height: 50px;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* Responsiveness */
+@media (max-width: 1024px) {
+  .animatedMapSection { padding: 100px 0; }
+  .stats { gap: 40px; padding: 30px 60px; }
+}
+
+@media (max-width: 768px) {
+  .animatedMapSection { padding: 80px 0; }
+  .content { gap: 60px; }
+  .stats {
+    flex-direction: column;
+    gap: 30px;
+    padding: 40px;
+    width: calc(100% - 40px);
+  }
+  .statDivider { width: 40px; height: 1px; }
+  .mapContainer {
+    aspect-ratio: auto;
+    height: 400px;
+  }
+  .mapGif {
+    width: 200%;
+    transform: translateX(-25%);
+  }
+  .svgOverlay {
+    width: 200%;
+    transform: translateX(-25%);
+  }
+}

@@ -10,6 +10,7 @@ import CinematicPanorama from "./CinematicPanorama";
 import InternationalTrips from "./InternationalTrips";
 import IndiaTrips from "./IndiaTrips";
 import CategoryNav from "./CategoryNav";
+import AnimatedMap from "../AnimatedMap/AnimatedMap";
 
 const TripsList = () => {
   const navigate = useNavigate();
@@ -333,6 +334,9 @@ const TripsList = () => {
 
       {/* India Trips Scrolling Showcase */}
       <IndiaTrips />
+
+      {/* Premium Animated Map Section */}
+      <AnimatedMap />
 
       {/* Search & Filter Section */}
       <section className={styles.searchSection}>
