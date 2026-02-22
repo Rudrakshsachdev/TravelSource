@@ -11,6 +11,7 @@ import { TripDetail } from "./components/Trips";
 import ContactUs from "./components/ContactUs/ContactUs";
 import MyBookings from "./pages/MyBookings/MyBookings";
 import BookingPage from "./pages/Booking/BookingPage";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 
 // Admin
 import AdminLayout from "./admin/AdminLayout";
@@ -49,6 +50,15 @@ function App() {
         element={
           <Layout>
             <Signup />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/forgot-password"
+        element={
+          <Layout>
+            <ForgotPassword />
           </Layout>
         }
       />

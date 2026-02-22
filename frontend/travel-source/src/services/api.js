@@ -533,3 +533,47 @@ export const fetchIndiaTrips = async () => {
   if (!res.ok) throw new Error("Failed to fetch India trips");
   return res.json();
 };
+
+// ─── Forgot Password ────────────────────────────────────────────────────────
+
+export const requestPasswordReset = async (email) => {
+  const response = await fetch(`${API_BASE_URL}/v1/auth/request-reset/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(result.error || "Failed to send reset code");
+  }
+  return result;
+};
+
+export const verifyResetOTP = async (email, otp) => {
+  const response = await fetch(`${API_BASE_URL}/v1/auth/verify-otp/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, otp }),
+  });
+
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(result.error || "Invalid reset code");
+  }
+  return result;
+};
+
+export const resetPassword = async (email, newPassword) => {
+  const response = await fetch(`${API_BASE_URL}/v1/auth/reset-password/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, new_password: newPassword }),
+  });
+
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(result.error || "Failed to reset password");
+  }
+  return result;
+};

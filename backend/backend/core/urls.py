@@ -10,6 +10,7 @@ from .views import (
     site_stats, admin_site_stats,
     international_trips, admin_international_config,
     india_trips, admin_india_config,
+    request_password_reset, verify_reset_otp, reset_password,
 )
 
 urlpatterns = [
@@ -23,6 +24,9 @@ urlpatterns = [
     path("v1/auth/login/", login_view),
     path("v1/auth/signup/", signup_view),
     path("v1/auth/protected/", protected_test_view),
+    path("v1/auth/request-reset/", request_password_reset),
+    path("v1/auth/verify-otp/", verify_reset_otp),
+    path("v1/auth/reset-password/", reset_password),
     path("v1/enquiries/", create_enquiry),
     path("v1/my-enquiries/", my_enquiries),
     path("v1/admin/enquiries/", admin_enquiries),
