@@ -58,7 +58,7 @@ const Navbar = () => {
               id: trip.id,
               name: trip.location,
               country: trip.country || "Global",
-              type: trip.category || "Premium",
+              type: trip.category?.name || "Premium",
             });
           }
         });

@@ -1,121 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import styles from "./CategoryNav.module.css";
+import { fetchCategories } from "../../services/api";
 
-/* ── Static category data (frontend-only for now) ── */
-const CATEGORIES = [
-  {
-    id: 1,
-    name: "Early Bird",
-    slug: "early-bird",
-    image:
-      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=200&h=200&fit=crop",
-    gradStart: "#28a745",
-    gradEnd: "#20c997",
-    emoji: "🌅",
-  },
-  {
-    id: 2,
-    name: "Long Weekend",
-    slug: "long-weekend",
-    image:
-      "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=200&h=200&fit=crop",
-    gradStart: "#6f42c1",
-    gradEnd: "#e83e8c",
-    emoji: "🏖️",
-  },
-  {
-    id: 3,
-    name: "International",
-    slug: "international",
-    image:
-      "https://images.unsplash.com/photo-1488646472447-360ad2c0e3b6?w=200&h=200&fit=crop",
-    gradStart: "#9b59b6",
-    gradEnd: "#e74c8b",
-    emoji: "🌍",
-  },
-  {
-    id: 4,
-    name: "New Launches",
-    slug: "new-launches",
-    image:
-      "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=200&h=200&fit=crop",
-    gradStart: "#3f9e8f",
-    gradEnd: "#7ecfc0",
-    emoji: "🚀",
-  },
-  {
-    id: 5,
-    name: "Treks",
-    slug: "treks",
-    image:
-      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=200&h=200&fit=crop",
-    gradStart: "#e8913a",
-    gradEnd: "#e74c3c",
-    emoji: "🏔️",
-  },
-  {
-    id: 6,
-    name: "Biking",
-    slug: "biking",
-    image:
-      "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=200&h=200&fit=crop",
-    gradStart: "#3f9e8f",
-    gradEnd: "#2ecc71",
-    emoji: "🏍️",
-  },
-  {
-    id: 7,
-    name: "Ladakh",
-    slug: "ladakh",
-    image:
-      "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=200&h=200&fit=crop",
-    gradStart: "#e83e8c",
-    gradEnd: "#fd7e14",
-    emoji: "🗻",
-  },
-  {
-    id: 8,
-    name: "Spiti",
-    slug: "spiti",
-    image:
-      "https://images.unsplash.com/photo-1626714100232-dfc3e8a4d108?w=200&h=200&fit=crop",
-    gradStart: "#e74c3c",
-    gradEnd: "#e83e8c",
-    emoji: "⛰️",
-  },
-  {
-    id: 9,
-    name: "Backpacking",
-    slug: "backpacking",
-    image:
-      "https://images.unsplash.com/photo-1527631746610-bca00a040d60?w=200&h=200&fit=crop",
-    gradStart: "#fd7e14",
-    gradEnd: "#e83e8c",
-    emoji: "🎒",
-  },
-  {
-    id: 10,
-    name: "All Girls",
-    slug: "all-girls",
-    image:
-      "https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=200&h=200&fit=crop",
-    gradStart: "#e83e8c",
-    gradEnd: "#6f42c1",
-    emoji: "👩‍👩‍👧",
-  },
-  {
-    id: 11,
-    name: "Customized",
-    slug: "customized",
-    image:
-      "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?w=200&h=200&fit=crop",
-    gradStart: "#6f42c1",
-    gradEnd: "#3f9e8f",
-    emoji: "✨",
-  },
-];
-
-const CategoryNav = () => {
+const CategoryNav = ({ onCategoryChange }) => {
+  const [categories, setCategories] = useState([]);
   const [activeSlug, setActiveSlug] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -123,8 +11,24 @@ const CategoryNav = () => {
   const trackRef = useRef(null);
   const sectionRef = useRef(null);
 
-  /* Intersection Observer for entrance animation */
+  /* ── Fetch categories from the API ── */
   useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const data = await fetchCategories();
+        setCategories(data);
+      } catch (err) {
+        console.error("Failed to load categories:", err);
+      }
+    };
+    loadCategories();
+  }, []);
+
+  /* Intersection Observer for entrance animation
+     Must depend on categories.length so it re-attaches after categories load
+     (on first mount, categories is [] → component returns null → sectionRef is null) */
+  useEffect(() => {
+    if (!sectionRef.current) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -134,9 +38,9 @@ const CategoryNav = () => {
       },
       { threshold: 0.15 },
     );
-    if (sectionRef.current) observer.observe(sectionRef.current);
+    observer.observe(sectionRef.current);
     return () => observer.disconnect();
-  }, []);
+  }, [categories.length]);
 
   /* Track scroll state for arrow visibility */
   const updateScrollState = useCallback(() => {
@@ -152,7 +56,7 @@ const CategoryNav = () => {
     el.addEventListener("scroll", updateScrollState, { passive: true });
     updateScrollState();
     return () => el.removeEventListener("scroll", updateScrollState);
-  }, [updateScrollState]);
+  }, [updateScrollState, categories]);
 
   /* Scroll by arrow click */
   const scrollBy = (direction) => {
@@ -189,8 +93,15 @@ const CategoryNav = () => {
 
   const handleClick = (slug) => {
     if (wasDragged.current) return;
-    setActiveSlug((prev) => (prev === slug ? null : slug));
+    const newSlug = activeSlug === slug ? null : slug;
+    setActiveSlug(newSlug);
+    if (onCategoryChange) {
+      onCategoryChange(newSlug);
+    }
   };
+
+  /* Don't render the section if there are no categories */
+  if (categories.length === 0) return null;
 
   return (
     <section
@@ -273,7 +184,7 @@ const CategoryNav = () => {
             onPointerUp={handlePointerUp}
             onPointerLeave={handlePointerUp}
           >
-            {CATEGORIES.map((cat, i) => {
+            {categories.map((cat, i) => {
               const isActive = activeSlug === cat.slug;
               return (
                 <button
@@ -287,8 +198,8 @@ const CategoryNav = () => {
                   <span
                     className={styles.aura}
                     style={{
-                      "--grad-start": cat.gradStart,
-                      "--grad-end": cat.gradEnd,
+                      "--grad-start": cat.grad_start,
+                      "--grad-end": cat.grad_end,
                     }}
                   />
 
@@ -296,21 +207,36 @@ const CategoryNav = () => {
                   <span
                     className={styles.ring}
                     style={{
-                      "--grad-start": cat.gradStart,
-                      "--grad-end": cat.gradEnd,
+                      "--grad-start": cat.grad_start,
+                      "--grad-end": cat.grad_end,
                     }}
                   >
                     {/* Orbiting dot */}
                     <span className={styles.orbitDot} />
 
                     <span className={styles.ringInner}>
-                      <img
-                        src={cat.image}
-                        alt={cat.name}
-                        className={styles.avatar}
-                        draggable={false}
-                        loading="lazy"
-                      />
+                      {cat.image ? (
+                        <img
+                          src={cat.image}
+                          alt={cat.name}
+                          className={styles.avatar}
+                          draggable={false}
+                          loading="lazy"
+                        />
+                      ) : (
+                        <span className={styles.avatar} style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "1.6rem",
+                          background: `linear-gradient(135deg, ${cat.grad_start || "#3f9e8f"}, ${cat.grad_end || "#7ecfc0"})`,
+                          borderRadius: "50%",
+                          width: "100%",
+                          height: "100%",
+                        }}>
+                          {cat.emoji || "✈️"}
+                        </span>
+                      )}
                       {/* Shimmer sweep overlay */}
                       <span className={styles.shimmer} />
                     </span>
@@ -348,3 +274,4 @@ const CategoryNav = () => {
 };
 
 export default CategoryNav;
+

@@ -11,11 +11,14 @@ from .views import (
     international_trips, admin_international_config,
     india_trips, admin_india_config,
     request_password_reset, verify_reset_otp, reset_password,
+    category_list, admin_categories,
 )
 
 urlpatterns = [
     path("v1/hello/", hello_api),
     path("v1/trips/", trip_list),
+    path("v1/categories/", category_list),
+    path("v1/admin/categories/", admin_categories),
     path("v1/trips/recommended/", recommended_trips),
     path("v1/trips/international/", international_trips),
     path("v1/trips/india/", india_trips),

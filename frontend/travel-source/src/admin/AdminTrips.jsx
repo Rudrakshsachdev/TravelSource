@@ -6,6 +6,8 @@ import {
   updateTrip,
   deleteTrip,
   uploadImageToCloudinary,
+  fetchCategories,
+  createCategory,
 } from "../services/api";
 import styles from "./AdminTrips.module.css";
 
@@ -37,6 +39,7 @@ const AdminTrips = () => {
     show_in_india_section: false,
     india_display_order: 0,
     india_featured_priority: 0,
+    category: "",
   });
 
   // Dynamic Lists State
@@ -45,6 +48,46 @@ const AdminTrips = () => {
   const [inclusions, setInclusions] = useState([]);
   const [exclusions, setExclusions] = useState([]);
   const [imageFile, setImageFile] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [creatingCategory, setCreatingCategory] = useState(false);
+  const [categoryError, setCategoryError] = useState("");
+
+  // Load categories on mount
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const data = await fetchCategories();
+        setCategories(data);
+      } catch (err) {
+        console.error("Failed to load categories", err);
+      }
+    };
+    loadCategories();
+  }, []);
+
+  const handleCreateCategory = async () => {
+    const name = newCategoryName.trim();
+    if (!name) return;
+    setCategoryError("");
+    setCreatingCategory(true);
+    try {
+      const slug = name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
+      const created = await createCategory({ name, slug });
+      // Refresh list and auto-select the new one
+      const updated = await fetchCategories();
+      setCategories(updated);
+      setFormData((prev) => ({ ...prev, category: created.id }));
+      setNewCategoryName("");
+    } catch (err) {
+      setCategoryError(err.message || "Failed to create category");
+    } finally {
+      setCreatingCategory(false);
+    }
+  };
 
   const loadTrips = async () => {
     try {
@@ -143,6 +186,7 @@ const AdminTrips = () => {
       show_in_india_section: trip.show_in_india_section || false,
       india_display_order: trip.india_display_order || 0,
       india_featured_priority: trip.india_featured_priority || 0,
+      category: trip.category || "",
     });
 
     // Safe parsing / defaulting for JSON fields
@@ -174,6 +218,7 @@ const AdminTrips = () => {
       show_in_india_section: false,
       india_display_order: 0,
       india_featured_priority: 0,
+      category: "",
     });
     setItinerary([]);
     setHighlights([]);
@@ -211,6 +256,7 @@ const AdminTrips = () => {
         inclusions: cleanInclusions,
         exclusions: cleanExclusions,
         image: imageUrl,
+        category: formData.category || null,
       };
 
       if (editingTrip) {
@@ -562,6 +608,60 @@ const AdminTrips = () => {
                         required
                       />
                     </div>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Category</label>
+                    <div className={styles.inputWrapper}>
+                      <svg
+                        className={styles.inputIcon}
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <select
+                        className={styles.input}
+                        name="category"
+                        value={formData.category}
+                        onChange={handleChange}
+                      >
+                        <option value="">— No Category —</option>
+                        {categories.map((cat) => (
+                          <option key={cat.id} value={cat.id}>
+                            {cat.emoji} {cat.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    {/* Inline: create a new category */}
+                    <div style={{ display: "flex", gap: "8px", marginTop: "8px", alignItems: "center" }}>
+                      <input
+                        className={styles.input}
+                        type="text"
+                        placeholder="New category name…"
+                        value={newCategoryName}
+                        onChange={(e) => { setNewCategoryName(e.target.value); setCategoryError(""); }}
+                        onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleCreateCategory(); } }}
+                        style={{ flex: 1 }}
+                      />
+                      <button
+                        type="button"
+                        className={styles.addButton}
+                        onClick={handleCreateCategory}
+                        disabled={creatingCategory || !newCategoryName.trim()}
+                        title="Create new category"
+                      >
+                        {creatingCategory ? "…" : "+"}
+                      </button>
+                    </div>
+                    {categoryError && (
+                      <p style={{ color: "#e74c3c", fontSize: "0.82rem", margin: "4px 0 0" }}>{categoryError}</p>
+                    )}
                   </div>
                 </div>
 

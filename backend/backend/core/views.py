@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig
+from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, Category
 
 from .serializers import (
     TripSerializer,
@@ -22,6 +22,7 @@ from .serializers import (
     InternationalSectionConfigSerializer,
     IndiaTripSerializer,
     IndiaSectionConfigSerializer,
+    CategorySerializer,
 )
 
 from django.shortcuts import get_object_or_404
@@ -41,8 +42,41 @@ from django.conf import settings
 @api_view(["GET"])
 def trip_list(request):
     trips = Trip.objects.filter(is_active=True)
+    category_slug = request.query_params.get("category")
+    if category_slug:
+        trips = trips.filter(category__slug=category_slug)
     serializer = TripSerializer(trips, many=True)
     return Response(serializer.data)
+
+
+# ─── Categories ───────────────────────────────────────────────────────────────
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def category_list(request):
+    """Return all categories for public display."""
+    categories = Category.objects.all()
+    serializer = CategorySerializer(categories, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET", "POST"])
+@permission_classes([IsAuthenticated])
+def admin_categories(request):
+    """Admin: list or create categories."""
+    if not hasattr(request.user, "profile") or request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    if request.method == "GET":
+        categories = Category.objects.all()
+        serializer = CategorySerializer(categories, many=True)
+        return Response(serializer.data)
+
+    # POST — create a new category
+    serializer = CategorySerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data, status=201)
 
 # ─── Reviews ──────────────────────────────────────────────────────────────────
 

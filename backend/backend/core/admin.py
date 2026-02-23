@@ -1,16 +1,23 @@
 from django.contrib import admin
-from .models import Trip, Profile, Enquiry, SiteStat, InternationalSectionConfig, IndiaSectionConfig
+from .models import Trip, Profile, Enquiry, SiteStat, InternationalSectionConfig, IndiaSectionConfig, Category
 # Register your models here.
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ("name", "slug", "emoji")
+    search_fields = ("name", "slug")
+    prepopulated_fields = {"slug": ("name",)}
 
 
 @admin.register(Trip)
 class TripAdmin(admin.ModelAdmin):
     list_display = (
-        "title", "location", "country", "state", "price", "is_active",
+        "title", "location", "country", "state", "category", "price", "is_active",
         "is_international", "show_in_international_section", "display_order",
         "is_india_trip", "show_in_india_section", "india_display_order",
     )
-    list_filter = ("is_active", "is_international", "show_in_international_section", "is_india_trip", "show_in_india_section")
+    list_filter = ("is_active", "category", "is_international", "show_in_international_section", "is_india_trip", "show_in_india_section")
     list_editable = (
         "is_international", "show_in_international_section", "display_order",
         "is_india_trip", "show_in_india_section", "india_display_order",
@@ -19,7 +26,7 @@ class TripAdmin(admin.ModelAdmin):
     ordering = ("display_order", "-id")
     fieldsets = (
         (None, {
-            "fields": ("title", "location", "country", "state", "price", "duration_days", "image"),
+            "fields": ("title", "location", "country", "state", "category", "price", "duration_days", "image"),
         }),
         ("Details", {
             "fields": ("description", "short_description", "itinerary", "highlights", "inclusions", "exclusions"),

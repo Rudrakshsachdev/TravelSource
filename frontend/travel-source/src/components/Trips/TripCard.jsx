@@ -81,7 +81,7 @@ const TripCard = ({ trip, index, onView }) => {
   const getLuxuryBadge = (trip) => {
     if (trip.price > 10000) return "EXCLUSIVE";
     if (trip.duration_days > 10) return "EXTENDED";
-    if (trip.category === "luxury") return "PREMIUM";
+    if (trip.category?.slug === "luxury") return "PREMIUM";
     return "FEATURED";
   };
 
@@ -120,8 +120,9 @@ const TripCard = ({ trip, index, onView }) => {
     return `${backendUrl}${trip.image}`;
   };
 
-  const luxuryGradient = getLuxuryGradient(trip.category);
-  const luxuryIcon = getLuxuryIcon(trip.category, trip.title);
+  const categorySlug = trip.category?.slug || null;
+  const luxuryGradient = getLuxuryGradient(categorySlug);
+  const luxuryIcon = getLuxuryIcon(categorySlug, trip.title);
   const luxuryBadge = getLuxuryBadge(trip);
   const difficulty = getDifficultyLevel(trip.title);
   const [currentImage, setCurrentImage] = useState(getImageUrl());
@@ -254,7 +255,7 @@ const TripCard = ({ trip, index, onView }) => {
           <div className={styles.categoryTag}>
             <span className={styles.categoryIcon}>{luxuryIcon}</span>
             <span className={styles.categoryText}>
-              {trip.category ? trip.category.toUpperCase() : "PREMIUM"}
+              {trip.category ? trip.category.name.toUpperCase() : "PREMIUM"}
             </span>
           </div>
           <div className={styles.duration}>

@@ -1,12 +1,43 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const fetchTrips = async () => {
-  const response = await fetch(`${API_BASE_URL}/v1/trips/`);
+export const fetchTrips = async (categorySlug = null) => {
+  let url = `${API_BASE_URL}/v1/trips/`;
+  if (categorySlug) {
+    url += `?category=${encodeURIComponent(categorySlug)}`;
+  }
+  const response = await fetch(url);
 
   if (!response.ok) {
     throw new Error("Failed to fetch trips");
   }
 
+  return response.json();
+};
+
+export const fetchCategories = async () => {
+  const response = await fetch(`${API_BASE_URL}/v1/categories/`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch categories");
+  }
+  return response.json();
+};
+
+export const createCategory = async (data) => {
+  const token = localStorage.getItem("accessToken");
+  const response = await fetch(`${API_BASE_URL}/v1/admin/categories/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    const msg = errorData.detail || errorData.slug?.[0] || errorData.name?.[0] || JSON.stringify(errorData) || "Failed to create category";
+    throw new Error(msg);
+  }
   return response.json();
 };
 

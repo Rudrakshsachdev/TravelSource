@@ -3,6 +3,24 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+
+class Category(models.Model):
+    """Trip categories managed from the admin panel."""
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, unique=True)
+    image = models.URLField(blank=True, default="")
+    emoji = models.CharField(max_length=10, blank=True, default="")
+    grad_start = models.CharField(max_length=20, blank=True, default="#3f9e8f", help_text="Gradient start colour hex")
+    grad_end = models.CharField(max_length=20, blank=True, default="#2ecc71", help_text="Gradient end colour hex")
+
+    class Meta:
+        verbose_name_plural = "Categories"
+        ordering = ["id"]
+
+    def __str__(self):
+        return self.name
+
+
 class Trip(models.Model):
     title = models.CharField(max_length=200)
     location = models.CharField(max_length=200)
@@ -15,6 +33,7 @@ class Trip(models.Model):
     exclusions = models.JSONField(blank=True, null=True, help_text="List of excluded items")
     image = models.URLField(blank=True, default="")
     is_active = models.BooleanField(default=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name="trips")
 
     # International showcase fields
     country = models.CharField(max_length=100, blank=True, default="", help_text="Country name for international trips")

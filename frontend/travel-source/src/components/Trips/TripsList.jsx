@@ -21,6 +21,7 @@ const TripsList = () => {
   const [activeFilter, setActiveFilter] = useState("all");
   const [sortBy, setSortBy] = useState("featured");
   const [currentPage, setCurrentPage] = useState(1);
+  const [activeCategory, setActiveCategory] = useState(null);
   const tripsPerPage = 6;
 
   const {
@@ -31,21 +32,41 @@ const TripsList = () => {
     loadingRec,
     recordView,
   } = usePersonalization(trips);
+  const [filtering, setFiltering] = useState(false);
 
   useEffect(() => {
     const loadTrips = async () => {
       try {
-        const data = await fetchTrips();
+        // Only show the big loading screen on initial load (no category selected yet and trips empty)
+        if (trips.length === 0 && !activeCategory) {
+          setLoading(true);
+        } else {
+          setFiltering(true);
+        }
+        const data = await fetchTrips(activeCategory);
         setTrips(data);
       } catch (err) {
         setError("Unable to load trips.");
       } finally {
         setLoading(false);
+        setFiltering(false);
       }
     };
 
     loadTrips();
-  }, []);
+  }, [activeCategory]);
+
+  const handleCategoryChange = (slug) => {
+    setActiveCategory(slug);
+    setCurrentPage(1);
+    // Scroll to the trips grid so the user can see the filtered results
+    setTimeout(() => {
+      const tripsSection = document.getElementById("trips-grid");
+      if (tripsSection) {
+        tripsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 100);
+  };
 
   // Filter and sort trips
   const filteredTrips = trips.filter((trip) => {
@@ -327,7 +348,7 @@ const TripsList = () => {
       <CinematicPanorama />
 
       {/* Category Navigation Bar */}
-      <CategoryNav />
+      <CategoryNav onCategoryChange={handleCategoryChange} />
 
       {/* International Trips Scrolling Showcase */}
       <InternationalTrips />
@@ -591,7 +612,7 @@ const TripsList = () => {
       </section>
 
       {/* Main Content Section */}
-      <section className={styles.mainContent}>
+      <section id="trips-grid" className={styles.mainContent}>
         <div className={styles.contentContainer}>
           {/* Content Header */}
           <div className={styles.contentHeader}>
