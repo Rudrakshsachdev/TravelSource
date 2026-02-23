@@ -10,6 +10,7 @@ import CinematicPanorama from "./CinematicPanorama";
 import InternationalTrips from "./InternationalTrips";
 import IndiaTrips from "./IndiaTrips";
 import HoneymoonTrips from "./HoneymoonTrips";
+import HimalayanTreks from "./HimalayanTreks";
 import CategoryNav from "./CategoryNav";
 import AnimatedMap from "../AnimatedMap/AnimatedMap";
 
@@ -359,6 +360,9 @@ const TripsList = () => {
 
       {/* Honeymoon Trips Scrolling Showcase */}
       <HoneymoonTrips />
+
+      {/* Himalayan Treks Scrolling Showcase */}
+      <HimalayanTreks />
 
       {/* Premium Animated Map Section */}
       <AnimatedMap />

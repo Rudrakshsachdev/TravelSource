@@ -584,7 +584,7 @@ export const fetchHoneymoonConfig = async () => {
 
 /** Update Honeymoon section config (ADMIN) */
 export const updateHoneymoonConfig = async (data) => {
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem("accessToken");
   const res = await fetch(`${API_BASE_URL}/v1/admin/honeymoon-config/`, {
     method: "PATCH",
     headers: {
@@ -596,6 +596,86 @@ export const updateHoneymoonConfig = async (data) => {
   if (!res.ok) throw new Error("Failed to update honeymoon config");
   return res.json();
 };
+
+/** Fetch Himalayan trips + section config for the scrolling showcase */
+export const fetchHimalayanTrips = async () => {
+  const res = await fetch(`${API_BASE_URL}/v1/trips/himalayan/`);
+  if (!res.ok) throw new Error("Failed to fetch Himalayan trips");
+  return res.json();
+};
+
+/** Fetch Himalayan section config (ADMIN) */
+export const fetchHimalayanConfig = async () => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/himalayan-config/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Failed to fetch Himalayan config");
+  return res.json();
+};
+
+/** Update Himalayan section config (ADMIN) */
+export const updateHimalayanConfig = async (data) => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/himalayan-config/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to update Himalayan config");
+  return res.json();
+};
+
+export const fetchInternationalConfig = async () => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/international-config/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Failed to fetch International config");
+  return res.json();
+};
+
+export const updateInternationalConfig = async (data) => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/international-config/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to update International config");
+  return res.json();
+};
+
+export const fetchIndiaConfig = async () => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/india-config/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Failed to fetch India config");
+  return res.json();
+};
+
+export const updateIndiaConfig = async (data) => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/india-config/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to update India config");
+  return res.json();
+};
+
+
 
 
 // ─── Forgot Password ────────────────────────────────────────────────────────

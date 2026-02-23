@@ -11,6 +11,7 @@ from .views import (
     international_trips, admin_international_config,
     india_trips, admin_india_config,
     honeymoon_trips, admin_honeymoon_config,
+    himalayan_trips, admin_himalayan_config,
     request_password_reset, verify_reset_otp, reset_password,
     category_list, admin_categories,
 )
@@ -56,5 +57,7 @@ urlpatterns = [
     path("v1/admin/site-stats/<int:pk>/", admin_site_stats),
     path("v1/admin/international-config/", admin_international_config),
     path("v1/admin/india-config/", admin_india_config),
+    path("v1/trips/himalayan/", himalayan_trips),
+    path("v1/admin/himalayan-config/", admin_himalayan_config),
 ]
 

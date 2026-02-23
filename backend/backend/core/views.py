@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, HoneymoonSectionConfig, Category
+from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, Category
 
 from .serializers import (
     TripSerializer,
@@ -24,6 +24,8 @@ from .serializers import (
     IndiaSectionConfigSerializer,
     HoneymoonTripSerializer,
     HoneymoonSectionConfigSerializer,
+    HimalayanTripSerializer,
+    HimalayanSectionConfigSerializer,
     CategorySerializer,
 )
 
@@ -719,6 +721,51 @@ def admin_honeymoon_config(request):
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(serializer.data)
+
+
+# ─── Himalayan Treks ──────────────────────────────────────────────────────────
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def himalayan_trips(request):
+    """Return active Himalayan Trek trips for the scrolling showcase section."""
+    config = HimalayanSectionConfig.load()
+    if not config.is_enabled:
+        return Response({"config": {"is_enabled": False}, "trips": []})
+
+    trips = Trip.objects.filter(
+        is_active=True,
+        is_himalayan_trek=True,
+        show_in_himalayan_section=True,
+    ).order_by("himalayan_display_order", "-id")
+
+    config_serializer = HimalayanSectionConfigSerializer(config)
+    trip_serializer = HimalayanTripSerializer(trips, many=True)
+
+    return Response({
+        "config": config_serializer.data,
+        "trips": trip_serializer.data,
+    })
+
+
+@api_view(["GET", "PATCH"])
+@permission_classes([IsAuthenticated])
+def admin_himalayan_config(request):
+    """Admin: get or update the Himalayan section configuration."""
+    if not hasattr(request.user, "profile") or request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    config = HimalayanSectionConfig.load()
+
+    if request.method == "GET":
+        serializer = HimalayanSectionConfigSerializer(config)
+        return Response(serializer.data)
+
+    serializer = HimalayanSectionConfigSerializer(config, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data)
+
 
 
 import random

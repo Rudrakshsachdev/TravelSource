@@ -54,6 +54,12 @@ class Trip(models.Model):
     show_in_honeymoon_section = models.BooleanField(default=False, help_text="Show in the scrolling honeymoon section")
     honeymoon_display_order = models.IntegerField(default=0, help_text="Order in the honeymoon section (lower = first)")
 
+    # Himalayan showcase fields
+    is_himalayan_trek = models.BooleanField(default=False, help_text="Mark as Himalayan trek")
+    show_in_himalayan_section = models.BooleanField(default=False, help_text="Show in the scrolling Himalayan section")
+    himalayan_display_order = models.IntegerField(default=0, help_text="Order in the Himalayan section (lower = first)")
+
+
     def __str__(self):
         return self.title
 
@@ -267,6 +273,32 @@ class HoneymoonSectionConfig(models.Model):
     def load(cls):
         obj, _ = cls.objects.get_or_create(pk=1)
         return obj
+
+
+class HimalayanSectionConfig(models.Model):
+    """Singleton settings for the Himalayan Treks showcase section."""
+    is_enabled = models.BooleanField(default=True, help_text="Enable the Himalayan treks scrolling section")
+    title = models.CharField(max_length=200, default="Majestic Himalayan Treks")
+    subtitle = models.CharField(max_length=300, blank=True, default="", help_text="Optional subtitle below the heading")
+    scroll_speed = models.PositiveIntegerField(default=60, help_text="Animation duration in seconds (higher = slower)")
+
+    class Meta:
+        verbose_name = "Himalayan Section Config"
+        verbose_name_plural = "Himalayan Section Config"
+
+    def __str__(self):
+        return f"Himalayan Section ({'Enabled' if self.is_enabled else 'Disabled'})"
+
+    def save(self, *args, **kwargs):
+        # Enforce singleton: always use pk=1
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
 
 
 class PasswordResetOTP(models.Model):

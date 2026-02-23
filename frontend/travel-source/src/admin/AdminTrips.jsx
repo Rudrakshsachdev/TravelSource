@@ -10,6 +10,8 @@ import {
   createCategory,
 } from "../services/api";
 import styles from "./AdminTrips.module.css";
+import SectionSettings from "./SectionSettings";
+
 
 const AdminTrips = () => {
   const [trips, setTrips] = useState([]);
@@ -42,7 +44,11 @@ const AdminTrips = () => {
     is_honeymoon: false,
     show_in_honeymoon_section: false,
     honeymoon_display_order: 0,
+    is_himalayan_trek: false,
+    show_in_himalayan_section: false,
+    himalayan_display_order: 0,
     category: "",
+
   });
 
   // Dynamic Lists State
@@ -192,7 +198,11 @@ const AdminTrips = () => {
       is_honeymoon: trip.is_honeymoon || false,
       show_in_honeymoon_section: trip.show_in_honeymoon_section || false,
       honeymoon_display_order: trip.honeymoon_display_order || 0,
+      is_himalayan_trek: trip.is_himalayan_trek || false,
+      show_in_himalayan_section: trip.show_in_himalayan_section || false,
+      himalayan_display_order: trip.himalayan_display_order || 0,
       category: trip.category || "",
+
     });
 
     // Safe parsing / defaulting for JSON fields
@@ -224,7 +234,14 @@ const AdminTrips = () => {
       show_in_india_section: false,
       india_display_order: 0,
       india_featured_priority: 0,
+      is_honeymoon: false,
+      show_in_honeymoon_section: false,
+      honeymoon_display_order: 0,
+      is_himalayan_trek: false,
+      show_in_himalayan_section: false,
+      himalayan_display_order: 0,
       category: "",
+
     });
     setItinerary([]);
     setHighlights([]);
@@ -258,7 +275,9 @@ const AdminTrips = () => {
         india_display_order: Number(formData.india_display_order) || 0,
         india_featured_priority: Number(formData.india_featured_priority) || 0,
         honeymoon_display_order: Number(formData.honeymoon_display_order) || 0,
+        himalayan_display_order: Number(formData.himalayan_display_order) || 0,
         itinerary,
+
         highlights,
         inclusions: cleanInclusions,
         exclusions: cleanExclusions,
@@ -598,6 +617,46 @@ const AdminTrips = () => {
                       />
                     </div>
                   </div>
+
+                  {/* Himalayan Section Fields */}
+                  <div className={styles.sectionHeader}>
+                    <h3 className={styles.sectionTitle}>Himalayan Showcase</h3>
+                  </div>
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="is_himalayan_trek"
+                        checked={formData.is_himalayan_trek}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Mark as Himalayan Trek
+                    </label>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="show_in_himalayan_section"
+                        checked={formData.show_in_himalayan_section}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Show in Himalayan Section
+                    </label>
+                  </div>
+                  <div className={styles.formGrid}>
+                    <div className={styles.inputGroup}>
+                      <label className={styles.inputLabel}>Himalayan Display Order</label>
+                      <input
+                        type="number"
+                        name="himalayan_display_order"
+                        value={formData.himalayan_display_order}
+                        onChange={handleChange}
+                        className={styles.input}
+                      />
+                    </div>
+                  </div>
+
 
                   <div className={styles.inputGroup}>
                     <label className={styles.inputLabel}>
@@ -1541,6 +1600,37 @@ const AdminTrips = () => {
                             🇮🇳 India
                           </span>
                         )}
+                        {trip.is_honeymoon && (
+                          <span
+                            className={styles.metaItem}
+                            style={{
+                              background: "rgba(255,105,180,0.1)",
+                              color: "#ff69b4",
+                              padding: "2px 8px",
+                              borderRadius: "12px",
+                              fontSize: "0.75rem",
+                              fontWeight: 600,
+                            }}
+                          >
+                            💝 Honeymoon
+                          </span>
+                        )}
+                        {trip.is_himalayan_trek && (
+                          <span
+                            className={styles.metaItem}
+                            style={{
+                              background: "rgba(69,123,157,0.1)",
+                              color: "#457b9d",
+                              padding: "2px 8px",
+                              borderRadius: "12px",
+                              fontSize: "0.75rem",
+                              fontWeight: 600,
+                            }}
+                          >
+                            🏔️ Himalayan
+                          </span>
+                        )}
+
                       </div>
                     </div>
 
@@ -1693,8 +1783,12 @@ const AdminTrips = () => {
             </div>
           )}
         </div>
+
+        {/* Global Showcase Settings */}
+        <SectionSettings />
       </div>
     </div>
+
   );
 };
 
