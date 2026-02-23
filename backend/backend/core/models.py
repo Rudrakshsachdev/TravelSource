@@ -59,6 +59,11 @@ class Trip(models.Model):
     show_in_himalayan_section = models.BooleanField(default=False, help_text="Show in the scrolling Himalayan section")
     himalayan_display_order = models.IntegerField(default=0, help_text="Order in the Himalayan section (lower = first)")
 
+    # Backpacking showcase fields
+    is_backpacking_trip = models.BooleanField(default=False, help_text="Mark as Backpacking trip")
+    show_in_backpacking_section = models.BooleanField(default=False, help_text="Show in the scrolling Backpacking section")
+    backpacking_display_order = models.IntegerField(default=0, help_text="Order in the Backpacking section (lower = first)")
+
 
     def __str__(self):
         return self.title
@@ -288,6 +293,31 @@ class HimalayanSectionConfig(models.Model):
 
     def __str__(self):
         return f"Himalayan Section ({'Enabled' if self.is_enabled else 'Disabled'})"
+
+    def save(self, *args, **kwargs):
+        # Enforce singleton: always use pk=1
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+
+class BackpackingSectionConfig(models.Model):
+    """Singleton settings for the Backpacking Trips showcase section."""
+    is_enabled = models.BooleanField(default=True, help_text="Enable the Backpacking trips scrolling section")
+    title = models.CharField(max_length=200, default="Adventure Backpacking")
+    subtitle = models.CharField(max_length=300, blank=True, default="", help_text="Optional subtitle below the heading")
+    scroll_speed = models.PositiveIntegerField(default=60, help_text="Animation duration in seconds (higher = slower)")
+
+    class Meta:
+        verbose_name = "Backpacking Section Config"
+        verbose_name_plural = "Backpacking Section Config"
+
+    def __str__(self):
+        return f"Backpacking Section ({'Enabled' if self.is_enabled else 'Disabled'})"
 
     def save(self, *args, **kwargs):
         # Enforce singleton: always use pk=1

@@ -1,0 +1,323 @@
+.section {
+    position: relative;
+    padding: 100px 0;
+    background: #0d1a0d; /* Deep forest green */
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Background Decor */
+.bgDecor {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.bgOrb1 {
+    position: absolute;
+    top: -10%;
+    right: -5%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(45, 106, 79, 0.2) 0%, transparent 70%);
+    filter: blur(60px);
+}
+
+.bgOrb2 {
+    position: absolute;
+    bottom: -10%;
+    left: -5%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(149, 213, 178, 0.1) 0%, transparent 70%);
+    filter: blur(50px);
+}
+
+.bgMesh {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+}
+
+/* Header */
+.header {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    margin-bottom: 60px;
+    padding: 0 20px;
+}
+
+.labelRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 16px;
+}
+
+.labelLine {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #52b788);
+}
+
+.labelLine:last-child {
+    background: linear-gradient(to left, transparent, #52b788);
+}
+
+.label {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #52b788;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.labelDot {
+    width: 6px;
+    height: 6px;
+    background: #52b788;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 10px #52b788;
+}
+
+.title {
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 800;
+    color: #fff;
+    margin: 0;
+    letter-spacing: -1px;
+    text-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.subtitle {
+    font-size: clamp(15px, 2vw, 18px);
+    color: #95d5b2;
+    max-width: 600px;
+    margin: 15px auto 0;
+    opacity: 0.8;
+}
+
+/* Track & Scrolling */
+.trackWrapper {
+    position: relative;
+    width: 100%;
+    z-index: 2;
+    padding: 20px 0;
+}
+
+.edgeFadeLeft, 
+.edgeFadeRight {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 150px;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.edgeFadeLeft {
+    left: 0;
+    background: linear-gradient(to right, #0d1a0d, transparent);
+}
+
+.edgeFadeRight {
+    right: 0;
+    background: linear-gradient(to left, #0d1a0d, transparent);
+}
+
+.track {
+    display: flex;
+    gap: 30px;
+    width: max-content;
+    padding: 0 30px;
+    animation: scroll linear infinite;
+}
+
+@keyframes scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+/* Card Styling */
+.card {
+    width: 320px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 28px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card:hover {
+    transform: translateY(-15px) scale(1.02);
+    border-color: rgba(82, 183, 136, 0.4);
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.cardImageWrap {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+}
+
+.cardImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+}
+
+.card:hover .cardImage {
+    transform: scale(1.1);
+}
+
+.cardOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(13, 26, 13, 0.8), transparent);
+}
+
+.natureBadge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(27, 67, 50, 0.8);
+    backdrop-filter: blur(8px);
+    color: #95d5b2;
+    padding: 6px 14px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid rgba(149, 213, 178, 0.3);
+}
+
+.durationPill {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: #52b788;
+    color: #081c15;
+    padding: 4px 12px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 800;
+    box-shadow: 0 4px 15px rgba(82, 183, 136, 0.4);
+}
+
+.cardBody {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 200px;
+}
+
+.cardTitle {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cardLocation {
+    font-size: 13px;
+    color: #95d5b2;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.cardDesc {
+    font-size: 13px;
+    color: #adb5bd;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-clamp: 2;
+    overflow: hidden;
+    margin: 0;
+}
+
+.cardFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.priceInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.priceLabel {
+    font-size: 10px;
+    color: #6c757d;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.priceValue {
+    font-size: 20px;
+    font-weight: 800;
+    color: #52b788;
+}
+
+.ctaBtn {
+    padding: 10px 18px;
+    background: transparent;
+    border: 1px solid #52b788;
+    color: #52b788;
+    border-radius: 14px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.card:hover .ctaBtn {
+    background: #52b788;
+    color: #081c15;
+    box-shadow: 0 5px 15px rgba(82, 183, 136, 0.3);
+}
+
+/* Particles */
+.particles {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    .section { padding: 60px 0; }
+    .card { width: 280px; }
+    .edgeFadeLeft, .edgeFadeRight { width: 60px; }
+}

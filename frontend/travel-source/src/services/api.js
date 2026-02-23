@@ -675,6 +675,36 @@ export const updateIndiaConfig = async (data) => {
   return res.json();
 };
 
+export const fetchBackpackingTrips = async () => {
+  const res = await fetch(`${API_BASE_URL}/v1/trips/backpacking/`);
+  if (!res.ok) throw new Error("Failed to fetch Backpacking trips");
+  return res.json();
+};
+
+export const fetchBackpackingConfig = async () => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/backpacking-config/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Failed to fetch Backpacking config");
+  return res.json();
+};
+
+export const updateBackpackingConfig = async (data) => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/backpacking-config/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to update Backpacking config");
+  return res.json();
+};
+
+
 
 
 

@@ -3,9 +3,9 @@ import {
     fetchHoneymoonConfig, updateHoneymoonConfig,
     fetchHimalayanConfig, updateHimalayanConfig,
     fetchInternationalConfig, updateInternationalConfig,
-    fetchIndiaConfig, updateIndiaConfig
+    fetchIndiaConfig, updateIndiaConfig,
+    fetchBackpackingConfig, updateBackpackingConfig
 } from "../services/api";
-
 import styles from "./SectionSettings.module.css";
 
 const SectionCard = ({ title, config, onUpdate, loading }) => {
@@ -101,25 +101,28 @@ const SectionSettings = () => {
         honeymoon: null,
         himalayan: null,
         international: null,
-        india: null
+        india: null,
+        backpacking: null
     });
     const [loading, setLoading] = useState({
         honeymoon: false,
         himalayan: false,
         international: false,
-        india: false
+        india: false,
+        backpacking: false
     });
     const [message, setMessage] = useState("");
 
     const loadConfigs = async () => {
         try {
-            const [honeymoon, himalayan, international, india] = await Promise.all([
+            const [honeymoon, himalayan, international, india, backpacking] = await Promise.all([
                 fetchHoneymoonConfig().catch(() => null),
                 fetchHimalayanConfig().catch(() => null),
                 fetchInternationalConfig().catch(() => null),
-                fetchIndiaConfig().catch(() => null)
+                fetchIndiaConfig().catch(() => null),
+                fetchBackpackingConfig().catch(() => null)
             ]);
-            setConfigs({ honeymoon, himalayan, international, india });
+            setConfigs({ honeymoon, himalayan, international, india, backpacking });
         } catch (err) {
             console.error("Failed to load configs", err);
         }
@@ -137,6 +140,7 @@ const SectionSettings = () => {
             if (type === "himalayan") await updateHimalayanConfig(data);
             if (type === "international") await updateInternationalConfig(data);
             if (type === "india") await updateIndiaConfig(data);
+            if (type === "backpacking") await updateBackpackingConfig(data);
             setMessage(`${type.charAt(0).toUpperCase() + type.slice(1)} section updated successfully!`);
             loadConfigs();
         } catch (err) {
@@ -183,6 +187,12 @@ const SectionSettings = () => {
                     config={configs.himalayan}
                     onUpdate={(data) => handleUpdate("himalayan", data)}
                     loading={loading.himalayan}
+                />
+                <SectionCard
+                    title="Backpacking Trips"
+                    config={configs.backpacking}
+                    onUpdate={(data) => handleUpdate("backpacking", data)}
+                    loading={loading.backpacking}
                 />
             </div>
         </div>

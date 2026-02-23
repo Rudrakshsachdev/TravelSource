@@ -11,6 +11,7 @@ import InternationalTrips from "./InternationalTrips";
 import IndiaTrips from "./IndiaTrips";
 import HoneymoonTrips from "./HoneymoonTrips";
 import HimalayanTreks from "./HimalayanTreks";
+import BackpackingTrips from "./BackpackingTrips";
 import CategoryNav from "./CategoryNav";
 import AnimatedMap from "../AnimatedMap/AnimatedMap";
 
@@ -363,6 +364,7 @@ const TripsList = () => {
 
       {/* Himalayan Treks Scrolling Showcase */}
       <HimalayanTreks />
+      <BackpackingTrips />
 
       {/* Premium Animated Map Section */}
       <AnimatedMap />

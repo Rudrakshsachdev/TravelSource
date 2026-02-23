@@ -47,6 +47,9 @@ const AdminTrips = () => {
     is_himalayan_trek: false,
     show_in_himalayan_section: false,
     himalayan_display_order: 0,
+    is_backpacking_trip: false,
+    show_in_backpacking_section: false,
+    backpacking_display_order: 0,
     category: "",
 
   });
@@ -201,6 +204,9 @@ const AdminTrips = () => {
       is_himalayan_trek: trip.is_himalayan_trek || false,
       show_in_himalayan_section: trip.show_in_himalayan_section || false,
       himalayan_display_order: trip.himalayan_display_order || 0,
+      is_backpacking_trip: trip.is_backpacking_trip || false,
+      show_in_backpacking_section: trip.show_in_backpacking_section || false,
+      backpacking_display_order: trip.backpacking_display_order || 0,
       category: trip.category || "",
 
     });
@@ -240,6 +246,9 @@ const AdminTrips = () => {
       is_himalayan_trek: false,
       show_in_himalayan_section: false,
       himalayan_display_order: 0,
+      is_backpacking_trip: false,
+      show_in_backpacking_section: false,
+      backpacking_display_order: 0,
       category: "",
 
     });
@@ -276,6 +285,7 @@ const AdminTrips = () => {
         india_featured_priority: Number(formData.india_featured_priority) || 0,
         honeymoon_display_order: Number(formData.honeymoon_display_order) || 0,
         himalayan_display_order: Number(formData.himalayan_display_order) || 0,
+        backpacking_display_order: Number(formData.backpacking_display_order) || 0,
         itinerary,
 
         highlights,
@@ -651,6 +661,45 @@ const AdminTrips = () => {
                         type="number"
                         name="himalayan_display_order"
                         value={formData.himalayan_display_order}
+                        onChange={handleChange}
+                        className={styles.input}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Backpacking Section Fields */}
+                  <div className={styles.sectionHeader}>
+                    <h3 className={styles.sectionTitle}>Backpacking Showcase</h3>
+                  </div>
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="is_backpacking_trip"
+                        checked={formData.is_backpacking_trip}
+                        onChange={handleChange}
+                        className={styles.checkbox}
+                      />
+                      Mark as Backpacking Trip
+                    </label>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="show_in_backpacking_section"
+                        checked={formData.show_in_backpacking_section}
+                        onChange={handleChange}
+                        className={styles.checkbox}
+                      />
+                      Show in Backpacking Section
+                    </label>
+                  </div>
+                  <div className={styles.formGrid}>
+                    <div className={styles.inputGroup}>
+                      <label className={styles.inputLabel}>Backpacking Display Order</label>
+                      <input
+                        type="number"
+                        name="backpacking_display_order"
+                        value={formData.backpacking_display_order}
                         onChange={handleChange}
                         className={styles.input}
                       />
@@ -1630,6 +1679,22 @@ const AdminTrips = () => {
                             🏔️ Himalayan
                           </span>
                         )}
+                        {trip.is_backpacking_trip && (
+                          <span
+                            className={styles.metaItem}
+                            style={{
+                              background: "rgba(45,106,79,0.1)",
+                              color: "#2d6a4f",
+                              padding: "2px 8px",
+                              borderRadius: "12px",
+                              fontSize: "0.75rem",
+                              fontWeight: 600,
+                            }}
+                          >
+                            🎒 Backpacking
+                          </span>
+                        )}
+
 
                       </div>
                     </div>

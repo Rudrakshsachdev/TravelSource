@@ -14,5 +14,6 @@ from .international_trip_serializer import InternationalTripSerializer, Internat
 from .india_trip_serializer import IndiaTripSerializer, IndiaSectionConfigSerializer
 from .honeymoon_serializer import HoneymoonTripSerializer, HoneymoonSectionConfigSerializer
 from .himalayan_serializer import HimalayanTripSerializer, HimalayanSectionConfigSerializer
+from .backpacking_serializer import BackpackingTripSerializer, BackpackingSectionConfigSerializer
 from .category_serializer import CategorySerializer
 

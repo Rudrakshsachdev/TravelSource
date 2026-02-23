@@ -12,6 +12,7 @@ from .views import (
     india_trips, admin_india_config,
     honeymoon_trips, admin_honeymoon_config,
     himalayan_trips, admin_himalayan_config,
+    backpacking_trips, admin_backpacking_config,
     request_password_reset, verify_reset_otp, reset_password,
     category_list, admin_categories,
 )
@@ -59,5 +60,7 @@ urlpatterns = [
     path("v1/admin/india-config/", admin_india_config),
     path("v1/trips/himalayan/", himalayan_trips),
     path("v1/admin/himalayan-config/", admin_himalayan_config),
+    path("v1/trips/backpacking/", backpacking_trips),
+    path("v1/admin/backpacking-config/", admin_backpacking_config),
 ]
 

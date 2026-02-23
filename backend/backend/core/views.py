@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, Category
+from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, Category
 
 from .serializers import (
     TripSerializer,
@@ -26,6 +26,8 @@ from .serializers import (
     HoneymoonSectionConfigSerializer,
     HimalayanTripSerializer,
     HimalayanSectionConfigSerializer,
+    BackpackingTripSerializer,
+    BackpackingSectionConfigSerializer,
     CategorySerializer,
 )
 
@@ -765,6 +767,52 @@ def admin_himalayan_config(request):
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(serializer.data)
+
+
+# ─── Backpacking Trips ────────────────────────────────────────────────────────
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def backpacking_trips(request):
+    """Return active Backpacking trips for the scrolling showcase section."""
+    config = BackpackingSectionConfig.load()
+    if not config.is_enabled:
+        return Response({"config": {"is_enabled": False}, "trips": []})
+
+    trips = Trip.objects.filter(
+        is_active=True,
+        is_backpacking_trip=True,
+        show_in_backpacking_section=True,
+    ).order_by("backpacking_display_order", "-id")
+
+    config_serializer = BackpackingSectionConfigSerializer(config)
+    trip_serializer = BackpackingTripSerializer(trips, many=True)
+
+    return Response({
+        "config": config_serializer.data,
+        "trips": trip_serializer.data,
+    })
+
+
+@api_view(["GET", "PATCH"])
+@permission_classes([IsAuthenticated])
+def admin_backpacking_config(request):
+    """Admin: get or update the Backpacking section configuration."""
+    if not hasattr(request.user, "profile") or request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    config = BackpackingSectionConfig.load()
+
+    if request.method == "GET":
+        serializer = BackpackingSectionConfigSerializer(config)
+        return Response(serializer.data)
+
+    serializer = BackpackingSectionConfigSerializer(config, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data)
+
+
 
 
 
