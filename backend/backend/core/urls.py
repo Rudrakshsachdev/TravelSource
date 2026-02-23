@@ -10,6 +10,7 @@ from .views import (
     site_stats, admin_site_stats,
     international_trips, admin_international_config,
     india_trips, admin_india_config,
+    honeymoon_trips, admin_honeymoon_config,
     request_password_reset, verify_reset_otp, reset_password,
     category_list, admin_categories,
 )
@@ -22,6 +23,8 @@ urlpatterns = [
     path("v1/trips/recommended/", recommended_trips),
     path("v1/trips/international/", international_trips),
     path("v1/trips/india/", india_trips),
+    path("v1/trips/honeymoon/", honeymoon_trips),
+    path("v1/admin/honeymoon-config/", admin_honeymoon_config),
     path("v1/trips/<int:pk>/", trip_detail),
     path("v1/trips/<int:pk>/view/", record_trip_view),
     path("v1/auth/login/", login_view),

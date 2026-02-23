@@ -565,6 +565,39 @@ export const fetchIndiaTrips = async () => {
   return res.json();
 };
 
+/** Fetch Honeymoon trips + section config for the scrolling showcase */
+export const fetchHoneymoonTrips = async () => {
+  const res = await fetch(`${API_BASE_URL}/v1/trips/honeymoon/`);
+  if (!res.ok) throw new Error("Failed to fetch Honeymoon trips");
+  return res.json();
+};
+
+/** Fetch Honeymoon section config (ADMIN) */
+export const fetchHoneymoonConfig = async () => {
+  const token = localStorage.getItem("access_token");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/honeymoon-config/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Failed to fetch honeymoon config");
+  return res.json();
+};
+
+/** Update Honeymoon section config (ADMIN) */
+export const updateHoneymoonConfig = async (data) => {
+  const token = localStorage.getItem("access_token");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/honeymoon-config/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to update honeymoon config");
+  return res.json();
+};
+
+
 // ─── Forgot Password ────────────────────────────────────────────────────────
 
 export const requestPasswordReset = async (email) => {

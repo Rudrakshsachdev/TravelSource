@@ -12,4 +12,6 @@ from .review_serializer import ReviewSerializer
 from .sitestat_serializer import SiteStatSerializer
 from .international_trip_serializer import InternationalTripSerializer, InternationalSectionConfigSerializer
 from .india_trip_serializer import IndiaTripSerializer, IndiaSectionConfigSerializer
+from .honeymoon_serializer import HoneymoonTripSerializer, HoneymoonSectionConfigSerializer
 from .category_serializer import CategorySerializer
+

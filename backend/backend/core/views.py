@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, Category
+from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, HoneymoonSectionConfig, Category
 
 from .serializers import (
     TripSerializer,
@@ -22,6 +22,8 @@ from .serializers import (
     InternationalSectionConfigSerializer,
     IndiaTripSerializer,
     IndiaSectionConfigSerializer,
+    HoneymoonTripSerializer,
+    HoneymoonSectionConfigSerializer,
     CategorySerializer,
 )
 
@@ -672,6 +674,48 @@ def admin_india_config(request):
         return Response(serializer.data)
 
     serializer = IndiaSectionConfigSerializer(config, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def honeymoon_trips(request):
+    """Return active Honeymoon trips for the scrolling showcase section."""
+    config = HoneymoonSectionConfig.load()
+    if not config.is_enabled:
+        return Response({"config": {"is_enabled": False}, "trips": []})
+
+    trips = Trip.objects.filter(
+        is_active=True,
+        is_honeymoon=True,
+        show_in_honeymoon_section=True,
+    ).order_by("honeymoon_display_order", "-id")
+
+    config_serializer = HoneymoonSectionConfigSerializer(config)
+    trip_serializer = HoneymoonTripSerializer(trips, many=True)
+
+    return Response({
+        "config": config_serializer.data,
+        "trips": trip_serializer.data,
+    })
+
+
+@api_view(["GET", "PATCH"])
+@permission_classes([IsAuthenticated])
+def admin_honeymoon_config(request):
+    """Admin: get or update the Honeymoon section configuration."""
+    if not hasattr(request.user, "profile") or request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    config = HoneymoonSectionConfig.load()
+
+    if request.method == "GET":
+        serializer = HoneymoonSectionConfigSerializer(config)
+        return Response(serializer.data)
+
+    serializer = HoneymoonSectionConfigSerializer(config, data=request.data, partial=True)
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(serializer.data)

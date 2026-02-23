@@ -9,6 +9,7 @@ import PanoramaBanner from "./PanoramaBanner";
 import CinematicPanorama from "./CinematicPanorama";
 import InternationalTrips from "./InternationalTrips";
 import IndiaTrips from "./IndiaTrips";
+import HoneymoonTrips from "./HoneymoonTrips";
 import CategoryNav from "./CategoryNav";
 import AnimatedMap from "../AnimatedMap/AnimatedMap";
 
@@ -355,6 +356,9 @@ const TripsList = () => {
 
       {/* India Trips Scrolling Showcase */}
       <IndiaTrips />
+
+      {/* Honeymoon Trips Scrolling Showcase */}
+      <HoneymoonTrips />
 
       {/* Premium Animated Map Section */}
       <AnimatedMap />

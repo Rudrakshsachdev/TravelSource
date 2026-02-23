@@ -39,6 +39,9 @@ const AdminTrips = () => {
     show_in_india_section: false,
     india_display_order: 0,
     india_featured_priority: 0,
+    is_honeymoon: false,
+    show_in_honeymoon_section: false,
+    honeymoon_display_order: 0,
     category: "",
   });
 
@@ -186,6 +189,9 @@ const AdminTrips = () => {
       show_in_india_section: trip.show_in_india_section || false,
       india_display_order: trip.india_display_order || 0,
       india_featured_priority: trip.india_featured_priority || 0,
+      is_honeymoon: trip.is_honeymoon || false,
+      show_in_honeymoon_section: trip.show_in_honeymoon_section || false,
+      honeymoon_display_order: trip.honeymoon_display_order || 0,
       category: trip.category || "",
     });
 
@@ -251,6 +257,7 @@ const AdminTrips = () => {
         display_order: Number(formData.display_order) || 0,
         india_display_order: Number(formData.india_display_order) || 0,
         india_featured_priority: Number(formData.india_featured_priority) || 0,
+        honeymoon_display_order: Number(formData.honeymoon_display_order) || 0,
         itinerary,
         highlights,
         inclusions: cleanInclusions,
@@ -549,6 +556,45 @@ const AdminTrips = () => {
                         value={formData.location}
                         onChange={handleChange}
                         required
+                      />
+                    </div>
+                  </div>
+
+                  {/* Honeymoon Section Fields */}
+                  <div className={styles.sectionHeader}>
+                    <h3 className={styles.sectionTitle}>Honeymoon Showcase</h3>
+                  </div>
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="is_honeymoon"
+                        checked={formData.is_honeymoon}
+                        onChange={handleChange}
+                        className={styles.checkbox}
+                      />
+                      Mark as Honeymoon Trip
+                    </label>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="show_in_honeymoon_section"
+                        checked={formData.show_in_honeymoon_section}
+                        onChange={handleChange}
+                        className={styles.checkbox}
+                      />
+                      Show in Honeymoon Section
+                    </label>
+                  </div>
+                  <div className={styles.formGrid}>
+                    <div className={styles.inputGroup}>
+                      <label className={styles.inputLabel}>Honeymoon Display Order</label>
+                      <input
+                        type="number"
+                        name="honeymoon_display_order"
+                        value={formData.honeymoon_display_order}
+                        onChange={handleChange}
+                        className={styles.input}
                       />
                     </div>
                   </div>
