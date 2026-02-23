@@ -50,6 +50,9 @@ const AdminTrips = () => {
     is_backpacking_trip: false,
     show_in_backpacking_section: false,
     backpacking_display_order: 0,
+    is_summer_trek: false,
+    show_in_summer_section: false,
+    summer_display_order: 0,
     category: "",
 
   });
@@ -207,6 +210,9 @@ const AdminTrips = () => {
       is_backpacking_trip: trip.is_backpacking_trip || false,
       show_in_backpacking_section: trip.show_in_backpacking_section || false,
       backpacking_display_order: trip.backpacking_display_order || 0,
+      is_summer_trek: trip.is_summer_trek || false,
+      show_in_summer_section: trip.show_in_summer_section || false,
+      summer_display_order: trip.summer_display_order || 0,
       category: trip.category || "",
 
     });
@@ -249,6 +255,9 @@ const AdminTrips = () => {
       is_backpacking_trip: false,
       show_in_backpacking_section: false,
       backpacking_display_order: 0,
+      is_summer_trek: false,
+      show_in_summer_section: false,
+      summer_display_order: 0,
       category: "",
 
     });
@@ -286,6 +295,7 @@ const AdminTrips = () => {
         honeymoon_display_order: Number(formData.honeymoon_display_order) || 0,
         himalayan_display_order: Number(formData.himalayan_display_order) || 0,
         backpacking_display_order: Number(formData.backpacking_display_order) || 0,
+        summer_display_order: Number(formData.summer_display_order) || 0,
         itinerary,
 
         highlights,
@@ -700,6 +710,45 @@ const AdminTrips = () => {
                         type="number"
                         name="backpacking_display_order"
                         value={formData.backpacking_display_order}
+                        onChange={handleChange}
+                        className={styles.input}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Summer Section Fields */}
+                  <div className={styles.sectionHeader}>
+                    <h3 className={styles.sectionTitle}>Summer Showcase</h3>
+                  </div>
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="is_summer_trek"
+                        checked={formData.is_summer_trek}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Mark as Summer Trek
+                    </label>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="show_in_summer_section"
+                        checked={formData.show_in_summer_section}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Show in Summer Section
+                    </label>
+                  </div>
+                  <div className={styles.formGrid}>
+                    <div className={styles.inputGroup}>
+                      <label className={styles.inputLabel}>Summer Display Order</label>
+                      <input
+                        type="number"
+                        name="summer_display_order"
+                        value={formData.summer_display_order}
                         onChange={handleChange}
                         className={styles.input}
                       />
@@ -1692,6 +1741,21 @@ const AdminTrips = () => {
                             }}
                           >
                             🎒 Backpacking
+                          </span>
+                        )}
+                        {trip.is_summer_trek && (
+                          <span
+                            className={styles.metaItem}
+                            style={{
+                              background: "rgba(251,146,60,0.1)",
+                              color: "#ea580c",
+                              padding: "2px 8px",
+                              borderRadius: "12px",
+                              fontSize: "0.75rem",
+                              fontWeight: 600,
+                            }}
+                          >
+                            ☀️ Summer
                           </span>
                         )}
 

@@ -15,5 +15,6 @@ from .india_trip_serializer import IndiaTripSerializer, IndiaSectionConfigSerial
 from .honeymoon_serializer import HoneymoonTripSerializer, HoneymoonSectionConfigSerializer
 from .himalayan_serializer import HimalayanTripSerializer, HimalayanSectionConfigSerializer
 from .backpacking_serializer import BackpackingTripSerializer, BackpackingSectionConfigSerializer
+from .summer_serializer import SummerTripSerializer, SummerSectionConfigSerializer
 from .category_serializer import CategorySerializer
 

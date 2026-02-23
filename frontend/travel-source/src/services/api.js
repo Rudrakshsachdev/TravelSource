@@ -704,6 +704,35 @@ export const updateBackpackingConfig = async (data) => {
   return res.json();
 };
 
+export const fetchSummerTrips = async () => {
+  const res = await fetch(`${API_BASE_URL}/v1/trips/summer/`);
+  if (!res.ok) throw new Error("Failed to fetch Summer trips");
+  return res.json();
+};
+
+export const fetchSummerConfig = async () => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/summer-config/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Failed to fetch Summer config");
+  return res.json();
+};
+
+export const updateSummerConfig = async (data) => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/summer-config/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to update Summer config");
+  return res.json();
+};
+
 
 
 

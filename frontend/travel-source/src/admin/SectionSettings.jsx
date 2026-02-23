@@ -4,7 +4,8 @@ import {
     fetchHimalayanConfig, updateHimalayanConfig,
     fetchInternationalConfig, updateInternationalConfig,
     fetchIndiaConfig, updateIndiaConfig,
-    fetchBackpackingConfig, updateBackpackingConfig
+    fetchBackpackingConfig, updateBackpackingConfig,
+    fetchSummerConfig, updateSummerConfig
 } from "../services/api";
 import styles from "./SectionSettings.module.css";
 
@@ -102,14 +103,16 @@ const SectionSettings = () => {
         himalayan: null,
         international: null,
         india: null,
-        backpacking: null
+        backpacking: null,
+        summer: null
     });
     const [loading, setLoading] = useState({
         honeymoon: false,
         himalayan: false,
         international: false,
         india: false,
-        backpacking: false
+        backpacking: false,
+        summer: false
     });
     const [message, setMessage] = useState("");
 
@@ -120,9 +123,10 @@ const SectionSettings = () => {
                 fetchHimalayanConfig().catch(() => null),
                 fetchInternationalConfig().catch(() => null),
                 fetchIndiaConfig().catch(() => null),
-                fetchBackpackingConfig().catch(() => null)
+                fetchBackpackingConfig().catch(() => null),
+                fetchSummerConfig().catch(() => null)
             ]);
-            setConfigs({ honeymoon, himalayan, international, india, backpacking });
+            setConfigs({ honeymoon, himalayan, international, india, backpacking, summer });
         } catch (err) {
             console.error("Failed to load configs", err);
         }
@@ -141,6 +145,7 @@ const SectionSettings = () => {
             if (type === "international") await updateInternationalConfig(data);
             if (type === "india") await updateIndiaConfig(data);
             if (type === "backpacking") await updateBackpackingConfig(data);
+            if (type === "summer") await updateSummerConfig(data);
             setMessage(`${type.charAt(0).toUpperCase() + type.slice(1)} section updated successfully!`);
             loadConfigs();
         } catch (err) {
@@ -193,6 +198,12 @@ const SectionSettings = () => {
                     config={configs.backpacking}
                     onUpdate={(data) => handleUpdate("backpacking", data)}
                     loading={loading.backpacking}
+                />
+                <SectionCard
+                    title="Summer Treks"
+                    config={configs.summer}
+                    onUpdate={(data) => handleUpdate("summer", data)}
+                    loading={loading.summer}
                 />
             </div>
         </div>

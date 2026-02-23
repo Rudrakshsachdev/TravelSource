@@ -64,6 +64,10 @@ class Trip(models.Model):
     show_in_backpacking_section = models.BooleanField(default=False, help_text="Show in the scrolling Backpacking section")
     backpacking_display_order = models.IntegerField(default=0, help_text="Order in the Backpacking section (lower = first)")
 
+    is_summer_trek = models.BooleanField(default=False, help_text="Mark as Summer trek")
+    show_in_summer_section = models.BooleanField(default=False, help_text="Show in the scrolling Summer section")
+    summer_display_order = models.IntegerField(default=0, help_text="Order in the Summer section (lower = first)")
+
 
     def __str__(self):
         return self.title
@@ -318,6 +322,31 @@ class BackpackingSectionConfig(models.Model):
 
     def __str__(self):
         return f"Backpacking Section ({'Enabled' if self.is_enabled else 'Disabled'})"
+
+    def save(self, *args, **kwargs):
+        # Enforce singleton: always use pk=1
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+
+class SummerSectionConfig(models.Model):
+    """Singleton settings for the Summer Treks showcase section."""
+    is_enabled = models.BooleanField(default=True, help_text="Enable the Summer treks scrolling section")
+    title = models.CharField(max_length=200, default="Vibrant Summer Treks")
+    subtitle = models.CharField(max_length=300, blank=True, default="", help_text="Optional subtitle below the heading")
+    scroll_speed = models.PositiveIntegerField(default=60, help_text="Animation duration in seconds (higher = slower)")
+
+    class Meta:
+        verbose_name = "Summer Section Config"
+        verbose_name_plural = "Summer Section Config"
+
+    def __str__(self):
+        return f"Summer Section ({'Enabled' if self.is_enabled else 'Disabled'})"
 
     def save(self, *args, **kwargs):
         # Enforce singleton: always use pk=1

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Trip, Profile, Enquiry, SiteStat, InternationalSectionConfig, IndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, Category
+from .models import Trip, Profile, Enquiry, SiteStat, InternationalSectionConfig, IndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, Category
 # Register your models here.
 
 
@@ -19,6 +19,7 @@ class TripAdmin(admin.ModelAdmin):
         "is_honeymoon", "show_in_honeymoon_section", "honeymoon_display_order",
         "is_himalayan_trek", "show_in_himalayan_section", "himalayan_display_order",
         "is_backpacking_trip", "show_in_backpacking_section", "backpacking_display_order",
+        "is_summer_trek", "show_in_summer_section", "summer_display_order",
     )
     list_filter = ("is_active", "category", "is_international", "show_in_international_section", "is_india_trip", "show_in_india_section")
     list_editable = (
@@ -27,6 +28,7 @@ class TripAdmin(admin.ModelAdmin):
         "is_honeymoon", "show_in_honeymoon_section", "honeymoon_display_order",
         "is_himalayan_trek", "show_in_himalayan_section", "himalayan_display_order",
         "is_backpacking_trip", "show_in_backpacking_section", "backpacking_display_order",
+        "is_summer_trek", "show_in_summer_section", "summer_display_order",
     )
     search_fields = ("title", "location", "country", "state")
     ordering = ("display_order", "-id")
@@ -56,6 +58,10 @@ class TripAdmin(admin.ModelAdmin):
         ("Backpacking Showcase", {
             "fields": ("is_backpacking_trip", "show_in_backpacking_section", "backpacking_display_order"),
             "description": "Control how this trip appears in the Backpacking Trips scrolling section.",
+        }),
+        ("Summer Showcase", {
+            "fields": ("is_summer_trek", "show_in_summer_section", "summer_display_order"),
+            "description": "Control how this trip appears in the Summer Treks scrolling section.",
         }),
 
         ("Status", {
@@ -119,6 +125,17 @@ class BackpackingSectionConfigAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return not BackpackingSectionConfig.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+@admin.register(SummerSectionConfig)
+class SummerSectionConfigAdmin(admin.ModelAdmin):
+    list_display = ("title", "is_enabled", "scroll_speed")
+    list_editable = ("is_enabled", "scroll_speed")
+
+    def has_add_permission(self, request):
+        return not SummerSectionConfig.objects.exists()
 
     def has_delete_permission(self, request, obj=None):
         return False
