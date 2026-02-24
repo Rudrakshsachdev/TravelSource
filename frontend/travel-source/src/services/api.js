@@ -794,6 +794,38 @@ export const updateCommunityConfig = async (data) => {
   return res.json();
 };
 
+/** Fetch Festival trips + section config for the scrolling showcase */
+export const fetchFestivalTrips = async () => {
+  const res = await fetch(`${API_BASE_URL}/v1/trips/festival/`);
+  if (!res.ok) throw new Error("Failed to fetch Festival trips");
+  return res.json();
+};
+
+/** Fetch Festival section config (ADMIN) */
+export const fetchFestivalConfig = async () => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/festival-config/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Failed to fetch Festival config");
+  return res.json();
+};
+
+/** Update Festival section config (ADMIN) */
+export const updateFestivalConfig = async (data) => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/festival-config/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to update Festival config");
+  return res.json();
+};
+
 
 
 

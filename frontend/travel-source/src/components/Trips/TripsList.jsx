@@ -15,6 +15,7 @@ import BackpackingTrips from "./BackpackingTrips";
 import SummerTreks from "./SummerTreks";
 import MonsoonTreks from "./MonsoonTreks";
 import CommunityTrips from "./CommunityTrips";
+import FestivalTrips from "./FestivalTrips";
 import CategoryNav from "./CategoryNav";
 import AnimatedMap from "../AnimatedMap/AnimatedMap";
 
@@ -371,6 +372,7 @@ const TripsList = () => {
       <SummerTreks />
       <MonsoonTreks />
       <CommunityTrips />
+      <FestivalTrips />
 
       {/* Premium Animated Map Section */}
       <AnimatedMap />

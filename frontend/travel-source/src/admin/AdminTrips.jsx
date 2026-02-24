@@ -225,6 +225,9 @@ const AdminTrips = () => {
       is_community_trip: trip.is_community_trip || false,
       show_in_community_section: trip.show_in_community_section || false,
       community_display_order: trip.community_display_order || 0,
+      is_festival_trip: trip.is_festival_trip || false,
+      show_in_festival_section: trip.show_in_festival_section || false,
+      festival_display_order: trip.festival_display_order || 0,
       category: trip.category || "",
 
     });
@@ -276,6 +279,9 @@ const AdminTrips = () => {
       is_community_trip: false,
       show_in_community_section: false,
       community_display_order: 0,
+      is_festival_trip: false,
+      show_in_festival_section: false,
+      festival_display_order: 0,
       category: "",
 
     });
@@ -847,6 +853,45 @@ const AdminTrips = () => {
                         type="number"
                         name="community_display_order"
                         value={formData.community_display_order}
+                        onChange={handleChange}
+                        className={styles.input}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Festival Section Fields */}
+                  <div className={styles.sectionHeader}>
+                    <h3 className={styles.sectionTitle}>Festival Showcase</h3>
+                  </div>
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="is_festival_trip"
+                        checked={formData.is_festival_trip}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Mark as Festival Trip
+                    </label>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="show_in_festival_section"
+                        checked={formData.show_in_festival_section}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Show in Festival Section
+                    </label>
+                  </div>
+                  <div className={styles.formGrid}>
+                    <div className={styles.inputGroup}>
+                      <label className={styles.inputLabel}>Festival Display Order</label>
+                      <input
+                        type="number"
+                        name="festival_display_order"
+                        value={formData.festival_display_order}
                         onChange={handleChange}
                         className={styles.input}
                       />
@@ -1884,6 +1929,21 @@ const AdminTrips = () => {
                             }}
                           >
                             🌅 Social Community
+                          </span>
+                        )}
+                        {trip.is_festival_trip && (
+                          <span
+                            className={styles.metaItem}
+                            style={{
+                              background: "rgba(139, 92, 246, 0.1)",
+                              color: "#7c3aed",
+                              padding: "2px 8px",
+                              borderRadius: "12px",
+                              fontSize: "0.75rem",
+                              fontWeight: 600,
+                            }}
+                          >
+                            🎆 Festival
                           </span>
                         )}
 

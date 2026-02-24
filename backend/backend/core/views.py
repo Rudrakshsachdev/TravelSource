@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, Category
+from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, Category
 
 from .serializers import (
     TripSerializer,
@@ -34,6 +34,8 @@ from .serializers import (
     MonsoonSectionConfigSerializer,
     CommunityTripSerializer,
     CommunitySectionConfigSerializer,
+    FestivalTripSerializer,
+    FestivalSectionConfigSerializer,
     CategorySerializer,
 )
 
@@ -1056,3 +1058,40 @@ def reset_password(request):
         return Response({"message": "Password reset successfully. You can now log in."})
     except (PasswordResetOTP.DoesNotExist, User.DoesNotExist):
         return Response({"error": "Invalid request"}, status=400)
+
+# ─── Festival Section ───────────────────────────────────────────────────────
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def festival_trips(request):
+    """Public: return festival section config and its active trips."""
+    config = FestivalSectionConfig.load()
+    trips = Trip.objects.filter(
+        is_active=True,
+        is_festival_trip=True,
+        show_in_festival_section=True
+    ).order_by("festival_display_order")
+    
+    return Response({
+        "config": FestivalSectionConfigSerializer(config).data,
+        "trips": FestivalTripSerializer(trips, many=True).data
+    })
+
+
+@api_view(["GET", "PATCH"])
+@permission_classes([IsAuthenticated])
+def admin_festival_config(request):
+    """Admin: get or update festival section configuration."""
+    if not hasattr(request.user, "profile") or request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+        
+    config = FestivalSectionConfig.load()
+    if request.method == "GET":
+        return Response(FestivalSectionConfigSerializer(config).data)
+    
+    # PATCH
+    serializer = FestivalSectionConfigSerializer(config, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data)
+

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Trip, Profile, Enquiry, SiteStat, InternationalSectionConfig, IndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, Category
+from .models import Trip, Profile, Enquiry, SiteStat, InternationalSectionConfig, IndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, Category
 # Register your models here.
 
 
@@ -22,6 +22,7 @@ class TripAdmin(admin.ModelAdmin):
         "is_summer_trek", "show_in_summer_section", "summer_display_order",
         "is_monsoon_trek", "show_in_monsoon_section", "monsoon_display_order",
         "is_community_trip", "show_in_community_section", "community_display_order",
+        "is_festival_trip", "show_in_festival_section", "festival_display_order",
     )
     list_filter = ("is_active", "category", "is_international", "show_in_international_section", "is_india_trip", "show_in_india_section")
     list_editable = (
@@ -33,6 +34,7 @@ class TripAdmin(admin.ModelAdmin):
         "is_summer_trek", "show_in_summer_section", "summer_display_order",
         "is_monsoon_trek", "show_in_monsoon_section", "monsoon_display_order",
         "is_community_trip", "show_in_community_section", "community_display_order",
+        "is_festival_trip", "show_in_festival_section", "festival_display_order",
     )
     search_fields = ("title", "location", "country", "state")
     ordering = ("display_order", "-id")
@@ -74,6 +76,10 @@ class TripAdmin(admin.ModelAdmin):
         ("Community Showcase", {
             "fields": ("is_community_trip", "show_in_community_section", "community_display_order"),
             "description": "Control how this trip appears in the Community Trips scrolling section.",
+        }),
+        ("Festival Showcase", {
+            "fields": ("is_festival_trip", "show_in_festival_section", "festival_display_order"),
+            "description": "Control how this trip appears in the Festival Trips scrolling section.",
         }),
 
         ("Status", {
@@ -171,6 +177,18 @@ class CommunitySectionConfigAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return not CommunitySectionConfig.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(FestivalSectionConfig)
+class FestivalSectionConfigAdmin(admin.ModelAdmin):
+    list_display = ("title", "is_enabled", "scroll_speed")
+    list_editable = ("is_enabled", "scroll_speed")
+
+    def has_add_permission(self, request):
+        return not FestivalSectionConfig.objects.exists()
 
     def has_delete_permission(self, request, obj=None):
         return False

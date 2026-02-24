@@ -16,6 +16,7 @@ from .views import (
     summer_trips, admin_summer_config,
     monsoon_trips, admin_monsoon_config,
     community_trips, admin_community_config,
+    festival_trips, admin_festival_config,
     request_password_reset, verify_reset_otp, reset_password,
     category_list, admin_categories,
 )
@@ -71,5 +72,7 @@ urlpatterns = [
     path("v1/admin/monsoon-config/", admin_monsoon_config),
     path("v1/trips/community/", community_trips),
     path("v1/admin/community-config/", admin_community_config),
+    path("v1/trips/festival/", festival_trips),
+    path("v1/admin/festival-config/", admin_festival_config),
 ]
 

@@ -1,0 +1,37 @@
+
+
+# ─── Festival Section ───────────────────────────────────────────────────────
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def festival_trips(request):
+    """Public: return festival section config and its active trips."""
+    config = FestivalSectionConfig.load()
+    trips = Trip.objects.filter(
+        is_active=True,
+        is_festival_trip=True,
+        show_in_festival_section=True
+    ).order_by("festival_display_order")
+    
+    return Response({
+        "config": FestivalSectionConfigSerializer(config).data,
+        "trips": FestivalTripSerializer(trips, many=True).data
+    })
+
+
+@api_view(["GET", "PATCH"])
+@permission_classes([IsAuthenticated])
+def admin_festival_config(request):
+    """Admin: get or update festival section configuration."""
+    if not hasattr(request.user, "profile") or request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+        
+    config = FestivalSectionConfig.load()
+    if request.method == "GET":
+        return Response(FestivalSectionConfigSerializer(config).data)
+    
+    # PATCH
+    serializer = FestivalSectionConfigSerializer(config, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data)

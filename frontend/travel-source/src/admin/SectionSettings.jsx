@@ -7,7 +7,8 @@ import {
     fetchBackpackingConfig, updateBackpackingConfig,
     fetchSummerConfig, updateSummerConfig,
     fetchMonsoonConfig, updateMonsoonConfig,
-    fetchCommunityConfig, updateCommunityConfig
+    fetchCommunityConfig, updateCommunityConfig,
+    fetchFestivalConfig, updateFestivalConfig
 } from "../services/api";
 import styles from "./SectionSettings.module.css";
 
@@ -108,7 +109,8 @@ const SectionSettings = () => {
         backpacking: null,
         summer: null,
         monsoon: null,
-        community: null
+        community: null,
+        festival: null
     });
     const [loading, setLoading] = useState({
         honeymoon: false,
@@ -118,13 +120,14 @@ const SectionSettings = () => {
         backpacking: false,
         summer: false,
         monsoon: false,
-        community: false
+        community: false,
+        festival: false
     });
     const [message, setMessage] = useState("");
 
     const loadConfigs = async () => {
         try {
-            const [honeymoon, himalayan, international, india, backpacking, summer, monsoon, community] = await Promise.all([
+            const [honeymoon, himalayan, international, india, backpacking, summer, monsoon, community, festival] = await Promise.all([
                 fetchHoneymoonConfig().catch(() => null),
                 fetchHimalayanConfig().catch(() => null),
                 fetchInternationalConfig().catch(() => null),
@@ -132,9 +135,10 @@ const SectionSettings = () => {
                 fetchBackpackingConfig().catch(() => null),
                 fetchSummerConfig().catch(() => null),
                 fetchMonsoonConfig().catch(() => null),
-                fetchCommunityConfig().catch(() => null)
+                fetchCommunityConfig().catch(() => null),
+                fetchFestivalConfig().catch(() => null)
             ]);
-            setConfigs({ honeymoon, himalayan, international, india, backpacking, summer, monsoon, community });
+            setConfigs({ honeymoon, himalayan, international, india, backpacking, summer, monsoon, community, festival });
         } catch (err) {
             console.error("Failed to load configs", err);
         }
@@ -156,6 +160,7 @@ const SectionSettings = () => {
             if (type === "summer") await updateSummerConfig(data);
             if (type === "monsoon") await updateMonsoonConfig(data);
             if (type === "community") await updateCommunityConfig(data);
+            if (type === "festival") await updateFestivalConfig(data);
             setMessage(`${type.charAt(0).toUpperCase() + type.slice(1)} section updated successfully!`);
             loadConfigs();
         } catch (err) {
@@ -226,6 +231,12 @@ const SectionSettings = () => {
                     config={configs.community}
                     onUpdate={(data) => handleUpdate("community", data)}
                     loading={loading.community}
+                />
+                <SectionCard
+                    title="Festival Trips"
+                    config={configs.festival}
+                    onUpdate={(data) => handleUpdate("festival", data)}
+                    loading={loading.festival}
                 />
             </div>
         </div>
