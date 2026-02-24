@@ -3,33 +3,32 @@ import { useNavigate } from "react-router-dom";
 import { fetchHoneymoonTrips } from "../../services/api";
 import styles from "./HoneymoonTrips.module.css";
 
+/* Animated heart particle */
 const HeartParticle = ({ delay, left, size, duration }) => (
     <svg
         style={{
             position: "absolute",
             left: `${left}%`,
-            top: "110%",
+            top: "-5%",
             width: `${size}px`,
             height: `${size}px`,
-            opacity: 0.15,
-            filter: "blur(0.5px)",
-            animation: `floatUp ${duration}s linear ${delay}s infinite`,
+            opacity: 0,
+            animation: `heart-float ${duration}s ease-in ${delay}s infinite`,
             pointerEvents: "none",
+            fill: "rgba(63,158,143,0.2)",
         }}
         viewBox="0 0 24 24"
-        fill="#3f9e8f"
     >
         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-        <style>
-            {`
-        @keyframes floatUp {
-          0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-          10% { opacity: 0.3; }
-          90% { opacity: 0.1; }
-          100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
-        }
-      `}
-        </style>
+        <style>{`
+      @keyframes heart-float {
+        0% { transform: translateY(0) scale(0.8); opacity: 0; }
+        10% { opacity: 0.5; }
+        50% { transform: translateY(-40vh) scale(1) translateX(15px); }
+        90% { opacity: 0.2; }
+        100% { transform: translateY(-80vh) scale(0.6) translateX(-10px); opacity: 0; }
+      }
+    `}</style>
     </svg>
 );
 
@@ -43,7 +42,6 @@ const HoneymoonTrips = () => {
     const sectionRef = useRef(null);
     const navigate = useNavigate();
 
-    // Fetch data from backend
     useEffect(() => {
         const load = async () => {
             try {
@@ -53,7 +51,7 @@ const HoneymoonTrips = () => {
                     setTrips(data.trips);
                 }
             } catch {
-                // Silently fail section
+                // Silently fail
             } finally {
                 setLoading(false);
             }
@@ -61,7 +59,6 @@ const HoneymoonTrips = () => {
         load();
     }, []);
 
-    // Entrance animation observer
     useEffect(() => {
         const node = sectionRef.current;
         if (!node) return;
@@ -69,7 +66,7 @@ const HoneymoonTrips = () => {
             ([entry]) => {
                 if (entry.isIntersecting) setIsVisible(true);
             },
-            { threshold: 0.1 }
+            { threshold: 0.08 }
         );
         observer.observe(node);
         return () => observer.disconnect();
@@ -80,22 +77,23 @@ const HoneymoonTrips = () => {
             style: "currency",
             currency: "INR",
             minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
         }).format(price);
     }, []);
 
-    const particles = useMemo(() => {
+    const hearts = useMemo(() => {
         return Array.from({ length: 20 }).map((_, i) => ({
             id: i,
-            delay: Math.random() * 5,
+            delay: Math.random() * 8,
             left: Math.random() * 100,
-            size: 10 + Math.random() * 15,
-            duration: 10 + Math.random() * 10,
+            size: 10 + Math.random() * 12,
+            duration: 6 + Math.random() * 6,
         }));
     }, []);
 
     if (loading || !config || !config.is_enabled || trips.length === 0) return null;
 
-    // Double trips for infinite scroll
+    const scrollSpeed = config.scroll_speed || 60;
     const displayTrips = [...trips, ...trips];
 
     return (
@@ -106,14 +104,19 @@ const HoneymoonTrips = () => {
             <div className={styles.bgDecor}>
                 <div className={styles.bgOrb1} />
                 <div className={styles.bgOrb2} />
+                <div className={styles.bgOrb3} />
                 <div className={styles.bgMesh} />
+                <div className={styles.bgLine} />
+                <div className={styles.bgLine2} />
             </div>
 
             <div className={styles.particles}>
-                {particles.map(p => (
-                    <HeartParticle key={p.id} {...p} />
+                {hearts.map((h) => (
+                    <HeartParticle key={h.id} {...h} />
                 ))}
             </div>
+
+            <div className={styles.topAccent} />
 
             <div className={styles.header}>
                 <div className={styles.labelRow}>
@@ -124,8 +127,12 @@ const HoneymoonTrips = () => {
                     </span>
                     <span className={styles.labelLine} />
                 </div>
-                <h2 className={styles.title}>{config.title}</h2>
-                {config.subtitle && <p className={styles.subtitle}>{config.subtitle}</p>}
+                <h2 className={styles.title}>
+                    {config.title || "Honeymoon Trips"}
+                </h2>
+                {config.subtitle && (
+                    <p className={styles.subtitle}>{config.subtitle}</p>
+                )}
                 <div className={styles.headerUnderline}>
                     <span className={styles.underlineDot} />
                 </div>
@@ -142,7 +149,7 @@ const HoneymoonTrips = () => {
                 <div
                     className={styles.track}
                     style={{
-                        animationDuration: `${config.scroll_speed || 60}s`,
+                        animationDuration: `${scrollSpeed}s`,
                         animationPlayState: isPaused ? "paused" : "running",
                     }}
                 >
@@ -153,6 +160,11 @@ const HoneymoonTrips = () => {
                             onClick={() => navigate(`/trips/${trip.id}`)}
                             onMouseEnter={() => setActiveCard(`${trip.id}-${i}`)}
                             onMouseLeave={() => setActiveCard(null)}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) =>
+                                e.key === "Enter" && navigate(`/trips/${trip.id}`)
+                            }
                         >
                             <div className={styles.cardGlow} />
 
@@ -162,37 +174,42 @@ const HoneymoonTrips = () => {
                                     alt={trip.title}
                                     className={styles.cardImage}
                                     loading="lazy"
+                                    decoding="async"
                                 />
                                 <div className={styles.cardOverlay} />
+                                <div className={styles.cardOverlayVignette} />
 
-                                {trip.country && (
-                                    <span className={styles.countryBadge}>
-                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                            <circle cx="12" cy="12" r="10" />
-                                            <line x1="2" y1="12" x2="22" y2="12" />
-                                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                                {trip.location && (
+                                    <span className={styles.stateBadge}>
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                            <circle cx="12" cy="10" r="3" />
                                         </svg>
-                                        {trip.country}
+                                        {trip.location}
                                     </span>
                                 )}
 
-                                <span className={styles.durationPill}>
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                        <circle cx="12" cy="12" r="10" />
-                                        <polyline points="12 6 12 12 16 14" />
-                                    </svg>
-                                    {trip.duration_days} Days
-                                </span>
+                                {trip.duration_days && (
+                                    <span className={styles.durationPill}>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <circle cx="12" cy="12" r="10" />
+                                            <polyline points="12 6 12 12 16 14" />
+                                        </svg>
+                                        {trip.duration_days} Days
+                                    </span>
+                                )}
 
                                 <div className={styles.priceWrap}>
-                                    <span className={styles.priceFrom}>Starting at</span>
-                                    <span className={styles.priceAmount}>{formatPrice(trip.price)}</span>
+                                    <span className={styles.priceFrom}>from</span>
+                                    <span className={styles.priceAmount}>
+                                        {formatPrice(trip.price)}
+                                    </span>
                                 </div>
 
                                 <div className={styles.imageContent}>
                                     <h3 className={styles.cardTitle}>{trip.title}</h3>
                                     <div className={styles.cardLocation}>
-                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                                             <circle cx="12" cy="10" r="3" />
                                         </svg>
@@ -202,22 +219,32 @@ const HoneymoonTrips = () => {
                             </div>
 
                             <div className={styles.cardBody}>
-                                {trip.short_description && <p className={styles.cardDesc}>{trip.short_description}</p>}
+                                {trip.short_description && (
+                                    <p className={styles.cardDesc}>{trip.short_description}</p>
+                                )}
                                 <div className={styles.cardFooter}>
                                     <span className={styles.cardCta}>
-                                        Unlock Romance
-                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                        View Package
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                             <line x1="5" y1="12" x2="19" y2="12" />
                                             <polyline points="12 5 19 12 12 19" />
                                         </svg>
                                     </span>
-                                    <div className={styles.cardDivider} />
-                                    <span className={styles.cardPriceSmall}>{formatPrice(trip.price)}</span>
+                                    <span className={styles.cardDivider} />
+                                    <span className={styles.cardPriceSmall}>
+                                        {formatPrice(trip.price)}
+                                    </span>
                                 </div>
                             </div>
                         </div>
                     ))}
                 </div>
+            </div>
+
+            <div className={styles.bottomWave}>
+                <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <path d="M0 60V30C240 5 480 0 720 10C960 20 1200 45 1440 30V60H0Z" fill="currentColor" />
+                </svg>
             </div>
         </section>
     );

@@ -3,34 +3,33 @@ import { useNavigate } from "react-router-dom";
 import { fetchHimalayanTrips } from "../../services/api";
 import styles from "./HimalayanTreks.module.css";
 
+/* Snowflake particle */
 const Snowflake = ({ delay, left, size, duration }) => (
-    <svg
+    <div
         style={{
             position: "absolute",
             left: `${left}%`,
-            top: "-10%",
+            top: "-5%",
             width: `${size}px`,
             height: `${size}px`,
-            opacity: 0.3,
-            filter: "blur(0.3px)",
-            animation: `fall ${duration}s linear ${delay}s infinite`,
+            background: "#fff",
+            borderRadius: "50%",
+            opacity: 0,
+            filter: "blur(0.5px)",
+            animation: `snow-fall ${duration}s linear ${delay}s infinite`,
             pointerEvents: "none",
         }}
-        viewBox="0 0 24 24"
-        fill="#a2d2ff"
     >
-        <path d="M19,12L17.5,12.87L19,14V16.13L17.5,15.26L16.5,17L14.77,16L15.77,14.26L13,12.67V15H15V17H13V21H11V17H9V15H11V12.67L8.23,14.26L9.23,16L7.5,17L6.5,15.26L5,16.13V14L6.5,12.87L5,12L6.5,11.13L5,10V7.87L6.5,8.74L7.5,7L9.23,8L8.23,9.74L11,11.33V9H9V7H11V3H13V7H15V9H13V11.33L15.77,9.74L14.77,8L16.5,7L17.5,8.74L19,7.87V10L17.5,11.13L19,12Z" />
-        <style>
-            {`
-        @keyframes fall {
-          0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-          10% { opacity: 0.4; }
-          90% { opacity: 0.4; }
-          100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-        }
-      `}
-        </style>
-    </svg>
+        <style>{`
+      @keyframes snow-fall {
+        0% { transform: translateY(0) translateX(0); opacity: 0; }
+        10% { opacity: 0.5; }
+        50% { transform: translateY(50vh) translateX(20px); }
+        90% { opacity: 0.3; }
+        100% { transform: translateY(110vh) translateX(-10px); opacity: 0; }
+      }
+    `}</style>
+    </div>
 );
 
 const HimalayanTreks = () => {
@@ -39,10 +38,10 @@ const HimalayanTreks = () => {
     const [loading, setLoading] = useState(true);
     const [isVisible, setIsVisible] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
+    const [activeCard, setActiveCard] = useState(null);
     const sectionRef = useRef(null);
     const navigate = useNavigate();
 
-    // Fetch data from backend
     useEffect(() => {
         const load = async () => {
             try {
@@ -52,7 +51,7 @@ const HimalayanTreks = () => {
                     setTrips(data.trips);
                 }
             } catch {
-                // Silently fail section
+                // Silently fail
             } finally {
                 setLoading(false);
             }
@@ -60,7 +59,6 @@ const HimalayanTreks = () => {
         load();
     }, []);
 
-    // Entrance animation observer
     useEffect(() => {
         const node = sectionRef.current;
         if (!node) return;
@@ -68,7 +66,7 @@ const HimalayanTreks = () => {
             ([entry]) => {
                 if (entry.isIntersecting) setIsVisible(true);
             },
-            { threshold: 0.1 }
+            { threshold: 0.08 }
         );
         observer.observe(node);
         return () => observer.disconnect();
@@ -79,6 +77,7 @@ const HimalayanTreks = () => {
             style: "currency",
             currency: "INR",
             minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
         }).format(price);
     }, []);
 
@@ -87,14 +86,14 @@ const HimalayanTreks = () => {
             id: i,
             delay: Math.random() * 10,
             left: Math.random() * 100,
-            size: 5 + Math.random() * 12,
-            duration: 8 + Math.random() * 12,
+            size: 2 + Math.random() * 4,
+            duration: 6 + Math.random() * 8,
         }));
     }, []);
 
     if (loading || !config || !config.is_enabled || trips.length === 0) return null;
 
-    // Double trips for infinite scroll
+    const scrollSpeed = config.scroll_speed || 60;
     const displayTrips = [...trips, ...trips];
 
     return (
@@ -105,26 +104,38 @@ const HimalayanTreks = () => {
             <div className={styles.bgDecor}>
                 <div className={styles.bgOrb1} />
                 <div className={styles.bgOrb2} />
+                <div className={styles.bgOrb3} />
                 <div className={styles.bgMesh} />
+                <div className={styles.bgLine} />
+                <div className={styles.bgLine2} />
             </div>
 
             <div className={styles.particles}>
-                {snowflakes.map(s => (
+                {snowflakes.map((s) => (
                     <Snowflake key={s.id} {...s} />
                 ))}
             </div>
+
+            <div className={styles.topAccent} />
 
             <div className={styles.header}>
                 <div className={styles.labelRow}>
                     <span className={styles.labelLine} />
                     <span className={styles.label}>
                         <span className={styles.labelDot} />
-                        Mountain Quest
+                        Himalayan Collection
                     </span>
                     <span className={styles.labelLine} />
                 </div>
-                <h2 className={styles.title}>{config.title}</h2>
-                {config.subtitle && <p className={styles.subtitle}>{config.subtitle}</p>}
+                <h2 className={styles.title}>
+                    {config.title || "Himalayan Treks"}
+                </h2>
+                {config.subtitle && (
+                    <p className={styles.subtitle}>{config.subtitle}</p>
+                )}
+                <div className={styles.headerUnderline}>
+                    <span className={styles.underlineDot} />
+                </div>
             </div>
 
             <div
@@ -138,64 +149,102 @@ const HimalayanTreks = () => {
                 <div
                     className={styles.track}
                     style={{
-                        animationDuration: `${config.scroll_speed || 60}s`,
+                        animationDuration: `${scrollSpeed}s`,
                         animationPlayState: isPaused ? "paused" : "running",
                     }}
                 >
                     {displayTrips.map((trip, i) => (
                         <div
                             key={`${trip.id}-${i}`}
-                            className={styles.card}
+                            className={`${styles.card} ${activeCard === `${trip.id}-${i}` ? styles.cardActive : ""}`}
                             onClick={() => navigate(`/trips/${trip.id}`)}
+                            onMouseEnter={() => setActiveCard(`${trip.id}-${i}`)}
+                            onMouseLeave={() => setActiveCard(null)}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) =>
+                                e.key === "Enter" && navigate(`/trips/${trip.id}`)
+                            }
                         >
+                            <div className={styles.cardGlow} />
+
                             <div className={styles.cardImageWrap}>
                                 <img
                                     src={trip.image}
                                     alt={trip.title}
                                     className={styles.cardImage}
                                     loading="lazy"
+                                    decoding="async"
                                 />
                                 <div className={styles.cardOverlay} />
+                                <div className={styles.cardOverlayVignette} />
 
                                 {trip.location && (
-                                    <span className={styles.altitudeBadge}>
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                            <path d="M8 18l4-4 4 4" />
-                                            <path d="M12 2l10 18H2L12 2z" />
+                                    <span className={styles.stateBadge}>
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                            <circle cx="12" cy="10" r="3" />
                                         </svg>
-                                        Himalayas
+                                        {trip.location}
                                     </span>
                                 )}
 
-                                <span className={styles.durationPill}>
-                                    {trip.duration_days} Days
-                                </span>
-                            </div>
+                                {trip.duration_days && (
+                                    <span className={styles.durationPill}>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <circle cx="12" cy="12" r="10" />
+                                            <polyline points="12 6 12 12 16 14" />
+                                        </svg>
+                                        {trip.duration_days} Days
+                                    </span>
+                                )}
 
-                            <div className={styles.cardBody}>
-                                <div>
+                                <div className={styles.priceWrap}>
+                                    <span className={styles.priceFrom}>from</span>
+                                    <span className={styles.priceAmount}>
+                                        {formatPrice(trip.price)}
+                                    </span>
+                                </div>
+
+                                <div className={styles.imageContent}>
                                     <h3 className={styles.cardTitle}>{trip.title}</h3>
                                     <div className={styles.cardLocation}>
-                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                                             <circle cx="12" cy="10" r="3" />
                                         </svg>
                                         {trip.location}
                                     </div>
-                                    {trip.short_description && <p className={styles.cardDesc}>{trip.short_description}</p>}
                                 </div>
+                            </div>
 
+                            <div className={styles.cardBody}>
+                                {trip.short_description && (
+                                    <p className={styles.cardDesc}>{trip.short_description}</p>
+                                )}
                                 <div className={styles.cardFooter}>
-                                    <div className={styles.priceInfo}>
-                                        <span className={styles.priceLabel}>From</span>
-                                        <span className={styles.priceValue}>{formatPrice(trip.price)}</span>
-                                    </div>
-                                    <button className={styles.ctaBtn}>View Trek</button>
+                                    <span className={styles.cardCta}>
+                                        Explore Trek
+                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <line x1="5" y1="12" x2="19" y2="12" />
+                                            <polyline points="12 5 19 12 12 19" />
+                                        </svg>
+                                    </span>
+                                    <span className={styles.cardDivider} />
+                                    <span className={styles.cardPriceSmall}>
+                                        {formatPrice(trip.price)}
+                                    </span>
                                 </div>
                             </div>
                         </div>
                     ))}
                 </div>
+            </div>
+
+            <div className={styles.bottomWave}>
+                <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    <path d="M0 60V30C240 5 480 0 720 10C960 20 1200 45 1440 30V60H0Z" fill="currentColor" />
+                </svg>
             </div>
         </section>
     );
