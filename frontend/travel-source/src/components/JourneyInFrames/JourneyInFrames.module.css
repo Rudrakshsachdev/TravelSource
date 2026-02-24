@@ -1,0 +1,302 @@
+/* ================================================================
+   Journey in Frames  — matches WhyChooseUs design language
+   Theme: teal / aqua, Playfair + Montserrat + Inter
+   ================================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap");
+
+/* ---------- Section ---------- */
+.section {
+  padding: 100px 0 80px;
+  background: linear-gradient(168deg, #f2faf8 0%, #e8f6f3 100%);
+  position: relative;
+  overflow: hidden;
+
+  /* Scroll-in animation */
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.section.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Subtle diagonal line pattern */
+.bgPattern {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(63, 158, 143, 0.03) 0px,
+    rgba(63, 158, 143, 0.03) 1px,
+    transparent 1px,
+    transparent 60px
+  );
+  pointer-events: none;
+}
+
+.container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 40px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Header ---------- */
+.header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+.title {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  letter-spacing: 6px;
+  color: #1a3a35;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 1.05rem;
+  color: #4a7a72;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+/* ---------- Carousel Root ---------- */
+.carouselRoot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+/* ---------- Viewport ---------- */
+.viewport {
+  flex: 1;
+  overflow: hidden;
+  /* Padding so scaled/rotated cards aren't clipped */
+  padding: 48px 0;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.viewport:active {
+  cursor: grabbing;
+}
+
+/* ---------- Track ---------- */
+.track {
+  display: flex;
+  gap: 24px;
+  will-change: transform;
+  /* transition injected inline for drag-disable */
+}
+
+/* ---------- Card ---------- */
+.card {
+  position: relative;
+  flex: 0 0 300px;
+  height: 440px;
+  border-radius: 18px;
+  overflow: hidden;
+  /* White picture-frame border — matches reference */
+  border: 5px solid #ffffff;
+  box-shadow:
+    0 8px 24px rgba(30, 80, 70, 0.10),
+    0 2px 6px rgba(0, 0, 0, 0.06);
+  background: #e0f0ec;
+  transition:
+    box-shadow 0.45s ease,
+    border-color 0.3s ease;
+  will-change: transform;
+}
+
+.card:hover {
+  box-shadow:
+    0 24px 56px rgba(30, 80, 70, 0.18),
+    0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: rgba(63, 158, 143, 0.5);
+}
+
+/* ---------- Image ---------- */
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.7s cubic-bezier(0.25, 0.8, 0.25, 1);
+  pointer-events: none;
+}
+
+.card:hover .img {
+  transform: scale(1.07);
+}
+
+/* ---------- Gradient overlay ---------- */
+.gradientOverlay {
+  position: absolute;
+  inset: 0;
+  /* Strong gradient only at bottom for location tag readability */
+  background: linear-gradient(
+    to top,
+    rgba(10, 40, 35, 0.68) 0%,
+    rgba(10, 40, 35, 0.2) 30%,
+    transparent 60%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ---------- Location tag ---------- */
+.locationTag {
+  position: absolute;
+  bottom: 20px;
+  left: 18px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px) saturate(1.4);
+  -webkit-backdrop-filter: blur(10px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 30px;
+  padding: 7px 14px;
+  color: #ffffff;
+  font-family: "Inter", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover .locationTag {
+  background: rgba(63, 158, 143, 0.85);
+  transform: translateY(-3px);
+}
+
+.pin {
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+/* ---------- Nav Arrows ---------- */
+.arrow {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: #ffffff;
+  color: #3f9e8f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(30, 80, 70, 0.14);
+  transition: background 0.3s ease, color 0.3s ease, transform 0.25s ease, box-shadow 0.3s ease;
+  z-index: 20;
+}
+
+.arrow:hover:not(:disabled) {
+  background: #3f9e8f;
+  color: #ffffff;
+  transform: scale(1.12);
+  box-shadow: 0 8px 28px rgba(63, 158, 143, 0.35);
+}
+
+.arrow:disabled {
+  opacity: 0.28;
+  cursor: default;
+  pointer-events: none;
+}
+
+.arrowLeft { margin-right: 16px; }
+.arrowRight { margin-left: 16px; }
+
+/* ---------- Dots ---------- */
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 36px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(63, 158, 143, 0.25);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.3s ease, width 0.3s ease, border-radius 0.3s ease;
+}
+
+.dot.dotActive {
+  width: 24px;
+  border-radius: 4px;
+  background: #3f9e8f;
+}
+
+/* ================================================================
+   Responsive
+   ================================================================ */
+
+@media (max-width: 1100px) {
+  .card { flex: 0 0 260px; height: 390px; }
+}
+
+@media (max-width: 840px) {
+  .container { padding: 0 24px; }
+  .card { flex: 0 0 240px; height: 360px; }
+  .arrowLeft { margin-right: 10px; }
+  .arrowRight { margin-left: 10px; }
+}
+
+@media (max-width: 600px) {
+  .section { padding: 64px 0 56px; }
+  .container { padding: 0 0; }
+  .header { padding: 0 20px; }
+  .title { letter-spacing: 3px; }
+
+  /* On mobile: native scroll, no JS offsets */
+  .carouselRoot {
+    flex-direction: column;
+    gap: 0;
+  }
+  .arrow { display: none; }
+
+  .viewport {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding: 24px 20px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .viewport::-webkit-scrollbar { display: none; }
+
+  .track {
+    /* On mobile override JS transform with native scroll */
+    transform: none !important;
+    transition: none !important;
+    gap: 16px;
+  }
+
+  .card {
+    flex: 0 0 82vw;
+    height: 400px;
+    scroll-snap-align: center;
+    /* Disable 3-D tilt on mobile for smooth scrolling */
+    transform: none !important;
+  }
+}
