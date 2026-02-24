@@ -17,5 +17,6 @@ from .himalayan_serializer import HimalayanTripSerializer, HimalayanSectionConfi
 from .backpacking_serializer import BackpackingTripSerializer, BackpackingSectionConfigSerializer
 from .summer_serializer import SummerTripSerializer, SummerSectionConfigSerializer
 from .monsoon_serializer import MonsoonTripSerializer, MonsoonSectionConfigSerializer
+from .community_serializer import CommunityTripSerializer, CommunitySectionConfigSerializer
 from .category_serializer import CategorySerializer
 

@@ -72,6 +72,10 @@ class Trip(models.Model):
     show_in_monsoon_section = models.BooleanField(default=False, help_text="Show in the scrolling Monsoon section")
     monsoon_display_order = models.IntegerField(default=0, help_text="Order in the Monsoon section (lower = first)")
 
+    is_community_trip = models.BooleanField(default=False, help_text="Mark as Community trip")
+    show_in_community_section = models.BooleanField(default=False, help_text="Show in the scrolling Community section")
+    community_display_order = models.IntegerField(default=0, help_text="Order in the Community section (lower = first)")
+
 
     def __str__(self):
         return self.title
@@ -374,8 +378,25 @@ class MonsoonSectionConfig(models.Model):
         verbose_name = "Monsoon Section Config"
         verbose_name_plural = "Monsoon Section Config"
 
+    @classmethod
+    def load(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+
+class CommunitySectionConfig(models.Model):
+    """Singleton settings for the Community Trips showcase section."""
+    is_enabled = models.BooleanField(default=True, help_text="Enable the Community trips scrolling section")
+    title = models.CharField(max_length=200, default="Social Community Trips")
+    subtitle = models.CharField(max_length=300, blank=True, default="", help_text="Optional subtitle below the heading")
+    scroll_speed = models.PositiveIntegerField(default=60, help_text="Animation duration in seconds (higher = slower)")
+
+    class Meta:
+        verbose_name = "Community Section Config"
+        verbose_name_plural = "Community Section Config"
+
     def __str__(self):
-        return f"Monsoon Section ({'Enabled' if self.is_enabled else 'Disabled'})"
+        return f"Community Section ({'Enabled' if self.is_enabled else 'Disabled'})"
 
     def save(self, *args, **kwargs):
         # Enforce singleton: always use pk=1

@@ -762,6 +762,38 @@ export const updateMonsoonConfig = async (data) => {
   return res.json();
 };
 
+/** Fetch Community trips + section config for the scrolling showcase */
+export const fetchCommunityTrips = async () => {
+  const res = await fetch(`${API_BASE_URL}/v1/trips/community/`);
+  if (!res.ok) throw new Error("Failed to fetch Community trips");
+  return res.json();
+};
+
+/** Fetch Community section config (ADMIN) */
+export const fetchCommunityConfig = async () => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/community-config/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Failed to fetch Community config");
+  return res.json();
+};
+
+/** Update Community section config (ADMIN) */
+export const updateCommunityConfig = async (data) => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/community-config/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to update Community config");
+  return res.json();
+};
+
 
 
 

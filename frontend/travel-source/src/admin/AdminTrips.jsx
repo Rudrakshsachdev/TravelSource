@@ -56,6 +56,9 @@ const AdminTrips = () => {
     is_monsoon_trek: false,
     show_in_monsoon_section: false,
     monsoon_display_order: 0,
+    is_community_trip: false,
+    show_in_community_section: false,
+    community_display_order: 0,
     category: "",
 
   });
@@ -219,6 +222,9 @@ const AdminTrips = () => {
       is_monsoon_trek: trip.is_monsoon_trek || false,
       show_in_monsoon_section: trip.show_in_monsoon_section || false,
       monsoon_display_order: trip.monsoon_display_order || 0,
+      is_community_trip: trip.is_community_trip || false,
+      show_in_community_section: trip.show_in_community_section || false,
+      community_display_order: trip.community_display_order || 0,
       category: trip.category || "",
 
     });
@@ -267,6 +273,9 @@ const AdminTrips = () => {
       is_monsoon_trek: false,
       show_in_monsoon_section: false,
       monsoon_display_order: 0,
+      is_community_trip: false,
+      show_in_community_section: false,
+      community_display_order: 0,
       category: "",
 
     });
@@ -306,6 +315,7 @@ const AdminTrips = () => {
         backpacking_display_order: Number(formData.backpacking_display_order) || 0,
         summer_display_order: Number(formData.summer_display_order) || 0,
         monsoon_display_order: Number(formData.monsoon_display_order) || 0,
+        community_display_order: Number(formData.community_display_order) || 0,
         itinerary,
 
         highlights,
@@ -798,6 +808,45 @@ const AdminTrips = () => {
                         type="number"
                         name="monsoon_display_order"
                         value={formData.monsoon_display_order}
+                        onChange={handleChange}
+                        className={styles.input}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Community Section Fields */}
+                  <div className={styles.sectionHeader}>
+                    <h3 className={styles.sectionTitle}>Community Showcase</h3>
+                  </div>
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="is_community_trip"
+                        checked={formData.is_community_trip}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Mark as Community Trip
+                    </label>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="show_in_community_section"
+                        checked={formData.show_in_community_section}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Show in Community Section
+                    </label>
+                  </div>
+                  <div className={styles.formGrid}>
+                    <div className={styles.inputGroup}>
+                      <label className={styles.inputLabel}>Community Display Order</label>
+                      <input
+                        type="number"
+                        name="community_display_order"
+                        value={formData.community_display_order}
                         onChange={handleChange}
                         className={styles.input}
                       />
@@ -1820,6 +1869,21 @@ const AdminTrips = () => {
                             }}
                           >
                             🌧️ Monsoon
+                          </span>
+                        )}
+                        {trip.is_community_trip && (
+                          <span
+                            className={styles.metaItem}
+                            style={{
+                              background: "rgba(251,191,36,0.1)",
+                              color: "#d97706",
+                              padding: "2px 8px",
+                              borderRadius: "12px",
+                              fontSize: "0.75rem",
+                              fontWeight: 600,
+                            }}
+                          >
+                            🌅 Social Community
                           </span>
                         )}
 

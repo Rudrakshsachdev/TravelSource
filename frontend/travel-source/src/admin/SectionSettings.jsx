@@ -6,7 +6,8 @@ import {
     fetchIndiaConfig, updateIndiaConfig,
     fetchBackpackingConfig, updateBackpackingConfig,
     fetchSummerConfig, updateSummerConfig,
-    fetchMonsoonConfig, updateMonsoonConfig
+    fetchMonsoonConfig, updateMonsoonConfig,
+    fetchCommunityConfig, updateCommunityConfig
 } from "../services/api";
 import styles from "./SectionSettings.module.css";
 
@@ -106,7 +107,8 @@ const SectionSettings = () => {
         india: null,
         backpacking: null,
         summer: null,
-        monsoon: null
+        monsoon: null,
+        community: null
     });
     const [loading, setLoading] = useState({
         honeymoon: false,
@@ -115,22 +117,24 @@ const SectionSettings = () => {
         india: false,
         backpacking: false,
         summer: false,
-        monsoon: false
+        monsoon: false,
+        community: false
     });
     const [message, setMessage] = useState("");
 
     const loadConfigs = async () => {
         try {
-            const [honeymoon, himalayan, international, india, backpacking, summer, monsoon] = await Promise.all([
+            const [honeymoon, himalayan, international, india, backpacking, summer, monsoon, community] = await Promise.all([
                 fetchHoneymoonConfig().catch(() => null),
                 fetchHimalayanConfig().catch(() => null),
                 fetchInternationalConfig().catch(() => null),
                 fetchIndiaConfig().catch(() => null),
                 fetchBackpackingConfig().catch(() => null),
                 fetchSummerConfig().catch(() => null),
-                fetchMonsoonConfig().catch(() => null)
+                fetchMonsoonConfig().catch(() => null),
+                fetchCommunityConfig().catch(() => null)
             ]);
-            setConfigs({ honeymoon, himalayan, international, india, backpacking, summer, monsoon });
+            setConfigs({ honeymoon, himalayan, international, india, backpacking, summer, monsoon, community });
         } catch (err) {
             console.error("Failed to load configs", err);
         }
@@ -151,6 +155,7 @@ const SectionSettings = () => {
             if (type === "backpacking") await updateBackpackingConfig(data);
             if (type === "summer") await updateSummerConfig(data);
             if (type === "monsoon") await updateMonsoonConfig(data);
+            if (type === "community") await updateCommunityConfig(data);
             setMessage(`${type.charAt(0).toUpperCase() + type.slice(1)} section updated successfully!`);
             loadConfigs();
         } catch (err) {
@@ -215,6 +220,12 @@ const SectionSettings = () => {
                     config={configs.monsoon}
                     onUpdate={(data) => handleUpdate("monsoon", data)}
                     loading={loading.monsoon}
+                />
+                <SectionCard
+                    title="Community Trips"
+                    config={configs.community}
+                    onUpdate={(data) => handleUpdate("community", data)}
+                    loading={loading.community}
                 />
             </div>
         </div>

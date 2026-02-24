@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Trip, Profile, Enquiry, SiteStat, InternationalSectionConfig, IndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, Category
+from .models import Trip, Profile, Enquiry, SiteStat, InternationalSectionConfig, IndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, Category
 # Register your models here.
 
 
@@ -20,6 +20,8 @@ class TripAdmin(admin.ModelAdmin):
         "is_himalayan_trek", "show_in_himalayan_section", "himalayan_display_order",
         "is_backpacking_trip", "show_in_backpacking_section", "backpacking_display_order",
         "is_summer_trek", "show_in_summer_section", "summer_display_order",
+        "is_monsoon_trek", "show_in_monsoon_section", "monsoon_display_order",
+        "is_community_trip", "show_in_community_section", "community_display_order",
     )
     list_filter = ("is_active", "category", "is_international", "show_in_international_section", "is_india_trip", "show_in_india_section")
     list_editable = (
@@ -29,6 +31,8 @@ class TripAdmin(admin.ModelAdmin):
         "is_himalayan_trek", "show_in_himalayan_section", "himalayan_display_order",
         "is_backpacking_trip", "show_in_backpacking_section", "backpacking_display_order",
         "is_summer_trek", "show_in_summer_section", "summer_display_order",
+        "is_monsoon_trek", "show_in_monsoon_section", "monsoon_display_order",
+        "is_community_trip", "show_in_community_section", "community_display_order",
     )
     search_fields = ("title", "location", "country", "state")
     ordering = ("display_order", "-id")
@@ -66,6 +70,10 @@ class TripAdmin(admin.ModelAdmin):
         ("Monsoon Showcase", {
             "fields": ("is_monsoon_trek", "show_in_monsoon_section", "monsoon_display_order"),
             "description": "Control how this trip appears in the Monsoon Treks scrolling section.",
+        }),
+        ("Community Showcase", {
+            "fields": ("is_community_trip", "show_in_community_section", "community_display_order"),
+            "description": "Control how this trip appears in the Community Trips scrolling section.",
         }),
 
         ("Status", {
@@ -152,6 +160,17 @@ class MonsoonSectionConfigAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return not MonsoonSectionConfig.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+@admin.register(CommunitySectionConfig)
+class CommunitySectionConfigAdmin(admin.ModelAdmin):
+    list_display = ("title", "is_enabled", "scroll_speed")
+    list_editable = ("is_enabled", "scroll_speed")
+
+    def has_add_permission(self, request):
+        return not CommunitySectionConfig.objects.exists()
 
     def has_delete_permission(self, request, obj=None):
         return False
