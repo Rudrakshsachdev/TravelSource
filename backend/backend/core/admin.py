@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Trip, Profile, Enquiry, SiteStat, InternationalSectionConfig, IndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, Category
+from .models import Trip, Profile, Enquiry, SiteStat, InternationalSectionConfig, IndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, Category
 # Register your models here.
 
 
@@ -62,6 +62,10 @@ class TripAdmin(admin.ModelAdmin):
         ("Summer Showcase", {
             "fields": ("is_summer_trek", "show_in_summer_section", "summer_display_order"),
             "description": "Control how this trip appears in the Summer Treks scrolling section.",
+        }),
+        ("Monsoon Showcase", {
+            "fields": ("is_monsoon_trek", "show_in_monsoon_section", "monsoon_display_order"),
+            "description": "Control how this trip appears in the Monsoon Treks scrolling section.",
         }),
 
         ("Status", {
@@ -136,6 +140,18 @@ class SummerSectionConfigAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return not SummerSectionConfig.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(MonsoonSectionConfig)
+class MonsoonSectionConfigAdmin(admin.ModelAdmin):
+    list_display = ("title", "is_enabled", "scroll_speed")
+    list_editable = ("is_enabled", "scroll_speed")
+
+    def has_add_permission(self, request):
+        return not MonsoonSectionConfig.objects.exists()
 
     def has_delete_permission(self, request, obj=None):
         return False

@@ -53,6 +53,9 @@ const AdminTrips = () => {
     is_summer_trek: false,
     show_in_summer_section: false,
     summer_display_order: 0,
+    is_monsoon_trek: false,
+    show_in_monsoon_section: false,
+    monsoon_display_order: 0,
     category: "",
 
   });
@@ -213,6 +216,9 @@ const AdminTrips = () => {
       is_summer_trek: trip.is_summer_trek || false,
       show_in_summer_section: trip.show_in_summer_section || false,
       summer_display_order: trip.summer_display_order || 0,
+      is_monsoon_trek: trip.is_monsoon_trek || false,
+      show_in_monsoon_section: trip.show_in_monsoon_section || false,
+      monsoon_display_order: trip.monsoon_display_order || 0,
       category: trip.category || "",
 
     });
@@ -258,6 +264,9 @@ const AdminTrips = () => {
       is_summer_trek: false,
       show_in_summer_section: false,
       summer_display_order: 0,
+      is_monsoon_trek: false,
+      show_in_monsoon_section: false,
+      monsoon_display_order: 0,
       category: "",
 
     });
@@ -296,6 +305,7 @@ const AdminTrips = () => {
         himalayan_display_order: Number(formData.himalayan_display_order) || 0,
         backpacking_display_order: Number(formData.backpacking_display_order) || 0,
         summer_display_order: Number(formData.summer_display_order) || 0,
+        monsoon_display_order: Number(formData.monsoon_display_order) || 0,
         itinerary,
 
         highlights,
@@ -749,6 +759,45 @@ const AdminTrips = () => {
                         type="number"
                         name="summer_display_order"
                         value={formData.summer_display_order}
+                        onChange={handleChange}
+                        className={styles.input}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Monsoon Section Fields */}
+                  <div className={styles.sectionHeader}>
+                    <h3 className={styles.sectionTitle}>Monsoon Showcase</h3>
+                  </div>
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="is_monsoon_trek"
+                        checked={formData.is_monsoon_trek}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Mark as Monsoon Trek
+                    </label>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="show_in_monsoon_section"
+                        checked={formData.show_in_monsoon_section}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Show in Monsoon Section
+                    </label>
+                  </div>
+                  <div className={styles.formGrid}>
+                    <div className={styles.inputGroup}>
+                      <label className={styles.inputLabel}>Monsoon Display Order</label>
+                      <input
+                        type="number"
+                        name="monsoon_display_order"
+                        value={formData.monsoon_display_order}
                         onChange={handleChange}
                         className={styles.input}
                       />
@@ -1756,6 +1805,21 @@ const AdminTrips = () => {
                             }}
                           >
                             ☀️ Summer
+                          </span>
+                        )}
+                        {trip.is_monsoon_trek && (
+                          <span
+                            className={styles.metaItem}
+                            style={{
+                              background: "rgba(13,148,136,0.1)",
+                              color: "#0d9488",
+                              padding: "2px 8px",
+                              borderRadius: "12px",
+                              fontSize: "0.75rem",
+                              fontWeight: 600,
+                            }}
+                          >
+                            🌧️ Monsoon
                           </span>
                         )}
 

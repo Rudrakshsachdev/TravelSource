@@ -13,6 +13,7 @@ import HoneymoonTrips from "./HoneymoonTrips";
 import HimalayanTreks from "./HimalayanTreks";
 import BackpackingTrips from "./BackpackingTrips";
 import SummerTreks from "./SummerTreks";
+import MonsoonTreks from "./MonsoonTreks";
 import CategoryNav from "./CategoryNav";
 import AnimatedMap from "../AnimatedMap/AnimatedMap";
 
@@ -367,6 +368,7 @@ const TripsList = () => {
       <HimalayanTreks />
       <BackpackingTrips />
       <SummerTreks />
+      <MonsoonTreks />
 
       {/* Premium Animated Map Section */}
       <AnimatedMap />
@@ -493,6 +495,7 @@ const TripsList = () => {
                       "cultural",
                       "beach",
                       "mountain",
+                      "monsoon",
                     ].map((filter) => (
                       <button
                         key={filter}

@@ -733,6 +733,35 @@ export const updateSummerConfig = async (data) => {
   return res.json();
 };
 
+export const fetchMonsoonTrips = async () => {
+  const res = await fetch(`${API_BASE_URL}/v1/trips/monsoon/`);
+  if (!res.ok) throw new Error("Failed to fetch Monsoon trips");
+  return res.json();
+};
+
+export const fetchMonsoonConfig = async () => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/monsoon-config/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Failed to fetch Monsoon config");
+  return res.json();
+};
+
+export const updateMonsoonConfig = async (data) => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/monsoon-config/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to update Monsoon config");
+  return res.json();
+};
+
 
 
 
