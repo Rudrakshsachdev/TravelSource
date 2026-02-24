@@ -74,10 +74,13 @@ const CommunityTrips = () => {
 
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <div className={styles.titleWrapper}>
-                        <Users className={styles.titleIcon} size={32} />
-                        <h2 className={styles.title}>{config?.title || "Social Community Trips"}</h2>
+                    <div className={styles.eyebrow}>
+                        <Users size={10} strokeWidth={2.5} />
+                        Community Vibe
                     </div>
+                    <h2 className={styles.title}>
+                        {config?.title || "Social "}<span className={styles.titleAccent}>Community Trips</span>
+                    </h2>
                     {config?.subtitle && <p className={styles.subtitle}>{config.subtitle}</p>}
                 </div>
 

@@ -74,10 +74,13 @@ const FestivalTrips = () => {
 
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <div className={styles.titleWrapper}>
-                        <Sparkles className={styles.titleIcon} size={40} />
-                        <h2 className={styles.title}>{config?.title || "Celebrate Festival Trips"}</h2>
+                    <div className={styles.eyebrow}>
+                        <Sparkles size={10} strokeWidth={2.5} />
+                        Festive Special
                     </div>
+                    <h2 className={styles.title}>
+                        {config?.title || "Celebrate "}<span className={styles.titleAccent}>Festival Trips</span>
+                    </h2>
                     {config?.subtitle && <p className={styles.subtitle}>{config.subtitle}</p>}
                 </div>
 

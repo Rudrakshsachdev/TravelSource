@@ -73,10 +73,13 @@ const MonsoonTreks = () => {
 
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <div className={styles.titleWrapper}>
-                        <CloudRain className={styles.titleIcon} size={32} />
-                        <h2 className={styles.title}>{config?.title || "Misty Monsoon Treks"}</h2>
+                    <div className={styles.eyebrow}>
+                        <CloudRain size={10} strokeWidth={2.5} />
+                        Monsoon Special
                     </div>
+                    <h2 className={styles.title}>
+                        {config?.title || "Misty "}<span className={styles.titleAccent}>Monsoon Treks</span>
+                    </h2>
                     {config?.subtitle && <p className={styles.subtitle}>{config.subtitle}</p>}
                 </div>
 

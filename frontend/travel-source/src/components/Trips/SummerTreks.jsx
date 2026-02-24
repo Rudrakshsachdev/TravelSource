@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { fetchSummerTrips } from "../../services/api";
-import { MapPin, Clock, ArrowRight } from "lucide-react";
+import { MapPin, Clock, Sun } from "lucide-react";
 import styles from "./SummerTreks.module.css";
 
 const SummerTreks = () => {
@@ -73,7 +73,13 @@ const SummerTreks = () => {
 
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <h2 className={styles.title}>{config?.title || "Vibrant Summer Treks"}</h2>
+                    <div className={styles.eyebrow}>
+                        <Sun size={10} strokeWidth={2.5} />
+                        Summer Edition
+                    </div>
+                    <h2 className={styles.title}>
+                        {config?.title || "Vibrant "}<span className={styles.titleAccent}>Summer Treks</span>
+                    </h2>
                     {config?.subtitle && <p className={styles.subtitle}>{config.subtitle}</p>}
                 </div>
 
