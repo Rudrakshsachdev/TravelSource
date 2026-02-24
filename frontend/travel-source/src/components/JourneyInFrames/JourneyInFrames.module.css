@@ -1,160 +1,177 @@
 /* ================================================================
-   Journey in Frames  — matches WhyChooseUs design language
-   Theme: teal / aqua, Playfair + Montserrat + Inter
+   Journey in Frames  ·  Travel Professor
+   Mirrors the Reviews + WhyChooseUs design tokens exactly
    ================================================================ */
 
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Montserrat:wght@500;600;700;800&family=Inter:wght@300;400;500;600&display=swap");
 
-/* ---------- Section ---------- */
+/* ── SECTION & BACKGROUND ─────────────────────────────── */
 .section {
-  padding: 100px 0 80px;
-  background: linear-gradient(168deg, #f2faf8 0%, #e8f6f3 100%);
+  padding: 100px 40px;
+  background: linear-gradient(135deg, #e8f6f3 0%, #d4f0ea 50%, #dff2ed 100%);
   position: relative;
   overflow: hidden;
-
-  /* Scroll-in animation */
   opacity: 0;
   transform: translateY(40px);
-  transition: opacity 0.9s ease, transform 0.9s ease;
+  transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .section.visible {
   opacity: 1;
   transform: none;
 }
 
-/* Subtle diagonal line pattern */
-.bgPattern {
+/* Radial glow overlay — same pattern as Reviews */
+.section::before {
+  content: "";
   position: absolute;
   inset: 0;
-  background-image: repeating-linear-gradient(
-    135deg,
-    rgba(63, 158, 143, 0.03) 0px,
-    rgba(63, 158, 143, 0.03) 1px,
-    transparent 1px,
-    transparent 60px
-  );
+  background:
+    radial-gradient(circle at 15% 80%, rgba(63,158,143,0.10) 0%, transparent 50%),
+    radial-gradient(circle at 85% 15%, rgba(63,158,143,0.07) 0%, transparent 50%);
   pointer-events: none;
+  z-index: 0;
 }
 
+/* ── CONTAINER ────────────────────────────────────────── */
 .container {
-  max-width: 1320px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 40px;
   position: relative;
   z-index: 1;
 }
 
-/* ---------- Header ---------- */
+/* ── HEADER ───────────────────────────────────────────── */
 .header {
   text-align: center;
   margin-bottom: 56px;
 }
 
-.title {
+/* Eyebrow pill — matches Reviews .subHeading */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #3f9e8f 0%, #5fb8a8 100%);
+  color: #fff;
   font-family: "Montserrat", sans-serif;
-  font-weight: 800;
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
-  letter-spacing: 6px;
-  color: #1a3a35;
-  margin: 0 0 12px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 2.5px;
   text-transform: uppercase;
+  padding: 5px 16px;
+  border-radius: 999px;
+  margin-bottom: 18px;
+}
+
+/* Main heading — Playfair Display like Reviews .heading */
+.title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #1a3a35;
+  margin: 0 0 10px;
+  line-height: 1.1;
+}
+
+/* Italic accent word */
+.titleAccent {
+  color: #3f9e8f;
+  font-style: italic;
 }
 
 .subtitle {
   font-family: "Inter", sans-serif;
-  font-weight: 400;
-  font-size: 1.05rem;
-  color: #4a7a72;
+  font-size: 0.97rem;
+  color: #3d7a70;
   margin: 0;
-  letter-spacing: 0.5px;
+  line-height: 1.65;
+  letter-spacing: 0.2px;
 }
 
-/* ---------- Carousel Root ---------- */
+/* ── CAROUSEL ROOT ────────────────────────────────────── */
 .carouselRoot {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 0;
+  gap: 16px;
 }
 
-/* ---------- Viewport ---------- */
+/* ── VIEWPORT (clip window) ───────────────────────────── */
 .viewport {
   flex: 1;
   overflow: hidden;
-  /* Padding so scaled/rotated cards aren't clipped */
-  padding: 48px 0;
+  /* vertical pad so 3D tilt + shadow isn't clipped */
+  padding: 52px 0;
   cursor: grab;
   user-select: none;
   -webkit-user-select: none;
 }
-.viewport:active {
-  cursor: grabbing;
-}
+.viewport:active { cursor: grabbing; }
 
-/* ---------- Track ---------- */
+/* ── TRACK ────────────────────────────────────────────── */
 .track {
   display: flex;
   gap: 24px;
   will-change: transform;
-  /* transition injected inline for drag-disable */
 }
 
-/* ---------- Card ---------- */
+/* ── CARD ─────────────────────────────────────────────── */
 .card {
+  flex: 0 0 280px;
+  height: 420px;
   position: relative;
-  flex: 0 0 300px;
-  height: 440px;
-  border-radius: 18px;
+  border-radius: 20px;
   overflow: hidden;
-  /* White picture-frame border — matches reference */
+  /* White picture-frame border — matches reference image */
   border: 5px solid #ffffff;
   box-shadow:
-    0 8px 24px rgba(30, 80, 70, 0.10),
-    0 2px 6px rgba(0, 0, 0, 0.06);
-  background: #e0f0ec;
-  transition:
-    box-shadow 0.45s ease,
-    border-color 0.3s ease;
-  will-change: transform;
+    0 8px 32px rgba(26, 58, 53, 0.10),
+    0 2px 8px  rgba(0, 0, 0, 0.05);
+  background: #c8e8e0;
+  transition: box-shadow 0.5s cubic-bezier(0.4,0,0.2,1),
+              border-color 0.3s ease;
+  will-change: transform, box-shadow;
 }
 
 .card:hover {
   box-shadow:
-    0 24px 56px rgba(30, 80, 70, 0.18),
-    0 4px 12px rgba(0, 0, 0, 0.1);
-  border-color: rgba(63, 158, 143, 0.5);
+    0 24px 56px rgba(26, 58, 53, 0.18),
+    0 4px 14px  rgba(0, 0, 0, 0.09);
+  border-color: rgba(63, 158, 143, 0.55);
 }
 
-/* ---------- Image ---------- */
+/* ── IMAGE ────────────────────────────────────────────── */
 .img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.7s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: transform 0.75s cubic-bezier(0.25, 0.8, 0.25, 1);
   pointer-events: none;
+  will-change: transform;
 }
 
 .card:hover .img {
-  transform: scale(1.07);
+  transform: scale(1.08);
 }
 
-/* ---------- Gradient overlay ---------- */
+/* ── GRADIENT OVERLAY ─────────────────────────────────── */
 .gradientOverlay {
   position: absolute;
   inset: 0;
-  /* Strong gradient only at bottom for location tag readability */
   background: linear-gradient(
     to top,
-    rgba(10, 40, 35, 0.68) 0%,
-    rgba(10, 40, 35, 0.2) 30%,
-    transparent 60%
+    rgba(10, 40, 35, 0.72) 0%,
+    rgba(10, 40, 35, 0.18) 35%,
+    transparent 65%
   );
   z-index: 1;
   pointer-events: none;
 }
 
-/* ---------- Location tag ---------- */
+/* ── LOCATION TAG ─────────────────────────────────────── */
 .locationTag {
   position: absolute;
   bottom: 20px;
@@ -163,66 +180,69 @@
   display: flex;
   align-items: center;
   gap: 7px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px) saturate(1.4);
-  -webkit-backdrop-filter: blur(10px) saturate(1.4);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  /* Glassmorphic — matches site's overlay style */
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(12px) saturate(1.5);
+  -webkit-backdrop-filter: blur(12px) saturate(1.5);
+  border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 30px;
-  padding: 7px 14px;
-  color: #ffffff;
-  font-family: "Inter", sans-serif;
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  transition: background 0.3s ease, transform 0.3s ease;
+  padding: 7px 15px;
+  color: #fff;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  transition: background 0.35s ease, transform 0.35s ease;
 }
 
 .card:hover .locationTag {
-  background: rgba(63, 158, 143, 0.85);
-  transform: translateY(-3px);
+  background: rgba(63, 158, 143, 0.88);
+  border-color: transparent;
+  transform: translateY(-4px);
 }
 
-.pin {
+.pinIcon {
   flex-shrink: 0;
+  width: 13px;
+  height: 13px;
   opacity: 0.9;
 }
 
-/* ---------- Nav Arrows ---------- */
+/* ── NAVIGATION ARROWS ────────────────────────────────── */
 .arrow {
   flex-shrink: 0;
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  border: none;
-  background: #ffffff;
+  border: 1.5px solid rgba(63, 158, 143, 0.25);
+  background: #fff;
   color: #3f9e8f;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 18px rgba(30, 80, 70, 0.14);
-  transition: background 0.3s ease, color 0.3s ease, transform 0.25s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 18px rgba(26, 58, 53, 0.10);
+  transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
   z-index: 20;
 }
 
 .arrow:hover:not(:disabled) {
-  background: #3f9e8f;
-  color: #ffffff;
-  transform: scale(1.12);
-  box-shadow: 0 8px 28px rgba(63, 158, 143, 0.35);
+  background: linear-gradient(135deg, #3f9e8f 0%, #5fb8a8 100%);
+  color: #fff;
+  border-color: transparent;
+  transform: scale(1.14);
+  box-shadow: 0 8px 28px rgba(63, 158, 143, 0.38);
 }
 
 .arrow:disabled {
-  opacity: 0.28;
+  opacity: 0.25;
   cursor: default;
   pointer-events: none;
 }
 
-.arrowLeft { margin-right: 16px; }
-.arrowRight { margin-left: 16px; }
-
-/* ---------- Dots ---------- */
-.dots {
+/* ── DOTS ───────────────────────────────────────────── */
+.dotsRow {
   display: flex;
   justify-content: center;
   gap: 8px;
@@ -234,44 +254,37 @@
   height: 8px;
   border-radius: 50%;
   border: none;
-  background: rgba(63, 158, 143, 0.25);
+  background: rgba(63, 158, 143, 0.22);
   cursor: pointer;
   padding: 0;
-  transition: background 0.3s ease, width 0.3s ease, border-radius 0.3s ease;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.dot.dotActive {
-  width: 24px;
+.dot:hover { background: rgba(63, 158, 143, 0.45); }
+
+.dotActive {
+  width: 26px;
   border-radius: 4px;
-  background: #3f9e8f;
+  background: linear-gradient(135deg, #3f9e8f 0%, #5fb8a8 100%);
+  box-shadow: 0 0 0 3px rgba(63, 158, 143, 0.18);
 }
 
-/* ================================================================
-   Responsive
-   ================================================================ */
-
+/* ── RESPONSIVE ──────────────────────────────────────── */
 @media (max-width: 1100px) {
-  .card { flex: 0 0 260px; height: 390px; }
+  .card { flex: 0 0 250px; height: 380px; }
 }
 
 @media (max-width: 840px) {
-  .container { padding: 0 24px; }
-  .card { flex: 0 0 240px; height: 360px; }
-  .arrowLeft { margin-right: 10px; }
-  .arrowRight { margin-left: 10px; }
+  .section { padding: 80px 24px; }
+  .card { flex: 0 0 230px; height: 350px; }
 }
 
 @media (max-width: 600px) {
   .section { padding: 64px 0 56px; }
-  .container { padding: 0 0; }
+  .container { padding: 0; }
   .header { padding: 0 20px; }
-  .title { letter-spacing: 3px; }
 
-  /* On mobile: native scroll, no JS offsets */
-  .carouselRoot {
-    flex-direction: column;
-    gap: 0;
-  }
+  .carouselRoot { flex-direction: column; gap: 0; }
   .arrow { display: none; }
 
   .viewport {
@@ -285,8 +298,8 @@
   }
   .viewport::-webkit-scrollbar { display: none; }
 
+  /* Disable JS-driven transform on mobile for native scroll */
   .track {
-    /* On mobile override JS transform with native scroll */
     transform: none !important;
     transition: none !important;
     gap: 16px;
@@ -296,7 +309,6 @@
     flex: 0 0 82vw;
     height: 400px;
     scroll-snap-align: center;
-    /* Disable 3-D tilt on mobile for smooth scrolling */
     transform: none !important;
   }
 }

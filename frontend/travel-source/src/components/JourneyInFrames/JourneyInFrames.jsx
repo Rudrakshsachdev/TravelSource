@@ -1,158 +1,168 @@
 import { useRef, useState, useEffect, useCallback } from "react";
-import { ChevronLeft, ChevronRight, MapPin } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Camera } from "lucide-react";
 import styles from "./JourneyInFrames.module.css";
 
+/* ── DATA ─────────────────────────────────────────────────── */
 const frames = [
     {
         id: 1,
         location: "Dubai",
-        country: "UAE",
+        label: "UAE",
         image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=900&q=85",
     },
     {
         id: 2,
         location: "Bhutan",
-        country: "South Asia",
+        label: "South Asia",
         image: "https://images.unsplash.com/photo-1578593139801-667ec3ec5ec1?auto=format&fit=crop&w=900&q=85",
     },
     {
         id: 3,
         location: "Kerala",
-        country: "India",
+        label: "India",
         image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=900&q=85",
     },
     {
         id: 4,
         location: "Meghalaya",
-        country: "India",
+        label: "India",
         image: "https://images.unsplash.com/photo-1601362840469-51e4405559bf?auto=format&fit=crop&w=900&q=85",
     },
     {
         id: 5,
         location: "Kashmir",
-        country: "India",
+        label: "India",
         image: "https://images.unsplash.com/photo-1598091383021-15ddea10925d?auto=format&fit=crop&w=900&q=85",
     },
     {
         id: 6,
         location: "Leh Ladakh",
-        country: "India",
+        label: "India",
         image: "https://images.unsplash.com/photo-1581791538302-03537b9c9f4d?auto=format&fit=crop&w=900&q=85",
     },
     {
         id: 7,
         location: "Spiti Valley",
-        country: "India",
+        label: "India",
         image: "https://images.unsplash.com/photo-1570530739989-b57041a75c13?auto=format&fit=crop&w=900&q=85",
     },
 ];
 
-const CARD_WIDTH = 300;   // px
-const CARD_GAP = 24;      // px
-const VISIBLE_CARDS = 4;  // on desktop
+const CARD_W = 280;   // card width px
+const CARD_GAP = 24;  // gap px
+const STEP = CARD_W + CARD_GAP;
 
+/* ── COMPONENT ────────────────────────────────────────────── */
 export default function JourneyInFrames() {
-    const [current, setCurrent] = useState(0);   // index of leftmost visible card
-    const [isAnimating, setIsAnimating] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
-    const [isDragging, setIsDragging] = useState(false);
-    const dragStartX = useRef(0);
-    const dragCurrentX = useRef(0);
-    const sectionRef = useRef(null);
+    const [current, setCurrent] = useState(0);
+    const [animating, setAnimating] = useState(false);
     const [visible, setVisible] = useState(false);
+    const [visibleCards, setVisibleCards] = useState(4);
+    const [isDragging, setIsDragging] = useState(false);
+    const dragStart = useRef(0);
+    const sectionRef = useRef(null);
 
-    const totalCards = frames.length;
-    const maxIndex = Math.max(0, totalCards - VISIBLE_CARDS);
+    const total = frames.length;
+    const maxIdx = Math.max(0, total - visibleCards);
 
-    // Responsive
+    /* Responsive visible count */
     useEffect(() => {
-        const check = () => setIsMobile(window.innerWidth < 768);
-        check();
-        window.addEventListener("resize", check);
-        return () => window.removeEventListener("resize", check);
+        const calc = () => {
+            const w = window.innerWidth;
+            if (w < 600) setVisibleCards(1);
+            else if (w < 840) setVisibleCards(2);
+            else if (w < 1100) setVisibleCards(3);
+            else setVisibleCards(4);
+        };
+        calc();
+        window.addEventListener("resize", calc);
+        return () => window.removeEventListener("resize", calc);
     }, []);
 
-    // Scroll-in animation
+    /* Scroll-in reveal */
     useEffect(() => {
         const obs = new IntersectionObserver(
-            ([entry]) => { if (entry.isIntersecting) setVisible(true); },
-            { threshold: 0.1 }
+            ([e]) => { if (e.isIntersecting) setVisible(true); },
+            { threshold: 0.12 }
         );
         if (sectionRef.current) obs.observe(sectionRef.current);
         return () => obs.disconnect();
     }, []);
 
     const go = useCallback((dir) => {
-        if (isAnimating) return;
-        setIsAnimating(true);
-        setCurrent((prev) => {
-            if (dir === "next") return Math.min(prev + 1, maxIndex);
-            return Math.max(prev - 1, 0);
-        });
-        setTimeout(() => setIsAnimating(false), 600);
-    }, [isAnimating, maxIndex]);
+        if (animating) return;
+        setAnimating(true);
+        setCurrent((p) => dir === "next"
+            ? Math.min(p + 1, maxIdx)
+            : Math.max(p - 1, 0)
+        );
+        setTimeout(() => setAnimating(false), 650);
+    }, [animating, maxIdx]);
 
-    // Touch / drag support
+    /* Touch/drag */
     const onDragStart = (e) => {
         setIsDragging(true);
-        dragStartX.current = e.touches ? e.touches[0].clientX : e.clientX;
+        dragStart.current = e.touches ? e.touches[0].clientX : e.clientX;
     };
     const onDragEnd = (e) => {
         if (!isDragging) return;
         const end = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
-        const delta = dragStartX.current - end;
-        if (Math.abs(delta) > 50) go(delta > 0 ? "next" : "prev");
+        if (Math.abs(dragStart.current - end) > 50)
+            go(dragStart.current > end ? "next" : "prev");
         setIsDragging(false);
     };
 
-    // Compute 3-D transform per card based on its position relative to the "center"
-    const getCardTransform = (idx) => {
-        const relativeIdx = idx - current;
-        const centerOffset = isMobile ? 0 : (VISIBLE_CARDS - 1) / 2; // midpoint of visible window
-        const pos = relativeIdx - centerOffset; // negative = left of center, positive = right
-
-        // The reference image: outer cards tilt inward up to ~20 degrees
-        const maxTilt = 18;
-        const tilt = -pos * (maxTilt / (VISIBLE_CARDS / 2));
-        const clampedTilt = Math.max(-maxTilt, Math.min(maxTilt, tilt));
-
-        const scale = 1 - Math.abs(pos) * 0.04;
-        const clampedScale = Math.max(0.88, scale);
-
+    /* Per-card 3D perspective: outer cards tilt toward center */
+    const cardTransform = (idx) => {
+        const center = current + (visibleCards - 1) / 2;
+        const offset = idx - center;               // negative = left, positive = right
+        const tilt = -Math.sign(offset) * Math.min(Math.abs(offset) * 9, 22); // cap at 22°
+        const sc = 1 - Math.min(Math.abs(offset) * 0.035, 0.12);
+        const origin = offset < 0 ? "right center" : offset > 0 ? "left center" : "center center";
         return {
-            transform: `perspective(1400px) rotateY(${clampedTilt}deg) scale(${clampedScale})`,
-            zIndex: Math.round(10 - Math.abs(pos) * 2),
-            transformOrigin: pos < 0 ? "right center" : "left center",
+            transform: `perspective(1400px) rotateY(${tilt}deg) scale(${sc})`,
+            transformOrigin: origin,
+            zIndex: Math.round(20 - Math.abs(offset) * 3),
         };
     };
 
-    const translateX = -(current * (CARD_WIDTH + CARD_GAP));
+    const translateX = -(current * STEP);
 
     return (
         <section
             ref={sectionRef}
             className={`${styles.section} ${visible ? styles.visible : ""}`}
         >
-            {/* Subtle Background pattern */}
-            <div className={styles.bgPattern} aria-hidden="true" />
-
             <div className={styles.container}>
-                {/* Header */}
+
+                {/* ── HEADER ─────────────────────────────────── */}
                 <div className={styles.header}>
-                    <h2 className={styles.title}>JOURNEY IN FRAMES</h2>
-                    <p className={styles.subtitle}>Pictures Perfect Moments</p>
+                    {/* Eyebrow pill — same pattern as Reviews */}
+                    <div className={styles.eyebrow}>
+                        <Camera size={10} strokeWidth={2.5} />
+                        Our Gallery
+                    </div>
+
+                    <h2 className={styles.title}>
+                        Journey in{" "}
+                        <span className={styles.titleAccent}>Frames</span>
+                    </h2>
+
+                    <p className={styles.subtitle}>
+                        Pictures Perfect Moments — captured across every destination
+                    </p>
                 </div>
 
-                {/* Carousel */}
+                {/* ── CAROUSEL ───────────────────────────────── */}
                 <div className={styles.carouselRoot}>
-                    {/* LEFT Arrow */}
+                    {/* Left arrow */}
                     <button
-                        className={`${styles.arrow} ${styles.arrowLeft}`}
+                        className={styles.arrow}
                         onClick={() => go("prev")}
                         disabled={current === 0}
                         aria-label="Previous"
                     >
-                        <ChevronLeft size={22} strokeWidth={2.5} />
+                        <ChevronLeft size={20} strokeWidth={2.5} />
                     </button>
 
                     {/* Track */}
@@ -168,62 +178,62 @@ export default function JourneyInFrames() {
                             className={styles.track}
                             style={{
                                 transform: `translateX(${translateX}px)`,
-                                transition: isDragging ? "none" : "transform 0.7s cubic-bezier(0.25, 0.8, 0.25, 1)",
+                                transition: isDragging
+                                    ? "none"
+                                    : "transform 0.7s cubic-bezier(0.25, 0.8, 0.25, 1)",
                             }}
                         >
-                            {frames.map((frame, idx) => {
-                                const cardStyle = getCardTransform(idx);
-                                return (
-                                    <div
-                                        key={frame.id}
-                                        className={styles.card}
-                                        style={cardStyle}
-                                    >
-                                        {/* Gradient overlay for text legibility */}
-                                        <div className={styles.gradientOverlay} />
-
-                                        {/* Image */}
-                                        <img
-                                            src={frame.image}
-                                            alt={frame.location}
-                                            className={styles.img}
-                                            loading="lazy"
-                                            draggable="false"
+                            {frames.map((f, idx) => (
+                                <div
+                                    key={f.id}
+                                    className={styles.card}
+                                    style={window.innerWidth > 600 ? cardTransform(idx) : {}}
+                                >
+                                    <div className={styles.gradientOverlay} />
+                                    <img
+                                        src={f.image}
+                                        alt={f.location}
+                                        className={styles.img}
+                                        loading="lazy"
+                                        draggable="false"
+                                    />
+                                    <div className={styles.locationTag}>
+                                        <MapPin
+                                            size={13}
+                                            fill="white"
+                                            strokeWidth={0}
+                                            className={styles.pinIcon}
                                         />
-
-                                        {/* Location Tag */}
-                                        <div className={styles.locationTag}>
-                                            <MapPin size={14} fill="white" strokeWidth={0} className={styles.pin} />
-                                            <span>{frame.location}</span>
-                                        </div>
+                                        {f.location}
                                     </div>
-                                );
-                            })}
+                                </div>
+                            ))}
                         </div>
                     </div>
 
-                    {/* RIGHT Arrow */}
+                    {/* Right arrow */}
                     <button
-                        className={`${styles.arrow} ${styles.arrowRight}`}
+                        className={styles.arrow}
                         onClick={() => go("next")}
-                        disabled={current >= maxIndex}
+                        disabled={current >= maxIdx}
                         aria-label="Next"
                     >
-                        <ChevronRight size={22} strokeWidth={2.5} />
+                        <ChevronRight size={20} strokeWidth={2.5} />
                     </button>
                 </div>
 
-                {/* Dot indicators */}
-                <div className={styles.dots}>
-                    {Array.from({ length: maxIndex + 1 }).map((_, i) => (
+                {/* ── DOTS ───────────────────────────────────── */}
+                <div className={styles.dotsRow}>
+                    {Array.from({ length: maxIdx + 1 }).map((_, i) => (
                         <button
                             key={i}
                             className={`${styles.dot} ${i === current ? styles.dotActive : ""}`}
                             onClick={() => setCurrent(i)}
-                            aria-label={`Go to page ${i + 1}`}
+                            aria-label={`Go to set ${i + 1}`}
                         />
                     ))}
                 </div>
+
             </div>
         </section>
     );
