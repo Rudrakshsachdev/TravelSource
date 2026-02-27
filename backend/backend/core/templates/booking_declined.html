@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Booking Update — Travel Professor</title>
+    <!--[if mso]>
+      <style>
+        table,
+        td {
+          font-family: Arial, sans-serif !important;
+        }
+      </style>
+    <![endif]-->
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      background-color: #e8f6f3;
+      font-family: &quot;Segoe UI&quot;, Roboto, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    "
+  >
+    <!-- Outer wrapper -->
+    <table
+      role="presentation"
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      style="background-color: #e8f6f3; padding: 32px 16px"
+    >
+      <tr>
+        <td align="center">
+          <!-- Email container -->
+          <table
+            role="presentation"
+            width="600"
+            cellpadding="0"
+            cellspacing="0"
+            style="
+              max-width: 600px;
+              width: 100%;
+              background-color: #ffffff;
+              border-radius: 16px;
+              overflow: hidden;
+              box-shadow: 0 8px 40px rgba(26, 58, 53, 0.12);
+            "
+          >
+            <!-- ═══ Header Banner ═══ -->
+            <tr>
+              <td
+                style="
+                  background: linear-gradient(
+                    135deg,
+                    #1a3a35 0%,
+                    #2d5c54 50%,
+                    #3d7a70 100%
+                  );
+                  padding: 40px 40px 36px;
+                  text-align: center;
+                "
+              >
+                <!-- Logo Icon -->
+                <table
+                  role="presentation"
+                  cellpadding="0"
+                  cellspacing="0"
+                  style="margin: 0 auto 18px"
+                >
+                  <tr>
+                    <td
+                      style="
+                        width: 60px;
+                        height: 60px;
+                        background: linear-gradient(
+                          135deg,
+                          #3f9e8f 0%,
+                          #5fb8a8 100%
+                        );
+                        border-radius: 12px;
+                        text-align: center;
+                        vertical-align: middle;
+                      "
+                    >
+                      <!--[if !mso]><!-->
+                      <img
+                        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5z' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M2 17l10 5 10-5' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M2 12l10 5 10-5' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"
+                        alt="TP"
+                        width="32"
+                        height="32"
+                        style="display: block; margin: 14px auto"
+                      />
+                      <!--<![endif]-->
+                    </td>
+                  </tr>
+                </table>
+                <!-- Brand Name -->
+                <h1
+                  style="
+                    margin: 0 0 6px;
+                    font-family: Georgia, &quot;Times New Roman&quot;, serif;
+                    font-size: 26px;
+                    font-weight: 700;
+                    color: #ffffff;
+                    letter-spacing: 0.5px;
+                  "
+                >
+                  Travel Professor
+                </h1>
+                <p
+                  style="
+                    margin: 0;
+                    font-family:
+                      &quot;Segoe UI&quot;, Roboto, Arial, sans-serif;
+                    font-size: 13px;
+                    font-weight: 500;
+                    color: rgba(255, 255, 255, 0.7);
+                    letter-spacing: 1.5px;
+                    text-transform: uppercase;
+                  "
+                >
+                  Booking Update
+                </p>
+              </td>
+            </tr>
+
+            <!-- ═══ Accent Bar ═══ -->
+            <tr>
+              <td
+                style="
+                  height: 4px;
+                  background: linear-gradient(
+                    90deg,
+                    #3f9e8f 0%,
+                    #7ecfc0 50%,
+                    #3f9e8f 100%
+                  );
+                "
+              ></td>
+            </tr>
+
+            <!-- ═══ Body Content ═══ -->
+            <tr>
+              <td style="padding: 40px 40px 20px">
+                <!-- Greeting -->
+                <h2
+                  style="
+                    margin: 0 0 8px;
+                    font-family: Georgia, &quot;Times New Roman&quot;, serif;
+                    font-size: 22px;
+                    font-weight: 700;
+                    color: #1a3a35;
+                  "
+                >
+                  Hello {{ full_name }},
+                </h2>
+                <p
+                  style="
+                    margin: 0 0 28px;
+                    font-size: 15px;
+                    color: #3d7a70;
+                    line-height: 1.6;
+                  "
+                >
+                  We have an update regarding your booking request.
+                </p>
+
+                <!-- Status Badge -->
+                <table
+                  role="presentation"
+                  cellpadding="0"
+                  cellspacing="0"
+                  style="margin: 0 auto 28px"
+                >
+                  <tr>
+                    <td
+                      style="
+                        background: linear-gradient(
+                          135deg,
+                          #fef2f2 0%,
+                          #fde8e8 100%
+                        );
+                        border: 1px solid rgba(220, 38, 38, 0.2);
+                        border-radius: 100px;
+                        padding: 12px 32px;
+                        text-align: center;
+                      "
+                    >
+                      <span
+                        style="
+                          font-family:
+                            &quot;Segoe UI&quot;, Roboto, Arial, sans-serif;
+                          font-size: 13px;
+                          font-weight: 700;
+                          color: #991b1b;
+                          letter-spacing: 1.8px;
+                          text-transform: uppercase;
+                        "
+                        >✕&nbsp;&nbsp;Declined</span
+                      >
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Booking Details Card -->
+                <table
+                  role="presentation"
+                  width="100%"
+                  cellpadding="0"
+                  cellspacing="0"
+                  style="
+                    background: #f8fdfb;
+                    border: 1px solid rgba(63, 158, 143, 0.15);
+                    border-radius: 12px;
+                    margin-bottom: 28px;
+                  "
+                >
+                  <tr>
+                    <td style="padding: 24px 28px">
+                      <p
+                        style="
+                          margin: 0 0 10px;
+                          font-family:
+                            &quot;Segoe UI&quot;, Roboto, Arial, sans-serif;
+                          font-size: 11px;
+                          font-weight: 600;
+                          color: #3f9e8f;
+                          letter-spacing: 1.2px;
+                          text-transform: uppercase;
+                        "
+                      >
+                        Booking Details
+                      </p>
+
+                      <!-- Trip -->
+                      <table
+                        role="presentation"
+                        width="100%"
+                        cellpadding="0"
+                        cellspacing="0"
+                        style="margin-bottom: 12px"
+                      >
+                        <tr>
+                          <td
+                            style="
+                              font-size: 13px;
+                              color: #3d7a70;
+                              font-weight: 500;
+                              padding: 6px 0;
+                              width: 110px;
+                              vertical-align: top;
+                            "
+                          >
+                            Trip
+                          </td>
+                          <td
+                            style="
+                              font-size: 14px;
+                              color: #1a3a35;
+                              font-weight: 600;
+                              padding: 6px 0;
+                            "
+                          >
+                            {{ trip_title }}
+                          </td>
+                        </tr>
+                      </table>
+
+                      <!-- Divider -->
+                      <div
+                        style="
+                          height: 1px;
+                          background: rgba(63, 158, 143, 0.12);
+                          margin: 0 0 12px;
+                        "
+                      ></div>
+
+                      <!-- Persons & Amount Row -->
+                      <table
+                        role="presentation"
+                        width="100%"
+                        cellpadding="0"
+                        cellspacing="0"
+                      >
+                        <tr>
+                          <td style="width: 50%; vertical-align: top">
+                            <p
+                              style="
+                                margin: 0 0 4px;
+                                font-size: 13px;
+                                color: #3d7a70;
+                                font-weight: 500;
+                              "
+                            >
+                              Persons
+                            </p>
+                            <p
+                              style="
+                                margin: 0;
+                                font-size: 18px;
+                                color: #1a3a35;
+                                font-weight: 700;
+                              "
+                            >
+                              {{ persons }}
+                            </p>
+                          </td>
+                          <td style="width: 50%; vertical-align: top">
+                            <p
+                              style="
+                                margin: 0 0 4px;
+                                font-size: 13px;
+                                color: #3d7a70;
+                                font-weight: 500;
+                              "
+                            >
+                              Total Amount
+                            </p>
+                            <p
+                              style="
+                                margin: 0;
+                                font-size: 18px;
+                                color: #1a3a35;
+                                font-weight: 700;
+                              "
+                            >
+                              ₹{{ total_amount }}
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Message -->
+                <p
+                  style="
+                    margin: 0 0 10px;
+                    font-size: 15px;
+                    color: #2d5c54;
+                    line-height: 1.7;
+                  "
+                >
+                  Unfortunately, we were unable to confirm your booking at this
+                  time. This could be due to availability or other factors. We
+                  sincerely apologize for the inconvenience.
+                </p>
+
+                <p
+                  style="
+                    margin: 0 0 10px;
+                    font-size: 15px;
+                    color: #2d5c54;
+                    line-height: 1.7;
+                  "
+                >
+                  Please feel free to browse our other trips or contact our team
+                  — we'd love to help you find the perfect adventure.
+                </p>
+
+                <p
+                  style="
+                    margin: 28px 0 0;
+                    font-size: 15px;
+                    color: #1a3a35;
+                    font-weight: 600;
+                  "
+                >
+                  Thank you for your understanding! 🌍
+                </p>
+              </td>
+            </tr>
+
+            <!-- ═══ Footer ═══ -->
+            <tr>
+              <td style="padding: 0 40px">
+                <div
+                  style="height: 1px; background: rgba(63, 158, 143, 0.12)"
+                ></div>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 24px 40px 32px; text-align: center">
+                <p
+                  style="
+                    margin: 0 0 6px;
+                    font-family:
+                      &quot;Segoe UI&quot;, Roboto, Arial, sans-serif;
+                    font-size: 13px;
+                    font-weight: 600;
+                    color: #3d7a70;
+                  "
+                >
+                  Travel Professor Team
+                </p>
+                <p style="margin: 0; font-size: 12px; color: #b8ddd6">
+                  © 2026 Travel Professor. All rights reserved.
+                </p>
+              </td>
+            </tr>
+          </table>
+          <!-- /Email container -->
+        </td>
+      </tr>
+    </table>
+    <!-- /Outer wrapper -->
+  </body>
+</html>
