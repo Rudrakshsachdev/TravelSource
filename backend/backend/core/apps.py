@@ -7,4 +7,4 @@ class CoreConfig(AppConfig):
     name = 'backend.backend.core'
 
     def ready(self):
-        import core.signals
+        import backend.backend.core.signals
