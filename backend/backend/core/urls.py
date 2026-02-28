@@ -17,6 +17,7 @@ from .views import (
     monsoon_trips, admin_monsoon_config,
     community_trips, admin_community_config,
     festival_trips, admin_festival_config,
+    featured_trips,
     request_password_reset, verify_reset_otp, reset_password,
     category_list, admin_categories,
 )
@@ -27,6 +28,7 @@ urlpatterns = [
     path("v1/categories/", category_list),
     path("v1/admin/categories/", admin_categories),
     path("v1/trips/recommended/", recommended_trips),
+    path("v1/trips/featured/", featured_trips),
     path("v1/trips/international/", international_trips),
     path("v1/trips/india/", india_trips),
     path("v1/trips/honeymoon/", honeymoon_trips),

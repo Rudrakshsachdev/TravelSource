@@ -80,6 +80,10 @@ class Trip(models.Model):
     show_in_festival_section = models.BooleanField(default=False, help_text="Show in the scrolling Festival section")
     festival_display_order = models.IntegerField(default=0, help_text="Order in the Festival section (lower = first)")
 
+    # Featured trip showcase
+    is_featured = models.BooleanField(default=False, help_text="Mark as featured trip (shows in Featured Destination section)")
+    featured_highlights = models.JSONField(blank=True, null=True, help_text="List of highlight labels for floating chips, e.g. [\"Ubud · Rice Terraces\", \"Tanah Lot · Temples\"]")
+
 
     def __str__(self):
         return self.title

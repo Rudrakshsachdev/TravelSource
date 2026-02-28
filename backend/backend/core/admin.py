@@ -13,7 +13,7 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Trip)
 class TripAdmin(admin.ModelAdmin):
     list_display = (
-        "title", "location", "country", "state", "category", "price", "is_active",
+        "title", "location", "country", "state", "category", "price", "is_active", "is_featured",
         "is_international", "show_in_international_section", "display_order",
         "is_india_trip", "show_in_india_section", "india_display_order",
         "is_honeymoon", "show_in_honeymoon_section", "honeymoon_display_order",
@@ -24,7 +24,7 @@ class TripAdmin(admin.ModelAdmin):
         "is_community_trip", "show_in_community_section", "community_display_order",
         "is_festival_trip", "show_in_festival_section", "festival_display_order",
     )
-    list_filter = ("is_active", "category", "is_international", "show_in_international_section", "is_india_trip", "show_in_india_section")
+    list_filter = ("is_active", "is_featured", "category", "is_international", "show_in_international_section", "is_india_trip", "show_in_india_section")
     list_editable = (
         "is_international", "show_in_international_section", "display_order",
         "is_india_trip", "show_in_india_section", "india_display_order",
@@ -80,6 +80,10 @@ class TripAdmin(admin.ModelAdmin):
         ("Festival Showcase", {
             "fields": ("is_festival_trip", "show_in_festival_section", "festival_display_order"),
             "description": "Control how this trip appears in the Festival Trips scrolling section.",
+        }),
+        ("Featured Showcase", {
+            "fields": ("is_featured", "featured_highlights"),
+            "description": "Mark as featured to display in the Featured Destination highlight section. Add highlight labels as a JSON list.",
         }),
 
         ("Status", {

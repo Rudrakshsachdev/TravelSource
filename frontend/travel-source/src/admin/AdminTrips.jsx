@@ -60,7 +60,8 @@ const AdminTrips = () => {
     show_in_community_section: false,
     community_display_order: 0,
     category: "",
-
+    is_featured: false,
+    featured_highlights: [],
   });
 
   // Dynamic Lists State
@@ -229,6 +230,8 @@ const AdminTrips = () => {
       show_in_festival_section: trip.show_in_festival_section || false,
       festival_display_order: trip.festival_display_order || 0,
       category: trip.category || "",
+      is_featured: trip.is_featured || false,
+      featured_highlights: Array.isArray(trip.featured_highlights) ? trip.featured_highlights : [],
 
     });
 
@@ -283,6 +286,8 @@ const AdminTrips = () => {
       show_in_festival_section: false,
       festival_display_order: 0,
       category: "",
+      is_featured: false,
+      featured_highlights: [],
 
     });
     setItinerary([]);
@@ -329,6 +334,7 @@ const AdminTrips = () => {
         exclusions: cleanExclusions,
         image: imageUrl,
         category: formData.category || null,
+        featured_highlights: formData.featured_highlights.filter(h => h.trim() !== ""),
       };
 
       if (editingTrip) {
@@ -897,6 +903,71 @@ const AdminTrips = () => {
                       />
                     </div>
                   </div>
+
+                  {/* Featured Showcase Section */}
+                  <div className={styles.sectionHeader}>
+                    <h3 className={styles.sectionTitle}>⭐ Featured Showcase</h3>
+                  </div>
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="is_featured"
+                        checked={formData.is_featured}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Mark as Featured Trip
+                    </label>
+                  </div>
+                  {formData.is_featured && (
+                    <div className={styles.formGrid}>
+                      <div className={styles.inputGroup} style={{ gridColumn: "1 / -1" }}>
+                        <label className={styles.inputLabel}>
+                          Featured Highlight Labels (floating chips on the visual panel)
+                        </label>
+                        {formData.featured_highlights.map((chip, ci) => (
+                          <div key={ci} style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                            <input
+                              className={styles.input}
+                              value={chip}
+                              placeholder={`e.g. Ubud · Rice Terraces`}
+                              onChange={(e) => {
+                                const updated = [...formData.featured_highlights];
+                                updated[ci] = e.target.value;
+                                setFormData({ ...formData, featured_highlights: updated });
+                              }}
+                            />
+                            <button
+                              type="button"
+                              className={styles.removeButton}
+                              onClick={() => {
+                                const updated = formData.featured_highlights.filter((_, i) => i !== ci);
+                                setFormData({ ...formData, featured_highlights: updated });
+                              }}
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ))}
+                        {formData.featured_highlights.length < 3 && (
+                          <button
+                            type="button"
+                            className={styles.addButton}
+                            style={{ width: "auto", padding: "0.5rem 1rem", fontSize: "0.8rem" }}
+                            onClick={() =>
+                              setFormData({
+                                ...formData,
+                                featured_highlights: [...formData.featured_highlights, ""],
+                              })
+                            }
+                          >
+                            + Add Highlight
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
 
 
                   <div className={styles.inputGroup}>

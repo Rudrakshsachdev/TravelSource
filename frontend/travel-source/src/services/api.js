@@ -873,3 +873,10 @@ export const resetPassword = async (email, newPassword) => {
   }
   return result;
 };
+
+/** Fetch featured trips for the Featured Destination highlight section */
+export const fetchFeaturedTrips = async () => {
+  const res = await fetch(`${API_BASE_URL}/v1/trips/featured/`);
+  if (!res.ok) throw new Error("Failed to fetch featured trips");
+  return res.json();
+};

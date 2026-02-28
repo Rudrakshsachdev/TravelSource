@@ -63,6 +63,17 @@ def trip_list(request):
     return Response(serializer.data)
 
 
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def featured_trips(request):
+    """Return up to 3 featured trips. Falls back to latest 3 if none marked."""
+    trips = Trip.objects.filter(is_active=True, is_featured=True).order_by("-id")[:3]
+    if not trips.exists():
+        trips = Trip.objects.filter(is_active=True).order_by("-id")[:3]
+    serializer = TripSerializer(trips, many=True)
+    return Response(serializer.data)
+
+
 # ─── Categories ───────────────────────────────────────────────────────────────
 
 @api_view(["GET"])

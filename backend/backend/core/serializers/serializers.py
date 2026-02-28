@@ -38,5 +38,7 @@ class TripSerializer(serializers.ModelSerializer):
             "display_order",
             "category",
             "category_id",
+            "is_featured",
+            "featured_highlights",
         ]
 
