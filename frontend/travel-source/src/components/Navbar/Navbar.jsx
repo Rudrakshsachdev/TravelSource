@@ -467,8 +467,32 @@ const Navbar = () => {
           </nav>
 
           <div className={styles.mobileActions}>
+            {!authData && (
+              <button
+                className={styles.mobileCtaBtn}
+                onClick={() => handleNavigation("/login")}
+              >
+                LOGIN / SIGN UP
+                <span className={styles.mobileCtaArrow}>
+                  <svg
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M4 10H16M16 10L13 6M16 10L13 14"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+              </button>
+            )}
+
             <button
-              className={`${styles.mobileCtaBtn} ${authData ? styles.mobileLogoutBtn : ""}`}
+              className={`${styles.mobileCtaBtn} ${authData ? styles.mobileLogoutBtn : styles.mobileSecondaryBtn}`}
               onClick={
                 authData ? handleLogout : () => handleNavigation("/concierge")
               }
