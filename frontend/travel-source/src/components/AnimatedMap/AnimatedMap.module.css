@@ -234,30 +234,136 @@
 
 /* Responsiveness */
 @media (max-width: 1024px) {
-  .animatedMapSection { padding: 100px 0; }
-  .stats { gap: 40px; padding: 30px 60px; }
+  .animatedMapSection {
+    padding: 80px 0;
+  }
+
+  .container {
+    padding: 0 24px;
+    min-height: auto;
+  }
+
+  .stats {
+    gap: 40px;
+    padding: 30px 60px;
+  }
 }
 
 @media (max-width: 768px) {
-  .animatedMapSection { padding: 80px 0; }
-  .content { gap: 60px; }
+  .animatedMapSection {
+    padding: 60px 0;
+  }
+
+  .container {
+    padding: 0 16px;
+    min-height: auto;
+  }
+
+  .mapContainer {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 32px;
+  }
+
+  .mapGif {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .svgOverlay {
+    width: 100%;
+    height: 100%;
+  }
+
+  .content {
+    gap: 40px;
+  }
+
+  .title {
+    font-size: clamp(1.8rem, 5.5vw, 2.8rem);
+  }
+
+  .description {
+    font-size: clamp(0.95rem, 2vw, 1.1rem);
+    padding: 0 0.5rem;
+  }
+
   .stats {
     flex-direction: column;
-    gap: 30px;
-    padding: 40px;
-    width: calc(100% - 40px);
+    gap: 24px;
+    padding: 32px;
+    width: 100%;
+    max-width: 340px;
+    border-radius: 24px;
   }
-  .statDivider { width: 40px; height: 1px; }
+
+  .statDivider {
+    width: 40px;
+    height: 1px;
+  }
+
+  .statNumber {
+    font-size: 1.8rem;
+  }
+
+  .statLabel {
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .animatedMapSection {
+    padding: 40px 0;
+  }
+
+  .container {
+    padding: 0 12px;
+  }
+
   .mapContainer {
-    aspect-ratio: auto;
-    height: 400px;
+    margin-bottom: 24px;
   }
-  .mapGif {
-    width: 200%;
-    transform: translateX(-25%);
+
+  .content {
+    gap: 28px;
   }
-  .svgOverlay {
-    width: 200%;
-    transform: translateX(-25%);
+
+  .header {
+    gap: 14px;
+  }
+
+  .title {
+    font-size: clamp(1.6rem, 7vw, 2.2rem);
+    letter-spacing: -0.5px;
+  }
+
+  .description {
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+
+  .labelLine {
+    width: 32px;
+  }
+
+  .stats {
+    gap: 20px;
+    padding: 24px 20px;
+    max-width: 280px;
+    border-radius: 20px;
+  }
+
+  .statNumber {
+    font-size: 1.6rem;
+  }
+
+  .statLabel {
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+  }
+
+  .statDivider {
+    width: 32px;
   }
 }
