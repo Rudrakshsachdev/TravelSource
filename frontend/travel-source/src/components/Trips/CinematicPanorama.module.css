@@ -642,6 +642,8 @@
 
   .badge {
     margin-bottom: 1.25rem;
+    font-size: 0.68rem;
+    padding: 0.4rem 1rem;
   }
 
   .heading {
@@ -663,6 +665,14 @@
   .ctaGroup {
     justify-content: center;
     flex-wrap: wrap;
+    width: 100%;
+    max-width: 360px;
+  }
+
+  .ctaPrimary,
+  .ctaSecondary {
+    width: 100%;
+    justify-content: center;
   }
 
   .statsBar {
@@ -690,56 +700,87 @@
 /* Phones */
 @media (max-width: 480px) {
   .cinema {
-    min-height: 380px;
+    min-height: auto;
   }
 
   .foreground {
-    padding: 2rem 1rem;
-    min-height: 380px;
+    padding: 2.5rem 1.25rem 2rem;
+    min-height: auto;
+  }
+
+  .badge {
+    margin-bottom: 1rem;
+    font-size: 0.62rem;
+    padding: 0.35rem 0.9rem;
+    letter-spacing: 0.12em;
+  }
+
+  .heading {
+    margin-bottom: 0.8rem;
   }
 
   .headingLine1,
   .headingLine2 {
-    font-size: clamp(1.3rem, 6vw, 1.8rem);
+    font-size: clamp(1.55rem, 7vw, 2rem);
   }
 
   .description {
-    font-size: 0.85rem;
+    font-size: 0.88rem;
     margin-bottom: 1.5rem;
+    max-width: 340px;
+    line-height: 1.65;
   }
 
   .ctaGroup {
-    gap: 0.75rem;
-    margin-bottom: 2rem;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-bottom: 1.75rem;
+    width: 100%;
+    max-width: 300px;
   }
 
   .ctaPrimary,
   .ctaSecondary {
-    padding: 0.78rem 1.5rem;
-    font-size: 0.75rem;
+    width: 100%;
+    justify-content: center;
+    padding: 0.85rem 1.5rem;
+    font-size: 0.76rem;
   }
 
   .statsBar {
-    flex-wrap: wrap;
-    border-radius: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-radius: 14px;
+    width: 100%;
+    max-width: 340px;
   }
 
   .statItem {
-    flex: 0 0 50%;
-    padding: 0.65rem 0.5rem;
+    padding: 0.85rem 0.5rem;
   }
 
-  .statItem:nth-child(1)::after,
-  .statItem:nth-child(3)::after {
-    display: block;
-  }
-
-  .statItem:nth-child(2)::after {
+  /* Reset the flex-based ::after dividers */
+  .statItem:not(:last-child)::after {
     display: none;
   }
 
+  /* Vertical divider between left and right columns */
+  .statItem:nth-child(odd) {
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Horizontal divider between top and bottom rows */
+  .statItem:nth-child(1),
+  .statItem:nth-child(2) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
   .statNumber {
-    font-size: 1rem;
+    font-size: 1.15rem;
+  }
+
+  .statLabel {
+    font-size: 0.6rem;
   }
 
   /* Disable continuous sliding on mobile for performance */
@@ -755,22 +796,39 @@
 /* Very small phones */
 @media (max-width: 360px) {
   .foreground {
-    padding: 1.5rem 0.75rem;
+    padding: 2rem 0.75rem 1.5rem;
   }
 
   .headingLine1,
   .headingLine2 {
-    font-size: 1.2rem;
+    font-size: 1.35rem;
   }
 
   .description {
-    font-size: 0.8rem;
+    font-size: 0.82rem;
+    max-width: 280px;
+  }
+
+  .ctaGroup {
+    max-width: 260px;
   }
 
   .ctaPrimary,
   .ctaSecondary {
-    padding: 0.7rem 1.2rem;
+    padding: 0.75rem 1.2rem;
     font-size: 0.7rem;
+  }
+
+  .statsBar {
+    max-width: 290px;
+  }
+
+  .statNumber {
+    font-size: 1rem;
+  }
+
+  .statLabel {
+    font-size: 0.55rem;
   }
 }
 
