@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import styles from "./CategoryNav.module.css";
 import { fetchCategories } from "../../services/api";
+import ExploreRippleBackground from "../RippleGrid/ExploreRippleBackground";
 
 const CategoryNav = ({ onCategoryChange }) => {
   const [categories, setCategories] = useState([]);
@@ -108,6 +109,9 @@ const CategoryNav = ({ onCategoryChange }) => {
       ref={sectionRef}
       className={`${styles.categorySection} ${isVisible ? styles.visible : ""}`}
     >
+      {/* RippleGrid animated background */}
+      <ExploreRippleBackground />
+
       {/* Ambient floating orbs */}
       <div className={styles.ambientOrb} aria-hidden="true" />
       <div className={styles.ambientOrb} aria-hidden="true" />
@@ -224,16 +228,19 @@ const CategoryNav = ({ onCategoryChange }) => {
                           loading="lazy"
                         />
                       ) : (
-                        <span className={styles.avatar} style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          fontSize: "1.6rem",
-                          background: `linear-gradient(135deg, ${cat.grad_start || "#3f9e8f"}, ${cat.grad_end || "#7ecfc0"})`,
-                          borderRadius: "50%",
-                          width: "100%",
-                          height: "100%",
-                        }}>
+                        <span
+                          className={styles.avatar}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: "1.6rem",
+                            background: `linear-gradient(135deg, ${cat.grad_start || "#3f9e8f"}, ${cat.grad_end || "#7ecfc0"})`,
+                            borderRadius: "50%",
+                            width: "100%",
+                            height: "100%",
+                          }}
+                        >
                           {cat.emoji || "✈️"}
                         </span>
                       )}
@@ -274,4 +281,3 @@ const CategoryNav = ({ onCategoryChange }) => {
 };
 
 export default CategoryNav;
-
