@@ -708,17 +708,17 @@
 
 @media (max-width: 480px) {
   .heroContent {
-    padding: 105px 14px 24px;
+    padding: 120px 14px 24px;
   }
 
   .heading {
-    font-size: clamp(1.7rem, 8vw, 2.2rem);
+    font-size: clamp(1.6rem, 8vw, 2rem);
     letter-spacing: -0.5px;
   }
 
   .inlineImgWrap {
     width: 40px;
-    height: 24px;
+    height: 22px;
   }
 
   .ctaRow {
@@ -754,18 +754,6 @@
     height: 36px;
   }
 
-  .catThumb {
-    width: 58px;
-    height: 58px;
-  }
-
-  .catEmoji {
-    font-size: 22px;
-  }
-
-  .catLabel {
-    font-size: 11px;
-  }
 }
 
 /* Reduced motion */

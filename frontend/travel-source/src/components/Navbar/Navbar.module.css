@@ -84,7 +84,7 @@
 }
 
 .logoImg {
-  height: 100px;
+  height: 130px;
   width: auto;
   object-fit: contain;
 }
@@ -1218,7 +1218,7 @@
   }
 
   .logoImg {
-    height: 80px;
+    height: 52px;
   }
 
   .searchOverlay {
@@ -1237,7 +1237,7 @@
 
 @media (max-width: 480px) {
   .logoImg {
-    height: 65px;
+    height: 48px;
   }
 
   .searchBtn {
