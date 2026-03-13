@@ -91,16 +91,7 @@ const TRUST_STATS = [
   { icon: <Clock size={22} />, number: "9+ Years", label: "Experience" },
 ];
 
-const CATEGORIES = [
-  { id: "weekend", label: "Long Weekend", emoji: "🌅" },
-  { id: "international", label: "International", emoji: "✈️" },
-  { id: "ladakh", label: "Ladakh", emoji: "🏔️" },
-  { id: "spiti", label: "Spiti", emoji: "🏍️" },
-  { id: "treks", label: "Treks", emoji: "🥾" },
-  { id: "biking", label: "Biking", emoji: "🚴" },
-  { id: "backpacking", label: "Backpacking", emoji: "🎒" },
-  { id: "allgirls", label: "All Girls", emoji: "👩‍👩‍👧" },
-];
+
 
 const HeroSection = () => {
   const [entered, setEntered] = useState(false);
@@ -334,25 +325,6 @@ const HeroSection = () => {
         </div>
       </div>
 
-      {/* ═══ Category Strip ═══ */}
-      <div className={styles.catStrip}>
-        <div className={styles.catInner}>
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.id}
-              className={styles.catItem}
-              onClick={scrollToTrips}
-            >
-              <div className={styles.catThumb}>
-                <div className={styles.catThumbInner}>
-                  <span className={styles.catEmoji}>{cat.emoji}</span>
-                </div>
-              </div>
-              <span className={styles.catLabel}>{cat.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
     </section>
   );
 };
