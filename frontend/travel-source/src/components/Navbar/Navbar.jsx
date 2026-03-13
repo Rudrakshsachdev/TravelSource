@@ -1,25 +1,54 @@
 import styles from "./Navbar.module.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { getAuthData, logout } from "../../utils/auth";
 import { useState, useEffect, useRef, useCallback } from "react";
-import logoIcon from "../../assets/logo-icon.svg";
 import { fetchTrips } from "../../services/api";
+import {
+  Search,
+  Phone,
+  User,
+  LogOut,
+  BookOpen,
+  Compass,
+  MapPin,
+  Mountain,
+  Bike,
+  Mail,
+  Shield,
+  FileText,
+  ChevronDown,
+  X,
+  Flame,
+  Star,
+  Users,
+} from "lucide-react";
+import tpLogo from "../../assets/logog.png";
+
+/* ═══════════════════════════════════════════════════════════════
+   Navbar — Advanced JustWravel-style | Travel Professor
+   Glassmorphism, search overlay, rich dropdowns, user avatar
+   ═══════════════════════════════════════════════════════════════ */
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const authData = getAuthData();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeHover, setActiveHover] = useState(null);
+  const [activeHover, setActiveHover] = useState("");
+  const [activeMobileGroup, setActiveMobileGroup] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const menuRef = useRef(null);
-  const timeoutRef = useRef(null);
+  const searchInputRef = useRef(null);
+  const userDropdownRef = useRef(null);
+  const dropdownTimeoutRef = useRef(null);
   const rafRef = useRef(null);
 
   const [destinations, setDestinations] = useState([]);
-  const [tripsRaw, setTripsRaw] = useState([]);
-  const [loadingDestinations, setLoadingDestinations] = useState(true);
+  const [tripsCount, setTripsCount] = useState(0);
 
-  // Throttled scroll via rAF to avoid layout thrashing
+  /* ── Scroll handler ── */
   const handleScroll = useCallback(() => {
     if (rafRef.current) return;
     rafRef.current = requestAnimationFrame(() => {
@@ -28,9 +57,9 @@ const Navbar = () => {
     });
   }, []);
 
-  // Lock body scroll when mobile menu is open
+  /* ── Body lock on mobile menu ── */
   useEffect(() => {
-    if (isMenuOpen) {
+    if (isMenuOpen || isSearchOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -38,15 +67,15 @@ const Navbar = () => {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [isMenuOpen]);
+  }, [isMenuOpen, isSearchOpen]);
 
+  /* ── Load data + listeners ── */
   useEffect(() => {
     const loadDestinations = async () => {
       try {
         const trips = await fetchTrips();
-        setTripsRaw(trips);
+        setTripsCount(trips.length);
 
-        // Extract unique destinations based on location name
         const uniqueLocations = [];
         const seen = new Set();
 
@@ -57,17 +86,14 @@ const Navbar = () => {
             uniqueLocations.push({
               id: trip.id,
               name: trip.location,
-              country: trip.country || "Global",
-              type: trip.category?.name || "Premium",
+              country: trip.country || "Destination",
             });
           }
         });
 
-        setDestinations(uniqueLocations.slice(0, 6)); // Keep top 6 for the grid layout
+        setDestinations(uniqueLocations.slice(0, 6));
       } catch (err) {
         console.error("Failed to load navbar destinations:", err);
-      } finally {
-        setLoadingDestinations(false);
       }
     };
 
@@ -77,208 +103,349 @@ const Navbar = () => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setIsMenuOpen(false);
       }
+      if (
+        userDropdownRef.current &&
+        !userDropdownRef.current.contains(event.target)
+      ) {
+        setIsUserDropdownOpen(false);
+      }
+    };
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setIsSearchOpen(false);
+        setIsUserDropdownOpen(false);
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("mousedown", handleClickOutside);
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      document.removeEventListener("keydown", handleKeyDown);
+      if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, [handleScroll]);
+
+  /* ── Focus search input when overlay opens ── */
+  useEffect(() => {
+    if (isSearchOpen && searchInputRef.current) {
+      setTimeout(() => searchInputRef.current?.focus(), 100);
+    }
+  }, [isSearchOpen]);
 
   const handleLogout = () => {
     logout();
     navigate("/login");
     setIsMenuOpen(false);
+    setIsUserDropdownOpen(false);
   };
 
   const handleNavigation = (path) => {
     navigate(path);
     setIsMenuOpen(false);
+    setActiveMobileGroup("");
+    setActiveHover("");
+    setIsUserDropdownOpen(false);
+    setIsSearchOpen(false);
   };
 
-  const handleDestinationHover = (index) => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    setActiveHover(index);
+  const handleDesktopHover = (menuKey) => {
+    if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
+    setActiveHover(menuKey);
   };
 
-  const handleDestinationLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setActiveHover(null);
-    }, 200);
+  const handleDesktopLeave = () => {
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setActiveHover("");
+    }, 250);
   };
+
+  const goToHomeSection = (sectionId) => {
+    if (location.pathname !== "/") {
+      navigate("/");
+    }
+
+    setIsMenuOpen(false);
+    setActiveHover("");
+    setActiveMobileGroup("");
+    setIsSearchOpen(false);
+
+    const delay = location.pathname !== "/" ? 400 : 50;
+    setTimeout(() => {
+      const target = document.getElementById(sectionId);
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, delay);
+  };
+
+  /* ── Rich menu structure with icons ── */
+  const desktopMenus = [
+    {
+      key: "backpacking",
+      label: "Backpacking Trips",
+      submenu: [
+        {
+          icon: <Star size={14} />,
+          label: "Featured Tours",
+          desc: "Our most popular trips",
+          action: () => goToHomeSection("trips-grid"),
+        },
+        {
+          icon: <BookOpen size={14} />,
+          label: "My Bookings",
+          desc: "View your reservations",
+          action: () => handleNavigation("/my-bookings"),
+        },
+      ],
+    },
+    {
+      key: "bestsellers",
+      label: "Best Sellers",
+      submenu: destinations.map((dest) => ({
+        icon: <MapPin size={14} />,
+        label: dest.name,
+        desc: dest.country,
+        action: () => handleNavigation(`/trips/${dest.id}`),
+      })),
+    },
+    {
+      key: "biking",
+      label: "Biking Trips",
+      submenu: [
+        {
+          icon: <Mountain size={14} />,
+          label: "Adventure",
+          desc: "Thrilling outdoor rides",
+          action: () => goToHomeSection("trips-grid"),
+        },
+        {
+          icon: <Users size={14} />,
+          label: "Group Trips",
+          desc: "Travel with friends",
+          action: () => goToHomeSection("trips-grid"),
+        },
+        {
+          icon: <Mail size={14} />,
+          label: "Contact Concierge",
+          desc: "Get expert help",
+          action: () => handleNavigation("/contact"),
+        },
+      ],
+    },
+    {
+      key: "more",
+      label: "More",
+      submenu: [
+        {
+          icon: <Compass size={14} />,
+          label: "Contact",
+          desc: "Reach our team",
+          action: () => handleNavigation("/contact"),
+        },
+        {
+          icon: <FileText size={14} />,
+          label: "Terms",
+          desc: "Terms of service",
+          action: () => handleNavigation("/terms"),
+        },
+        {
+          icon: <Shield size={14} />,
+          label: "Privacy",
+          desc: "Your data matters",
+          action: () => handleNavigation("/privacy"),
+        },
+        {
+          icon: <FileText size={14} />,
+          label: "Refund Policy",
+          desc: "Returns & refunds",
+          action: () => handleNavigation("/refund-policy"),
+        },
+      ],
+    },
+  ];
+
+  const searchHints = [
+    "Goa",
+    "Manali",
+    "Leh Ladakh",
+    "Kashmir",
+    "Rishikesh",
+    "Weekend Trips",
+    "Group Tours",
+  ];
 
   return (
     <>
-      {/* Luxury Top Bar */}
-      <div
-        className={`${styles.topBar} ${isScrolled ? styles.topBarHidden : ""}`}
-      >
-        <div className={styles.topBarContent}>
-          <span className={styles.topBarText}>
-            <span className={styles.topBarStar}>✦</span>
-            <span className={styles.topBarMainText}>
-              CURATING EXTRAORDINARY JOURNEYS SINCE 2021
-            </span>
-            <span className={styles.topBarStar}>✦</span>
-          </span>
-          <div className={styles.topBarIcons}>
-            <span className={styles.topBarIcon}>24/7 CONCIERGE</span>
-            <span className={styles.topBarDivider}>|</span>
-            <span className={styles.topBarIcon}>EXCLUSIVE ACCESS</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Navbar */}
       <header
         className={`${styles.navbar} ${isScrolled ? styles.scrolled : ""}`}
-        data-luxury-navbar
       >
         <div className={styles.container}>
-          {/* Premium Logo Section */}
+          {/* ── Logo ── */}
           <div
             className={styles.logoContainer}
             onClick={() => handleNavigation("/")}
-            aria-label="Travel Professor - Luxury Travel Concierge"
+            aria-label="Travel Professor home"
           >
-            <div className={styles.logoMark}>
-              <img
-                src={logoIcon}
-                alt="Travel Professor"
-                className={styles.logoImg}
-              />
-            </div>
-            <div className={styles.logoText}>
-              <span className={styles.logoPrimary}>TRAVEL</span>
-              <span className={styles.logoDivider}></span>
-              <span className={styles.logoSecondary}>PROFESSOR</span>
-              <div className={styles.logoSubtitle}>WORLD-CLASS JOURNEYS</div>
-            </div>
+            <img
+              src={tpLogo}
+              alt="Travel Professor"
+              className={styles.logoImg}
+            />
           </div>
 
-          {/* Desktop Navigation */}
+          {/* ── Desktop Nav ── */}
           <nav className={styles.navDesktop}>
-            {/* Navigation Links */}
-            <div className={styles.navLinks}>
-              <button
-                className={styles.navLink}
-                onMouseEnter={() => handleDestinationHover(0)}
-                onMouseLeave={handleDestinationLeave}
-              >
-                <span className={styles.linkNumber}>01</span>
-                <span className={styles.linkText}>DESTINATIONS</span>
-                <span className={styles.linkUnderline}></span>
-              </button>
+            <ul className={styles.navLinks}>
+              {/* "Good Friday" animated badge */}
+              <li className={styles.navItem}>
+                <button
+                  className={styles.highlightBadge}
+                  onClick={() => goToHomeSection("trips-grid")}
+                >
+                  Good Friday
+                  <span className={styles.liveBadge}>LIVE NOW</span>
+                </button>
+              </li>
 
-              <button
-                className={styles.navLink}
-                onClick={() => handleNavigation("/my-bookings")}
-              >
-                <span className={styles.linkNumber}>02</span>
-                <span className={styles.linkText}>MY BOOKINGS</span>
-                <span className={styles.linkUnderline}></span>
-              </button>
+              {desktopMenus.map((item) => (
+                <li
+                  key={item.key}
+                  className={styles.navItem}
+                  onMouseEnter={() =>
+                    item.submenu && handleDesktopHover(item.key)
+                  }
+                  onMouseLeave={handleDesktopLeave}
+                >
+                  <button className={styles.navLink} onClick={item.action}>
+                    {item.label}
+                    {item.submenu ? <span className={styles.caret} /> : null}
+                  </button>
 
-              <button
-                className={styles.navLink}
-                onClick={() => handleNavigation("/yachts")}
-              >
-                <span className={styles.linkNumber}>03</span>
-                <span className={styles.linkText}>PRIVATE YACHTS</span>
-                <span className={styles.linkUnderline}></span>
-              </button>
-
-              <button
-                className={styles.navLink}
-                onClick={() => handleNavigation("/about")}
-              >
-                <span className={styles.linkNumber}>04</span>
-                <span className={styles.linkText}>OUR LEGACY</span>
-                <span className={styles.linkUnderline}></span>
-              </button>
-            </div>
-
-            {/* User Actions */}
-            <div className={styles.userActions}>
-              {authData && (
-                <div className={styles.userSection}>
-                  <span className={styles.userDivider}></span>
-                  <div className={styles.userProfile}>
-                    <div className={styles.avatarRing}>
-                      <span className={styles.userInitial}>
-                        {authData.username.charAt(0).toUpperCase()}
-                      </span>
-                    </div>
-                    <div className={styles.userInfo}>
-                      <span className={styles.userGreeting}>Hello,</span>
-                      <span className={styles.userName}>
-                        {authData.username}
-                      </span>
-                    </div>
-                  </div>
-
-                  {authData?.role?.toUpperCase() === "USER" && (
-                    <button
-                      className={styles.enquiryBtn}
-                      onClick={() => handleNavigation("/my-enquiries")}
-                    >
-                      <span className={styles.enquiryIcon}>
-                        <svg
-                          viewBox="0 0 20 20"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
+                  {/* Rich dropdown with icons & descriptions */}
+                  {item.submenu && activeHover === item.key ? (
+                    <div className={styles.dropdown}>
+                      {item.submenu.map((subItem) => (
+                        <button
+                          key={`${item.key}-${subItem.label}`}
+                          className={styles.dropdownItem}
+                          onClick={subItem.action}
                         >
-                          <path
-                            d="M10 1V19M1 10H19"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                          />
-                        </svg>
-                      </span>
-                      <span className={styles.enquiryText}>MY JOURNEYS</span>
-                    </button>
+                          {subItem.icon && (
+                            <span className={styles.dropdownIcon}>
+                              {subItem.icon}
+                            </span>
+                          )}
+                          <span className={styles.dropdownItemText}>
+                            <span className={styles.dropdownItemLabel}>
+                              {subItem.label}
+                            </span>
+                            {subItem.desc && (
+                              <span className={styles.dropdownItemDesc}>
+                                {subItem.desc}
+                              </span>
+                            )}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+
+            {/* ── Right Actions ── */}
+            <div className={styles.rightActions}>
+              {/* Phone CTA with ring animation */}
+              <a
+                href="tel:+919797972175"
+                className={styles.phoneCta}
+                aria-label="Call us"
+              >
+                <span className={styles.phoneIconWrap}>
+                  <Phone size={14} strokeWidth={2} />
+                </span>
+                <span className={styles.phoneTextWrap}>
+                  <span className={styles.phoneLabel}>Call Us</span>
+                  <span className={styles.phoneNumber}>
+                    +91 97 97 97 21 75
+                  </span>
+                </span>
+              </a>
+
+              {/* Search — opens overlay */}
+              <button
+                className={styles.searchBtn}
+                onClick={() => setIsSearchOpen(true)}
+                aria-label="Search"
+              >
+                <Search size={18} strokeWidth={2.5} />
+              </button>
+
+              {/* Auth: User avatar dropdown OR Login button */}
+              {authData ? (
+                <div
+                  className={styles.navItem}
+                  ref={userDropdownRef}
+                  style={{ position: "relative" }}
+                >
+                  <button
+                    className={styles.userBtn}
+                    onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                  >
+                    <span className={styles.userAvatar}>
+                      {authData.username.charAt(0).toUpperCase()}
+                    </span>
+                    <span className={styles.userName}>
+                      {authData.username}
+                    </span>
+                    <span className={styles.userCaret} />
+                  </button>
+
+                  {isUserDropdownOpen && (
+                    <div className={styles.userDropdown}>
+                      <button
+                        className={styles.userDropdownItem}
+                        onClick={() => handleNavigation("/my-enquiries")}
+                      >
+                        <User size={16} />
+                        My Journeys
+                      </button>
+                      <button
+                        className={styles.userDropdownItem}
+                        onClick={() => handleNavigation("/my-bookings")}
+                      >
+                        <BookOpen size={16} />
+                        My Bookings
+                      </button>
+                      <div className={styles.userDivider} />
+                      <button
+                        className={`${styles.userDropdownItem} ${styles.logoutItem}`}
+                        onClick={handleLogout}
+                      >
+                        <LogOut size={16} />
+                        Logout
+                      </button>
+                    </div>
                   )}
                 </div>
+              ) : (
+                <button
+                  className={styles.loginBtn}
+                  onClick={() => handleNavigation("/login")}
+                >
+                  Login
+                </button>
               )}
-
-              {/* Luxury CTA Button */}
-              <button
-                className={`${styles.primaryBtn} ${authData ? styles.logoutBtn : styles.ctaBtn}`}
-                onClick={
-                  authData ? handleLogout : () => handleNavigation("/login")
-                }
-                aria-label={authData ? "Logout" : "Begin Your Journey"}
-              >
-                <span className={styles.btnGlow}></span>
-                <span className={styles.btnText}>
-                  {authData ? "LOGOUT" : "BEGIN JOURNEY"}
-                </span>
-                <span className={styles.btnArrow}>
-                  <svg
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M4 10H16M16 10L13 6M16 10L13 14"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
-              </button>
             </div>
           </nav>
 
-          {/* Mobile Menu Toggle */}
+          {/* ── Mobile Toggle ── */}
           <button
             className={`${styles.mobileMenuToggle} ${isMenuOpen ? styles.active : ""}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -289,89 +456,59 @@ const Navbar = () => {
             <div className={styles.toggleLines}>
               <span></span>
               <span></span>
+              <span></span>
             </div>
           </button>
         </div>
-
-        {/* Luxury Destinations Dropdown */}
-        {activeHover === 0 && (
-          <div
-            className={styles.destinationsDropdown}
-            onMouseEnter={() => handleDestinationHover(0)}
-            onMouseLeave={handleDestinationLeave}
-          >
-            <div className={styles.dropdownContent}>
-              <div className={styles.dropdownHeader}>
-                <span className={styles.dropdownTitle}>
-                  EXCLUSIVE DESTINATIONS
-                </span>
-                <span className={styles.dropdownSubtitle}>
-                  Curated by our global concierge team
-                </span>
-              </div>
-
-              <div className={styles.destinationsGrid}>
-                {destinations.map((dest) => (
-                  <div
-                    key={dest.id}
-                    className={styles.destinationCard}
-                    onClick={() =>
-                      handleNavigation(`/trips/${dest.id}`)
-                    }
-                  >
-                    <div className={styles.destinationNumber}>0{dest.id}</div>
-                    <div className={styles.destinationInfo}>
-                      <div className={styles.destinationName}>{dest.name}</div>
-                      <div className={styles.destinationCountry}>
-                        {dest.country}
-                      </div>
-                    </div>
-                    <div className={styles.destinationType}>{dest.type}</div>
-                    <div className={styles.destinationArrow}>
-                      <svg
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M4 8H12M12 8L9 5M12 8L9 11"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className={styles.dropdownFooter}>
-                <button className={styles.viewAllBtn} onClick={() => handleNavigation("/#trips")}>
-                  VIEW ALL {tripsRaw.length} JOURNEYS
-                  <span className={styles.viewAllArrow}>
-                    <svg
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M4 8H12M12 8L9 5M12 8L9 11"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </span>
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </header>
 
-      {/* Luxury Mobile Menu */}
+      {/* ═══ Search Overlay ═══ */}
+      <div
+        className={`${styles.searchOverlay} ${isSearchOpen ? styles.active : ""}`}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) setIsSearchOpen(false);
+        }}
+      >
+        <div className={styles.searchModal}>
+          <div className={styles.searchInputWrap}>
+            <Search size={20} strokeWidth={2} />
+            <input
+              ref={searchInputRef}
+              className={styles.searchInput}
+              type="text"
+              placeholder="Search destinations, trips, activities..."
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  setIsSearchOpen(false);
+                  goToHomeSection("trips-grid");
+                }
+              }}
+            />
+            <button
+              className={styles.searchClose}
+              onClick={() => setIsSearchOpen(false)}
+            >
+              ESC
+            </button>
+          </div>
+          <div className={styles.searchHints}>
+            {searchHints.map((hint) => (
+              <button
+                key={hint}
+                className={styles.searchHint}
+                onClick={() => {
+                  setIsSearchOpen(false);
+                  goToHomeSection("trips-grid");
+                }}
+              >
+                {hint}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Mobile Drawer ── */}
       <div
         className={`${styles.mobileMenu} ${isMenuOpen ? styles.active : ""}`}
       >
@@ -383,7 +520,7 @@ const Navbar = () => {
                   <div className={styles.mobileAvatar}>
                     {authData.username.charAt(0).toUpperCase()}
                   </div>
-                  <div className={styles.mobileUserInfo}>
+                  <div>
                     <div className={styles.mobileWelcome}>Welcome back</div>
                     <div className={styles.mobileUsername}>
                       {authData.username}
@@ -400,59 +537,61 @@ const Navbar = () => {
 
           <nav className={styles.mobileNav}>
             <div className={styles.mobileNavSection}>
-              <div className={styles.mobileNavTitle}>EXPLORE</div>
-              {destinations.slice(0, 4).map((dest, index) => (
-                <button
-                  key={dest.id}
-                  className={styles.mobileNavItem}
-                  onClick={() =>
-                    handleNavigation(`/trips/${dest.id}`)
-                  }
-                >
-                  <span className={styles.mobileItemNumber}>0{index + 1}</span>
-                  <span className={styles.mobileItemText}>{dest.name}</span>
-                  <span className={styles.mobileItemArrow}>
-                    <svg
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
+              <button
+                className={styles.mobileNavTitle}
+                onClick={() => handleNavigation("/")}
+              >
+                🏠 Home
+              </button>
+              <button
+                className={styles.mobileNavTitle}
+                onClick={() => goToHomeSection("trips-grid")}
+              >
+                🎒 Backpacking Trips
+              </button>
+              <button
+                className={styles.mobileNavTitle}
+                onClick={() =>
+                  setActiveMobileGroup((prev) =>
+                    prev === "destinations" ? "" : "destinations",
+                  )
+                }
+              >
+                ⭐ Best Sellers
+              </button>
+
+              {activeMobileGroup === "destinations"
+                ? destinations.map((dest) => (
+                    <button
+                      key={dest.id}
+                      className={styles.mobileNavItem}
+                      onClick={() => handleNavigation(`/trips/${dest.id}`)}
                     >
-                      <path
-                        d="M4 8H12M12 8L9 5M12 8L9 11"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </span>
-                </button>
-              ))}
+                      {dest.name}
+                    </button>
+                  ))
+                : null}
             </div>
 
             <div className={styles.mobileNavSection}>
-              <div className={styles.mobileNavTitle}>NAVIGATION</div>
               <button
-                className={styles.mobileNavItem}
-                onClick={() => handleNavigation("/experiences")}
+                className={styles.mobileNavTitle}
+                onClick={() => goToHomeSection("trips-grid")}
               >
-                <span className={styles.mobileItemText}>
-                  Premium Experiences
-                </span>
+                🚴 Biking Trips
               </button>
               <button
-                className={styles.mobileNavItem}
-                onClick={() => handleNavigation("/yachts")}
+                className={styles.mobileNavTitle}
+                onClick={() => handleNavigation("/contact")}
               >
-                <span className={styles.mobileItemText}>
-                  Private Yacht Charters
-                </span>
+                📞 Contact
               </button>
+
               <button
                 className={styles.mobileNavItem}
-                onClick={() => handleNavigation("/about")}
+                onClick={() => handleNavigation("/my-bookings")}
               >
-                <span className={styles.mobileItemText}>Our Legacy</span>
+                My Bookings
               </button>
 
               {authData?.role?.toUpperCase() === "USER" && (
@@ -460,7 +599,7 @@ const Navbar = () => {
                   className={styles.mobileNavItem}
                   onClick={() => handleNavigation("/my-enquiries")}
                 >
-                  <span className={styles.mobileItemText}>My Journeys</span>
+                  My Journeys
                 </button>
               )}
             </div>
@@ -472,53 +611,26 @@ const Navbar = () => {
                 className={styles.mobileCtaBtn}
                 onClick={() => handleNavigation("/login")}
               >
-                LOGIN / SIGN UP
-                <span className={styles.mobileCtaArrow}>
-                  <svg
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M4 10H16M16 10L13 6M16 10L13 14"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
+                Sign In / Register
               </button>
             )}
 
             <button
               className={`${styles.mobileCtaBtn} ${authData ? styles.mobileLogoutBtn : styles.mobileSecondaryBtn}`}
               onClick={
-                authData ? handleLogout : () => handleNavigation("/concierge")
+                authData ? handleLogout : () => goToHomeSection("trips-grid")
               }
             >
-              {authData ? "LOGOUT" : "CONNECT WITH CONCIERGE"}
-              <span className={styles.mobileCtaArrow}>
-                <svg
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M4 10H16M16 10L13 6M16 10L13 14"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </span>
+              {authData ? "Logout" : "Start Booking"}
             </button>
 
             <div className={styles.mobileContact}>
-              <div className={styles.contactTitle}>24/7 CONCIERGE</div>
-              <a href="tel:+18005551234" className={styles.contactPhone}>
-                +1 (800) 555-1234
+              <div className={styles.contactTitle}>TRIP OPTIONS</div>
+              <span className={styles.contactCount}>
+                {tripsCount} tours available
+              </span>
+              <a href="tel:+919797972175" className={styles.contactPhone}>
+                +91 97 97 97 21 75
               </a>
               <a
                 href="mailto:concierge@travelprofessor.com"
