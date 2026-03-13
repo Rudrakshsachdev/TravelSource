@@ -12,33 +12,36 @@ import {
   Compass,
   MapPin,
   Mountain,
-  Bike,
   Mail,
   Shield,
   FileText,
-  ChevronDown,
-  X,
-  Flame,
   Star,
   Users,
+  ArrowRight,
+  Bike,
+  Globe,
+  Heart,
+  Sparkles,
 } from "lucide-react";
 import tpLogo from "../../assets/logog.png";
 
 /* ═══════════════════════════════════════════════════════════════
-   Navbar — Advanced JustWravel-style | Travel Professor
-   Glassmorphism, search overlay, rich dropdowns, user avatar
+   Navbar — Production-Level | Travel Professor
+   Mega-menus · Keyboard A11y · Micro-interactions · ⌘K Search
    ═══════════════════════════════════════════════════════════════ */
 
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const authData = getAuthData();
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeHover, setActiveHover] = useState("");
   const [activeMobileGroup, setActiveMobileGroup] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+
   const menuRef = useRef(null);
   const searchInputRef = useRef(null);
   const userDropdownRef = useRef(null);
@@ -48,7 +51,7 @@ const Navbar = () => {
   const [destinations, setDestinations] = useState([]);
   const [tripsCount, setTripsCount] = useState(0);
 
-  /* ── Scroll handler ── */
+  /* ── Scroll with rAF throttle ── */
   const handleScroll = useCallback(() => {
     if (rafRef.current) return;
     rafRef.current = requestAnimationFrame(() => {
@@ -57,41 +60,35 @@ const Navbar = () => {
     });
   }, []);
 
-  /* ── Body lock on mobile menu ── */
+  /* ── Body scroll lock ── */
   useEffect(() => {
-    if (isMenuOpen || isSearchOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow =
+      isMenuOpen || isSearchOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
   }, [isMenuOpen, isSearchOpen]);
 
-  /* ── Load data + listeners ── */
+  /* ── Load data + global listeners ── */
   useEffect(() => {
     const loadDestinations = async () => {
       try {
         const trips = await fetchTrips();
         setTripsCount(trips.length);
 
-        const uniqueLocations = [];
+        const unique = [];
         const seen = new Set();
-
         trips.forEach((trip) => {
-          const locName = trip.location;
-          if (!seen.has(locName)) {
-            seen.add(locName);
-            uniqueLocations.push({
+          if (!seen.has(trip.location)) {
+            seen.add(trip.location);
+            unique.push({
               id: trip.id,
               name: trip.location,
               country: trip.country || "Destination",
             });
           }
         });
-
-        setDestinations(uniqueLocations.slice(0, 6));
+        setDestinations(unique.slice(0, 6));
       } catch (err) {
         console.error("Failed to load navbar destinations:", err);
       }
@@ -99,14 +96,11 @@ const Navbar = () => {
 
     loadDestinations();
 
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
         setIsMenuOpen(false);
       }
-      if (
-        userDropdownRef.current &&
-        !userDropdownRef.current.contains(event.target)
-      ) {
+      if (userDropdownRef.current && !userDropdownRef.current.contains(e.target)) {
         setIsUserDropdownOpen(false);
       }
     };
@@ -115,6 +109,12 @@ const Navbar = () => {
       if (e.key === "Escape") {
         setIsSearchOpen(false);
         setIsUserDropdownOpen(false);
+        setActiveHover("");
+      }
+      // ⌘K / Ctrl+K to open search
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setIsSearchOpen((prev) => !prev);
       }
     };
 
@@ -131,13 +131,15 @@ const Navbar = () => {
     };
   }, [handleScroll]);
 
-  /* ── Focus search input when overlay opens ── */
+  /* ── Auto-focus search input ── */
   useEffect(() => {
     if (isSearchOpen && searchInputRef.current) {
-      setTimeout(() => searchInputRef.current?.focus(), 100);
+      const t = setTimeout(() => searchInputRef.current?.focus(), 120);
+      return () => clearTimeout(t);
     }
   }, [isSearchOpen]);
 
+  /* ── Navigation helpers ── */
   const handleLogout = () => {
     logout();
     navigate("/login");
@@ -145,126 +147,158 @@ const Navbar = () => {
     setIsUserDropdownOpen(false);
   };
 
-  const handleNavigation = (path) => {
-    navigate(path);
-    setIsMenuOpen(false);
-    setActiveMobileGroup("");
-    setActiveHover("");
-    setIsUserDropdownOpen(false);
-    setIsSearchOpen(false);
-  };
+  const go = useCallback(
+    (path) => {
+      navigate(path);
+      setIsMenuOpen(false);
+      setActiveMobileGroup("");
+      setActiveHover("");
+      setIsUserDropdownOpen(false);
+      setIsSearchOpen(false);
+    },
+    [navigate],
+  );
 
-  const handleDesktopHover = (menuKey) => {
+  const handleDesktopHover = (key) => {
     if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
-    setActiveHover(menuKey);
+    setActiveHover(key);
   };
 
   const handleDesktopLeave = () => {
-    dropdownTimeoutRef.current = setTimeout(() => {
+    dropdownTimeoutRef.current = setTimeout(() => setActiveHover(""), 220);
+  };
+
+  const goToSection = useCallback(
+    (sectionId) => {
+      if (location.pathname !== "/") navigate("/");
+      setIsMenuOpen(false);
       setActiveHover("");
-    }, 250);
-  };
+      setActiveMobileGroup("");
+      setIsSearchOpen(false);
 
-  const goToHomeSection = (sectionId) => {
-    if (location.pathname !== "/") {
-      navigate("/");
+      const delay = location.pathname !== "/" ? 400 : 50;
+      setTimeout(() => {
+        const el = document.getElementById(sectionId);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, delay);
+    },
+    [location.pathname, navigate],
+  );
+
+  /* ── Keyboard navigation for dropdowns ── */
+  const handleNavKeyDown = (e, menuKey) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      setActiveHover((prev) => (prev === menuKey ? "" : menuKey));
     }
-
-    setIsMenuOpen(false);
-    setActiveHover("");
-    setActiveMobileGroup("");
-    setIsSearchOpen(false);
-
-    const delay = location.pathname !== "/" ? 400 : 50;
-    setTimeout(() => {
-      const target = document.getElementById(sectionId);
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    }, delay);
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveHover(menuKey);
+    }
+    if (e.key === "Escape") {
+      setActiveHover("");
+    }
   };
 
-  /* ── Rich menu structure with icons ── */
+  /* ═══ MEGA-MENU STRUCTURE ═══ */
   const desktopMenus = [
     {
       key: "backpacking",
       label: "Backpacking Trips",
+      header: "EXPLORE TRIPS",
       submenu: [
         {
-          icon: <Star size={14} />,
+          icon: <Sparkles size={16} />,
           label: "Featured Tours",
-          desc: "Our most popular trips",
-          action: () => goToHomeSection("trips-grid"),
+          desc: "Our most loved trips",
+          action: () => goToSection("trips-grid"),
         },
         {
-          icon: <BookOpen size={14} />,
+          icon: <Globe size={16} />,
+          label: "All Destinations",
+          desc: "Browse every location",
+          action: () => goToSection("trips-grid"),
+        },
+        {
+          icon: <BookOpen size={16} />,
           label: "My Bookings",
           desc: "View your reservations",
-          action: () => handleNavigation("/my-bookings"),
+          action: () => go("/my-bookings"),
         },
       ],
+      footer: { label: "View all trips", action: () => goToSection("trips-grid") },
     },
     {
       key: "bestsellers",
       label: "Best Sellers",
+      header: "TOP DESTINATIONS",
       submenu: destinations.map((dest) => ({
-        icon: <MapPin size={14} />,
+        icon: <MapPin size={16} />,
         label: dest.name,
         desc: dest.country,
-        action: () => handleNavigation(`/trips/${dest.id}`),
+        action: () => go(`/trips/${dest.id}`),
       })),
+      footer: { label: "See all destinations", action: () => goToSection("trips-grid") },
     },
     {
       key: "biking",
       label: "Biking Trips",
+      header: "ADVENTURE RIDES",
       submenu: [
         {
-          icon: <Mountain size={14} />,
-          label: "Adventure",
-          desc: "Thrilling outdoor rides",
-          action: () => goToHomeSection("trips-grid"),
+          icon: <Mountain size={16} />,
+          label: "Mountain Rides",
+          desc: "High-altitude thrills",
+          action: () => goToSection("trips-grid"),
         },
         {
-          icon: <Users size={14} />,
-          label: "Group Trips",
-          desc: "Travel with friends",
-          action: () => goToHomeSection("trips-grid"),
+          icon: <Users size={16} />,
+          label: "Group Expeditions",
+          desc: "Ride with a crew",
+          action: () => goToSection("trips-grid"),
         },
         {
-          icon: <Mail size={14} />,
-          label: "Contact Concierge",
-          desc: "Get expert help",
-          action: () => handleNavigation("/contact"),
+          icon: <Heart size={16} />,
+          label: "Solo Adventures",
+          desc: "Go at your own pace",
+          action: () => goToSection("trips-grid"),
+        },
+        {
+          icon: <Mail size={16} />,
+          label: "Trip Concierge",
+          desc: "Expert help & planning",
+          action: () => go("/contact"),
         },
       ],
     },
     {
       key: "more",
       label: "More",
+      header: "RESOURCES",
       submenu: [
         {
-          icon: <Compass size={14} />,
-          label: "Contact",
-          desc: "Reach our team",
-          action: () => handleNavigation("/contact"),
+          icon: <Compass size={16} />,
+          label: "Contact Us",
+          desc: "Get in touch anytime",
+          action: () => go("/contact"),
         },
         {
-          icon: <FileText size={14} />,
-          label: "Terms",
-          desc: "Terms of service",
-          action: () => handleNavigation("/terms"),
+          icon: <FileText size={16} />,
+          label: "Terms of Service",
+          desc: "Rules & agreements",
+          action: () => go("/terms"),
         },
         {
-          icon: <Shield size={14} />,
-          label: "Privacy",
+          icon: <Shield size={16} />,
+          label: "Privacy Policy",
           desc: "Your data matters",
-          action: () => handleNavigation("/privacy"),
+          action: () => go("/privacy"),
         },
         {
-          icon: <FileText size={14} />,
+          icon: <FileText size={16} />,
           label: "Refund Policy",
-          desc: "Returns & refunds",
-          action: () => handleNavigation("/refund-policy"),
+          desc: "Returns & cancellation",
+          action: () => go("/refund-policy"),
         },
       ],
     },
@@ -280,17 +314,22 @@ const Navbar = () => {
     "Group Tours",
   ];
 
+  /* ═══ RENDER ═══ */
   return (
     <>
       <header
         className={`${styles.navbar} ${isScrolled ? styles.scrolled : ""}`}
+        role="banner"
       >
         <div className={styles.container}>
           {/* ── Logo ── */}
           <div
             className={styles.logoContainer}
-            onClick={() => handleNavigation("/")}
-            aria-label="Travel Professor home"
+            onClick={() => go("/")}
+            onKeyDown={(e) => e.key === "Enter" && go("/")}
+            tabIndex={0}
+            role="link"
+            aria-label="Travel Professor — Home"
           >
             <img
               src={tpLogo}
@@ -300,74 +339,115 @@ const Navbar = () => {
           </div>
 
           {/* ── Desktop Nav ── */}
-          <nav className={styles.navDesktop}>
-            <ul className={styles.navLinks}>
-              {/* "Good Friday" animated badge */}
-              <li className={styles.navItem}>
+          <nav className={styles.navDesktop} aria-label="Main navigation">
+            <ul className={styles.navLinks} role="menubar">
+              {/* Good Friday badge */}
+              <li className={styles.navItem} role="none">
                 <button
                   className={styles.highlightBadge}
-                  onClick={() => goToHomeSection("trips-grid")}
+                  onClick={() => goToSection("trips-grid")}
+                  role="menuitem"
+                  aria-label="Good Friday — Live deals"
                 >
                   Good Friday
-                  <span className={styles.liveBadge}>LIVE NOW</span>
+                  <span className={styles.liveBadge} aria-label="Live now">
+                    LIVE NOW
+                  </span>
                 </button>
               </li>
 
-              {desktopMenus.map((item) => (
+              {/* Menu items with mega dropdowns */}
+              {desktopMenus.map((menu) => (
                 <li
-                  key={item.key}
+                  key={menu.key}
                   className={styles.navItem}
-                  onMouseEnter={() =>
-                    item.submenu && handleDesktopHover(item.key)
-                  }
+                  role="none"
+                  onMouseEnter={() => handleDesktopHover(menu.key)}
                   onMouseLeave={handleDesktopLeave}
                 >
-                  <button className={styles.navLink} onClick={item.action}>
-                    {item.label}
-                    {item.submenu ? <span className={styles.caret} /> : null}
+                  <button
+                    className={styles.navLink}
+                    role="menuitem"
+                    aria-haspopup="true"
+                    aria-expanded={activeHover === menu.key}
+                    onClick={() =>
+                      setActiveHover((prev) =>
+                        prev === menu.key ? "" : menu.key,
+                      )
+                    }
+                    onKeyDown={(e) => handleNavKeyDown(e, menu.key)}
+                  >
+                    {menu.label}
+                    <span className={styles.caret} aria-hidden="true" />
                   </button>
 
-                  {/* Rich dropdown with icons & descriptions */}
-                  {item.submenu && activeHover === item.key ? (
-                    <div className={styles.dropdown}>
-                      {item.submenu.map((subItem) => (
-                        <button
-                          key={`${item.key}-${subItem.label}`}
-                          className={styles.dropdownItem}
-                          onClick={subItem.action}
+                  {/* Mega dropdown */}
+                  {activeHover === menu.key && (
+                    <div
+                      className={styles.dropdown}
+                      role="menu"
+                      aria-label={menu.label}
+                    >
+                      {menu.header && (
+                        <div
+                          className={styles.dropdownHeader}
+                          aria-hidden="true"
                         >
-                          {subItem.icon && (
-                            <span className={styles.dropdownIcon}>
-                              {subItem.icon}
-                            </span>
-                          )}
+                          {menu.header}
+                        </div>
+                      )}
+
+                      {menu.submenu.map((item) => (
+                        <button
+                          key={`${menu.key}-${item.label}`}
+                          className={styles.dropdownItem}
+                          onClick={item.action}
+                          role="menuitem"
+                        >
+                          <span className={styles.dropdownIcon}>
+                            {item.icon}
+                          </span>
                           <span className={styles.dropdownItemText}>
                             <span className={styles.dropdownItemLabel}>
-                              {subItem.label}
+                              {item.label}
                             </span>
-                            {subItem.desc && (
+                            {item.desc && (
                               <span className={styles.dropdownItemDesc}>
-                                {subItem.desc}
+                                {item.desc}
                               </span>
                             )}
                           </span>
                         </button>
                       ))}
+
+                      {menu.footer && (
+                        <>
+                          <div className={styles.dropdownDivider} />
+                          <button
+                            className={styles.dropdownFooter}
+                            onClick={menu.footer.action}
+                            role="menuitem"
+                          >
+                            {menu.footer.label}
+                            <ArrowRight size={14} />
+                          </button>
+                        </>
+                      )}
                     </div>
-                  ) : null}
+                  )}
                 </li>
               ))}
             </ul>
 
             {/* ── Right Actions ── */}
             <div className={styles.rightActions}>
-              {/* Phone CTA with ring animation */}
+              {/* Phone CTA */}
               <a
                 href="tel:+919797972175"
                 className={styles.phoneCta}
-                aria-label="Call us"
+                aria-label="Call us at +91 97 97 97 21 75"
               >
-                <span className={styles.phoneIconWrap}>
+                <span className={styles.phoneIconWrap} aria-hidden="true">
                   <Phone size={14} strokeWidth={2} />
                 </span>
                 <span className={styles.phoneTextWrap}>
@@ -378,16 +458,17 @@ const Navbar = () => {
                 </span>
               </a>
 
-              {/* Search — opens overlay */}
+              {/* Search — ⌘K */}
               <button
                 className={styles.searchBtn}
                 onClick={() => setIsSearchOpen(true)}
-                aria-label="Search"
+                aria-label="Search (Ctrl+K)"
+                title="Search (Ctrl+K)"
               >
                 <Search size={18} strokeWidth={2.5} />
               </button>
 
-              {/* Auth: User avatar dropdown OR Login button */}
+              {/* Auth button */}
               {authData ? (
                 <div
                   className={styles.navItem}
@@ -397,36 +478,46 @@ const Navbar = () => {
                   <button
                     className={styles.userBtn}
                     onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                    aria-haspopup="true"
+                    aria-expanded={isUserDropdownOpen}
+                    aria-label="Account menu"
                   >
-                    <span className={styles.userAvatar}>
+                    <span className={styles.userAvatar} aria-hidden="true">
                       {authData.username.charAt(0).toUpperCase()}
                     </span>
                     <span className={styles.userName}>
                       {authData.username}
                     </span>
-                    <span className={styles.userCaret} />
+                    <span className={styles.userCaret} aria-hidden="true" />
                   </button>
 
                   {isUserDropdownOpen && (
-                    <div className={styles.userDropdown}>
+                    <div
+                      className={styles.userDropdown}
+                      role="menu"
+                      aria-label="User menu"
+                    >
                       <button
                         className={styles.userDropdownItem}
-                        onClick={() => handleNavigation("/my-enquiries")}
+                        onClick={() => go("/my-enquiries")}
+                        role="menuitem"
                       >
                         <User size={16} />
                         My Journeys
                       </button>
                       <button
                         className={styles.userDropdownItem}
-                        onClick={() => handleNavigation("/my-bookings")}
+                        onClick={() => go("/my-bookings")}
+                        role="menuitem"
                       >
                         <BookOpen size={16} />
                         My Bookings
                       </button>
-                      <div className={styles.userDivider} />
+                      <div className={styles.userDivider} role="separator" />
                       <button
                         className={`${styles.userDropdownItem} ${styles.logoutItem}`}
                         onClick={handleLogout}
+                        role="menuitem"
                       >
                         <LogOut size={16} />
                         Logout
@@ -437,7 +528,7 @@ const Navbar = () => {
               ) : (
                 <button
                   className={styles.loginBtn}
-                  onClick={() => handleNavigation("/login")}
+                  onClick={() => go("/login")}
                 >
                   Login
                 </button>
@@ -449,56 +540,64 @@ const Navbar = () => {
           <button
             className={`${styles.mobileMenuToggle} ${isMenuOpen ? styles.active : ""}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Navigation menu"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMenuOpen}
+            aria-controls="mobile-nav-drawer"
           >
             <span className={styles.toggleText}>MENU</span>
-            <div className={styles.toggleLines}>
-              <span></span>
-              <span></span>
-              <span></span>
+            <div className={styles.toggleLines} aria-hidden="true">
+              <span />
+              <span />
+              <span />
             </div>
           </button>
         </div>
       </header>
 
-      {/* ═══ Search Overlay ═══ */}
+      {/* ═══ ⌘K SEARCH OVERLAY ═══ */}
       <div
         className={`${styles.searchOverlay} ${isSearchOpen ? styles.active : ""}`}
         onClick={(e) => {
           if (e.target === e.currentTarget) setIsSearchOpen(false);
         }}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Search destinations"
       >
         <div className={styles.searchModal}>
           <div className={styles.searchInputWrap}>
-            <Search size={20} strokeWidth={2} />
+            <Search size={20} strokeWidth={2} aria-hidden="true" />
             <input
               ref={searchInputRef}
               className={styles.searchInput}
               type="text"
-              placeholder="Search destinations, trips, activities..."
+              placeholder="Search destinations, trips, activities…"
+              aria-label="Search"
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   setIsSearchOpen(false);
-                  goToHomeSection("trips-grid");
+                  goToSection("trips-grid");
                 }
               }}
             />
             <button
               className={styles.searchClose}
               onClick={() => setIsSearchOpen(false)}
+              aria-label="Close search"
             >
               ESC
             </button>
           </div>
-          <div className={styles.searchHints}>
+          <div className={styles.searchHintsLabel}>Trending</div>
+          <div className={styles.searchHints} role="list">
             {searchHints.map((hint) => (
               <button
                 key={hint}
                 className={styles.searchHint}
+                role="listitem"
                 onClick={() => {
                   setIsSearchOpen(false);
-                  goToHomeSection("trips-grid");
+                  goToSection("trips-grid");
                 }}
               >
                 {hint}
@@ -508,16 +607,21 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* ── Mobile Drawer ── */}
+      {/* ═══ MOBILE DRAWER ═══ */}
       <div
+        id="mobile-nav-drawer"
         className={`${styles.mobileMenu} ${isMenuOpen ? styles.active : ""}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Mobile navigation"
       >
         <div className={styles.mobileMenuContainer} ref={menuRef}>
+          {/* User greeting */}
           <div className={styles.mobileHeader}>
             <div className={styles.mobileUser}>
               {authData ? (
                 <>
-                  <div className={styles.mobileAvatar}>
+                  <div className={styles.mobileAvatar} aria-hidden="true">
                     {authData.username.charAt(0).toUpperCase()}
                   </div>
                   <div>
@@ -535,81 +639,79 @@ const Navbar = () => {
             </div>
           </div>
 
-          <nav className={styles.mobileNav}>
+          {/* Mobile nav */}
+          <nav className={styles.mobileNav} aria-label="Mobile navigation">
             <div className={styles.mobileNavSection}>
-              <button
-                className={styles.mobileNavTitle}
-                onClick={() => handleNavigation("/")}
-              >
+              <button className={styles.mobileNavTitle} onClick={() => go("/")}>
                 🏠 Home
               </button>
               <button
                 className={styles.mobileNavTitle}
-                onClick={() => goToHomeSection("trips-grid")}
+                onClick={() => goToSection("trips-grid")}
               >
                 🎒 Backpacking Trips
               </button>
               <button
                 className={styles.mobileNavTitle}
                 onClick={() =>
-                  setActiveMobileGroup((prev) =>
-                    prev === "destinations" ? "" : "destinations",
+                  setActiveMobileGroup((p) =>
+                    p === "destinations" ? "" : "destinations",
                   )
                 }
+                aria-expanded={activeMobileGroup === "destinations"}
               >
                 ⭐ Best Sellers
               </button>
 
-              {activeMobileGroup === "destinations"
-                ? destinations.map((dest) => (
-                    <button
-                      key={dest.id}
-                      className={styles.mobileNavItem}
-                      onClick={() => handleNavigation(`/trips/${dest.id}`)}
-                    >
-                      {dest.name}
-                    </button>
-                  ))
-                : null}
+              {activeMobileGroup === "destinations" &&
+                destinations.map((dest) => (
+                  <button
+                    key={dest.id}
+                    className={styles.mobileNavItem}
+                    onClick={() => go(`/trips/${dest.id}`)}
+                  >
+                    {dest.name}
+                  </button>
+                ))}
             </div>
 
             <div className={styles.mobileNavSection}>
               <button
                 className={styles.mobileNavTitle}
-                onClick={() => goToHomeSection("trips-grid")}
+                onClick={() => goToSection("trips-grid")}
               >
                 🚴 Biking Trips
               </button>
               <button
                 className={styles.mobileNavTitle}
-                onClick={() => handleNavigation("/contact")}
+                onClick={() => go("/contact")}
               >
-                📞 Contact
+                📞 Contact Us
               </button>
-
               <button
-                className={styles.mobileNavItem}
-                onClick={() => handleNavigation("/my-bookings")}
+                className={styles.mobileNavTitle}
+                onClick={() => go("/my-bookings")}
               >
-                My Bookings
+                📋 My Bookings
               </button>
 
               {authData?.role?.toUpperCase() === "USER" && (
                 <button
-                  className={styles.mobileNavItem}
-                  onClick={() => handleNavigation("/my-enquiries")}
+                  className={styles.mobileNavTitle}
+                  onClick={() => go("/my-enquiries")}
                 >
-                  My Journeys
+                  🗺️ My Journeys
                 </button>
               )}
             </div>
           </nav>
 
+          {/* Mobile actions */}
           <div className={styles.mobileActions}>
             {!authData && (
               <button
                 className={styles.mobileCtaBtn}
-                onClick={() => handleNavigation("/login")}
+                onClick={() => go("/login")}
               >
                 Sign In / Register
               </button>
@@ -617,9 +719,7 @@ const Navbar = () => {
 
             <button
               className={`${styles.mobileCtaBtn} ${authData ? styles.mobileLogoutBtn : styles.mobileSecondaryBtn}`}
-              onClick={
-                authData ? handleLogout : () => goToHomeSection("trips-grid")
-              }
+              onClick={authData ? handleLogout : () => goToSection("trips-grid")}
             >
               {authData ? "Logout" : "Start Booking"}
             </button>
@@ -630,23 +730,24 @@ const Navbar = () => {
                 {tripsCount} tours available
               </span>
               <a href="tel:+919797972175" className={styles.contactPhone}>
-                +91 97 97 97 21 75
+                📞 +91 97 97 97 21 75
               </a>
               <a
                 href="mailto:concierge@travelprofessor.com"
                 className={styles.contactEmail}
               >
-                concierge@travelprofessor.com
+                ✉️ concierge@travelprofessor.com
               </a>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Menu Overlay */}
+      {/* Overlay */}
       <div
         className={`${styles.menuOverlay} ${isMenuOpen ? styles.active : ""}`}
         onClick={() => setIsMenuOpen(false)}
+        aria-hidden="true"
       />
     </>
   );
