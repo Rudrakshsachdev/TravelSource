@@ -24,6 +24,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import tpLogo from "../../assets/logog.png";
+import { useMagnetic } from "../../hooks/useMagnetic";
 
 /* ═══════════════════════════════════════════════════════════════
    Navbar — Production-Level | Travel Professor
@@ -41,12 +42,22 @@ const Navbar = () => {
   const [activeMobileGroup, setActiveMobileGroup] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+  
+  // Floating pill state
+  const [pillStyle, setPillStyle] = useState({ opacity: 0, left: 0, width: 0 });
 
   const menuRef = useRef(null);
+  const navContainerRef = useRef(null);
   const searchInputRef = useRef(null);
   const userDropdownRef = useRef(null);
   const dropdownTimeoutRef = useRef(null);
+  const pillTimeoutRef = useRef(null);
   const rafRef = useRef(null);
+
+  // Magnetic refs
+  const magneticPhone = useMagnetic(0.25);
+  const magneticSearch = useMagnetic(0.2);
+  const magneticLogin = useMagnetic(0.15);
 
   const [destinations, setDestinations] = useState([]);
   const [tripsCount, setTripsCount] = useState(0);
@@ -127,6 +138,7 @@ const Navbar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleKeyDown);
       if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
+      if (pillTimeoutRef.current) clearTimeout(pillTimeoutRef.current);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, [handleScroll]);
@@ -159,13 +171,26 @@ const Navbar = () => {
     [navigate],
   );
 
-  const handleDesktopHover = (key) => {
+  const handleDesktopHover = (e, key) => {
     if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
+    if (pillTimeoutRef.current) clearTimeout(pillTimeoutRef.current);
     setActiveHover(key);
+
+    // Update floating pill position
+    if (e.currentTarget && navContainerRef.current) {
+      const elRect = e.currentTarget.getBoundingClientRect();
+      const containerRect = navContainerRef.current.getBoundingClientRect();
+      setPillStyle({
+        opacity: 1,
+        left: elRect.left - containerRect.left,
+        width: elRect.width,
+      });
+    }
   };
 
   const handleDesktopLeave = () => {
     dropdownTimeoutRef.current = setTimeout(() => setActiveHover(""), 220);
+    pillTimeoutRef.current = setTimeout(() => setPillStyle({ ...pillStyle, opacity: 0 }), 250);
   };
 
   const goToSection = useCallback(
@@ -340,7 +365,23 @@ const Navbar = () => {
 
           {/* ── Desktop Nav ── */}
           <nav className={styles.navDesktop} aria-label="Main navigation">
-            <ul className={styles.navLinks} role="menubar">
+            <ul 
+              className={styles.navLinks} 
+              role="menubar"
+              ref={navContainerRef}
+              onMouseLeave={handleDesktopLeave}
+            >
+              {/* Floating Pill Background */}
+              <div 
+                className={styles.navPill} 
+                style={{
+                  opacity: pillStyle.opacity,
+                  transform: `translateX(${pillStyle.left}px)`,
+                  width: `${pillStyle.width}px`
+                }}
+                aria-hidden="true"
+              />
+
               {/* Good Friday badge */}
               <li className={styles.navItem} role="none">
                 <button
@@ -357,13 +398,12 @@ const Navbar = () => {
               </li>
 
               {/* Menu items with mega dropdowns */}
-              {desktopMenus.map((menu) => (
+              {desktopMenus.map((menu, index) => (
                 <li
                   key={menu.key}
                   className={styles.navItem}
                   role="none"
-                  onMouseEnter={() => handleDesktopHover(menu.key)}
-                  onMouseLeave={handleDesktopLeave}
+                  onMouseEnter={(e) => handleDesktopHover(e, menu.key)}
                 >
                   <button
                     className={styles.navLink}
@@ -397,10 +437,11 @@ const Navbar = () => {
                         </div>
                       )}
 
-                      {menu.submenu.map((item) => (
+                      {menu.submenu.map((item, i) => (
                         <button
                           key={`${menu.key}-${item.label}`}
                           className={styles.dropdownItem}
+                          style={{ '--stagger-delay': `${i * 30}ms` }}
                           onClick={item.action}
                           role="menuitem"
                         >
@@ -445,6 +486,7 @@ const Navbar = () => {
               <a
                 href="tel:+919797972175"
                 className={styles.phoneCta}
+                ref={magneticPhone}
                 aria-label="Call us at +91 97 97 97 21 75"
               >
                 <span className={styles.phoneIconWrap} aria-hidden="true">
@@ -461,6 +503,7 @@ const Navbar = () => {
               {/* Search — ⌘K */}
               <button
                 className={styles.searchBtn}
+                ref={magneticSearch}
                 onClick={() => setIsSearchOpen(true)}
                 aria-label="Search (Ctrl+K)"
                 title="Search (Ctrl+K)"
@@ -528,6 +571,7 @@ const Navbar = () => {
               ) : (
                 <button
                   className={styles.loginBtn}
+                  ref={magneticLogin}
                   onClick={() => go("/login")}
                 >
                   Login

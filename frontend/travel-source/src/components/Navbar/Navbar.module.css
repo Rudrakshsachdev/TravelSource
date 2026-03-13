@@ -106,6 +106,25 @@
   gap: 4px;
   margin: 0;
   padding: 0;
+  position: relative;
+}
+
+/* Floating pill indicator */
+.navPill {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 38px;
+  background: var(--nav-green-light);
+  border-radius: 8px;
+  z-index: 0;
+  pointer-events: none;
+  transform-origin: center;
+  margin-top: -19px;
+  transition:
+    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.2s var(--nav-ease);
 }
 
 .navItem {
@@ -217,6 +236,7 @@
   cursor: pointer;
   white-space: nowrap;
   position: relative;
+  z-index: 1;
   transition: color 0.25s var(--nav-ease);
   border-radius: 8px;
 }
@@ -298,8 +318,13 @@
 }
 
 @keyframes megaReveal {
-  from { opacity: 0; transform: translateY(12px) scale(0.96); }
+  from { opacity: 0; transform: translateY(16px) scale(0.96); }
   to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes itemReveal {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 /* Dropdown header */
@@ -328,8 +353,11 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  transition: all 0.22s var(--nav-ease);
   border-left: 3px solid transparent;
+  opacity: 0;
+  animation: itemReveal 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: var(--stagger-delay, 0ms);
+  transition: background 0.22s var(--nav-ease), color 0.22s var(--nav-ease), border-color 0.22s var(--nav-ease), padding 0.22s var(--nav-ease);
 }
 
 .dropdownItem:hover {
