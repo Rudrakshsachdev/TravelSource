@@ -44,6 +44,21 @@ const SEARCH_SYNONYMS = {
   backpacker: ["backpacking", "budget"],
 };
 
+const MONTH_ALIASES = {
+  january: ["january", "jan"],
+  february: ["february", "feb"],
+  march: ["march", "mar"],
+  april: ["april", "apr"],
+  may: ["may"],
+  june: ["june", "jun"],
+  july: ["july", "jul"],
+  august: ["august", "aug"],
+  september: ["september", "sep", "sept"],
+  october: ["october", "oct"],
+  november: ["november", "nov"],
+  december: ["december", "dec"],
+};
+
 const normalizeSearchText = (value) =>
   (value || "")
     .toString()
@@ -129,6 +144,31 @@ const buildTripSearchBlob = (trip) => {
   );
 };
 
+const tripMatchesType = (trip, typeFilter, searchBlob) => {
+  switch (typeFilter) {
+    case "international":
+      return trip.is_international || trip.show_in_international_section;
+    case "india":
+      return trip.is_india_trip || trip.show_in_india_section;
+    case "honeymoon":
+      return trip.is_honeymoon || trip.show_in_honeymoon_section;
+    case "himalayan":
+      return trip.is_himalayan_trek || trip.show_in_himalayan_section;
+    case "backpacking":
+      return trip.is_backpacking_trip || trip.show_in_backpacking_section;
+    case "summer":
+      return trip.is_summer_trek || trip.show_in_summer_section;
+    case "monsoon":
+      return trip.is_monsoon_trek || trip.show_in_monsoon_section;
+    case "community":
+      return trip.is_community_trip || trip.show_in_community_section;
+    case "festival":
+      return trip.is_festival_trip || trip.show_in_festival_section;
+    default:
+      return searchBlob.includes(typeFilter);
+  }
+};
+
 const TripsList = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -153,11 +193,18 @@ const TripsList = () => {
     recordView,
   } = usePersonalization(trips);
   const urlSearchQuery = searchParams.get("search") || "";
+  const urlDestinationFilter = normalizeSearchText(
+    searchParams.get("destination") || "",
+  );
+  const urlTripTypeFilter = normalizeSearchText(
+    searchParams.get("tripType") || "",
+  );
+  const urlMonthFilter = normalizeSearchText(searchParams.get("month") || "");
 
   useEffect(() => {
     setSearchQuery(urlSearchQuery);
     setCurrentPage(1);
-  }, [urlSearchQuery]);
+  }, [urlSearchQuery, urlDestinationFilter, urlTripTypeFilter, urlMonthFilter]);
 
   useEffect(() => {
     const loadTrips = async () => {
@@ -207,6 +254,8 @@ const TripsList = () => {
 
   // Filter and sort trips
   const filteredTrips = trips.filter((trip) => {
+    const searchBlob = buildTripSearchBlob(trip);
+
     if (searchQuery) {
       const normalizedQuery = normalizeSearchText(searchQuery);
       if (!normalizedQuery) return true;
@@ -219,13 +268,37 @@ const TripsList = () => {
         ? queryTokens
         : normalizedQuery.split(" ").filter(Boolean);
 
-      const searchBlob = buildTripSearchBlob(trip);
-
       // All meaningful words in the query must match by direct token, stem, or synonym.
-      return effectiveTokens.every((token) =>
+      const matchesTextSearch = effectiveTokens.every((token) =>
         getTokenVariants(token).some((variant) => searchBlob.includes(variant)),
       );
+
+      if (!matchesTextSearch) {
+        return false;
+      }
     }
+
+    if (urlDestinationFilter && !searchBlob.includes(urlDestinationFilter)) {
+      return false;
+    }
+
+    if (
+      urlTripTypeFilter &&
+      !tripMatchesType(trip, urlTripTypeFilter, searchBlob)
+    ) {
+      return false;
+    }
+
+    if (urlMonthFilter) {
+      const monthTokens = MONTH_ALIASES[urlMonthFilter] || [urlMonthFilter];
+      const monthMatched = monthTokens.some((token) =>
+        searchBlob.includes(token),
+      );
+      if (!monthMatched) {
+        return false;
+      }
+    }
+
     return true;
   });
 
@@ -283,6 +356,9 @@ const TripsList = () => {
 
     const nextParams = new URLSearchParams(searchParams);
     nextParams.delete("search");
+    nextParams.delete("destination");
+    nextParams.delete("tripType");
+    nextParams.delete("month");
     setSearchParams(nextParams, { replace: true });
   };
 

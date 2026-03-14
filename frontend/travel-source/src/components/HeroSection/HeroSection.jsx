@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import styles from "./HeroSection.module.css";
+import { useNavigate } from "react-router-dom";
+import { fetchTrips } from "../../services/api";
 import {
   Search,
   Star,
@@ -39,6 +41,33 @@ const DESTINATIONS = [
   "Goa",
   "Rishikesh",
   "Meghalaya",
+];
+
+const TRIP_TYPE_OPTIONS = [
+  { value: "international", label: "International" },
+  { value: "india", label: "India Trips" },
+  { value: "honeymoon", label: "Honeymoon" },
+  { value: "himalayan", label: "Himalayan Treks" },
+  { value: "backpacking", label: "Backpacking" },
+  { value: "summer", label: "Summer Treks" },
+  { value: "monsoon", label: "Monsoon Treks" },
+  { value: "community", label: "Community Trips" },
+  { value: "festival", label: "Festival Trips" },
+];
+
+const MONTH_OPTIONS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 const TESTIMONIALS = [
@@ -96,9 +125,77 @@ const TRUST_STATS = [
 ];
 
 const HeroSection = () => {
+  const navigate = useNavigate();
   const [entered, setEntered] = useState(false);
   const [destIndex, setDestIndex] = useState(0);
   const [bgIndex, setBgIndex] = useState(0);
+  const [destinationOptions, setDestinationOptions] = useState([]);
+  const [tripTypeOptions, setTripTypeOptions] = useState([]);
+  const [heroFilters, setHeroFilters] = useState({
+    destination: "",
+    tripType: "",
+    month: "",
+  });
+
+  useEffect(() => {
+    const loadHeroFilters = async () => {
+      try {
+        const trips = await fetchTrips();
+
+        const destinations = Array.from(
+          new Set(
+            trips
+              .flatMap((trip) => [trip.location, trip.state, trip.country])
+              .map((value) => (value || "").trim())
+              .filter(Boolean),
+          ),
+        )
+          .sort((a, b) => a.localeCompare(b))
+          .slice(0, 40);
+
+        const availableTypes = TRIP_TYPE_OPTIONS.filter((type) =>
+          trips.some((trip) => {
+            switch (type.value) {
+              case "international":
+                return (
+                  trip.is_international || trip.show_in_international_section
+                );
+              case "india":
+                return trip.is_india_trip || trip.show_in_india_section;
+              case "honeymoon":
+                return trip.is_honeymoon || trip.show_in_honeymoon_section;
+              case "himalayan":
+                return trip.is_himalayan_trek || trip.show_in_himalayan_section;
+              case "backpacking":
+                return (
+                  trip.is_backpacking_trip || trip.show_in_backpacking_section
+                );
+              case "summer":
+                return trip.is_summer_trek || trip.show_in_summer_section;
+              case "monsoon":
+                return trip.is_monsoon_trek || trip.show_in_monsoon_section;
+              case "community":
+                return trip.is_community_trip || trip.show_in_community_section;
+              case "festival":
+                return trip.is_festival_trip || trip.show_in_festival_section;
+              default:
+                return false;
+            }
+          }),
+        );
+
+        setDestinationOptions(destinations);
+        setTripTypeOptions(
+          availableTypes.length ? availableTypes : TRIP_TYPE_OPTIONS,
+        );
+      } catch (err) {
+        console.error("Failed to load hero search filters:", err);
+        setTripTypeOptions(TRIP_TYPE_OPTIONS);
+      }
+    };
+
+    loadHeroFilters();
+  }, []);
 
   useEffect(() => {
     const t = requestAnimationFrame(() => setEntered(true));
@@ -130,6 +227,50 @@ const HeroSection = () => {
       window.scrollTo({ top: window.innerHeight, behavior: "smooth" });
     }
   }, []);
+
+  const handleHeroFilterChange = (field, value) => {
+    setHeroFilters((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleHeroSearch = () => {
+    const params = new URLSearchParams();
+
+    if (heroFilters.destination) {
+      params.set("destination", heroFilters.destination);
+    }
+    if (heroFilters.tripType) {
+      params.set("tripType", heroFilters.tripType);
+    }
+    if (heroFilters.month) {
+      params.set("month", heroFilters.month);
+    }
+
+    const composedSearchText = [
+      heroFilters.destination,
+      tripTypeOptions.find((item) => item.value === heroFilters.tripType)
+        ?.label,
+      heroFilters.month,
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .trim();
+
+    if (composedSearchText) {
+      params.set("search", composedSearchText);
+    }
+
+    navigate({
+      pathname: "/",
+      search: params.toString() ? `?${params.toString()}` : "",
+    });
+
+    setTimeout(() => {
+      const el = document.getElementById("trips-grid");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 80);
+  };
 
   return (
     <section
@@ -212,45 +353,72 @@ const HeroSection = () => {
           {/* ═══ Booking Card ═══ */}
           <div className={styles.bookingCard}>
             <div className={styles.bookingInner}>
-              <button className={styles.bookingField} onClick={scrollToTrips}>
+              <label className={styles.bookingField}>
                 <div className={styles.fieldIcon}>
                   <MapPin />
                   <span className={styles.fieldLabel}>Destination</span>
                 </div>
-                <span
-                  className={`${styles.fieldValue} ${styles.fieldPlaceholder}`}
+                <select
+                  className={`${styles.fieldSelect} ${!heroFilters.destination ? styles.fieldSelectPlaceholder : ""}`}
+                  value={heroFilters.destination}
+                  onChange={(e) =>
+                    handleHeroFilterChange("destination", e.target.value)
+                  }
                 >
-                  Where to?
-                </span>
-              </button>
+                  <option value="">Where to?</option>
+                  {destinationOptions.map((destination) => (
+                    <option key={destination} value={destination}>
+                      {destination}
+                    </option>
+                  ))}
+                </select>
+              </label>
 
-              <button className={styles.bookingField} onClick={scrollToTrips}>
+              <label className={styles.bookingField}>
                 <div className={styles.fieldIcon}>
                   <Compass />
                   <span className={styles.fieldLabel}>Trip Type</span>
                 </div>
-                <span
-                  className={`${styles.fieldValue} ${styles.fieldPlaceholder}`}
+                <select
+                  className={`${styles.fieldSelect} ${!heroFilters.tripType ? styles.fieldSelectPlaceholder : ""}`}
+                  value={heroFilters.tripType}
+                  onChange={(e) =>
+                    handleHeroFilterChange("tripType", e.target.value)
+                  }
                 >
-                  Backpacking
-                </span>
-              </button>
+                  <option value="">Any type</option>
+                  {tripTypeOptions.map((type) => (
+                    <option key={type.value} value={type.value}>
+                      {type.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
 
-              <button className={styles.bookingField} onClick={scrollToTrips}>
+              <label className={styles.bookingField}>
                 <div className={styles.fieldIcon}>
                   <Calendar />
                   <span className={styles.fieldLabel}>When</span>
                 </div>
-                <span
-                  className={`${styles.fieldValue} ${styles.fieldPlaceholder}`}
+                <select
+                  className={`${styles.fieldSelect} ${!heroFilters.month ? styles.fieldSelectPlaceholder : ""}`}
+                  value={heroFilters.month}
+                  onChange={(e) =>
+                    handleHeroFilterChange("month", e.target.value)
+                  }
                 >
-                  Select month
-                </span>
-              </button>
+                  <option value="">Select month</option>
+                  {MONTH_OPTIONS.map((month) => (
+                    <option key={month} value={month}>
+                      {month}
+                    </option>
+                  ))}
+                </select>
+              </label>
 
               <button
                 className={styles.bookingSearchBtn}
-                onClick={scrollToTrips}
+                onClick={handleHeroSearch}
                 id="hero-search-cta"
               >
                 <Search size={18} />
