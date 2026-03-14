@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchTrips, fetchFeaturedTrips } from "../../services/api";
 import { TripCard } from ".";
 import styles from "./TripsList.module.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import usePersonalization from "../../hooks/usePersonalization";
 import PersonalizationSection from "./PersonalizationSection";
 import PanoramaBanner from "./PanoramaBanner";
@@ -19,8 +19,119 @@ import FestivalTrips from "./FestivalTrips";
 import CategoryNav from "./CategoryNav";
 import AnimatedMap from "../AnimatedMap/AnimatedMap";
 
+const SEARCH_STOP_WORDS = new Set([
+  "trip",
+  "trips",
+  "tour",
+  "tours",
+  "journey",
+  "journeys",
+  "package",
+  "packages",
+]);
+
+const SEARCH_SYNONYMS = {
+  trek: ["trekking", "trekker", "hike", "hiking"],
+  trekking: ["trek", "trekker", "hike", "hiking"],
+  hike: ["hiking", "trek", "trekking"],
+  hiking: ["hike", "trek", "trekking"],
+  honeymoon: ["romantic", "romance", "couple", "newlywed"],
+  romantic: ["honeymoon", "couple", "romance"],
+  couple: ["honeymoon", "romantic", "romance"],
+  festival: ["festive", "celebration"],
+  festive: ["festival", "celebration"],
+  backpacking: ["backpacking", "backpacker", "budget"],
+  backpacker: ["backpacking", "budget"],
+};
+
+const normalizeSearchText = (value) =>
+  (value || "")
+    .toString()
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const getTokenVariants = (token) => {
+  const variants = new Set([token]);
+
+  if (token.endsWith("ing") && token.length > 5) {
+    const root = token.slice(0, -3);
+    variants.add(root);
+    if (root.endsWith("kk")) {
+      variants.add(root.slice(0, -1));
+    }
+    variants.add(`${root}e`);
+  }
+
+  if (token.endsWith("ed") && token.length > 4) {
+    variants.add(token.slice(0, -2));
+  }
+
+  if (token.endsWith("er") && token.length > 4) {
+    variants.add(token.slice(0, -2));
+  }
+
+  if (token.endsWith("s") && token.length > 3) {
+    variants.add(token.slice(0, -1));
+  }
+
+  (SEARCH_SYNONYMS[token] || []).forEach((synonym) => variants.add(synonym));
+
+  return Array.from(variants).filter(Boolean);
+};
+
+const buildTripSearchBlob = (trip) => {
+  const tags = [];
+
+  if (trip.is_international || trip.show_in_international_section) {
+    tags.push("international", "abroad", "global");
+  }
+  if (trip.is_india_trip || trip.show_in_india_section) {
+    tags.push("india", "domestic", "indian");
+  }
+  if (trip.is_honeymoon || trip.show_in_honeymoon_section) {
+    tags.push("honeymoon", "romantic", "couple");
+  }
+  if (trip.is_himalayan_trek || trip.show_in_himalayan_section) {
+    tags.push("himalayan", "trek", "mountain");
+  }
+  if (trip.is_backpacking_trip || trip.show_in_backpacking_section) {
+    tags.push("backpacking", "backpacker", "budget");
+  }
+  if (trip.is_summer_trek || trip.show_in_summer_section) {
+    tags.push("summer", "summer trek");
+  }
+  if (trip.is_monsoon_trek || trip.show_in_monsoon_section) {
+    tags.push("monsoon", "rain", "rainy");
+  }
+  if (trip.is_community_trip || trip.show_in_community_section) {
+    tags.push("community", "group", "social");
+  }
+  if (trip.is_festival_trip || trip.show_in_festival_section) {
+    tags.push("festival", "festive", "celebration");
+  }
+
+  return normalizeSearchText(
+    [
+      trip.title,
+      trip.location,
+      trip.state,
+      trip.country,
+      trip.description,
+      trip.short_description,
+      trip.category?.name,
+      trip.category?.slug,
+      tags.join(" "),
+    ]
+      .filter(Boolean)
+      .join(" "),
+  );
+};
+
 const TripsList = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -41,24 +152,26 @@ const TripsList = () => {
     loadingRec,
     recordView,
   } = usePersonalization(trips);
-  const [filtering, setFiltering] = useState(false);
+  const urlSearchQuery = searchParams.get("search") || "";
+
+  useEffect(() => {
+    setSearchQuery(urlSearchQuery);
+    setCurrentPage(1);
+  }, [urlSearchQuery]);
 
   useEffect(() => {
     const loadTrips = async () => {
       try {
-        // Only show the big loading screen on initial load (no category selected yet and trips empty)
-        if (trips.length === 0 && !activeCategory) {
+        // Only show the big loading screen on the default all-trips view.
+        if (!activeCategory) {
           setLoading(true);
-        } else {
-          setFiltering(true);
         }
         const data = await fetchTrips(activeCategory);
         setTrips(data);
-      } catch (err) {
+      } catch {
         setError("Unable to load trips.");
       } finally {
         setLoading(false);
-        setFiltering(false);
       }
     };
 
@@ -95,12 +208,22 @@ const TripsList = () => {
   // Filter and sort trips
   const filteredTrips = trips.filter((trip) => {
     if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      return (
-        trip.title.toLowerCase().includes(query) ||
-        trip.location.toLowerCase().includes(query) ||
-        (trip.country || "").toLowerCase().includes(query) ||
-        trip.description.toLowerCase().includes(query)
+      const normalizedQuery = normalizeSearchText(searchQuery);
+      if (!normalizedQuery) return true;
+
+      const queryTokens = normalizedQuery
+        .split(" ")
+        .filter((token) => token && !SEARCH_STOP_WORDS.has(token));
+
+      const effectiveTokens = queryTokens.length
+        ? queryTokens
+        : normalizedQuery.split(" ").filter(Boolean);
+
+      const searchBlob = buildTripSearchBlob(trip);
+
+      // All meaningful words in the query must match by direct token, stem, or synonym.
+      return effectiveTokens.every((token) =>
+        getTokenVariants(token).some((variant) => searchBlob.includes(variant)),
       );
     }
     return true;
@@ -134,8 +257,17 @@ const TripsList = () => {
   };
 
   const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
+    const value = e.target.value;
+    setSearchQuery(value);
     setCurrentPage(1);
+
+    const nextParams = new URLSearchParams(searchParams);
+    if (value.trim()) {
+      nextParams.set("search", value.trim());
+    } else {
+      nextParams.delete("search");
+    }
+    setSearchParams(nextParams, { replace: true });
   };
 
   const handleSortChange = (e) => {
@@ -148,6 +280,10 @@ const TripsList = () => {
     setActiveFilter("all");
     setSortBy("featured");
     setCurrentPage(1);
+
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete("search");
+    setSearchParams(nextParams, { replace: true });
   };
 
   if (loading) {
@@ -443,7 +579,12 @@ const TripsList = () => {
                 {searchQuery && (
                   <button
                     className={styles.searchClear}
-                    onClick={() => setSearchQuery("")}
+                    onClick={() => {
+                      setSearchQuery("");
+                      const nextParams = new URLSearchParams(searchParams);
+                      nextParams.delete("search");
+                      setSearchParams(nextParams, { replace: true });
+                    }}
                     aria-label="Clear search"
                   >
                     <svg
@@ -615,33 +756,33 @@ const TripsList = () => {
                 {(searchQuery ||
                   activeFilter !== "all" ||
                   sortBy !== "featured") && (
-                    <button
-                      className={styles.clearAllButton}
-                      onClick={clearFilters}
-                    >
-                      <span className={styles.clearIcon}>
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M18 6L6 18"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                          />
-                          <path
-                            d="M6 6L18 18"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                          />
-                        </svg>
-                      </span>
-                      Clear All Filters
-                    </button>
-                  )}
+                  <button
+                    className={styles.clearAllButton}
+                    onClick={clearFilters}
+                  >
+                    <span className={styles.clearIcon}>
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M18 6L6 18"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                        <path
+                          d="M6 6L18 18"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </span>
+                    Clear All Filters
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -1043,26 +1184,47 @@ const TripsList = () => {
 
               {/* Featured Destination Highlights — Dynamic */}
               {featuredLoading ? (
-                <div className={styles.featuredDestination} style={{ justifyContent: "center", alignItems: "center", minHeight: 200, opacity: 0.5 }}>
+                <div
+                  className={styles.featuredDestination}
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    minHeight: 200,
+                    opacity: 0.5,
+                  }}
+                >
                   <p>Loading featured destinations…</p>
                 </div>
               ) : featuredTrips.length > 0 ? (
                 featuredTrips.map((trip, idx) => {
-                  const eyebrows = ["Featured This Month", "Editor\u2019s Pick", "Signature Journey"];
+                  const eyebrows = [
+                    "Featured This Month",
+                    "Editor\u2019s Pick",
+                    "Signature Journey",
+                  ];
                   const eyebrow = eyebrows[idx % eyebrows.length];
 
                   // Split title: last word in accent, rest normal
                   const words = trip.title.split(" ");
-                  const titleMain = words.length > 1 ? words.slice(0, -1).join(" ") : words[0];
-                  const titleAccent = words.length > 1 ? words[words.length - 1] : "";
+                  const titleMain =
+                    words.length > 1 ? words.slice(0, -1).join(" ") : words[0];
+                  const titleAccent =
+                    words.length > 1 ? words[words.length - 1] : "";
 
                   const isAlt = idx % 2 === 1;
                   const chips = trip.featured_highlights || [];
 
                   const contentPanel = (
-                    <div className={styles.featuredContent} key={`content-${trip.id}`}>
+                    <div
+                      className={styles.featuredContent}
+                      key={`content-${trip.id}`}
+                    >
                       <div className={styles.featuredEyebrow}>
-                        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
                           <path d="M12 2l2.09 6.43H21l-5.47 3.97 2.09 6.43L12 14.86l-5.62 3.97 2.09-6.43L3 8.43h6.91L12 2z" />
                         </svg>
                         <span>{eyebrow}</span>
@@ -1070,7 +1232,11 @@ const TripsList = () => {
 
                       <h2 className={styles.featuredTitle}>
                         {titleMain}{" "}
-                        {titleAccent && <span className={styles.featuredTitleAccent}>{titleAccent}</span>}
+                        {titleAccent && (
+                          <span className={styles.featuredTitleAccent}>
+                            {titleAccent}
+                          </span>
+                        )}
                       </h2>
 
                       <p className={styles.featuredDescription}>
@@ -1078,27 +1244,63 @@ const TripsList = () => {
                           ? trip.description.length > 280
                             ? trip.description.slice(0, 280) + "…"
                             : trip.description
-                          : trip.short_description || "Explore this handpicked journey curated by our travel experts."}
+                          : trip.short_description ||
+                            "Explore this handpicked journey curated by our travel experts."}
                       </p>
 
                       <div className={styles.featuredTags}>
                         <span className={styles.featuredTag}>
-                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
-                            <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <circle
+                              cx="12"
+                              cy="12"
+                              r="9"
+                              stroke="currentColor"
+                              strokeWidth="1.6"
+                            />
+                            <path
+                              d="M12 6v6l4 2"
+                              stroke="currentColor"
+                              strokeWidth="1.6"
+                              strokeLinecap="round"
+                            />
                           </svg>
                           {trip.duration_days} Days
                         </span>
                         <span className={styles.featuredTag}>
-                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="currentColor" strokeWidth="1.6" />
-                            <path d="M12 8v4l3 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
+                              stroke="currentColor"
+                              strokeWidth="1.6"
+                            />
+                            <path
+                              d="M12 8v4l3 3"
+                              stroke="currentColor"
+                              strokeWidth="1.6"
+                              strokeLinecap="round"
+                            />
                           </svg>
                           {trip.country || trip.location}
                         </span>
                         <span className={styles.featuredTag}>
-                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2L14.4 8.3H21.2L15.9 12.1L17.9 18.4L12 14.6L6.1 18.4L8.1 12.1L2.8 8.3H9.6L12 2Z" fill="currentColor" />
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M12 2L14.4 8.3H21.2L15.9 12.1L17.9 18.4L12 14.6L6.1 18.4L8.1 12.1L2.8 8.3H9.6L12 2Z"
+                              fill="currentColor"
+                            />
                           </svg>
                           4.9 Rated
                         </span>
@@ -1109,8 +1311,18 @@ const TripsList = () => {
                         onClick={() => navigate(`/trips/${trip.id}`)}
                       >
                         <span>View Details</span>
-                        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                        <svg
+                          viewBox="0 0 20 20"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M4 10H16M16 10L11 5M16 10L11 15"
+                            stroke="currentColor"
+                            strokeWidth="1.6"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
                         </svg>
                       </button>
                     </div>
@@ -1132,29 +1344,43 @@ const TripsList = () => {
                             top: "50%",
                             left: "50%",
                             transform: "translate(-50%,-50%)",
-                            opacity: ri === 0 ? undefined : ri === 1 ? "0.35" : "0.18",
+                            opacity:
+                              ri === 0 ? undefined : ri === 1 ? "0.35" : "0.18",
                           }}
                         ></div>
                       ))}
                       <div className={styles.featuredPin}>
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="currentColor" />
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                            fill="currentColor"
+                          />
                         </svg>
                       </div>
                       {chips[0] && (
-                        <div className={`${styles.featuredChip} ${styles.featuredChipTop}`}>
+                        <div
+                          className={`${styles.featuredChip} ${styles.featuredChipTop}`}
+                        >
                           <span className={styles.featuredChipDot}></span>
                           <span>{chips[0]}</span>
                         </div>
                       )}
                       {chips[1] && (
-                        <div className={`${styles.featuredChip} ${styles.featuredChipBottom}`}>
+                        <div
+                          className={`${styles.featuredChip} ${styles.featuredChipBottom}`}
+                        >
                           <span className={styles.featuredChipDot}></span>
                           <span>{chips[1]}</span>
                         </div>
                       )}
                       {chips[2] && (
-                        <div className={`${styles.featuredChip} ${styles.featuredChipLeft}`}>
+                        <div
+                          className={`${styles.featuredChip} ${styles.featuredChipLeft}`}
+                        >
                           <span className={styles.featuredChipDot}></span>
                           <span>{chips[2]}</span>
                         </div>
@@ -1168,9 +1394,15 @@ const TripsList = () => {
                       className={`${styles.featuredDestination}${isAlt ? " " + styles.featuredDestinationAlt : ""}`}
                     >
                       {isAlt ? (
-                        <>{visualPanel}{contentPanel}</>
+                        <>
+                          {visualPanel}
+                          {contentPanel}
+                        </>
                       ) : (
-                        <>{contentPanel}{visualPanel}</>
+                        <>
+                          {contentPanel}
+                          {visualPanel}
+                        </>
                       )}
                     </div>
                   );

@@ -92,6 +92,7 @@ const Navbar = () => {
   const [activeMobileGroup, setActiveMobileGroup] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+  const [activeMoreTripsGroup, setActiveMoreTripsGroup] = useState("");
 
   // Floating pill state
   const [pillStyle, setPillStyle] = useState({ opacity: 0, left: 0, width: 0 });
@@ -111,6 +112,7 @@ const Navbar = () => {
 
   const [desktopMenus, setDesktopMenus] = useState([]);
   const [searchHints, setSearchHints] = useState([]);
+  const [navbarSearchQuery, setNavbarSearchQuery] = useState("");
   const [promoBadge, setPromoBadge] = useState({
     label: "Featured Trips",
     targetTripId: null,
@@ -322,6 +324,13 @@ const Navbar = () => {
     if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
     if (pillTimeoutRef.current) clearTimeout(pillTimeoutRef.current);
     setActiveHover(key);
+    if (
+      key === "more-trips" &&
+      !activeMoreTripsGroup &&
+      overflowDesktopMenus[0]
+    ) {
+      setActiveMoreTripsGroup(overflowDesktopMenus[0].key);
+    }
 
     // Update floating pill position
     if (e.currentTarget && navContainerRef.current) {
@@ -357,8 +366,41 @@ const Navbar = () => {
     }, delay);
   };
 
+  const submitNavbarSearch = (rawQuery) => {
+    const query = rawQuery.trim();
+
+    setIsMenuOpen(false);
+    setActiveHover("");
+    setActiveMobileGroup("");
+    setIsSearchOpen(false);
+
+    if (location.pathname !== "/") {
+      navigate({
+        pathname: "/",
+        search: query ? `?search=${encodeURIComponent(query)}` : "",
+      });
+    } else {
+      navigate({
+        pathname: "/",
+        search: query ? `?search=${encodeURIComponent(query)}` : "",
+      });
+    }
+
+    setTimeout(
+      () => {
+        const el = document.getElementById("trips-grid");
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      },
+      location.pathname !== "/" ? 400 : 80,
+    );
+  };
+
   const primaryDesktopMenus = desktopMenus.slice(0, DESKTOP_PRIMARY_MENU_LIMIT);
   const overflowDesktopMenus = desktopMenus.slice(DESKTOP_PRIMARY_MENU_LIMIT);
+  const activeMoreTripsMenu =
+    overflowDesktopMenus.find((menu) => menu.key === activeMoreTripsGroup) ||
+    overflowDesktopMenus[0] ||
+    null;
   const desktopMenusToRender = overflowDesktopMenus.length
     ? [
         ...primaryDesktopMenus,
@@ -366,13 +408,7 @@ const Navbar = () => {
           key: "more-trips",
           label: "More Trips",
           header: "MORE TRIP TYPES",
-          submenu: overflowDesktopMenus.map((menu) => ({
-            id: menu.key,
-            icon: menu.submenu[0]?.icon || <Compass size={16} />,
-            label: menu.label,
-            desc: `${menu.submenu.length} curated trips`,
-            path: menu.submenu[0]?.path || "/",
-          })),
+          sections: overflowDesktopMenus,
           footer: {
             label: "Browse all trips",
           },
@@ -484,7 +520,7 @@ const Navbar = () => {
                   {/* Mega dropdown */}
                   {activeHover === menu.key && (
                     <div
-                      className={styles.dropdown}
+                      className={`${styles.dropdown} ${menu.key === "more-trips" ? styles.moreTripsDropdown : ""}`}
                       role="menu"
                       aria-label={menu.label}
                     >
@@ -497,31 +533,109 @@ const Navbar = () => {
                         </div>
                       )}
 
-                      {menu.submenu.map((item, i) => (
-                        <button
-                          key={`${menu.key}-${item.id ?? item.label}`}
-                          className={styles.dropdownItem}
-                          style={{ "--stagger-delay": `${i * 30}ms` }}
-                          onClick={() => go(item.path)}
-                          role="menuitem"
-                        >
-                          <span className={styles.dropdownIcon}>
-                            {item.icon}
-                          </span>
-                          <span className={styles.dropdownItemText}>
-                            <span className={styles.dropdownItemLabel}>
-                              {item.label}
-                            </span>
-                            {item.desc && (
-                              <span className={styles.dropdownItemDesc}>
-                                {item.desc}
-                              </span>
-                            )}
-                          </span>
-                        </button>
-                      ))}
+                      {menu.key === "more-trips" ? (
+                        <div className={styles.moreTripsLayout}>
+                          <div className={styles.moreTripsSectionList}>
+                            {menu.sections.map((section, i) => (
+                              <button
+                                key={section.key}
+                                className={`${styles.moreTripsSectionButton} ${activeMoreTripsMenu?.key === section.key ? styles.moreTripsSectionButtonActive : ""}`}
+                                style={{ "--stagger-delay": `${i * 30}ms` }}
+                                onMouseEnter={() =>
+                                  setActiveMoreTripsGroup(section.key)
+                                }
+                                onFocus={() =>
+                                  setActiveMoreTripsGroup(section.key)
+                                }
+                                onClick={() =>
+                                  setActiveMoreTripsGroup(section.key)
+                                }
+                                role="menuitem"
+                              >
+                                <span className={styles.dropdownIcon}>
+                                  {section.submenu[0]?.icon || (
+                                    <Compass size={16} />
+                                  )}
+                                </span>
+                                <span className={styles.dropdownItemText}>
+                                  <span className={styles.dropdownItemLabel}>
+                                    {section.label}
+                                  </span>
+                                  <span className={styles.dropdownItemDesc}>
+                                    {section.submenu.length} curated trips
+                                  </span>
+                                </span>
+                              </button>
+                            ))}
+                          </div>
 
-                      {menu.footer && (
+                          <div className={styles.moreTripsItemsPanel}>
+                            <div className={styles.moreTripsItemsHeader}>
+                              <span>
+                                {activeMoreTripsMenu?.label || "Trips"}
+                              </span>
+                              <button
+                                className={styles.moreTripsViewAll}
+                                onClick={() => goToSection("trips-grid")}
+                                role="menuitem"
+                              >
+                                View all
+                                <ArrowRight size={14} />
+                              </button>
+                            </div>
+
+                            {activeMoreTripsMenu?.submenu.map((item, i) => (
+                              <button
+                                key={`${activeMoreTripsMenu.key}-${item.id ?? item.label}`}
+                                className={styles.dropdownItem}
+                                style={{ "--stagger-delay": `${i * 30}ms` }}
+                                onClick={() => go(item.path)}
+                                role="menuitem"
+                              >
+                                <span className={styles.dropdownIcon}>
+                                  {item.icon}
+                                </span>
+                                <span className={styles.dropdownItemText}>
+                                  <span className={styles.dropdownItemLabel}>
+                                    {item.label}
+                                  </span>
+                                  {item.desc && (
+                                    <span className={styles.dropdownItemDesc}>
+                                      {item.desc}
+                                    </span>
+                                  )}
+                                </span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        menu.submenu.map((item, i) => (
+                          <button
+                            key={`${menu.key}-${item.id ?? item.label}`}
+                            className={styles.dropdownItem}
+                            style={{ "--stagger-delay": `${i * 30}ms` }}
+                            onClick={() => go(item.path)}
+                            role="menuitem"
+                          >
+                            <span className={styles.dropdownIcon}>
+                              {item.icon}
+                            </span>
+                            <span className={styles.dropdownItemText}>
+                              <span className={styles.dropdownItemLabel}>
+                                {item.label}
+                              </span>
+                              {item.desc && (
+                                <span className={styles.dropdownItemDesc}>
+                                  {item.desc}
+                                </span>
+                              )}
+                            </span>
+                          </button>
+                        ))
+                      )}
+
+                      {menu.footer && menu.key !== "more-trips" && (
                         <>
                           <div className={styles.dropdownDivider} />
                           <button
@@ -692,10 +806,11 @@ const Navbar = () => {
               type="text"
               placeholder="Search destinations, trips, activities…"
               aria-label="Search"
+              value={navbarSearchQuery}
+              onChange={(e) => setNavbarSearchQuery(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  setIsSearchOpen(false);
-                  goToSection("trips-grid");
+                  submitNavbarSearch(navbarSearchQuery);
                 }
               }}
             />
@@ -715,8 +830,8 @@ const Navbar = () => {
                 className={styles.searchHint}
                 role="listitem"
                 onClick={() => {
-                  setIsSearchOpen(false);
-                  goToSection("trips-grid");
+                  setNavbarSearchQuery(hint);
+                  submitNavbarSearch(hint);
                 }}
               >
                 {hint}
