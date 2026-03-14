@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styles from "./HeroSection.module.css";
 import {
   Search,
@@ -86,19 +86,19 @@ const TESTIMONIALS = [
 
 const TRUST_STATS = [
   { icon: <MessageSquare size={22} />, number: "10,000+", label: "Reviews" },
-  { icon: <Users size={22} />, number: "80,000+", label: "Satisfied Travelers" },
+  {
+    icon: <Users size={22} />,
+    number: "80,000+",
+    label: "Satisfied Travelers",
+  },
   { icon: <MapPin size={22} />, number: "50+", label: "Destinations" },
   { icon: <Clock size={22} />, number: "9+ Years", label: "Experience" },
 ];
-
-
 
 const HeroSection = () => {
   const [entered, setEntered] = useState(false);
   const [destIndex, setDestIndex] = useState(0);
   const [bgIndex, setBgIndex] = useState(0);
-  const [prevBgIndex, setPrevBgIndex] = useState(null);
-  const destKeyRef = useRef(0);
 
   useEffect(() => {
     const t = requestAnimationFrame(() => setEntered(true));
@@ -109,7 +109,6 @@ const HeroSection = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setDestIndex((prev) => (prev + 1) % DESTINATIONS.length);
-      destKeyRef.current += 1;
     }, 3000);
     return () => clearInterval(interval);
   }, []);
@@ -117,7 +116,6 @@ const HeroSection = () => {
   /* Cycle background every 8s with crossfade */
   useEffect(() => {
     const interval = setInterval(() => {
-      setPrevBgIndex(bgIndex);
       setBgIndex((prev) => (prev + 1) % BG_IMAGES.length);
     }, 8000);
     return () => clearInterval(interval);
@@ -125,8 +123,7 @@ const HeroSection = () => {
 
   const scrollToTrips = useCallback(() => {
     const el =
-      document.getElementById("trips-grid") ||
-      document.getElementById("trips");
+      document.getElementById("trips-grid") || document.getElementById("trips");
     if (el) {
       el.scrollIntoView({ behavior: "smooth" });
     } else {
@@ -152,6 +149,9 @@ const HeroSection = () => {
           />
         ))}
         <div className={styles.heroBgOverlay} />
+        <div className={styles.heroGlowOne} aria-hidden="true" />
+        <div className={styles.heroGlowTwo} aria-hidden="true" />
+        <div className={styles.heroNoise} aria-hidden="true" />
       </div>
 
       {/* ═══ Main Content ═══ */}
@@ -181,7 +181,7 @@ const HeroSection = () => {
             </span>{" "}
             Trip to{" "}
             <span className={styles.destWord}>
-              <span className={styles.destText} key={destKeyRef.current}>
+              <span className={styles.destText} key={destIndex}>
                 {DESTINATIONS[destIndex]}
               </span>
             </span>
@@ -194,6 +194,21 @@ const HeroSection = () => {
             <span className={styles.hashtag}>#travelprofessor</span>
           </p>
 
+          <div className={styles.quickTrust}>
+            <span className={styles.quickTrustItem}>
+              <Star size={13} fill="currentColor" />
+              4.9 Avg Rating
+            </span>
+            <span className={styles.quickTrustItem}>
+              <Users size={13} />
+              80k+ Travelers
+            </span>
+            <span className={styles.quickTrustItem}>
+              <MapPin size={13} />
+              50+ Destinations
+            </span>
+          </div>
+
           {/* ═══ Booking Card ═══ */}
           <div className={styles.bookingCard}>
             <div className={styles.bookingInner}>
@@ -202,7 +217,9 @@ const HeroSection = () => {
                   <MapPin />
                   <span className={styles.fieldLabel}>Destination</span>
                 </div>
-                <span className={`${styles.fieldValue} ${styles.fieldPlaceholder}`}>
+                <span
+                  className={`${styles.fieldValue} ${styles.fieldPlaceholder}`}
+                >
                   Where to?
                 </span>
               </button>
@@ -212,7 +229,9 @@ const HeroSection = () => {
                   <Compass />
                   <span className={styles.fieldLabel}>Trip Type</span>
                 </div>
-                <span className={`${styles.fieldValue} ${styles.fieldPlaceholder}`}>
+                <span
+                  className={`${styles.fieldValue} ${styles.fieldPlaceholder}`}
+                >
                   Backpacking
                 </span>
               </button>
@@ -222,7 +241,9 @@ const HeroSection = () => {
                   <Calendar />
                   <span className={styles.fieldLabel}>When</span>
                 </div>
-                <span className={`${styles.fieldValue} ${styles.fieldPlaceholder}`}>
+                <span
+                  className={`${styles.fieldValue} ${styles.fieldPlaceholder}`}
+                >
                   Select month
                 </span>
               </button>
@@ -324,7 +345,6 @@ const HeroSection = () => {
           ))}
         </div>
       </div>
-
     </section>
   );
 };
