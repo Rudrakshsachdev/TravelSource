@@ -57,8 +57,12 @@
 }
 
 @keyframes kenBurns {
-  0% { transform: scale(1) translate(0, 0); }
-  100% { transform: scale(1.1) translate(-1%, -1%); }
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+  100% {
+    transform: scale(1.1) translate(-1%, -1%);
+  }
 }
 
 .heroBgOverlay {
@@ -66,13 +70,15 @@
   inset: 0;
   z-index: 1;
   background:
-    linear-gradient(180deg,
+    linear-gradient(
+      180deg,
       rgba(12, 15, 20, 0.7) 0%,
       rgba(12, 15, 20, 0.35) 35%,
       rgba(12, 15, 20, 0.5) 70%,
       rgba(12, 15, 20, 0.85) 100%
     ),
-    linear-gradient(90deg,
+    linear-gradient(
+      90deg,
       rgba(12, 15, 20, 0.8) 0%,
       rgba(12, 15, 20, 0.3) 50%,
       transparent 75%
@@ -99,6 +105,8 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  box-sizing: border-box;
+  min-width: 0;
 }
 
 /* Subtitle */
@@ -173,8 +181,16 @@
 }
 
 @keyframes destFade {
-  0% { opacity: 0; transform: translateY(18px) scale(0.96); filter: blur(6px); }
-  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+    filter: blur(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
 }
 
 /* Tagline */
@@ -201,6 +217,8 @@
   background: var(--hs-white);
   border-radius: 20px;
   padding: 8px;
+  box-sizing: border-box;
+  min-width: 0;
   box-shadow:
     0 20px 60px rgba(0, 0, 0, 0.25),
     0 4px 14px rgba(0, 0, 0, 0.1);
@@ -215,6 +233,7 @@
   grid-template-columns: 1fr 1fr 1fr auto;
   border-radius: 14px;
   overflow: hidden;
+  min-width: 0;
 }
 
 .bookingField {
@@ -222,6 +241,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  box-sizing: border-box;
+  min-width: 0;
   border-right: 1px solid #f0f0f0;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -291,6 +312,7 @@
   justify-content: center;
   gap: 8px;
   white-space: nowrap;
+  box-sizing: border-box;
   transition: all 0.25s var(--hs-ease);
   min-width: 120px;
 }
@@ -337,6 +359,7 @@
   font-size: 15px;
   font-weight: 700;
   padding: 14px 32px;
+  box-sizing: border-box;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -360,6 +383,7 @@
   font-size: 15px;
   font-weight: 600;
   padding: 13px 28px;
+  box-sizing: border-box;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -381,8 +405,20 @@
   height: clamp(380px, 50vh, 520px);
   position: relative;
   overflow: hidden;
-  mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
   padding-right: 10px;
   opacity: 0;
   transform: translateY(20px);
@@ -403,8 +439,12 @@
 }
 
 @keyframes scrollVertical {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(calc(-50% - 10px)); }
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(calc(-50% - 10px));
+  }
 }
 
 .testimonialCard {
@@ -493,6 +533,7 @@
   line-height: 1.55;
   margin: 0;
   display: -webkit-box;
+  line-clamp: 3;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -524,10 +565,18 @@
   transition: all 0.5s var(--hs-ease);
 }
 
-.trustItem:nth-child(1) { transition-delay: 0.55s; }
-.trustItem:nth-child(2) { transition-delay: 0.65s; }
-.trustItem:nth-child(3) { transition-delay: 0.75s; }
-.trustItem:nth-child(4) { transition-delay: 0.85s; }
+.trustItem:nth-child(1) {
+  transition-delay: 0.55s;
+}
+.trustItem:nth-child(2) {
+  transition-delay: 0.65s;
+}
+.trustItem:nth-child(3) {
+  transition-delay: 0.75s;
+}
+.trustItem:nth-child(4) {
+  transition-delay: 0.85s;
+}
 
 .trustIcon {
   width: 48px;
@@ -564,8 +613,6 @@
   color: var(--hs-muted);
 }
 
-
-
 /* ═══ Entrance trigger ═══ */
 .entered .subtitle,
 .entered .heading,
@@ -585,8 +632,8 @@
 
 @media (max-width: 1280px) {
   .heroContent {
-    padding: 140px 36px 36px;
-    gap: 36px;
+    padding: 136px 34px 34px;
+    gap: 34px;
   }
 
   .testimonialCard:nth-child(even) {
@@ -594,97 +641,66 @@
   }
 }
 
-@media (max-width: 1080px) {
-  .heroContent {
-    grid-template-columns: 1fr;
-    padding: 130px 28px 32px;
-    text-align: center;
-  }
-
-  .leftCol {
-    align-items: center;
-  }
-
-  .tagline {
-    margin: 0 auto;
-  }
-
-  .bookingCard {
-    max-width: 100%;
-  }
-
-  .bookingInner {
-    grid-template-columns: 1fr 1fr 1fr auto;
-  }
-
-  .ctaRow {
-    justify-content: center;
-  }
-
-  .rightCol {
-    display: none;
-  }
-
-  .arrowDecor {
-    display: none;
-  }
-
-  .trustInner {
-    grid-template-columns: repeat(4, 1fr);
-    padding: 20px 28px;
-  }
-}
-
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .hero {
     min-height: auto;
   }
 
   .heroContent {
-    padding: 100px 16px 24px;
-    gap: 16px;
+    grid-template-columns: 1fr;
+    padding: 106px 24px 22px;
+    gap: 18px;
+    text-align: left;
   }
 
-  .heading {
-    font-size: clamp(1.8rem, 7vw, 2.6rem);
-    letter-spacing: -0.8px;
-    word-break: break-word;
-  }
-
-  .inlineImgWrap {
-    width: 42px;
-    height: 24px;
+  .leftCol {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    align-items: stretch;
+    gap: 14px;
   }
 
   .subtitle {
-    font-size: 12px;
+    justify-content: flex-start;
+    font-size: 13px;
     gap: 6px;
     flex-wrap: wrap;
-    justify-content: center;
+  }
+
+  .heading {
+    font-size: clamp(2.2rem, 6.8vw, 3.2rem);
+    line-height: 1.12;
+    letter-spacing: -1px;
   }
 
   .tagline {
-    font-size: 13px;
-    line-height: 1.6;
+    margin: 0;
     max-width: 100%;
-    padding: 0 4px;
+    font-size: 14px;
+    line-height: 1.55;
   }
 
   .bookingCard {
+    width: 100%;
     max-width: 100%;
     padding: 6px;
     border-radius: 16px;
   }
 
   .bookingInner {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     border-radius: 12px;
   }
 
   .bookingField {
-    border-right: 0;
+    padding: 14px;
+    border-right: 1px solid #f0f0f0;
     border-bottom: 1px solid #f0f0f0;
-    padding: 12px 14px;
+  }
+
+  .bookingField:nth-child(2n) {
+    border-right: 0;
   }
 
   .bookingField:last-of-type {
@@ -692,80 +708,174 @@
   }
 
   .bookingSearchBtn {
-    width: 100%;
-    border-radius: 12px;
-    padding: 13px;
-    font-size: 14px;
-    min-width: unset;
+    grid-column: 1 / -1;
+    width: auto;
+    margin: 8px;
+    padding: 14px;
+    min-width: 0;
   }
 
   .ctaRow {
-    flex-direction: column;
-    width: 100%;
+    justify-content: flex-start;
     gap: 10px;
   }
 
-  .ctaPrimary,
-  .ctaSecondary {
-    font-size: 14px;
-    padding: 12px 24px;
-    width: 100%;
-    justify-content: center;
-  }
-
+  .rightCol,
   .arrowDecor {
     display: none;
   }
 
   .trustInner {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-    padding: 18px 16px;
-  }
-
-  .trustNumber {
-    font-size: 17px;
-  }
-
-  .trustLabel {
-    font-size: 11px;
-  }
-
-  .trustIcon {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    padding: 18px 24px;
+    gap: 16px;
   }
 
   .trustItem {
     gap: 10px;
   }
+
+  .trustNumber {
+    font-size: 18px;
+  }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .heroContent {
-    padding: 90px 12px 20px;
-    gap: 14px;
+    padding: 76px 16px 18px;
+    gap: 12px;
+    box-sizing: border-box;
   }
 
-  .heading {
-    font-size: clamp(1.5rem, 7.5vw, 1.9rem);
-    letter-spacing: -0.5px;
-  }
-
-  .inlineImgWrap {
-    width: 36px;
-    height: 20px;
-    margin: 0 3px;
+  .leftCol {
+    max-width: 100%;
+    gap: 11px;
   }
 
   .subtitle {
-    font-size: 11px;
+    font-size: 11.5px;
+    gap: 5px;
+  }
+
+  .heading {
+    font-size: clamp(1.95rem, 9vw, 2.6rem);
+    line-height: 1.14;
+    letter-spacing: -0.7px;
+  }
+
+  .inlineImgWrap {
+    width: 40px;
+    height: 24px;
+    margin: 0 4px;
   }
 
   .tagline {
-    font-size: 12px;
-    line-height: 1.55;
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+
+  .bookingInner {
+    grid-template-columns: 1fr;
+  }
+
+  .bookingField {
+    border-right: 0;
+    border-bottom: 1px solid #eceff3;
+    padding: 12px 13px;
+  }
+
+  .fieldIcon {
+    margin-bottom: 2px;
+  }
+
+  .fieldLabel {
+    font-size: 10px;
+    letter-spacing: 0.45px;
+  }
+
+  .fieldValue {
+    font-size: 13px;
+  }
+
+  .bookingSearchBtn {
+    grid-column: auto;
+    width: 100%;
+    margin: 5px 0 0;
+    border-radius: 11px;
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .ctaRow {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .ctaPrimary,
+  .ctaSecondary {
+    width: 100%;
+    justify-content: center;
+    font-size: 14px;
+    padding: 12px 18px;
+  }
+
+  .trustInner {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 14px 12px;
+    gap: 10px;
+  }
+
+  .trustIcon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+
+  .trustNumber {
+    font-size: 16px;
+  }
+
+  .trustLabel {
+    font-size: 10.5px;
+  }
+}
+
+@media (max-width: 420px) {
+  .heroContent {
+    padding: 70px 12px 14px;
+    gap: 10px;
+  }
+
+  .leftCol {
+    gap: 9px;
+  }
+
+  .subtitle {
+    font-size: 10px;
+    gap: 4px;
+  }
+
+  .subtitleSep {
+    display: none;
+  }
+
+  .heading {
+    font-size: clamp(1.72rem, 8.4vw, 2.02rem);
+    line-height: 1.16;
+    letter-spacing: -0.45px;
+  }
+
+  .inlineImgWrap {
+    width: 34px;
+    height: 20px;
+    margin: 0 2px;
+  }
+
+  .tagline {
+    font-size: 12.5px;
+    line-height: 1.45;
   }
 
   .bookingCard {
@@ -774,58 +884,57 @@
   }
 
   .bookingField {
-    padding: 10px 12px;
-  }
-
-  .fieldLabel {
-    font-size: 10px;
+    padding: 10px 11px;
   }
 
   .fieldValue {
-    font-size: 13px;
+    font-size: 12.5px;
   }
 
   .bookingSearchBtn {
-    padding: 12px;
-    font-size: 13px;
-    border-radius: 10px;
+    font-size: 13.5px;
+    padding: 11px;
   }
 
   .ctaPrimary,
   .ctaSecondary {
     font-size: 13px;
-    padding: 11px 20px;
+    padding: 11px 16px;
   }
 
   .trustInner {
+    padding: 12px 10px;
     gap: 8px;
-    padding: 12px;
   }
 
   .trustItem {
     gap: 8px;
   }
 
+  .trustIcon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+  }
+
   .trustNumber {
-    font-size: 15px;
+    font-size: 14px;
   }
 
   .trustLabel {
-    font-size: 10px;
-  }
-
-  .trustIcon {
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
+    font-size: 9.5px;
   }
 }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01s !important;
     transition-duration: 0.01s !important;
   }
-  .heroBgImg { animation: none; }
+  .heroBgImg {
+    animation: none;
+  }
 }
