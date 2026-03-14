@@ -5,6 +5,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { fetchTrips } from "../../services/api";
 import {
   Search,
+  X,
   Phone,
   User,
   LogOut,
@@ -42,7 +43,7 @@ const Navbar = () => {
   const [activeMobileGroup, setActiveMobileGroup] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
-  
+
   // Floating pill state
   const [pillStyle, setPillStyle] = useState({ opacity: 0, left: 0, width: 0 });
 
@@ -73,8 +74,7 @@ const Navbar = () => {
 
   /* ── Body scroll lock ── */
   useEffect(() => {
-    document.body.style.overflow =
-      isMenuOpen || isSearchOpen ? "hidden" : "";
+    document.body.style.overflow = isMenuOpen || isSearchOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
@@ -111,7 +111,10 @@ const Navbar = () => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
         setIsMenuOpen(false);
       }
-      if (userDropdownRef.current && !userDropdownRef.current.contains(e.target)) {
+      if (
+        userDropdownRef.current &&
+        !userDropdownRef.current.contains(e.target)
+      ) {
         setIsUserDropdownOpen(false);
       }
     };
@@ -190,7 +193,10 @@ const Navbar = () => {
 
   const handleDesktopLeave = () => {
     dropdownTimeoutRef.current = setTimeout(() => setActiveHover(""), 220);
-    pillTimeoutRef.current = setTimeout(() => setPillStyle({ ...pillStyle, opacity: 0 }), 250);
+    pillTimeoutRef.current = setTimeout(
+      () => setPillStyle({ ...pillStyle, opacity: 0 }),
+      250,
+    );
   };
 
   const goToSection = useCallback(
@@ -251,7 +257,10 @@ const Navbar = () => {
           action: () => go("/my-bookings"),
         },
       ],
-      footer: { label: "View all trips", action: () => goToSection("trips-grid") },
+      footer: {
+        label: "View all trips",
+        action: () => goToSection("trips-grid"),
+      },
     },
     {
       key: "bestsellers",
@@ -263,7 +272,10 @@ const Navbar = () => {
         desc: dest.country,
         action: () => go(`/trips/${dest.id}`),
       })),
-      footer: { label: "See all destinations", action: () => goToSection("trips-grid") },
+      footer: {
+        label: "See all destinations",
+        action: () => goToSection("trips-grid"),
+      },
     },
     {
       key: "biking",
@@ -365,19 +377,19 @@ const Navbar = () => {
 
           {/* ── Desktop Nav ── */}
           <nav className={styles.navDesktop} aria-label="Main navigation">
-            <ul 
-              className={styles.navLinks} 
+            <ul
+              className={styles.navLinks}
               role="menubar"
               ref={navContainerRef}
               onMouseLeave={handleDesktopLeave}
             >
               {/* Floating Pill Background */}
-              <div 
-                className={styles.navPill} 
+              <div
+                className={styles.navPill}
                 style={{
                   opacity: pillStyle.opacity,
                   transform: `translateX(${pillStyle.left}px)`,
-                  width: `${pillStyle.width}px`
+                  width: `${pillStyle.width}px`,
                 }}
                 aria-hidden="true"
               />
@@ -398,7 +410,7 @@ const Navbar = () => {
               </li>
 
               {/* Menu items with mega dropdowns */}
-              {desktopMenus.map((menu, index) => (
+              {desktopMenus.map((menu) => (
                 <li
                   key={menu.key}
                   className={styles.navItem}
@@ -441,7 +453,7 @@ const Navbar = () => {
                         <button
                           key={`${menu.key}-${item.label}`}
                           className={styles.dropdownItem}
-                          style={{ '--stagger-delay': `${i * 30}ms` }}
+                          style={{ "--stagger-delay": `${i * 30}ms` }}
                           onClick={item.action}
                           role="menuitem"
                         >
@@ -494,9 +506,7 @@ const Navbar = () => {
                 </span>
                 <span className={styles.phoneTextWrap}>
                   <span className={styles.phoneLabel}>Call Us</span>
-                  <span className={styles.phoneNumber}>
-                    +91 97 97 97 21 75
-                  </span>
+                  <span className={styles.phoneNumber}>+91 97 97 97 21 75</span>
                 </span>
               </a>
 
@@ -528,9 +538,7 @@ const Navbar = () => {
                     <span className={styles.userAvatar} aria-hidden="true">
                       {authData.username.charAt(0).toUpperCase()}
                     </span>
-                    <span className={styles.userName}>
-                      {authData.username}
-                    </span>
+                    <span className={styles.userName}>{authData.username}</span>
                     <span className={styles.userCaret} aria-hidden="true" />
                   </button>
 
@@ -580,21 +588,36 @@ const Navbar = () => {
             </div>
           </nav>
 
-          {/* ── Mobile Toggle ── */}
-          <button
-            className={`${styles.mobileMenuToggle} ${isMenuOpen ? styles.active : ""}`}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={isMenuOpen}
-            aria-controls="mobile-nav-drawer"
-          >
-            <span className={styles.toggleText}>MENU</span>
-            <div className={styles.toggleLines} aria-hidden="true">
-              <span />
-              <span />
-              <span />
-            </div>
-          </button>
+          {/* ── Mobile Controls ── */}
+          <div className={styles.mobileControls}>
+            <button
+              className={styles.mobileSearchBar}
+              onClick={() => {
+                setIsMenuOpen(false);
+                setIsSearchOpen(true);
+              }}
+              aria-label="Search destinations"
+              title="Search"
+            >
+              <Search size={16} strokeWidth={2.2} />
+              <span className={styles.mobileSearchText}>Search trips</span>
+            </button>
+
+            <button
+              className={`${styles.mobileMenuToggle} ${isMenuOpen ? styles.active : ""}`}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-nav-drawer"
+            >
+              <span className={styles.toggleText}>MENU</span>
+              <div className={styles.toggleLines} aria-hidden="true">
+                <span />
+                <span />
+                <span />
+              </div>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -659,6 +682,15 @@ const Navbar = () => {
         aria-modal="true"
         aria-label="Mobile navigation"
       >
+        <button
+          className={styles.mobileCloseBtn}
+          onClick={() => setIsMenuOpen(false)}
+          aria-label="Close menu"
+          title="Close"
+        >
+          <X size={18} strokeWidth={2.4} />
+        </button>
+
         <div className={styles.mobileMenuContainer} ref={menuRef}>
           {/* User greeting */}
           <div className={styles.mobileHeader}>
@@ -763,7 +795,9 @@ const Navbar = () => {
 
             <button
               className={`${styles.mobileCtaBtn} ${authData ? styles.mobileLogoutBtn : styles.mobileSecondaryBtn}`}
-              onClick={authData ? handleLogout : () => goToSection("trips-grid")}
+              onClick={
+                authData ? handleLogout : () => goToSection("trips-grid")
+              }
             >
               {authData ? "Logout" : "Start Booking"}
             </button>
