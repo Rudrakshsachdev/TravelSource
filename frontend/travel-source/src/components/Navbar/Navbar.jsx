@@ -2,10 +2,11 @@ import styles from "./Navbar.module.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getAuthData, logout } from "../../utils/auth";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { fetchTrips } from "../../services/api";
+import { fetchNavbarContent } from "../../services/api";
 import {
   Search,
   X,
+  CloudSun,
   Phone,
   User,
   LogOut,
@@ -26,6 +27,54 @@ import {
 } from "lucide-react";
 import tpLogo from "../../assets/logog.png";
 import { useMagnetic } from "../../hooks/useMagnetic";
+
+const CATEGORY_ICONS = [Sparkles, MapPin, Bike, Globe, Mountain, Heart];
+const SECTION_ICONS = {
+  international: Globe,
+  india: MapPin,
+  honeymoon: Heart,
+  himalayan: Mountain,
+  backpacking: Compass,
+  summer: Sparkles,
+  monsoon: CloudSun,
+  community: Users,
+  festival: Star,
+};
+const SECTION_LABELS = {
+  international: "International Trips",
+  india: "India Trips",
+  honeymoon: "Honeymoon Getaways",
+  himalayan: "Himalayan Treks",
+  backpacking: "Backpacking Trips",
+  summer: "Summer Treks",
+  monsoon: "Monsoon Treks",
+  community: "Community Trips",
+  festival: "Festival Trips",
+};
+const NAV_SECTION_ORDER = [
+  "international",
+  "india",
+  "honeymoon",
+  "himalayan",
+  "backpacking",
+  "summer",
+  "monsoon",
+  "community",
+  "festival",
+];
+const DESKTOP_PRIMARY_MENU_LIMIT = 4;
+
+const formatMenuHeader = (label) => label.toUpperCase();
+
+const getMenuIcon = (index) => {
+  const Icon = CATEGORY_ICONS[index % CATEGORY_ICONS.length];
+  return <Icon size={16} />;
+};
+
+const getSectionIcon = (sectionKey) => {
+  const Icon = SECTION_ICONS[sectionKey] || Sparkles;
+  return <Icon size={16} />;
+};
 
 /* ═══════════════════════════════════════════════════════════════
    Navbar — Production-Level | Travel Professor
@@ -60,7 +109,12 @@ const Navbar = () => {
   const magneticSearch = useMagnetic(0.2);
   const magneticLogin = useMagnetic(0.15);
 
-  const [destinations, setDestinations] = useState([]);
+  const [desktopMenus, setDesktopMenus] = useState([]);
+  const [searchHints, setSearchHints] = useState([]);
+  const [promoBadge, setPromoBadge] = useState({
+    label: "Featured Trips",
+    targetTripId: null,
+  });
   const [tripsCount, setTripsCount] = useState(0);
 
   /* ── Scroll with rAF throttle ── */
@@ -82,30 +136,123 @@ const Navbar = () => {
 
   /* ── Load data + global listeners ── */
   useEffect(() => {
-    const loadDestinations = async () => {
+    const loadNavbarData = async () => {
       try {
-        const trips = await fetchTrips();
+        const {
+          trips,
+          categories,
+          featuredTrips,
+          international,
+          india,
+          honeymoon,
+          himalayan,
+          backpacking,
+          summer,
+          monsoon,
+          community,
+          festival,
+        } = await fetchNavbarContent();
+
         setTripsCount(trips.length);
 
-        const unique = [];
-        const seen = new Set();
-        trips.forEach((trip) => {
-          if (!seen.has(trip.location)) {
-            seen.add(trip.location);
-            unique.push({
+        const sectionPayloads = {
+          international,
+          india,
+          honeymoon,
+          himalayan,
+          backpacking,
+          summer,
+          monsoon,
+          community,
+          festival,
+        };
+
+        const tripTypeMenus = NAV_SECTION_ORDER.map((sectionKey) => {
+          const section = sectionPayloads[sectionKey];
+          const sectionTrips = section?.trips || [];
+          const sectionLabel = SECTION_LABELS[sectionKey] || "Trips";
+          const sectionHeader = section?.config?.title || sectionLabel;
+
+          return {
+            key: sectionKey,
+            label: sectionLabel,
+            header: formatMenuHeader(sectionHeader),
+            submenu: sectionTrips.slice(0, 6).map((trip) => ({
               id: trip.id,
-              name: trip.location,
-              country: trip.country || "Destination",
-            });
+              icon: getSectionIcon(sectionKey),
+              label: trip.title,
+              desc:
+                trip.location ||
+                trip.state ||
+                trip.country ||
+                trip.short_description ||
+                "Explore trip",
+              path: `/trips/${trip.id}`,
+            })),
+            footer: {
+              label: `View all ${sectionLabel}`,
+              sectionKey,
+            },
+          };
+        }).filter((menu) => menu.submenu.length > 0);
+
+        const categoryMenus = categories
+          .map((category, index) => {
+            const categoryTrips = trips
+              .filter((trip) => trip.category?.slug === category.slug)
+              .slice(0, 6);
+
+            return {
+              key: category.slug,
+              label: category.name,
+              header: formatMenuHeader(category.name),
+              submenu: categoryTrips.map((trip) => ({
+                id: trip.id,
+                icon: getMenuIcon(index),
+                label: trip.title,
+                desc: trip.location || trip.short_description || "Explore trip",
+                path: `/trips/${trip.id}`,
+              })),
+              footer: {
+                label: `View all ${category.name}`,
+                categorySlug: category.slug,
+              },
+            };
+          })
+          .filter((menu) => menu.submenu.length > 0);
+
+        setDesktopMenus([...tripTypeMenus, ...categoryMenus]);
+
+        const hintSet = new Set();
+        [
+          ...featuredTrips.map((trip) => trip.location || trip.title),
+          ...NAV_SECTION_ORDER.map(
+            (sectionKey) => sectionPayloads[sectionKey]?.config?.title,
+          ),
+          ...categories.map((category) => category.name),
+          ...trips.map((trip) => trip.location),
+        ].forEach((value) => {
+          if (value && hintSet.size < 7) {
+            hintSet.add(value);
           }
         });
-        setDestinations(unique.slice(0, 6));
+
+        setSearchHints(Array.from(hintSet));
+
+        setPromoBadge({
+          label:
+            SECTION_LABELS.festival ||
+            featuredTrips[0]?.title ||
+            "Featured Trips",
+          targetTripId:
+            festival?.trips?.[0]?.id || featuredTrips[0]?.id || null,
+        });
       } catch (err) {
-        console.error("Failed to load navbar destinations:", err);
+        console.error("Failed to load navbar content:", err);
       }
     };
 
-    loadDestinations();
+    loadNavbarData();
 
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -162,17 +309,14 @@ const Navbar = () => {
     setIsUserDropdownOpen(false);
   };
 
-  const go = useCallback(
-    (path) => {
-      navigate(path);
-      setIsMenuOpen(false);
-      setActiveMobileGroup("");
-      setActiveHover("");
-      setIsUserDropdownOpen(false);
-      setIsSearchOpen(false);
-    },
-    [navigate],
-  );
+  const go = (path) => {
+    navigate(path);
+    setIsMenuOpen(false);
+    setActiveMobileGroup("");
+    setActiveHover("");
+    setIsUserDropdownOpen(false);
+    setIsSearchOpen(false);
+  };
 
   const handleDesktopHover = (e, key) => {
     if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
@@ -199,22 +343,42 @@ const Navbar = () => {
     );
   };
 
-  const goToSection = useCallback(
-    (sectionId) => {
-      if (location.pathname !== "/") navigate("/");
-      setIsMenuOpen(false);
-      setActiveHover("");
-      setActiveMobileGroup("");
-      setIsSearchOpen(false);
+  const goToSection = (sectionId) => {
+    if (location.pathname !== "/") navigate("/");
+    setIsMenuOpen(false);
+    setActiveHover("");
+    setActiveMobileGroup("");
+    setIsSearchOpen(false);
 
-      const delay = location.pathname !== "/" ? 400 : 50;
-      setTimeout(() => {
-        const el = document.getElementById(sectionId);
-        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, delay);
-    },
-    [location.pathname, navigate],
-  );
+    const delay = location.pathname !== "/" ? 400 : 50;
+    setTimeout(() => {
+      const el = document.getElementById(sectionId);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, delay);
+  };
+
+  const primaryDesktopMenus = desktopMenus.slice(0, DESKTOP_PRIMARY_MENU_LIMIT);
+  const overflowDesktopMenus = desktopMenus.slice(DESKTOP_PRIMARY_MENU_LIMIT);
+  const desktopMenusToRender = overflowDesktopMenus.length
+    ? [
+        ...primaryDesktopMenus,
+        {
+          key: "more-trips",
+          label: "More Trips",
+          header: "MORE TRIP TYPES",
+          submenu: overflowDesktopMenus.map((menu) => ({
+            id: menu.key,
+            icon: menu.submenu[0]?.icon || <Compass size={16} />,
+            label: menu.label,
+            desc: `${menu.submenu.length} curated trips`,
+            path: menu.submenu[0]?.path || "/",
+          })),
+          footer: {
+            label: "Browse all trips",
+          },
+        },
+      ]
+    : primaryDesktopMenus;
 
   /* ── Keyboard navigation for dropdowns ── */
   const handleNavKeyDown = (e, menuKey) => {
@@ -230,126 +394,6 @@ const Navbar = () => {
       setActiveHover("");
     }
   };
-
-  /* ═══ MEGA-MENU STRUCTURE ═══ */
-  const desktopMenus = [
-    {
-      key: "backpacking",
-      label: "Backpacking Trips",
-      header: "EXPLORE TRIPS",
-      submenu: [
-        {
-          icon: <Sparkles size={16} />,
-          label: "Featured Tours",
-          desc: "Our most loved trips",
-          action: () => goToSection("trips-grid"),
-        },
-        {
-          icon: <Globe size={16} />,
-          label: "All Destinations",
-          desc: "Browse every location",
-          action: () => goToSection("trips-grid"),
-        },
-        {
-          icon: <BookOpen size={16} />,
-          label: "My Bookings",
-          desc: "View your reservations",
-          action: () => go("/my-bookings"),
-        },
-      ],
-      footer: {
-        label: "View all trips",
-        action: () => goToSection("trips-grid"),
-      },
-    },
-    {
-      key: "bestsellers",
-      label: "Best Sellers",
-      header: "TOP DESTINATIONS",
-      submenu: destinations.map((dest) => ({
-        icon: <MapPin size={16} />,
-        label: dest.name,
-        desc: dest.country,
-        action: () => go(`/trips/${dest.id}`),
-      })),
-      footer: {
-        label: "See all destinations",
-        action: () => goToSection("trips-grid"),
-      },
-    },
-    {
-      key: "biking",
-      label: "Biking Trips",
-      header: "ADVENTURE RIDES",
-      submenu: [
-        {
-          icon: <Mountain size={16} />,
-          label: "Mountain Rides",
-          desc: "High-altitude thrills",
-          action: () => goToSection("trips-grid"),
-        },
-        {
-          icon: <Users size={16} />,
-          label: "Group Expeditions",
-          desc: "Ride with a crew",
-          action: () => goToSection("trips-grid"),
-        },
-        {
-          icon: <Heart size={16} />,
-          label: "Solo Adventures",
-          desc: "Go at your own pace",
-          action: () => goToSection("trips-grid"),
-        },
-        {
-          icon: <Mail size={16} />,
-          label: "Trip Concierge",
-          desc: "Expert help & planning",
-          action: () => go("/contact"),
-        },
-      ],
-    },
-    {
-      key: "more",
-      label: "More",
-      header: "RESOURCES",
-      submenu: [
-        {
-          icon: <Compass size={16} />,
-          label: "Contact Us",
-          desc: "Get in touch anytime",
-          action: () => go("/contact"),
-        },
-        {
-          icon: <FileText size={16} />,
-          label: "Terms of Service",
-          desc: "Rules & agreements",
-          action: () => go("/terms"),
-        },
-        {
-          icon: <Shield size={16} />,
-          label: "Privacy Policy",
-          desc: "Your data matters",
-          action: () => go("/privacy"),
-        },
-        {
-          icon: <FileText size={16} />,
-          label: "Refund Policy",
-          desc: "Returns & cancellation",
-          action: () => go("/refund-policy"),
-        },
-      ],
-    },
-  ];
-
-  const searchHints = [
-    "Goa",
-    "Manali",
-    "Leh Ladakh",
-    "Kashmir",
-    "Rishikesh",
-    "Weekend Trips",
-    "Group Tours",
-  ];
 
   /* ═══ RENDER ═══ */
   return (
@@ -398,11 +442,15 @@ const Navbar = () => {
               <li className={styles.navItem} role="none">
                 <button
                   className={styles.highlightBadge}
-                  onClick={() => goToSection("trips-grid")}
+                  onClick={() =>
+                    promoBadge.targetTripId
+                      ? go(`/trips/${promoBadge.targetTripId}`)
+                      : goToSection("trips-grid")
+                  }
                   role="menuitem"
-                  aria-label="Good Friday — Live deals"
+                  aria-label={`${promoBadge.label} — featured offers`}
                 >
-                  Good Friday
+                  {promoBadge.label}
                   <span className={styles.liveBadge} aria-label="Live now">
                     LIVE NOW
                   </span>
@@ -410,7 +458,7 @@ const Navbar = () => {
               </li>
 
               {/* Menu items with mega dropdowns */}
-              {desktopMenus.map((menu) => (
+              {desktopMenusToRender.map((menu) => (
                 <li
                   key={menu.key}
                   className={styles.navItem}
@@ -451,10 +499,10 @@ const Navbar = () => {
 
                       {menu.submenu.map((item, i) => (
                         <button
-                          key={`${menu.key}-${item.label}`}
+                          key={`${menu.key}-${item.id ?? item.label}`}
                           className={styles.dropdownItem}
                           style={{ "--stagger-delay": `${i * 30}ms` }}
-                          onClick={item.action}
+                          onClick={() => go(item.path)}
                           role="menuitem"
                         >
                           <span className={styles.dropdownIcon}>
@@ -478,7 +526,11 @@ const Navbar = () => {
                           <div className={styles.dropdownDivider} />
                           <button
                             className={styles.dropdownFooter}
-                            onClick={menu.footer.action}
+                            onClick={() =>
+                              menu.footer.categorySlug
+                                ? goToSection("trips-grid")
+                                : goToSection("trips-grid")
+                            }
                             role="menuitem"
                           >
                             {menu.footer.label}
@@ -721,34 +773,32 @@ const Navbar = () => {
               <button className={styles.mobileNavTitle} onClick={() => go("/")}>
                 🏠 Home
               </button>
-              <button
-                className={styles.mobileNavTitle}
-                onClick={() => goToSection("trips-grid")}
-              >
-                🎒 Backpacking Trips
-              </button>
-              <button
-                className={styles.mobileNavTitle}
-                onClick={() =>
-                  setActiveMobileGroup((p) =>
-                    p === "destinations" ? "" : "destinations",
-                  )
-                }
-                aria-expanded={activeMobileGroup === "destinations"}
-              >
-                ⭐ Best Sellers
-              </button>
-
-              {activeMobileGroup === "destinations" &&
-                destinations.map((dest) => (
+              {desktopMenus.map((menu) => (
+                <div key={menu.key}>
                   <button
-                    key={dest.id}
-                    className={styles.mobileNavItem}
-                    onClick={() => go(`/trips/${dest.id}`)}
+                    className={styles.mobileNavTitle}
+                    onClick={() =>
+                      setActiveMobileGroup((prev) =>
+                        prev === menu.key ? "" : menu.key,
+                      )
+                    }
+                    aria-expanded={activeMobileGroup === menu.key}
                   >
-                    {dest.name}
+                    {menu.label}
                   </button>
-                ))}
+
+                  {activeMobileGroup === menu.key &&
+                    menu.submenu.map((item) => (
+                      <button
+                        key={`${menu.key}-${item.id}`}
+                        className={styles.mobileNavItem}
+                        onClick={() => go(item.path)}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                </div>
+              ))}
             </div>
 
             <div className={styles.mobileNavSection}>
@@ -756,19 +806,25 @@ const Navbar = () => {
                 className={styles.mobileNavTitle}
                 onClick={() => goToSection("trips-grid")}
               >
-                🚴 Biking Trips
+                View All Trips
               </button>
+              {searchHints.slice(0, 4).map((hint) => (
+                <button
+                  key={hint}
+                  className={styles.mobileNavItem}
+                  onClick={() => goToSection("trips-grid")}
+                >
+                  {hint}
+                </button>
+              ))}
+            </div>
+
+            <div className={styles.mobileNavSection}>
               <button
                 className={styles.mobileNavTitle}
                 onClick={() => go("/contact")}
               >
-                📞 Contact Us
-              </button>
-              <button
-                className={styles.mobileNavTitle}
-                onClick={() => go("/my-bookings")}
-              >
-                📋 My Bookings
+                Contact Us
               </button>
 
               {authData?.role?.toUpperCase() === "USER" && (
@@ -776,7 +832,16 @@ const Navbar = () => {
                   className={styles.mobileNavTitle}
                   onClick={() => go("/my-enquiries")}
                 >
-                  🗺️ My Journeys
+                  My Journeys
+                </button>
+              )}
+
+              {authData && (
+                <button
+                  className={styles.mobileNavTitle}
+                  onClick={() => go("/my-bookings")}
+                >
+                  My Bookings
                 </button>
               )}
             </div>

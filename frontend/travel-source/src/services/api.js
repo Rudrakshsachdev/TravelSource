@@ -35,7 +35,12 @@ export const createCategory = async (data) => {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    const msg = errorData.detail || errorData.slug?.[0] || errorData.name?.[0] || JSON.stringify(errorData) || "Failed to create category";
+    const msg =
+      errorData.detail ||
+      errorData.slug?.[0] ||
+      errorData.name?.[0] ||
+      JSON.stringify(errorData) ||
+      "Failed to create category";
     throw new Error(msg);
   }
   return response.json();
@@ -826,10 +831,6 @@ export const updateFestivalConfig = async (data) => {
   return res.json();
 };
 
-
-
-
-
 // ─── Forgot Password ────────────────────────────────────────────────────────
 
 export const requestPasswordReset = async (email) => {
@@ -879,4 +880,78 @@ export const fetchFeaturedTrips = async () => {
   const res = await fetch(`${API_BASE_URL}/v1/trips/featured/`);
   if (!res.ok) throw new Error("Failed to fetch featured trips");
   return res.json();
+};
+
+/** Compose navbar content from existing public backend endpoints. */
+export const fetchNavbarContent = async () => {
+  const [
+    trips,
+    categories,
+    featuredTrips,
+    internationalData,
+    indiaData,
+    honeymoonData,
+    himalayanData,
+    backpackingData,
+    summerData,
+    monsoonData,
+    communityData,
+    festivalData,
+  ] = await Promise.allSettled([
+    fetchTrips(),
+    fetchCategories(),
+    fetchFeaturedTrips(),
+    fetchInternationalTrips(),
+    fetchIndiaTrips(),
+    fetchHoneymoonTrips(),
+    fetchHimalayanTrips(),
+    fetchBackpackingTrips(),
+    fetchSummerTrips(),
+    fetchMonsoonTrips(),
+    fetchCommunityTrips(),
+    fetchFestivalTrips(),
+  ]);
+
+  return {
+    trips: trips.status === "fulfilled" ? trips.value : [],
+    categories: categories.status === "fulfilled" ? categories.value : [],
+    featuredTrips:
+      featuredTrips.status === "fulfilled" ? featuredTrips.value : [],
+    international:
+      internationalData.status === "fulfilled"
+        ? internationalData.value
+        : { config: { is_enabled: false }, trips: [] },
+    india:
+      indiaData.status === "fulfilled"
+        ? indiaData.value
+        : { config: { is_enabled: false }, trips: [] },
+    honeymoon:
+      honeymoonData.status === "fulfilled"
+        ? honeymoonData.value
+        : { config: { is_enabled: false }, trips: [] },
+    himalayan:
+      himalayanData.status === "fulfilled"
+        ? himalayanData.value
+        : { config: { is_enabled: false }, trips: [] },
+    backpacking:
+      backpackingData.status === "fulfilled"
+        ? backpackingData.value
+        : { config: { is_enabled: false }, trips: [] },
+    summer:
+      summerData.status === "fulfilled"
+        ? summerData.value
+        : { config: { is_enabled: false }, trips: [] },
+    monsoon:
+      monsoonData.status === "fulfilled"
+        ? monsoonData.value
+        : { config: { is_enabled: false }, trips: [] },
+    community:
+      communityData.status === "fulfilled"
+        ? communityData.value
+        : { config: { is_enabled: false }, trips: [] },
+    festival:
+      festivalData.status === "fulfilled"
+        ? festivalData.value
+        : { config: { is_enabled: false }, trips: [] },
+  };
 };
