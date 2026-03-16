@@ -37,6 +37,7 @@ from .serializers import (
     FestivalTripSerializer,
     FestivalSectionConfigSerializer,
     CategorySerializer,
+    #TripGalleryImageSerializer,
 )
 
 from django.shortcuts import get_object_or_404
@@ -57,8 +58,18 @@ from django.conf import settings
 def trip_list(request):
     trips = Trip.objects.filter(is_active=True)
     category_slug = request.query_params.get("category")
+    is_international = request.query_params.get("is_international")
+    is_india_trip = request.query_params.get("is_india_trip")
+    
     if category_slug:
         trips = trips.filter(category__slug=category_slug)
+        
+    if is_international and is_international.lower() == "true":
+        trips = trips.filter(is_international=True)
+        
+    if is_india_trip and is_india_trip.lower() == "true":
+        trips = trips.filter(is_india_trip=True)
+        
     serializer = TripSerializer(trips, many=True)
     return Response(serializer.data)
 
@@ -1105,4 +1116,3 @@ def admin_festival_config(request):
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(serializer.data)
-

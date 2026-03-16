@@ -3,6 +3,7 @@ from .models import Trip, Profile, Enquiry, SiteStat, InternationalSectionConfig
 # Register your models here.
 
 
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ("name", "slug", "emoji")
@@ -12,6 +13,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Trip)
 class TripAdmin(admin.ModelAdmin):
+    inlines = [TripGalleryImageInline]
     list_display = (
         "title", "location", "country", "state", "category", "price", "is_active", "is_featured",
         "is_international", "show_in_international_section", "display_order",
@@ -215,3 +217,5 @@ class EnquiryAdmin(admin.ModelAdmin):
     list_display = ("trip", "name", "email", "phone", "created_at")
     list_filter = ("created_at",)
     search_fields = ("name", "email", "phone")
+
+

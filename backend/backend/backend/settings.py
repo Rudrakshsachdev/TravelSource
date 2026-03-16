@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'backend.backend.core',
+    'backend.backend.core', #backend.backend.core
     'rest_framework.authtoken',
 ]
 
@@ -58,7 +58,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'backend.backend.backend.urls'
+ROOT_URLCONF = 'backend.backend.backend.urls' # backend.backend.backend.urls
 
 TEMPLATES = [
     {

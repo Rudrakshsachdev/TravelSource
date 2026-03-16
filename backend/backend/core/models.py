@@ -453,3 +453,25 @@ class PasswordResetOTP(models.Model):
 
     def __str__(self):
         return f"OTP for {self.email} - {self.otp}"
+
+
+class TripGalleryImage(models.Model):
+    """Multiple images per trip for the gallery collage section."""
+    IMAGE_TYPE_CHOICES = (
+        ("GALLERY", "Gallery"),
+        ("MAP", "Route Map"),
+        ("REVIEW", "Review Screenshot"),
+    )
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE, related_name="gallery_images")
+    image = models.URLField(help_text="Cloudinary image URL")
+    caption = models.CharField(max_length=200, blank=True, default="")
+    image_type = models.CharField(max_length=20, choices=IMAGE_TYPE_CHOICES, default="GALLERY")
+    display_order = models.IntegerField(default=0, help_text="Lower = displayed first")
+
+    class Meta:
+        ordering = ["display_order", "id"]
+        verbose_name = "Trip Gallery Image"
+        verbose_name_plural = "Trip Gallery Images"
+
+    def __str__(self):
+        return f"{self.trip.title} — {self.get_image_type_display()} #{self.display_order}"

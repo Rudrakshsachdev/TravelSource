@@ -21,3 +21,4 @@ from .community_serializer import CommunityTripSerializer, CommunitySectionConfi
 from .festival_serializer import FestivalTripSerializer, FestivalSectionConfigSerializer
 from .category_serializer import CategorySerializer
 
+
