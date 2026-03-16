@@ -558,9 +558,19 @@ export const fetchSiteStats = async () => {
 
 /** Fetch international trips + section config for the scrolling showcase */
 export const fetchInternationalTrips = async () => {
-  const res = await fetch(`${API_BASE_URL}/v1/trips/international/`);
-  if (!res.ok) throw new Error("Failed to fetch international trips");
-  return res.json();
+  const response = await fetch(`${API_BASE_URL}/v1/trips/international/`);
+  if (!response.ok) {
+    throw new Error("Failed to load international trips");
+  }
+  return response.json();
+};
+
+export const fetchAllInternationalTrips = async () => {
+  const response = await fetch(`${API_BASE_URL}/v1/trips/?is_international=true`);
+  if (!response.ok) {
+    throw new Error("Failed to load all international trips");
+  }
+  return response.json();
 };
 
 /** Fetch India trips + section config for the scrolling showcase */

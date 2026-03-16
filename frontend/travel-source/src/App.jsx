@@ -8,6 +8,7 @@ import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import Profile from "./pages/Profile/Profile";
 import { TripDetail } from "./components/Trips";
+import InternationalTripsPage from "./pages/InternationalTrips/InternationalTripsPage";
 import ContactUs from "./components/ContactUs/ContactUs";
 import MyBookings from "./pages/MyBookings/MyBookings";
 import BookingPage from "./pages/Booking/BookingPage";
@@ -71,6 +72,15 @@ function App() {
         element={
           <Layout>
             <TripDetail />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/international-trips"
+        element={
+          <Layout>
+            <InternationalTripsPage />
           </Layout>
         }
       />
