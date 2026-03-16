@@ -720,6 +720,14 @@ export const fetchBackpackingTrips = async () => {
   return res.json();
 };
 
+export const fetchAllBackpackingTrips = async () => {
+  const response = await fetch(`${API_BASE_URL}/v1/trips/?is_backpacking_trip=true`);
+  if (!response.ok) {
+    throw new Error("Failed to load all Backpacking trips");
+  }
+  return response.json();
+};
+
 export const fetchBackpackingConfig = async () => {
   const token = localStorage.getItem("accessToken");
   const res = await fetch(`${API_BASE_URL}/v1/admin/backpacking-config/`, {
