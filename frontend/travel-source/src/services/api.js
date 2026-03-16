@@ -627,6 +627,14 @@ export const fetchHimalayanTrips = async () => {
   return res.json();
 };
 
+export const fetchAllHimalayanTrips = async () => {
+  const response = await fetch(`${API_BASE_URL}/v1/trips/?is_himalayan_trek=true`);
+  if (!response.ok) {
+    throw new Error("Failed to load all Himalayan trips");
+  }
+  return response.json();
+};
+
 /** Fetch Himalayan section config (ADMIN) */
 export const fetchHimalayanConfig = async () => {
   const token = localStorage.getItem("accessToken");

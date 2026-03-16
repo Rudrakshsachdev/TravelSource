@@ -10,6 +10,7 @@ import Profile from "./pages/Profile/Profile";
 import { TripDetail } from "./components/Trips";
 import InternationalTripsPage from "./pages/InternationalTrips/InternationalTripsPage";
 import IndiaTripsPage from "./pages/IndiaTrips/IndiaTripsPage";
+import HimalayanTripsPage from "./pages/HimalayanTrips/HimalayanTripsPage";
 import ContactUs from "./components/ContactUs/ContactUs";
 import MyBookings from "./pages/MyBookings/MyBookings";
 import BookingPage from "./pages/Booking/BookingPage";
@@ -91,6 +92,15 @@ function App() {
         element={
           <Layout>
             <IndiaTripsPage />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/himalayan-trips"
+        element={
+          <Layout>
+            <HimalayanTripsPage />
           </Layout>
         }
       />
