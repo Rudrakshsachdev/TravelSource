@@ -327,6 +327,7 @@ const AdminTrips = () => {
         summer_display_order: Number(formData.summer_display_order) || 0,
         monsoon_display_order: Number(formData.monsoon_display_order) || 0,
         community_display_order: Number(formData.community_display_order) || 0,
+        festival_display_order: Number(formData.festival_display_order) || 0,
         itinerary,
 
         highlights,
@@ -641,7 +642,7 @@ const AdminTrips = () => {
                         type="checkbox"
                         name="is_honeymoon"
                         checked={formData.is_honeymoon}
-                        onChange={handleChange}
+                        onChange={handleCheckboxChange}
                         className={styles.checkbox}
                       />
                       Mark as Honeymoon Trip
@@ -651,7 +652,7 @@ const AdminTrips = () => {
                         type="checkbox"
                         name="show_in_honeymoon_section"
                         checked={formData.show_in_honeymoon_section}
-                        onChange={handleChange}
+                        onChange={handleCheckboxChange}
                         className={styles.checkbox}
                       />
                       Show in Honeymoon Section
@@ -719,7 +720,7 @@ const AdminTrips = () => {
                         type="checkbox"
                         name="is_backpacking_trip"
                         checked={formData.is_backpacking_trip}
-                        onChange={handleChange}
+                        onChange={handleCheckboxChange}
                         className={styles.checkbox}
                       />
                       Mark as Backpacking Trip
@@ -729,7 +730,7 @@ const AdminTrips = () => {
                         type="checkbox"
                         name="show_in_backpacking_section"
                         checked={formData.show_in_backpacking_section}
-                        onChange={handleChange}
+                        onChange={handleCheckboxChange}
                         className={styles.checkbox}
                       />
                       Show in Backpacking Section
