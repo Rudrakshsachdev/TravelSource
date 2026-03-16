@@ -13,7 +13,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Trip)
 class TripAdmin(admin.ModelAdmin):
-    inlines = [TripGalleryImageInline]
+    #inlines = [TripGalleryImageInline]
     list_display = (
         "title", "location", "country", "state", "category", "price", "is_active", "is_featured",
         "is_international", "show_in_international_section", "display_order",
