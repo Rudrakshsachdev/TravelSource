@@ -11,6 +11,7 @@ import { TripDetail } from "./components/Trips";
 import InternationalTripsPage from "./pages/InternationalTrips/InternationalTripsPage";
 import IndiaTripsPage from "./pages/IndiaTrips/IndiaTripsPage";
 import HimalayanTripsPage from "./pages/HimalayanTrips/HimalayanTripsPage";
+import CommunityTripsPage from "./pages/CommunityTrips/CommunityTripsPage";
 import ContactUs from "./components/ContactUs/ContactUs";
 import MyBookings from "./pages/MyBookings/MyBookings";
 import BookingPage from "./pages/Booking/BookingPage";
@@ -101,6 +102,15 @@ function App() {
         element={
           <Layout>
             <HimalayanTripsPage />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/community-trips"
+        element={
+          <Layout>
+            <CommunityTripsPage />
           </Layout>
         }
       />

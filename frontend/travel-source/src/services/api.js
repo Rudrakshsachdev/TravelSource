@@ -800,6 +800,14 @@ export const fetchCommunityTrips = async () => {
   return res.json();
 };
 
+export const fetchAllCommunityTrips = async () => {
+  const response = await fetch(`${API_BASE_URL}/v1/trips/?is_community_trip=true`);
+  if (!response.ok) {
+    throw new Error("Failed to load all Community trips");
+  }
+  return response.json();
+};
+
 /** Fetch Community section config (ADMIN) */
 export const fetchCommunityConfig = async () => {
   const token = localStorage.getItem("accessToken");
