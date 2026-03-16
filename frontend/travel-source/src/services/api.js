@@ -595,6 +595,14 @@ export const fetchHoneymoonTrips = async () => {
   return res.json();
 };
 
+export const fetchAllHoneymoonTrips = async () => {
+  const response = await fetch(`${API_BASE_URL}/v1/trips/?is_honeymoon_trip=true`);
+  if (!response.ok) {
+    throw new Error("Failed to load all Honeymoon trips");
+  }
+  return response.json();
+};
+
 /** Fetch Honeymoon section config (ADMIN) */
 export const fetchHoneymoonConfig = async () => {
   const token = localStorage.getItem("access_token");

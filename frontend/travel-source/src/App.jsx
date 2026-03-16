@@ -13,6 +13,7 @@ import IndiaTripsPage from "./pages/IndiaTrips/IndiaTripsPage";
 import HimalayanTripsPage from "./pages/HimalayanTrips/HimalayanTripsPage";
 import CommunityTripsPage from "./pages/CommunityTrips/CommunityTripsPage";
 import FestivalTripsPage from "./pages/FestivalTrips/FestivalTripsPage";
+import HoneymoonTripsPage from "./pages/HoneymoonTrips/HoneymoonTripsPage";
 import ContactUs from "./components/ContactUs/ContactUs";
 import MyBookings from "./pages/MyBookings/MyBookings";
 import BookingPage from "./pages/Booking/BookingPage";
@@ -121,6 +122,15 @@ function App() {
         element={
           <Layout>
             <FestivalTripsPage />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/honeymoon-trips"
+        element={
+          <Layout>
+            <HoneymoonTripsPage />
           </Layout>
         }
       />
