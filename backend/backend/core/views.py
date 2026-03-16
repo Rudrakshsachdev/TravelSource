@@ -62,6 +62,7 @@ def trip_list(request):
     is_india_trip = request.query_params.get("is_india_trip")
     is_himalayan_trek = request.query_params.get("is_himalayan_trek")
     is_community_trip = request.query_params.get("is_community_trip")
+    is_festival_trip = request.query_params.get("is_festival_trip")
     
     if category_slug:
         trips = trips.filter(category__slug=category_slug)
@@ -77,6 +78,9 @@ def trip_list(request):
         
     if is_community_trip and is_community_trip.lower() == "true":
         trips = trips.filter(is_community_trip=True)
+        
+    if is_festival_trip and is_festival_trip.lower() == "true":
+        trips = trips.filter(is_festival_trip=True)
         
     serializer = TripSerializer(trips, many=True)
     return Response(serializer.data)

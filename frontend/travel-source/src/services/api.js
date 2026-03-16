@@ -840,6 +840,14 @@ export const fetchFestivalTrips = async () => {
   return res.json();
 };
 
+export const fetchAllFestivalTrips = async () => {
+  const response = await fetch(`${API_BASE_URL}/v1/trips/?is_festival_trip=true`);
+  if (!response.ok) {
+    throw new Error("Failed to load all Festival trips");
+  }
+  return response.json();
+};
+
 /** Fetch Festival section config (ADMIN) */
 export const fetchFestivalConfig = async () => {
   const token = localStorage.getItem("accessToken");
