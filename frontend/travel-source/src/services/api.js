@@ -580,6 +580,14 @@ export const fetchIndiaTrips = async () => {
   return res.json();
 };
 
+export const fetchAllIndiaTrips = async () => {
+  const response = await fetch(`${API_BASE_URL}/v1/trips/?is_india_trip=true`);
+  if (!response.ok) {
+    throw new Error("Failed to load all India trips");
+  }
+  return response.json();
+};
+
 /** Fetch Honeymoon trips + section config for the scrolling showcase */
 export const fetchHoneymoonTrips = async () => {
   const res = await fetch(`${API_BASE_URL}/v1/trips/honeymoon/`);
