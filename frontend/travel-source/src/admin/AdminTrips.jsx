@@ -10,7 +10,6 @@ import {
   createCategory,
 } from "../services/api";
 import styles from "./AdminTrips.module.css";
-import SectionSettings from "./SectionSettings";
 
 
 const AdminTrips = () => {
@@ -641,383 +640,6 @@ const AdminTrips = () => {
                       />
                     </div>
                   </div>
-
-                  {/* Honeymoon Section Fields */}
-                  <div className={styles.sectionHeader}>
-                    <h3 className={styles.sectionTitle}>Honeymoon Showcase</h3>
-                  </div>
-                  <div className={styles.checkboxGroup}>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="is_honeymoon"
-                        checked={formData.is_honeymoon}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Mark as Honeymoon Trip
-                    </label>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="show_in_honeymoon_section"
-                        checked={formData.show_in_honeymoon_section}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Show in Honeymoon Section
-                    </label>
-                  </div>
-                  <div className={styles.formGrid}>
-                    <div className={styles.inputGroup}>
-                      <label className={styles.inputLabel}>Honeymoon Display Order</label>
-                      <input
-                        type="number"
-                        name="honeymoon_display_order"
-                        value={formData.honeymoon_display_order}
-                        onChange={handleChange}
-                        className={styles.input}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Himalayan Section Fields */}
-                  <div className={styles.sectionHeader}>
-                    <h3 className={styles.sectionTitle}>Himalayan Showcase</h3>
-                  </div>
-                  <div className={styles.checkboxGroup}>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="is_himalayan_trek"
-                        checked={formData.is_himalayan_trek}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Mark as Himalayan Trek
-                    </label>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="show_in_himalayan_section"
-                        checked={formData.show_in_himalayan_section}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Show in Himalayan Section
-                    </label>
-                  </div>
-                  <div className={styles.formGrid}>
-                    <div className={styles.inputGroup}>
-                      <label className={styles.inputLabel}>Himalayan Display Order</label>
-                      <input
-                        type="number"
-                        name="himalayan_display_order"
-                        value={formData.himalayan_display_order}
-                        onChange={handleChange}
-                        className={styles.input}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Backpacking Section Fields */}
-                  <div className={styles.sectionHeader}>
-                    <h3 className={styles.sectionTitle}>Backpacking Showcase</h3>
-                  </div>
-                  <div className={styles.checkboxGroup}>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="is_backpacking_trip"
-                        checked={formData.is_backpacking_trip}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Mark as Backpacking Trip
-                    </label>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="show_in_backpacking_section"
-                        checked={formData.show_in_backpacking_section}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Show in Backpacking Section
-                    </label>
-                  </div>
-                  <div className={styles.formGrid}>
-                    <div className={styles.inputGroup}>
-                      <label className={styles.inputLabel}>Backpacking Display Order</label>
-                      <input
-                        type="number"
-                        name="backpacking_display_order"
-                        value={formData.backpacking_display_order}
-                        onChange={handleChange}
-                        className={styles.input}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Summer Section Fields */}
-                  <div className={styles.sectionHeader}>
-                    <h3 className={styles.sectionTitle}>Summer Showcase</h3>
-                  </div>
-                  <div className={styles.checkboxGroup}>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="is_summer_trek"
-                        checked={formData.is_summer_trek}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Mark as Summer Trek
-                    </label>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="show_in_summer_section"
-                        checked={formData.show_in_summer_section}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Show in Summer Section
-                    </label>
-                  </div>
-                  <div className={styles.formGrid}>
-                    <div className={styles.inputGroup}>
-                      <label className={styles.inputLabel}>Summer Display Order</label>
-                      <input
-                        type="number"
-                        name="summer_display_order"
-                        value={formData.summer_display_order}
-                        onChange={handleChange}
-                        className={styles.input}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Monsoon Section Fields */}
-                  <div className={styles.sectionHeader}>
-                    <h3 className={styles.sectionTitle}>Monsoon Showcase</h3>
-                  </div>
-                  <div className={styles.checkboxGroup}>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="is_monsoon_trek"
-                        checked={formData.is_monsoon_trek}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Mark as Monsoon Trek
-                    </label>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="show_in_monsoon_section"
-                        checked={formData.show_in_monsoon_section}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Show in Monsoon Section
-                    </label>
-                  </div>
-                  <div className={styles.formGrid}>
-                    <div className={styles.inputGroup}>
-                      <label className={styles.inputLabel}>Monsoon Display Order</label>
-                      <input
-                        type="number"
-                        name="monsoon_display_order"
-                        value={formData.monsoon_display_order}
-                        onChange={handleChange}
-                        className={styles.input}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Adventure Section Fields */}
-                  <div className={styles.sectionHeader}>
-                    <h3 className={styles.sectionTitle}>Adventure Showcase</h3>
-                  </div>
-                  <div className={styles.checkboxGroup}>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="is_adventure_trip"
-                        checked={formData.is_adventure_trip}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Mark as Adventure Trip
-                    </label>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="show_in_adventure_section"
-                        checked={formData.show_in_adventure_section}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Show in Adventure Section
-                    </label>
-                  </div>
-                  <div className={styles.formGrid}>
-                    <div className={styles.inputGroup}>
-                      <label className={styles.inputLabel}>Adventure Display Order</label>
-                      <input
-                        type="number"
-                        name="adventure_display_order"
-                        value={formData.adventure_display_order}
-                        onChange={handleChange}
-                        className={styles.input}
-                      />
-                    </div>
-                  </div>
-                  {/* Community Section Fields */}
-                  <div className={styles.sectionHeader}>
-                    <h3 className={styles.sectionTitle}>Community Showcase</h3>
-                  </div>
-                  <div className={styles.checkboxGroup}>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="is_community_trip"
-                        checked={formData.is_community_trip}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Mark as Community Trip
-                    </label>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="show_in_community_section"
-                        checked={formData.show_in_community_section}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Show in Community Section
-                    </label>
-                  </div>
-                  <div className={styles.formGrid}>
-                    <div className={styles.inputGroup}>
-                      <label className={styles.inputLabel}>Community Display Order</label>
-                      <input
-                        type="number"
-                        name="community_display_order"
-                        value={formData.community_display_order}
-                        onChange={handleChange}
-                        className={styles.input}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Festival Section Fields */}
-                  <div className={styles.sectionHeader}>
-                    <h3 className={styles.sectionTitle}>Festival Showcase</h3>
-                  </div>
-                  <div className={styles.checkboxGroup}>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="is_festival_trip"
-                        checked={formData.is_festival_trip}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Mark as Festival Trip
-                    </label>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="show_in_festival_section"
-                        checked={formData.show_in_festival_section}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Show in Festival Section
-                    </label>
-                  </div>
-                  <div className={styles.formGrid}>
-                    <div className={styles.inputGroup}>
-                      <label className={styles.inputLabel}>Festival Display Order</label>
-                      <input
-                        type="number"
-                        name="festival_display_order"
-                        value={formData.festival_display_order}
-                        onChange={handleChange}
-                        className={styles.input}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Featured Showcase Section */}
-                  <div className={styles.sectionHeader}>
-                    <h3 className={styles.sectionTitle}>⭐ Featured Showcase</h3>
-                  </div>
-                  <div className={styles.checkboxGroup}>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="is_featured"
-                        checked={formData.is_featured}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Mark as Featured Trip
-                    </label>
-                  </div>
-                  {formData.is_featured && (
-                    <div className={styles.formGrid}>
-                      <div className={styles.inputGroup} style={{ gridColumn: "1 / -1" }}>
-                        <label className={styles.inputLabel}>
-                          Featured Highlight Labels (floating chips on the visual panel)
-                        </label>
-                        {formData.featured_highlights.map((chip, ci) => (
-                          <div key={ci} style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
-                            <input
-                              className={styles.input}
-                              value={chip}
-                              placeholder={`e.g. Ubud · Rice Terraces`}
-                              onChange={(e) => {
-                                const updated = [...formData.featured_highlights];
-                                updated[ci] = e.target.value;
-                                setFormData({ ...formData, featured_highlights: updated });
-                              }}
-                            />
-                            <button
-                              type="button"
-                              className={styles.removeButton}
-                              onClick={() => {
-                                const updated = formData.featured_highlights.filter((_, i) => i !== ci);
-                                setFormData({ ...formData, featured_highlights: updated });
-                              }}
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        ))}
-                        {formData.featured_highlights.length < 3 && (
-                          <button
-                            type="button"
-                            className={styles.addButton}
-                            style={{ width: "auto", padding: "0.5rem 1rem", fontSize: "0.8rem" }}
-                            onClick={() =>
-                              setFormData({
-                                ...formData,
-                                featured_highlights: [...formData.featured_highlights, ""],
-                              })
-                            }
-                          >
-                            + Add Highlight
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  )}
-
 
                   <div className={styles.inputGroup}>
                     <label className={styles.inputLabel}>
@@ -1819,6 +1441,386 @@ const AdminTrips = () => {
                   </div>
                 </div>
               </div>
+              {/* Extra Showcase Settings */}
+              <div className={styles.formSection}>
+                  {/* Honeymoon Section Fields */}
+                  <div className={styles.sectionHeader}>
+                    <h3 className={styles.sectionTitle}>Honeymoon Showcase</h3>
+                  </div>
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="is_honeymoon"
+                        checked={formData.is_honeymoon}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Mark as Honeymoon Trip
+                    </label>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="show_in_honeymoon_section"
+                        checked={formData.show_in_honeymoon_section}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Show in Honeymoon Section
+                    </label>
+                  </div>
+                  <div className={styles.formGrid}>
+                    <div className={styles.inputGroup}>
+                      <label className={styles.inputLabel}>Honeymoon Display Order</label>
+                      <input
+                        type="number"
+                        name="honeymoon_display_order"
+                        value={formData.honeymoon_display_order}
+                        onChange={handleChange}
+                        className={styles.input}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Himalayan Section Fields */}
+                  <div className={styles.sectionHeader}>
+                    <h3 className={styles.sectionTitle}>Himalayan Showcase</h3>
+                  </div>
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="is_himalayan_trek"
+                        checked={formData.is_himalayan_trek}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Mark as Himalayan Trek
+                    </label>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="show_in_himalayan_section"
+                        checked={formData.show_in_himalayan_section}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Show in Himalayan Section
+                    </label>
+                  </div>
+                  <div className={styles.formGrid}>
+                    <div className={styles.inputGroup}>
+                      <label className={styles.inputLabel}>Himalayan Display Order</label>
+                      <input
+                        type="number"
+                        name="himalayan_display_order"
+                        value={formData.himalayan_display_order}
+                        onChange={handleChange}
+                        className={styles.input}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Backpacking Section Fields */}
+                  <div className={styles.sectionHeader}>
+                    <h3 className={styles.sectionTitle}>Backpacking Showcase</h3>
+                  </div>
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="is_backpacking_trip"
+                        checked={formData.is_backpacking_trip}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Mark as Backpacking Trip
+                    </label>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="show_in_backpacking_section"
+                        checked={formData.show_in_backpacking_section}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Show in Backpacking Section
+                    </label>
+                  </div>
+                  <div className={styles.formGrid}>
+                    <div className={styles.inputGroup}>
+                      <label className={styles.inputLabel}>Backpacking Display Order</label>
+                      <input
+                        type="number"
+                        name="backpacking_display_order"
+                        value={formData.backpacking_display_order}
+                        onChange={handleChange}
+                        className={styles.input}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Summer Section Fields */}
+                  <div className={styles.sectionHeader}>
+                    <h3 className={styles.sectionTitle}>Summer Showcase</h3>
+                  </div>
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="is_summer_trek"
+                        checked={formData.is_summer_trek}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Mark as Summer Trek
+                    </label>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="show_in_summer_section"
+                        checked={formData.show_in_summer_section}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Show in Summer Section
+                    </label>
+                  </div>
+                  <div className={styles.formGrid}>
+                    <div className={styles.inputGroup}>
+                      <label className={styles.inputLabel}>Summer Display Order</label>
+                      <input
+                        type="number"
+                        name="summer_display_order"
+                        value={formData.summer_display_order}
+                        onChange={handleChange}
+                        className={styles.input}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Monsoon Section Fields */}
+                  <div className={styles.sectionHeader}>
+                    <h3 className={styles.sectionTitle}>Monsoon Showcase</h3>
+                  </div>
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="is_monsoon_trek"
+                        checked={formData.is_monsoon_trek}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Mark as Monsoon Trek
+                    </label>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="show_in_monsoon_section"
+                        checked={formData.show_in_monsoon_section}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Show in Monsoon Section
+                    </label>
+                  </div>
+                  <div className={styles.formGrid}>
+                    <div className={styles.inputGroup}>
+                      <label className={styles.inputLabel}>Monsoon Display Order</label>
+                      <input
+                        type="number"
+                        name="monsoon_display_order"
+                        value={formData.monsoon_display_order}
+                        onChange={handleChange}
+                        className={styles.input}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Adventure Section Fields */}
+                  <div className={styles.sectionHeader}>
+                    <h3 className={styles.sectionTitle}>Adventure Showcase</h3>
+                  </div>
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="is_adventure_trip"
+                        checked={formData.is_adventure_trip}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Mark as Adventure Trip
+                    </label>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="show_in_adventure_section"
+                        checked={formData.show_in_adventure_section}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Show in Adventure Section
+                    </label>
+                  </div>
+                  <div className={styles.formGrid}>
+                    <div className={styles.inputGroup}>
+                      <label className={styles.inputLabel}>Adventure Display Order</label>
+                      <input
+                        type="number"
+                        name="adventure_display_order"
+                        value={formData.adventure_display_order}
+                        onChange={handleChange}
+                        className={styles.input}
+                      />
+                    </div>
+                  </div>
+                  {/* Community Section Fields */}
+                  <div className={styles.sectionHeader}>
+                    <h3 className={styles.sectionTitle}>Community Showcase</h3>
+                  </div>
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="is_community_trip"
+                        checked={formData.is_community_trip}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Mark as Community Trip
+                    </label>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="show_in_community_section"
+                        checked={formData.show_in_community_section}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Show in Community Section
+                    </label>
+                  </div>
+                  <div className={styles.formGrid}>
+                    <div className={styles.inputGroup}>
+                      <label className={styles.inputLabel}>Community Display Order</label>
+                      <input
+                        type="number"
+                        name="community_display_order"
+                        value={formData.community_display_order}
+                        onChange={handleChange}
+                        className={styles.input}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Festival Section Fields */}
+                  <div className={styles.sectionHeader}>
+                    <h3 className={styles.sectionTitle}>Festival Showcase</h3>
+                  </div>
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="is_festival_trip"
+                        checked={formData.is_festival_trip}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Mark as Festival Trip
+                    </label>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="show_in_festival_section"
+                        checked={formData.show_in_festival_section}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Show in Festival Section
+                    </label>
+                  </div>
+                  <div className={styles.formGrid}>
+                    <div className={styles.inputGroup}>
+                      <label className={styles.inputLabel}>Festival Display Order</label>
+                      <input
+                        type="number"
+                        name="festival_display_order"
+                        value={formData.festival_display_order}
+                        onChange={handleChange}
+                        className={styles.input}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Featured Showcase Section */}
+                  <div className={styles.sectionHeader}>
+                    <h3 className={styles.sectionTitle}>⭐ Featured Showcase</h3>
+                  </div>
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="is_featured"
+                        checked={formData.is_featured}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Mark as Featured Trip
+                    </label>
+                  </div>
+                  {formData.is_featured && (
+                    <div className={styles.formGrid}>
+                      <div className={styles.inputGroup} style={{ gridColumn: "1 / -1" }}>
+                        <label className={styles.inputLabel}>
+                          Featured Highlight Labels (floating chips on the visual panel)
+                        </label>
+                        {formData.featured_highlights.map((chip, ci) => (
+                          <div key={ci} style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                            <input
+                              className={styles.input}
+                              value={chip}
+                              placeholder={`e.g. Ubud · Rice Terraces`}
+                              onChange={(e) => {
+                                const updated = [...formData.featured_highlights];
+                                updated[ci] = e.target.value;
+                                setFormData({ ...formData, featured_highlights: updated });
+                              }}
+                            />
+                            <button
+                              type="button"
+                              className={styles.removeButton}
+                              onClick={() => {
+                                const updated = formData.featured_highlights.filter((_, i) => i !== ci);
+                                setFormData({ ...formData, featured_highlights: updated });
+                              }}
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ))}
+                        {formData.featured_highlights.length < 3 && (
+                          <button
+                            type="button"
+                            className={styles.addButton}
+                            style={{ width: "auto", padding: "0.5rem 1rem", fontSize: "0.8rem" }}
+                            onClick={() =>
+                              setFormData({
+                                ...formData,
+                                featured_highlights: [...formData.featured_highlights, ""],
+                              })
+                            }
+                          >
+                            + Add Highlight
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+
+              </div>
 
               <div className={styles.formActions}>
                 <button
@@ -2221,8 +2223,7 @@ const AdminTrips = () => {
           )}
         </div>
 
-        {/* Global Showcase Settings */}
-        <SectionSettings />
+
       </div>
     </div>
 
