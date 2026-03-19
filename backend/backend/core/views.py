@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, Category
+from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, AdventureSectionConfig, Category
 
 from .serializers import (
     TripSerializer,
@@ -36,6 +36,8 @@ from .serializers import (
     CommunitySectionConfigSerializer,
     FestivalTripSerializer,
     FestivalSectionConfigSerializer,
+    AdventureTripSerializer,
+    AdventureSectionConfigSerializer,
     CategorySerializer,
     #TripGalleryImageSerializer,
 )
@@ -65,6 +67,7 @@ def trip_list(request):
     is_festival_trip = request.query_params.get("is_festival_trip")
     is_honeymoon_trip = request.query_params.get("is_honeymoon_trip")
     is_backpacking_trip = request.query_params.get("is_backpacking_trip")
+    is_adventure_trip = request.query_params.get("is_adventure_trip")
     
     if category_slug:
         trips = trips.filter(category__slug=category_slug)
@@ -89,6 +92,9 @@ def trip_list(request):
         
     if is_backpacking_trip and is_backpacking_trip.lower() == "true":
         trips = trips.filter(is_backpacking_trip=True)
+        
+    if is_adventure_trip and is_adventure_trip.lower() == "true":
+        trips = trips.filter(is_adventure_trip=True)
         
     serializer = TripSerializer(trips, many=True)
     return Response(serializer.data)
@@ -1136,3 +1142,40 @@ def admin_festival_config(request):
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(serializer.data)
+
+
+# ─── Adventure Section ───────────────────────────────────────────────────────
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def adventure_trips(request):
+    """Public: return adventure section config and its active trips."""
+    config = AdventureSectionConfig.load()
+    trips = Trip.objects.filter(
+        is_active=True,
+        is_adventure_trip=True,
+        show_in_adventure_section=True
+    ).order_by("adventure_display_order")
+    
+    return Response({
+        "config": AdventureSectionConfigSerializer(config).data,
+        "trips": AdventureTripSerializer(trips, many=True).data
+    })
+
+
+@api_view(["GET", "PATCH"])
+@permission_classes([IsAuthenticated])
+def admin_adventure_config(request):
+    """Admin: get or update adventure section configuration."""
+    if not hasattr(request.user, "profile") or request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+        
+    config = AdventureSectionConfig.load()
+    if request.method == "GET":
+        return Response(AdventureSectionConfigSerializer(config).data)
+    
+    # PATCH
+    serializer = AdventureSectionConfigSerializer(config, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data)

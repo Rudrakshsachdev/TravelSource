@@ -19,6 +19,7 @@ from .summer_serializer import SummerTripSerializer, SummerSectionConfigSerializ
 from .monsoon_serializer import MonsoonTripSerializer, MonsoonSectionConfigSerializer
 from .community_serializer import CommunityTripSerializer, CommunitySectionConfigSerializer
 from .festival_serializer import FestivalTripSerializer, FestivalSectionConfigSerializer
+from .adventure_serializer import AdventureTripSerializer, AdventureSectionConfigSerializer
 from .category_serializer import CategorySerializer
 
 

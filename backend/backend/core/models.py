@@ -80,6 +80,11 @@ class Trip(models.Model):
     show_in_festival_section = models.BooleanField(default=False, help_text="Show in the scrolling Festival section")
     festival_display_order = models.IntegerField(default=0, help_text="Order in the Festival section (lower = first)")
 
+    # Adventure showcase fields
+    is_adventure_trip = models.BooleanField(default=False, help_text="Mark as Adventure trip")
+    show_in_adventure_section = models.BooleanField(default=False, help_text="Show in the scrolling Adventure section")
+    adventure_display_order = models.IntegerField(default=0, help_text="Order in the Adventure section (lower = first)")
+
     # Featured trip showcase
     is_featured = models.BooleanField(default=False, help_text="Mark as featured trip (shows in Featured Destination section)")
     featured_highlights = models.JSONField(blank=True, null=True, help_text="List of highlight labels for floating chips, e.g. [\"Ubud · Rice Terraces\", \"Tanah Lot · Temples\"]")
@@ -433,6 +438,31 @@ class FestivalSectionConfig(models.Model):
 
     def __str__(self):
         return f"Festival Section ({'Enabled' if self.is_enabled else 'Disabled'})"
+
+    def save(self, *args, **kwargs):
+        # Enforce singleton: always use pk=1
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+
+class AdventureSectionConfig(models.Model):
+    """Singleton settings for the Adventure Trips showcase section."""
+    is_enabled = models.BooleanField(default=True, help_text="Enable the Adventure trips scrolling section")
+    title = models.CharField(max_length=200, default="Epic Adventure Trips")
+    subtitle = models.CharField(max_length=300, blank=True, default="", help_text="Optional subtitle below the heading")
+    scroll_speed = models.PositiveIntegerField(default=60, help_text="Animation duration in seconds (higher = slower)")
+
+    class Meta:
+        verbose_name = "Adventure Section Config"
+        verbose_name_plural = "Adventure Section Config"
+
+    def __str__(self):
+        return f"Adventure Section ({'Enabled' if self.is_enabled else 'Disabled'})"
 
     def save(self, *args, **kwargs):
         # Enforce singleton: always use pk=1

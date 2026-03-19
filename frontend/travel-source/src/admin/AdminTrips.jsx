@@ -62,6 +62,9 @@ const AdminTrips = () => {
     category: "",
     is_featured: false,
     featured_highlights: [],
+    is_adventure_trip: false,
+    show_in_adventure_section: false,
+    adventure_display_order: 0,
   });
 
   // Dynamic Lists State
@@ -232,6 +235,9 @@ const AdminTrips = () => {
       category: trip.category || "",
       is_featured: trip.is_featured || false,
       featured_highlights: Array.isArray(trip.featured_highlights) ? trip.featured_highlights : [],
+      is_adventure_trip: trip.is_adventure_trip || false,
+      show_in_adventure_section: trip.show_in_adventure_section || false,
+      adventure_display_order: trip.adventure_display_order || 0,
 
     });
 
@@ -288,6 +294,9 @@ const AdminTrips = () => {
       category: "",
       is_featured: false,
       featured_highlights: [],
+      is_adventure_trip: false,
+      show_in_adventure_section: false,
+      adventure_display_order: 0,
 
     });
     setItinerary([]);
@@ -328,6 +337,7 @@ const AdminTrips = () => {
         monsoon_display_order: Number(formData.monsoon_display_order) || 0,
         community_display_order: Number(formData.community_display_order) || 0,
         festival_display_order: Number(formData.festival_display_order) || 0,
+        adventure_display_order: Number(formData.adventure_display_order) || 0,
         itinerary,
 
         highlights,
@@ -827,6 +837,44 @@ const AdminTrips = () => {
                     </div>
                   </div>
 
+                  {/* Adventure Section Fields */}
+                  <div className={styles.sectionHeader}>
+                    <h3 className={styles.sectionTitle}>Adventure Showcase</h3>
+                  </div>
+                  <div className={styles.checkboxGroup}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="is_adventure_trip"
+                        checked={formData.is_adventure_trip}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Mark as Adventure Trip
+                    </label>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        name="show_in_adventure_section"
+                        checked={formData.show_in_adventure_section}
+                        onChange={handleCheckboxChange}
+                        className={styles.checkbox}
+                      />
+                      Show in Adventure Section
+                    </label>
+                  </div>
+                  <div className={styles.formGrid}>
+                    <div className={styles.inputGroup}>
+                      <label className={styles.inputLabel}>Adventure Display Order</label>
+                      <input
+                        type="number"
+                        name="adventure_display_order"
+                        value={formData.adventure_display_order}
+                        onChange={handleChange}
+                        className={styles.input}
+                      />
+                    </div>
+                  </div>
                   {/* Community Section Fields */}
                   <div className={styles.sectionHeader}>
                     <h3 className={styles.sectionTitle}>Community Showcase</h3>

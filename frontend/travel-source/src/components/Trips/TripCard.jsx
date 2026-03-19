@@ -326,9 +326,9 @@ const TripCard = ({ trip, index, onView }) => {
         {/* Description */}
         <div className={styles.cardDescription}>
           <p>
-            {trip.description.length > 120
+            {trip.description && trip.description.length > 120
               ? `${trip.description.substring(0, 120)}...`
-              : trip.description}
+              : trip.description || ""}
           </p>
         </div>
 

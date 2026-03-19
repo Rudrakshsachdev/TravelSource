@@ -16,6 +16,7 @@ import SummerTreks from "./SummerTreks";
 import MonsoonTreks from "./MonsoonTreks";
 import CommunityTrips from "./CommunityTrips";
 import FestivalTrips from "./FestivalTrips";
+import AdventureTrips from "./AdventureTrips";
 import CategoryNav from "./CategoryNav";
 import AnimatedMap from "../AnimatedMap/AnimatedMap";
 
@@ -126,6 +127,9 @@ const buildTripSearchBlob = (trip) => {
   if (trip.is_festival_trip || trip.show_in_festival_section) {
     tags.push("festival", "festive", "celebration");
   }
+  if (trip.is_adventure_trip || trip.show_in_adventure_section) {
+    tags.push("adventure", "thrilling", "action");
+  }
 
   return normalizeSearchText(
     [
@@ -164,6 +168,8 @@ const tripMatchesType = (trip, typeFilter, searchBlob) => {
       return trip.is_community_trip || trip.show_in_community_section;
     case "festival":
       return trip.is_festival_trip || trip.show_in_festival_section;
+    case "adventure":
+      return trip.is_adventure_trip || trip.show_in_adventure_section;
     default:
       return searchBlob.includes(typeFilter);
   }
@@ -602,6 +608,7 @@ const TripsList = () => {
       <MonsoonTreks />
       <CommunityTrips />
       <FestivalTrips />
+      <AdventureTrips />
 
       {/* Premium Animated Map Section */}
       <AnimatedMap />

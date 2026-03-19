@@ -603,6 +603,46 @@ export const fetchAllHoneymoonTrips = async () => {
   return response.json();
 };
 
+/** Fetch Adventure trips + section config for the scrolling showcase */
+export const fetchAdventureTrips = async () => {
+  const res = await fetch(`${API_BASE_URL}/v1/trips/adventure/`);
+  if (!res.ok) throw new Error("Failed to fetch Adventure trips");
+  return res.json();
+};
+
+export const fetchAllAdventureTrips = async () => {
+  const response = await fetch(`${API_BASE_URL}/v1/trips/?is_adventure_trip=true`);
+  if (!response.ok) {
+    throw new Error("Failed to load all Adventure trips");
+  }
+  return response.json();
+};
+
+/** Fetch Adventure section config (ADMIN) */
+export const fetchAdventureConfig = async () => {
+  const token = localStorage.getItem("access_token");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/adventure-config/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Failed to fetch adventure config");
+  return res.json();
+};
+
+/** Update Adventure section config (ADMIN) */
+export const updateAdventureConfig = async (data) => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/adventure-config/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to update adventure config");
+  return res.json();
+};
+
 /** Fetch Honeymoon section config (ADMIN) */
 export const fetchHoneymoonConfig = async () => {
   const token = localStorage.getItem("access_token");

@@ -14,6 +14,7 @@ import HimalayanTripsPage from "./pages/HimalayanTrips/HimalayanTripsPage";
 import CommunityTripsPage from "./pages/CommunityTrips/CommunityTripsPage";
 import FestivalTripsPage from "./pages/FestivalTrips/FestivalTripsPage";
 import HoneymoonTripsPage from "./pages/HoneymoonTrips/HoneymoonTripsPage";
+import AdventureTripsPage from "./pages/AdventureTripsPage/AdventureTripsPage";
 import BackpackingTripsPage from "./pages/BackpackingTrips/BackpackingTripsPage";
 import ContactUs from "./components/ContactUs/ContactUs";
 import MyBookings from "./pages/MyBookings/MyBookings";
@@ -132,6 +133,15 @@ function App() {
         element={
           <Layout>
             <HoneymoonTripsPage />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/adventure-trips"
+        element={
+          <Layout>
+            <AdventureTripsPage />
           </Layout>
         }
       />
