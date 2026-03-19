@@ -84,6 +84,11 @@ const Login = () => {
 
         {/* ── Right Panel — Login Form ── */}
         <div className={styles.rightPanel}>
+          {/* Logo in Header */}
+          <div className={styles.logoWrapper}>
+            <img src="/logog.png" alt="Travel Professor Logo" className={styles.logoImg} />
+          </div>
+
           {/* Airplane Decorative Path */}
           <div className={styles.airplanePath}>
             <svg viewBox="0 0 200 100" fill="none">
@@ -306,68 +311,6 @@ const Login = () => {
 
       {/* ── Bottom Decorative Elements ── */}
       <div className={styles.bottomDecor}>
-        {/* Landmark Silhouettes */}
-        <div className={styles.landmarkSilhouettes}>
-          <svg viewBox="0 0 900 120" preserveAspectRatio="xMidYMax meet">
-            <defs>
-              <linearGradient id="landmarkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#0077b6" stopOpacity="0.9" />
-                <stop offset="100%" stopColor="#005f8a" stopOpacity="1" />
-              </linearGradient>
-            </defs>
-            {/* Grass/ground */}
-            <rect x="0" y="100" width="900" height="20" fill="url(#landmarkGrad)" />
-            {/* Taj Mahal */}
-            <g transform="translate(350, 0)" fill="url(#landmarkGrad)">
-              <rect x="35" y="40" width="30" height="60" />
-              <ellipse cx="50" cy="40" rx="20" ry="25" />
-              <rect x="46" y="15" width="8" height="25" />
-              <rect x="15" y="60" width="8" height="40" />
-              <rect x="77" y="60" width="8" height="40" />
-              <ellipse cx="19" cy="60" rx="6" ry="8" />
-              <ellipse cx="81" cy="60" rx="6" ry="8" />
-            </g>
-            {/* Mosque / Dome */}
-            <g transform="translate(520, 20)" fill="url(#landmarkGrad)">
-              <rect x="10" y="40" width="60" height="40" />
-              <ellipse cx="40" cy="40" rx="30" ry="22" />
-              <rect x="36" y="18" width="8" height="22" />
-              <rect x="-5" y="20" width="8" height="60" rx="2" />
-              <rect x="77" y="20" width="8" height="60" rx="2" />
-            </g>
-            {/* Tower/Minaret */}
-            <g transform="translate(680, 10)" fill="url(#landmarkGrad)">
-              <rect x="15" y="20" width="20" height="70" />
-              <polygon points="25,0 40,20 10,20" />
-              <rect x="10" y="45" width="30" height="4" />
-              <rect x="10" y="60" width="30" height="4" />
-            </g>
-            {/* Small dome */}
-            <g transform="translate(250, 50)" fill="url(#landmarkGrad)">
-              <rect x="5" y="20" width="40" height="30" />
-              <ellipse cx="25" cy="20" rx="20" ry="15" />
-              <rect x="22" y="5" width="6" height="15" />
-            </g>
-            {/* Leaning structure */}
-            <g transform="translate(150, 40)" fill="url(#landmarkGrad)">
-              <rect x="10" y="10" width="16" height="50" rx="2" />
-              <rect x="8" y="10" width="20" height="6" />
-              <rect x="8" y="22" width="20" height="4" />
-              <rect x="8" y="32" width="20" height="4" />
-              <rect x="8" y="42" width="20" height="4" />
-              <ellipse cx="18" cy="10" rx="10" ry="6" />
-            </g>
-            {/* Small grass tufts */}
-            <g fill="#0a8a5f" opacity="0.6">
-              <path d="M300 100 Q305 85 310 100" />
-              <path d="M305 100 Q310 80 315 100" />
-              <path d="M295 100 Q300 88 305 100" />
-              <path d="M440 100 Q445 82 450 100" />
-              <path d="M445 100 Q450 78 455 100" />
-              <path d="M435 100 Q440 86 445 100" />
-            </g>
-          </svg>
-        </div>
         <div className={styles.bottomCircleDecor} />
         <div className={styles.bottomCircleDecorInner} />
       </div>
