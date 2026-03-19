@@ -29,6 +29,7 @@ const AdminTrips = () => {
     country: "",
     price: "",
     duration_days: "",
+    duration_nights: "",
     description: "",
     short_description: "",
     image: "",
@@ -198,6 +199,7 @@ const AdminTrips = () => {
       country: trip.country || "",
       price: trip.price,
       duration_days: trip.duration_days,
+      duration_nights: trip.duration_nights || 0,
       description: trip.description,
       short_description: trip.short_description || "",
       image: trip.image || "",
@@ -326,6 +328,7 @@ const AdminTrips = () => {
         ...formData,
         price: Number(formData.price),
         duration_days: Number(formData.duration_days),
+        duration_nights: Number(formData.duration_nights),
         display_order: Number(formData.display_order) || 0,
         india_display_order: Number(formData.india_display_order) || 0,
         india_featured_priority: Number(formData.india_featured_priority) || 0,
@@ -692,6 +695,30 @@ const AdminTrips = () => {
                         type="number"
                         placeholder="5"
                         value={formData.duration_days}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>
+                      <span className={styles.required}>*</span> Duration (Nights)
+                    </label>
+                    <div className={styles.inputWrapper}>
+                      <svg
+                        className={styles.inputIcon}
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                      </svg>
+                      <input
+                        className={styles.input}
+                        name="duration_nights"
+                        type="number"
+                        placeholder="4"
+                        value={formData.duration_nights}
                         onChange={handleChange}
                         required
                       />
@@ -1916,7 +1943,7 @@ const AdminTrips = () => {
                               clipRule="evenodd"
                             />
                           </svg>
-                          {trip.duration_days} days
+                          {trip.duration_days} Days{trip.duration_nights > 0 ? ` / ${trip.duration_nights} Nights` : ""}
                         </span>
                         <span className={styles.metaItem}>
                           <svg

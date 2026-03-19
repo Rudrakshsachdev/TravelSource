@@ -1352,7 +1352,7 @@ const TripsList = () => {
                               strokeLinecap="round"
                             />
                           </svg>
-                          {trip.duration_days} Days
+                          {trip.duration_days} Days{trip.duration_nights > 0 ? " / " + trip.duration_nights + " Nights" : ""}
                         </span>
                         <span className={styles.featuredTag}>
                           <svg

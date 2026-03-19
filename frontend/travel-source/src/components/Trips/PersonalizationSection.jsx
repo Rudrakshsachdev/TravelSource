@@ -77,7 +77,7 @@ const MiniCard = ({ trip, onView }) => {
         <h4 className={styles.miniCardTitle}>{trip.title}</h4>
         <div className={styles.miniCardFooter}>
           <span className={styles.miniCardDuration}>
-            {trip.duration_days} {trip.duration_days === 1 ? "day" : "days"}
+            {trip.duration_days} {trip.duration_days === 1 ? "Day" : "Days"}{trip.duration_nights > 0 ? ` / ${trip.duration_nights} Nights` : ""}
           </span>
           <span className={styles.miniCardArrow}>
             <svg

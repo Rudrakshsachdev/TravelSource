@@ -282,7 +282,7 @@ const TripCard = ({ trip, index, onView }) => {
               </svg>
             </span>
             <span className={styles.durationText}>
-              {trip.duration_days} DAYS
+              {trip.duration_days} DAYS{trip.duration_nights > 0 ? " / " + trip.duration_nights + " NIGHTS" : ""}
             </span>
           </div>
         </div>

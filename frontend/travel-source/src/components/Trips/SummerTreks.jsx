@@ -150,7 +150,7 @@ const SummerTreks = () => {
                                             <circle cx="12" cy="12" r="10" />
                                             <polyline points="12 6 12 12 16 14" />
                                         </svg>
-                                        {trip.duration_days} Days
+                                        {trip.duration_days} Days{trip.duration_nights > 0 ? " / " + trip.duration_nights + " Nights" : ""}
                                     </span>
                                 )}
 

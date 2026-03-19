@@ -415,7 +415,7 @@ const TripDetail = () => {
                       clipRule="evenodd"
                     />
                   </svg>
-                  <span>{trip.duration_days} Days</span>
+                  <span>{trip.duration_days} Days{trip.duration_nights > 0 ? " / " + trip.duration_nights + " Nights" : ""}</span>
                 </div>
               </div>
             </div>
@@ -474,7 +474,7 @@ const TripDetail = () => {
             <div className={styles.quickInfoText}>
               <span className={styles.quickInfoLabel}>Duration</span>
               <span className={styles.quickInfoValue}>
-                {trip.duration_days} Days
+                {trip.duration_days} Days{trip.duration_nights > 0 ? " / " + trip.duration_nights + " Nights" : ""}
               </span>
             </div>
           </div>

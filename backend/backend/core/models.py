@@ -26,6 +26,7 @@ class Trip(models.Model):
     location = models.CharField(max_length=200)
     price = models.IntegerField()
     duration_days = models.IntegerField()
+    duration_nights = models.IntegerField(default=0)
     description = models.TextField(blank=True)
     itinerary = models.JSONField(blank=True, null=True, help_text="List of daily itinerary objects")
     highlights = models.JSONField(blank=True, null=True, help_text="List of trip highlights")

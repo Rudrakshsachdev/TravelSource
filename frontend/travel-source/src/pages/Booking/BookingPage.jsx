@@ -169,7 +169,7 @@ const BookingPage = () => {
                         clipRule="evenodd"
                       />
                     </svg>
-                    <span>{trip.duration_days} Days</span>
+                    <span>{trip.duration_days} Days{trip.duration_nights > 0 ? " / " + trip.duration_nights + " Nights" : ""}</span>
                   </div>
                 )}
 

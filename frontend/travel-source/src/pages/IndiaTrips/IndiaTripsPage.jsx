@@ -150,7 +150,7 @@ const IndiaTripsPage = () => {
                     <span className={styles.metaTag}>
                       <ClockIcon />
                       {trip.duration_days
-                        ? `${trip.duration_days - 1}N/${trip.duration_days}D`
+                        ? `${trip.duration_days} Days${trip.duration_nights > 0 ? " / " + trip.duration_nights + " Nights" : ""}`
                         : "6N/7D"}
                     </span>
 
