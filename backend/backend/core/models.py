@@ -90,6 +90,15 @@ class Trip(models.Model):
     is_featured = models.BooleanField(default=False, help_text="Mark as featured trip (shows in Featured Destination section)")
     featured_highlights = models.JSONField(blank=True, null=True, help_text="List of highlight labels for floating chips, e.g. [\"Ubud · Rice Terraces\", \"Tanah Lot · Temples\"]")
 
+    # ── Trip Detail Page (JustWravel-style) ──
+    gallery_image_urls = models.JSONField(blank=True, null=True, help_text="List of Cloudinary image URLs for the photo gallery")
+    overview = models.TextField(blank=True, default="", help_text="Rich overview / about text for the trip detail page")
+    cancellation_policy = models.TextField(blank=True, default="", help_text="Cancellation policy text")
+    things_to_pack = models.JSONField(blank=True, null=True, help_text='List of packing items, e.g. ["Warm jacket", "Trekking shoes"]')
+    faqs = models.JSONField(blank=True, null=True, help_text='List of FAQ objects, e.g. [{"q": "...", "a": "..."}]')
+    pickup_location = models.CharField(max_length=100, blank=True, default="", help_text="Pickup city, e.g. Delhi")
+    drop_location = models.CharField(max_length=100, blank=True, default="", help_text="Drop city, e.g. Delhi")
+
 
     def __str__(self):
         return self.title

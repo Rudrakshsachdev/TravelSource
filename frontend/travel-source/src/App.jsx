@@ -7,7 +7,6 @@ import Home from "./pages/Home";
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import Profile from "./pages/Profile/Profile";
-import { TripDetail } from "./components/Trips";
 import InternationalTripsPage from "./pages/InternationalTrips/InternationalTripsPage";
 import IndiaTripsPage from "./pages/IndiaTrips/IndiaTripsPage";
 import HimalayanTripsPage from "./pages/HimalayanTrips/HimalayanTripsPage";
@@ -23,6 +22,7 @@ import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
 import TermsOfService from "./pages/Legal/TermsOfService";
 import RefundPolicy from "./pages/Legal/RefundPolicy";
+import TripDetailNew from "./components/TripDetailNew/TripDetailNew";
 
 // Admin
 import AdminLayout from "./admin/AdminLayout";
@@ -78,7 +78,17 @@ function App() {
         path="/trips/:id"
         element={
           <Layout>
-            <TripDetail />
+            <TripDetailNew />
+          </Layout>
+        }
+      />
+
+      {/* NEW: JustWravel-style Trip Detail page (alias route) */}
+      <Route
+        path="/trip/:id"
+        element={
+          <Layout>
+            <TripDetailNew />
           </Layout>
         }
       />

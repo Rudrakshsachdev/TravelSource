@@ -34,37 +34,24 @@ const AdminTrips = () => {
     short_description: "",
     image: "",
     is_international: false,
-    show_in_international_section: false,
-    display_order: 0,
     state: "",
     is_india_trip: false,
-    show_in_india_section: false,
-    india_display_order: 0,
     india_featured_priority: 0,
     is_honeymoon: false,
-    show_in_honeymoon_section: false,
-    honeymoon_display_order: 0,
     is_himalayan_trek: false,
-    show_in_himalayan_section: false,
-    himalayan_display_order: 0,
     is_backpacking_trip: false,
-    show_in_backpacking_section: false,
-    backpacking_display_order: 0,
     is_summer_trek: false,
-    show_in_summer_section: false,
-    summer_display_order: 0,
     is_monsoon_trek: false,
-    show_in_monsoon_section: false,
-    monsoon_display_order: 0,
     is_community_trip: false,
-    show_in_community_section: false,
-    community_display_order: 0,
     category: "",
     is_featured: false,
     featured_highlights: [],
     is_adventure_trip: false,
-    show_in_adventure_section: false,
-    adventure_display_order: 0,
+    is_festival_trip: false,
+    overview: "",
+    pickup_location: "",
+    drop_location: "",
+    cancellation_policy: "",
   });
 
   // Dynamic Lists State
@@ -76,6 +63,12 @@ const AdminTrips = () => {
   const [categories, setCategories] = useState([]);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [creatingCategory, setCreatingCategory] = useState(false);
+
+  // Trip Detail Page fields
+  const [galleryImageUrls, setGalleryImageUrls] = useState([]);
+  const [thingsToPack, setThingsToPack] = useState([]);
+  const [faqs, setFaqs] = useState([]);
+  const [uploadingGallery, setUploadingGallery] = useState(false);
   const [categoryError, setCategoryError] = useState("");
 
   // Load categories on mount
@@ -204,42 +197,24 @@ const AdminTrips = () => {
       short_description: trip.short_description || "",
       image: trip.image || "",
       is_international: trip.is_international || false,
-      show_in_international_section:
-        trip.show_in_international_section || false,
-      display_order: trip.display_order || 0,
       state: trip.state || "",
       is_india_trip: trip.is_india_trip || false,
-      show_in_india_section: trip.show_in_india_section || false,
-      india_display_order: trip.india_display_order || 0,
       india_featured_priority: trip.india_featured_priority || 0,
       is_honeymoon: trip.is_honeymoon || false,
-      show_in_honeymoon_section: trip.show_in_honeymoon_section || false,
-      honeymoon_display_order: trip.honeymoon_display_order || 0,
       is_himalayan_trek: trip.is_himalayan_trek || false,
-      show_in_himalayan_section: trip.show_in_himalayan_section || false,
-      himalayan_display_order: trip.himalayan_display_order || 0,
       is_backpacking_trip: trip.is_backpacking_trip || false,
-      show_in_backpacking_section: trip.show_in_backpacking_section || false,
-      backpacking_display_order: trip.backpacking_display_order || 0,
       is_summer_trek: trip.is_summer_trek || false,
-      show_in_summer_section: trip.show_in_summer_section || false,
-      summer_display_order: trip.summer_display_order || 0,
       is_monsoon_trek: trip.is_monsoon_trek || false,
-      show_in_monsoon_section: trip.show_in_monsoon_section || false,
-      monsoon_display_order: trip.monsoon_display_order || 0,
       is_community_trip: trip.is_community_trip || false,
-      show_in_community_section: trip.show_in_community_section || false,
-      community_display_order: trip.community_display_order || 0,
       is_festival_trip: trip.is_festival_trip || false,
-      show_in_festival_section: trip.show_in_festival_section || false,
-      festival_display_order: trip.festival_display_order || 0,
       category: trip.category || "",
       is_featured: trip.is_featured || false,
       featured_highlights: Array.isArray(trip.featured_highlights) ? trip.featured_highlights : [],
       is_adventure_trip: trip.is_adventure_trip || false,
-      show_in_adventure_section: trip.show_in_adventure_section || false,
-      adventure_display_order: trip.adventure_display_order || 0,
-
+      overview: trip.overview || "",
+      pickup_location: trip.pickup_location || "",
+      drop_location: trip.drop_location || "",
+      cancellation_policy: trip.cancellation_policy || "",
     });
 
     // Safe parsing / defaulting for JSON fields
@@ -247,6 +222,9 @@ const AdminTrips = () => {
     setHighlights(Array.isArray(trip.highlights) ? trip.highlights : []);
     setInclusions(Array.isArray(trip.inclusions) ? trip.inclusions : []);
     setExclusions(Array.isArray(trip.exclusions) ? trip.exclusions : []);
+    setGalleryImageUrls(Array.isArray(trip.gallery_image_urls) ? trip.gallery_image_urls : []);
+    setThingsToPack(Array.isArray(trip.things_to_pack) ? trip.things_to_pack : []);
+    setFaqs(Array.isArray(trip.faqs) ? trip.faqs : []);
 
     setEditingTrip(trip);
     setShowForm(true);
@@ -264,49 +242,54 @@ const AdminTrips = () => {
       short_description: "",
       image: "",
       is_international: false,
-      show_in_international_section: false,
-      display_order: 0,
       state: "",
       is_india_trip: false,
-      show_in_india_section: false,
-      india_display_order: 0,
       india_featured_priority: 0,
       is_honeymoon: false,
-      show_in_honeymoon_section: false,
-      honeymoon_display_order: 0,
       is_himalayan_trek: false,
-      show_in_himalayan_section: false,
-      himalayan_display_order: 0,
       is_backpacking_trip: false,
-      show_in_backpacking_section: false,
-      backpacking_display_order: 0,
       is_summer_trek: false,
-      show_in_summer_section: false,
-      summer_display_order: 0,
       is_monsoon_trek: false,
-      show_in_monsoon_section: false,
-      monsoon_display_order: 0,
       is_community_trip: false,
-      show_in_community_section: false,
-      community_display_order: 0,
       is_festival_trip: false,
-      show_in_festival_section: false,
-      festival_display_order: 0,
       category: "",
       is_featured: false,
       featured_highlights: [],
       is_adventure_trip: false,
-      show_in_adventure_section: false,
-      adventure_display_order: 0,
-
+      overview: "",
+      pickup_location: "",
+      drop_location: "",
+      cancellation_policy: "",
     });
     setItinerary([]);
     setHighlights([]);
     setInclusions([]);
     setExclusions([]);
+    setGalleryImageUrls([]);
+    setThingsToPack([]);
+    setFaqs([]);
     setEditingTrip(null);
     setShowForm(false);
     setError("");
+  };
+
+  const handleGalleryUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+    
+    setUploadingGallery(true);
+    setError("");
+    
+    try {
+      const uploadPromises = files.map(uploadImageToCloudinary);
+      const newUrls = await Promise.all(uploadPromises);
+      setGalleryImageUrls(prev => [...prev, ...newUrls]);
+    } catch (err) {
+      console.error("Gallery upload failed:", err);
+      setError("Failed to upload one or more gallery images.");
+    } finally {
+      setUploadingGallery(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -329,17 +312,7 @@ const AdminTrips = () => {
         price: Number(formData.price),
         duration_days: Number(formData.duration_days),
         duration_nights: Number(formData.duration_nights),
-        display_order: Number(formData.display_order) || 0,
-        india_display_order: Number(formData.india_display_order) || 0,
         india_featured_priority: Number(formData.india_featured_priority) || 0,
-        honeymoon_display_order: Number(formData.honeymoon_display_order) || 0,
-        himalayan_display_order: Number(formData.himalayan_display_order) || 0,
-        backpacking_display_order: Number(formData.backpacking_display_order) || 0,
-        summer_display_order: Number(formData.summer_display_order) || 0,
-        monsoon_display_order: Number(formData.monsoon_display_order) || 0,
-        community_display_order: Number(formData.community_display_order) || 0,
-        festival_display_order: Number(formData.festival_display_order) || 0,
-        adventure_display_order: Number(formData.adventure_display_order) || 0,
         itinerary,
 
         highlights,
@@ -348,6 +321,9 @@ const AdminTrips = () => {
         image: imageUrl,
         category: formData.category || null,
         featured_highlights: formData.featured_highlights.filter(h => h.trim() !== ""),
+        gallery_image_urls: galleryImageUrls.filter(url => url.trim() !== ""),
+        things_to_pack: thingsToPack.filter(item => (typeof item === "string" ? item.trim() : item) !== ""),
+        faqs: faqs.filter(f => f.q && f.q.trim() !== ""),
       };
 
       if (editingTrip) {
@@ -1468,318 +1444,260 @@ const AdminTrips = () => {
                   </div>
                 </div>
               </div>
-              {/* Extra Showcase Settings */}
+
+              {/* ── TRIP DETAIL PAGE FIELDS ── */}
               <div className={styles.formSection}>
-                  {/* Honeymoon Section Fields */}
-                  <div className={styles.sectionHeader}>
-                    <h3 className={styles.sectionTitle}>Honeymoon Showcase</h3>
+                <h3 className={styles.sectionTitle}>
+                  <svg className={styles.sectionIcon} viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
+                  </svg>
+                  Trip Detail Page
+                </h3>
+
+                {/* Overview */}
+                <div className={styles.inputGroup}>
+                  <label className={styles.inputLabel}>Overview (Detail Page)</label>
+                  <textarea
+                    className={styles.textarea}
+                    name="overview"
+                    placeholder="Rich trip overview shown on the detail page..."
+                    value={formData.overview}
+                    onChange={handleChange}
+                    rows={4}
+                  />
+                </div>
+
+                {/* Pickup & Drop */}
+                <div className={styles.formGrid}>
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Pickup Location</label>
+                    <input
+                      className={styles.input}
+                      name="pickup_location"
+                      placeholder="e.g. Delhi"
+                      value={formData.pickup_location}
+                      onChange={handleChange}
+                    />
                   </div>
-                  <div className={styles.checkboxGroup}>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="is_honeymoon"
-                        checked={formData.is_honeymoon}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Mark as Honeymoon Trip
-                    </label>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="show_in_honeymoon_section"
-                        checked={formData.show_in_honeymoon_section}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Show in Honeymoon Section
-                    </label>
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Drop Location</label>
+                    <input
+                      className={styles.input}
+                      name="drop_location"
+                      placeholder="e.g. Delhi"
+                      value={formData.drop_location}
+                      onChange={handleChange}
+                    />
                   </div>
-                  <div className={styles.formGrid}>
-                    <div className={styles.inputGroup}>
-                      <label className={styles.inputLabel}>Honeymoon Display Order</label>
-                      <input
-                        type="number"
-                        name="honeymoon_display_order"
-                        value={formData.honeymoon_display_order}
-                        onChange={handleChange}
-                        className={styles.input}
-                      />
-                    </div>
+                </div>
+
+                {/* Cancellation Policy */}
+                <div className={styles.inputGroup}>
+                  <label className={styles.inputLabel}>Cancellation Policy</label>
+                  <textarea
+                    className={styles.textarea}
+                    name="cancellation_policy"
+                    placeholder="Cancellation policy text..."
+                    value={formData.cancellation_policy}
+                    onChange={handleChange}
+                    rows={4}
+                  />
+                </div>
+
+                {/* Gallery Image URLs */}
+                <div className={styles.inputGroup}>
+                  <label className={styles.inputLabel}>Gallery Images (Cloudinary)</label>
+                  
+                  {/* Multi-image upload input */}
+                  <div style={{ marginBottom: "16px", padding: "16px", background: "#f8fafc", borderRadius: "10px", border: "1px dashed #cbd5e1", textAlign: "center" }}>
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={handleGalleryUpload}
+                      disabled={uploadingGallery}
+                      style={{ display: "none" }}
+                      id="gallery-upload"
+                    />
+                    <label htmlFor="gallery-upload" style={{ cursor: uploadingGallery ? "not-allowed" : "pointer", color: uploadingGallery ? "#94a3b8" : "#2563eb", fontWeight: "600" }}>
+                      {uploadingGallery ? (
+                        <span>⏳ Uploading Images...</span>
+                      ) : (
+                        <span>+ Select Images to Upload</span>
+                      )}
+                    </label>
                   </div>
 
-                  {/* Himalayan Section Fields */}
-                  <div className={styles.sectionHeader}>
-                    <h3 className={styles.sectionTitle}>Himalayan Showcase</h3>
+                  <div className={styles.dynamicListSimple}>
+                    {galleryImageUrls.map((url, idx) => (
+                      <div key={idx} className={styles.simpleItem}>
+                        <div className={styles.simpleItemContent}>
+                          <input
+                            className={styles.input}
+                            value={url}
+                            onChange={(e) => {
+                              const updated = [...galleryImageUrls];
+                              updated[idx] = e.target.value;
+                              setGalleryImageUrls(updated);
+                            }}
+                            placeholder="https://res.cloudinary.com/..."
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          className={styles.removeButtonSmall}
+                          onClick={() => setGalleryImageUrls(galleryImageUrls.filter((_, i) => i !== idx))}
+                        >
+                          <svg viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      className={styles.addButtonSmall}
+                      onClick={() => setGalleryImageUrls([...galleryImageUrls, ""])}
+                    >
+                      <svg viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 3a1 1 0 00-1 1v5H4a1 1 0 100 2h5v5a1 1 0 102 0v-5h5a1 1 0 100-2h-5V4a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      Add Empty URL Field
+                    </button>
                   </div>
-                  <div className={styles.checkboxGroup}>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="is_himalayan_trek"
-                        checked={formData.is_himalayan_trek}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Mark as Himalayan Trek
-                    </label>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="show_in_himalayan_section"
-                        checked={formData.show_in_himalayan_section}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Show in Himalayan Section
-                    </label>
-                  </div>
-                  <div className={styles.formGrid}>
-                    <div className={styles.inputGroup}>
-                      <label className={styles.inputLabel}>Himalayan Display Order</label>
-                      <input
-                        type="number"
-                        name="himalayan_display_order"
-                        value={formData.himalayan_display_order}
-                        onChange={handleChange}
-                        className={styles.input}
-                      />
-                    </div>
-                  </div>
+                </div>
 
-                  {/* Backpacking Section Fields */}
-                  <div className={styles.sectionHeader}>
-                    <h3 className={styles.sectionTitle}>Backpacking Showcase</h3>
+                {/* Things to Pack */}
+                <div className={styles.inputGroup}>
+                  <label className={styles.inputLabel}>Things to Pack</label>
+                  <div className={styles.dynamicListSimple}>
+                    {thingsToPack.map((item, idx) => (
+                      <div key={idx} className={styles.simpleItem}>
+                        <div className={styles.simpleItemContent}>
+                          <input
+                            className={styles.input}
+                            value={typeof item === "string" ? item : item.name || ""}
+                            onChange={(e) => {
+                              const updated = [...thingsToPack];
+                              updated[idx] = e.target.value;
+                              setThingsToPack(updated);
+                            }}
+                            placeholder="e.g. Warm jacket"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          className={styles.removeButtonSmall}
+                          onClick={() => setThingsToPack(thingsToPack.filter((_, i) => i !== idx))}
+                        >
+                          <svg viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      className={styles.addButtonSmall}
+                      onClick={() => setThingsToPack([...thingsToPack, ""])}
+                    >
+                      <svg viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 3a1 1 0 00-1 1v5H4a1 1 0 100 2h5v5a1 1 0 102 0v-5h5a1 1 0 100-2h-5V4a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      Add Packing Item
+                    </button>
                   </div>
-                  <div className={styles.checkboxGroup}>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="is_backpacking_trip"
-                        checked={formData.is_backpacking_trip}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Mark as Backpacking Trip
-                    </label>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="show_in_backpacking_section"
-                        checked={formData.show_in_backpacking_section}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Show in Backpacking Section
-                    </label>
-                  </div>
-                  <div className={styles.formGrid}>
-                    <div className={styles.inputGroup}>
-                      <label className={styles.inputLabel}>Backpacking Display Order</label>
-                      <input
-                        type="number"
-                        name="backpacking_display_order"
-                        value={formData.backpacking_display_order}
-                        onChange={handleChange}
-                        className={styles.input}
-                      />
-                    </div>
-                  </div>
+                </div>
 
-                  {/* Summer Section Fields */}
-                  <div className={styles.sectionHeader}>
-                    <h3 className={styles.sectionTitle}>Summer Showcase</h3>
+                {/* FAQs */}
+                <div className={styles.inputGroup}>
+                  <label className={styles.inputLabel}>FAQs</label>
+                  <div className={styles.dynamicListSimple}>
+                    {faqs.map((faq, idx) => (
+                      <div key={idx} style={{ marginBottom: "12px", padding: "12px", background: "#f8fafc", borderRadius: "10px", border: "1px solid #e2e8f0" }}>
+                        <input
+                          className={styles.input}
+                          value={faq.q || ""}
+                          onChange={(e) => {
+                            const updated = [...faqs];
+                            updated[idx] = { ...updated[idx], q: e.target.value };
+                            setFaqs(updated);
+                          }}
+                          placeholder="Question"
+                          style={{ marginBottom: "8px" }}
+                        />
+                        <textarea
+                          className={styles.textarea}
+                          value={faq.a || ""}
+                          onChange={(e) => {
+                            const updated = [...faqs];
+                            updated[idx] = { ...updated[idx], a: e.target.value };
+                            setFaqs(updated);
+                          }}
+                          placeholder="Answer"
+                          rows={2}
+                        />
+                        <button
+                          type="button"
+                          className={styles.removeButtonSmall}
+                          onClick={() => setFaqs(faqs.filter((_, i) => i !== idx))}
+                          style={{ marginTop: "6px" }}
+                        >
+                          <svg viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                          </svg>
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      className={styles.addButtonSmall}
+                      onClick={() => setFaqs([...faqs, { q: "", a: "" }])}
+                    >
+                      <svg viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 3a1 1 0 00-1 1v5H4a1 1 0 100 2h5v5a1 1 0 102 0v-5h5a1 1 0 100-2h-5V4a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      Add FAQ
+                    </button>
                   </div>
-                  <div className={styles.checkboxGroup}>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="is_summer_trek"
-                        checked={formData.is_summer_trek}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Mark as Summer Trek
-                    </label>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="show_in_summer_section"
-                        checked={formData.show_in_summer_section}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Show in Summer Section
-                    </label>
-                  </div>
-                  <div className={styles.formGrid}>
-                    <div className={styles.inputGroup}>
-                      <label className={styles.inputLabel}>Summer Display Order</label>
-                      <input
-                        type="number"
-                        name="summer_display_order"
-                        value={formData.summer_display_order}
-                        onChange={handleChange}
-                        className={styles.input}
-                      />
-                    </div>
-                  </div>
+                </div>
+              </div>
 
-                  {/* Monsoon Section Fields */}
-                  <div className={styles.sectionHeader}>
-                    <h3 className={styles.sectionTitle}>Monsoon Showcase</h3>
-                  </div>
-                  <div className={styles.checkboxGroup}>
-                    <label className={styles.checkboxLabel}>
+              {/* Legacy Page Tags */}
+              <div className={styles.formSection}>
+                <div className={styles.sectionHeader}>
+                  <h3 className={styles.sectionTitle}>Legacy Page Tags</h3>
+                  <p style={{ fontSize: "0.85rem", color: "#64748b", marginTop: "4px" }}>
+                    These tags ensure backwards compatibility with older category pages.
+                  </p>
+                </div>
+                
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "12px", marginTop: "16px" }}>
+                  {[
+                    { name: "is_international", label: "International" },
+                    { name: "is_india_trip", label: "India" },
+                    { name: "is_honeymoon", label: "Honeymoon" },
+                    { name: "is_himalayan_trek", label: "Himalayan" },
+                    { name: "is_backpacking_trip", label: "Backpacking" },
+                    { name: "is_summer_trek", label: "Summer" },
+                    { name: "is_monsoon_trek", label: "Monsoon" },
+                    { name: "is_community_trip", label: "Community" },
+                    { name: "is_festival_trip", label: "Festival" },
+                    { name: "is_adventure_trip", label: "Adventure" },
+                  ].map((field) => (
+                    <label key={field.name} className={styles.checkboxLabel} style={{ background: "#f8fafc", padding: "10px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
                       <input
                         type="checkbox"
-                        name="is_monsoon_trek"
-                        checked={formData.is_monsoon_trek}
+                        name={field.name}
+                        checked={formData[field.name]}
                         onChange={handleCheckboxChange}
                         className={styles.checkbox}
                       />
-                      Mark as Monsoon Trek
+                      {field.label}
                     </label>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="show_in_monsoon_section"
-                        checked={formData.show_in_monsoon_section}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Show in Monsoon Section
-                    </label>
-                  </div>
-                  <div className={styles.formGrid}>
-                    <div className={styles.inputGroup}>
-                      <label className={styles.inputLabel}>Monsoon Display Order</label>
-                      <input
-                        type="number"
-                        name="monsoon_display_order"
-                        value={formData.monsoon_display_order}
-                        onChange={handleChange}
-                        className={styles.input}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Adventure Section Fields */}
-                  <div className={styles.sectionHeader}>
-                    <h3 className={styles.sectionTitle}>Adventure Showcase</h3>
-                  </div>
-                  <div className={styles.checkboxGroup}>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="is_adventure_trip"
-                        checked={formData.is_adventure_trip}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Mark as Adventure Trip
-                    </label>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="show_in_adventure_section"
-                        checked={formData.show_in_adventure_section}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Show in Adventure Section
-                    </label>
-                  </div>
-                  <div className={styles.formGrid}>
-                    <div className={styles.inputGroup}>
-                      <label className={styles.inputLabel}>Adventure Display Order</label>
-                      <input
-                        type="number"
-                        name="adventure_display_order"
-                        value={formData.adventure_display_order}
-                        onChange={handleChange}
-                        className={styles.input}
-                      />
-                    </div>
-                  </div>
-                  {/* Community Section Fields */}
-                  <div className={styles.sectionHeader}>
-                    <h3 className={styles.sectionTitle}>Community Showcase</h3>
-                  </div>
-                  <div className={styles.checkboxGroup}>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="is_community_trip"
-                        checked={formData.is_community_trip}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Mark as Community Trip
-                    </label>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="show_in_community_section"
-                        checked={formData.show_in_community_section}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Show in Community Section
-                    </label>
-                  </div>
-                  <div className={styles.formGrid}>
-                    <div className={styles.inputGroup}>
-                      <label className={styles.inputLabel}>Community Display Order</label>
-                      <input
-                        type="number"
-                        name="community_display_order"
-                        value={formData.community_display_order}
-                        onChange={handleChange}
-                        className={styles.input}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Festival Section Fields */}
-                  <div className={styles.sectionHeader}>
-                    <h3 className={styles.sectionTitle}>Festival Showcase</h3>
-                  </div>
-                  <div className={styles.checkboxGroup}>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="is_festival_trip"
-                        checked={formData.is_festival_trip}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Mark as Festival Trip
-                    </label>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="show_in_festival_section"
-                        checked={formData.show_in_festival_section}
-                        onChange={handleCheckboxChange}
-                        className={styles.checkbox}
-                      />
-                      Show in Festival Section
-                    </label>
-                  </div>
-                  <div className={styles.formGrid}>
-                    <div className={styles.inputGroup}>
-                      <label className={styles.inputLabel}>Festival Display Order</label>
-                      <input
-                        type="number"
-                        name="festival_display_order"
-                        value={formData.festival_display_order}
-                        onChange={handleChange}
-                        className={styles.input}
-                      />
-                    </div>
-                  </div>
+                  ))}
+                </div>
 
                   {/* Featured Showcase Section */}
                   <div className={styles.sectionHeader}>

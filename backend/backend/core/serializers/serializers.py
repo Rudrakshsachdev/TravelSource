@@ -58,5 +58,11 @@ class TripSerializer(serializers.ModelSerializer):
             "category_id",
             "is_featured",
             "featured_highlights",
+            "gallery_image_urls",
+            "overview",
+            "cancellation_policy",
+            "things_to_pack",
+            "faqs",
+            "pickup_location",
+            "drop_location",
         ]
-
