@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import BatchesSection from "./BatchesSection";
 import styles from "./TripDetailNew.module.css";
 
 const PricingSidebar = ({ trip }) => {
@@ -67,6 +68,9 @@ const PricingSidebar = ({ trip }) => {
           </button>
         </div>
       </div>
+
+      {/* Dynamic Batches Section */}
+      <BatchesSection batches={trip.batches} />
     </div>
   );
 };

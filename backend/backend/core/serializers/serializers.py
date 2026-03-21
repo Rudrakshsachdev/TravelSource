@@ -59,6 +59,7 @@ class TripSerializer(serializers.ModelSerializer):
             "is_featured",
             "featured_highlights",
             "gallery_image_urls",
+            "batches",
             "overview",
             "cancellation_policy",
             "things_to_pack",

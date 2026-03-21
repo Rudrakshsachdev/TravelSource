@@ -103,6 +103,7 @@ const TripDetailNew = () => {
               overview={trip.overview || trip.description}
               highlights={trip.highlights || []}
             />
+            
             <ItinerarySection itinerary={trip.itinerary || []} />
             <InclusionsExclusions
               inclusions={trip.inclusions || []}

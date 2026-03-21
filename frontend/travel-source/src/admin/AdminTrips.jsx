@@ -68,6 +68,7 @@ const AdminTrips = () => {
   const [galleryImageUrls, setGalleryImageUrls] = useState([]);
   const [thingsToPack, setThingsToPack] = useState([]);
   const [faqs, setFaqs] = useState([]);
+  const [batches, setBatches] = useState([]);
   const [uploadingGallery, setUploadingGallery] = useState(false);
   const [categoryError, setCategoryError] = useState("");
 
@@ -225,6 +226,7 @@ const AdminTrips = () => {
     setGalleryImageUrls(Array.isArray(trip.gallery_image_urls) ? trip.gallery_image_urls : []);
     setThingsToPack(Array.isArray(trip.things_to_pack) ? trip.things_to_pack : []);
     setFaqs(Array.isArray(trip.faqs) ? trip.faqs : []);
+    setBatches(Array.isArray(trip.batches) ? trip.batches : []);
 
     setEditingTrip(trip);
     setShowForm(true);
@@ -268,6 +270,7 @@ const AdminTrips = () => {
     setGalleryImageUrls([]);
     setThingsToPack([]);
     setFaqs([]);
+    setBatches([]);
     setEditingTrip(null);
     setShowForm(false);
     setError("");
@@ -324,6 +327,7 @@ const AdminTrips = () => {
         gallery_image_urls: galleryImageUrls.filter(url => url.trim() !== ""),
         things_to_pack: thingsToPack.filter(item => (typeof item === "string" ? item.trim() : item) !== ""),
         faqs: faqs.filter(f => f.q && f.q.trim() !== ""),
+        batches: batches.filter(b => b.startDate && b.endDate),
       };
 
       if (editingTrip) {
@@ -1445,6 +1449,89 @@ const AdminTrips = () => {
                 </div>
               </div>
 
+              {/* BATCHeS SECTION (Moved up for visibility) */}
+              <div className={styles.formSection}>
+                <h3 className={styles.sectionTitle}>
+                  <svg className={styles.sectionIcon} viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+                  </svg>
+                  Upcoming Batches
+                </h3>
+                <div className={styles.inputGroup}>
+                  <p style={{ fontSize: "0.85rem", color: "#64748b", marginBottom: "12px" }}>
+                    Add trip batches indicating start/end dates and availability status. Will show up dynamically below the pricing section on detailed pages.
+                  </p>
+                  <div className={styles.dynamicListSimple}>
+                    {batches.map((batch, idx) => (
+                      <div key={idx} style={{ marginBottom: "12px", padding: "12px", background: "#f8fafc", borderRadius: "10px", border: "1px solid #e2e8f0", display: "grid", gridTemplateColumns: "1fr 1fr 1fr auto", gap: "10px", alignItems: "center" }}>
+                        <div>
+                          <label style={{ fontSize: "0.75rem", color: "#64748b", display: "block", marginBottom: "4px" }}>Start Date</label>
+                          <input
+                            type="date"
+                            className={styles.input}
+                            value={batch.startDate || ""}
+                            onChange={(e) => {
+                              const updated = [...batches];
+                              updated[idx] = { ...updated[idx], startDate: e.target.value };
+                              setBatches(updated);
+                            }}
+                          />
+                        </div>
+                        <div>
+                          <label style={{ fontSize: "0.75rem", color: "#64748b", display: "block", marginBottom: "4px" }}>End Date</label>
+                          <input
+                            type="date"
+                            className={styles.input}
+                            value={batch.endDate || ""}
+                            onChange={(e) => {
+                              const updated = [...batches];
+                              updated[idx] = { ...updated[idx], endDate: e.target.value };
+                              setBatches(updated);
+                            }}
+                          />
+                        </div>
+                        <div>
+                          <label style={{ fontSize: "0.75rem", color: "#64748b", display: "block", marginBottom: "4px" }}>Status</label>
+                          <select
+                            className={styles.input}
+                            value={batch.status || "Available"}
+                            onChange={(e) => {
+                              const updated = [...batches];
+                              updated[idx] = { ...updated[idx], status: e.target.value };
+                              setBatches(updated);
+                            }}
+                          >
+                            <option value="Available">Available</option>
+                            <option value="Filling Fast">Filling Fast</option>
+                            <option value="Full">Full</option>
+                          </select>
+                        </div>
+                        <button
+                          type="button"
+                          className={styles.removeButtonSmall}
+                          onClick={() => setBatches(batches.filter((_, i) => i !== idx))}
+                          style={{ marginTop: "18px", justifySelf: "end" }}
+                        >
+                          <svg viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      className={styles.addButtonSmall}
+                      onClick={() => setBatches([...batches, { startDate: "", endDate: "", status: "Available" }])}
+                    >
+                      <svg viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 3a1 1 0 00-1 1v5H4a1 1 0 100 2h5v5a1 1 0 102 0v-5h5a1 1 0 100-2h-5V4a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                      Add Batch
+                    </button>
+                  </div>
+                </div>
+              </div>
+
               {/* ── TRIP DETAIL PAGE FIELDS ── */}
               <div className={styles.formSection}>
                 <h3 className={styles.sectionTitle}>
@@ -1662,6 +1749,9 @@ const AdminTrips = () => {
                     </button>
                   </div>
                 </div>
+
+
+
               </div>
 
               {/* Legacy Page Tags */}
