@@ -1,12 +1,20 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BatchesSection from "./BatchesSection";
 import styles from "./TripDetailNew.module.css";
 
 const PricingSidebar = ({ trip }) => {
   const navigate = useNavigate();
+  const [selectedOccupancyIndex, setSelectedOccupancyIndex] = useState(0);
+
   if (!trip) return null;
 
-  const price = trip.price ? Number(trip.price).toLocaleString("en-IN") : "—";
+  const priceOptions = Array.isArray(trip.price_options) && trip.price_options.length > 0 
+    ? trip.price_options 
+    : [{ occupancy: "Base Price", price: trip.price }];
+  
+  const currentOption = priceOptions[selectedOccupancyIndex] || priceOptions[0];
+  const displayPrice = currentOption.price ? Number(currentOption.price).toLocaleString("en-IN") : "—";
 
   const handleBookNow = () => {
     navigate(`/trips/${trip.id}/book`);
@@ -23,7 +31,7 @@ const PricingSidebar = ({ trip }) => {
         <div className={styles.pricingHeader}>
           <span className={styles.pricingLabel}>Starting From</span>
           <div className={styles.priceRow}>
-            <span className={styles.priceAmount}>₹ {price}*</span>
+            <span className={styles.priceAmount}>₹ {displayPrice}*</span>
             <span className={styles.pricePerPerson}>Per Person</span>
           </div>
         </div>
@@ -36,16 +44,25 @@ const PricingSidebar = ({ trip }) => {
         <div className={styles.pricingSection}>
           <div className={styles.pricingSectionHeader}>
             <span className={styles.pricingSectionLabel}>Pricing</span>
-            <div className={styles.occupancyTabs}>
-              <span>Occupancy</span>
-              <button className={styles.occTabActive}>Triple</button>
-              <button className={styles.occTab}>Double</button>
-            </div>
+            {trip.price_options && trip.price_options.length > 0 && (
+              <div className={styles.occupancyTabs}>
+                <span>Occupancy</span>
+                {priceOptions.map((opt, idx) => (
+                  <button 
+                    key={idx} 
+                    className={selectedOccupancyIndex === idx ? styles.occTabActive : styles.occTab}
+                    onClick={() => setSelectedOccupancyIndex(idx)}
+                  >
+                    {opt.occupancy}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
           <div className={styles.pricingDetail}>
             <span>Volvo Bus or Tempo Traveller</span>
-            <span>Triple Occupancy</span>
-            <span className={styles.pricingDetailPrice}>₹ {price}</span>
+            <span>{currentOption.occupancy !== "Base Price" ? `${currentOption.occupancy} Occupancy` : "Trip Package"}</span>
+            <span className={styles.pricingDetailPrice}>₹ {displayPrice}</span>
           </div>
           <div className={styles.gstNote}>* +5% GST</div>
         </div>

@@ -93,6 +93,7 @@ class Trip(models.Model):
     # ── Trip Detail Page (JustWravel-style) ──
     gallery_image_urls = models.JSONField(blank=True, null=True, help_text="List of Cloudinary image URLs for the photo gallery")
     batches = models.JSONField(blank=True, null=True, help_text='List of batch objects, e.g. [{"startDate": "...", "endDate": "...", "status": "Available/Filling Fast/Full"}]')
+    price_options = models.JSONField(blank=True, null=True, help_text='List of pricing options, e.g. [{"occupancy": "Triple", "price": 10000}, {"occupancy": "Double", "price": 12000}]')
     overview = models.TextField(blank=True, default="", help_text="Rich overview / about text for the trip detail page")
     cancellation_policy = models.TextField(blank=True, default="", help_text="Cancellation policy text")
     things_to_pack = models.JSONField(blank=True, null=True, help_text='List of packing items, e.g. ["Warm jacket", "Trekking shoes"]')
