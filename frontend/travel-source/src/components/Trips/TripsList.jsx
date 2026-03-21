@@ -6,7 +6,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import usePersonalization from "../../hooks/usePersonalization";
 import PersonalizationSection from "./PersonalizationSection";
 import PanoramaBanner from "./PanoramaBanner";
-import CinematicPanorama from "./CinematicPanorama";
+import ModernHero from "./ModernHero";
+import HeroCards from "./HeroCards";
 import InternationalTrips from "./InternationalTrips";
 import IndiaTrips from "./IndiaTrips";
 import HoneymoonTrips from "./HoneymoonTrips";
@@ -586,10 +587,11 @@ const TripsList = () => {
       {/* Cinematic Panorama Banner */}
       <PanoramaBanner />
 
-      {/* Cinematic Panoramic Hero with Sliding Background */}
-      <CinematicPanorama />
+      {/* ── HERO BANNER ── */}
+      <ModernHero />
+      <HeroCards />
 
-      {/* Category Navigation Bar */}
+      {/* ── SEARCH & FILTERS ── */}
       <CategoryNav onCategoryChange={handleCategoryChange} />
 
       {/* International Trips Scrolling Showcase */}
