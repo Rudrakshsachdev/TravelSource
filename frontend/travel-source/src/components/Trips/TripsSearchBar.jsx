@@ -31,7 +31,6 @@ const TripsSearchBar = ({
           {/* Header */}
           <div className={styles.searchHeader}>
             <div className={styles.searchTitle}>
-              <span className={styles.searchTitleNumber}>01</span>
               <h3 className={styles.searchTitleText}>
                 Find Your Perfect Journey
               </h3>
