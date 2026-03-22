@@ -3,32 +3,32 @@
    Teal palette matching TripsList, Hero & Navbar
    ═══════════════════════════════════════════════════════════════ */
 
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,700&family=Inter:wght@300;400;500;600&family=Montserrat:wght@500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap");
 
 /* ─── Scoped Tokens ──────────────────────────────────── */
 .reviewsSection {
-  --rv-obsidian: #1a3a35;
-  --rv-charcoal: #2d5c54;
-  --rv-steel: #3d7a70;
-  --rv-silver: #b8ddd6;
-  --rv-ivory: #e8f6f3;
+  --rv-obsidian: #0f172a;
+  --rv-charcoal: #1e293b;
+  --rv-steel: #475569;
+  --rv-silver: #cbd5e1;
+  --rv-ivory: #f8fafc;
   --rv-snow: #ffffff;
-  --rv-accent: #3f9e8f;
-  --rv-accent-light: #7ecfc0;
-  --rv-accent-dark: #2e8b7a;
-  --rv-accent-gradient: linear-gradient(135deg, #3f9e8f 0%, #5fb8a8 100%);
-  --rv-accent-glow: rgba(63, 158, 143, 0.15);
-  --rv-accent-border: rgba(63, 158, 143, 0.22);
-  --rv-shadow-card: 0 4px 24px rgba(26, 58, 53, 0.08);
-  --rv-shadow-luxury: 0 8px 40px rgba(26, 58, 53, 0.1);
-  --rv-shadow-elevated: 0 20px 60px rgba(26, 58, 53, 0.14);
+  --rv-accent: #2563eb;
+  --rv-accent-light: #60a5fa;
+  --rv-accent-dark: #1d4ed8;
+  --rv-accent-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  --rv-accent-glow: rgba(37, 99, 235, 0.15);
+  --rv-accent-border: rgba(37, 99, 235, 0.22);
+  --rv-shadow-card: 0 4px 24px rgba(15, 23, 42, 0.06);
+  --rv-shadow-luxury: 0 8px 40px rgba(15, 23, 42, 0.08);
+  --rv-shadow-elevated: 0 20px 60px rgba(15, 23, 42, 0.12);
   --rv-radius-lg: 20px;
   --rv-radius-md: 12px;
   --rv-radius-sm: 8px;
   --rv-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --rv-font-display: "Playfair Display", Georgia, serif;
-  --rv-font-primary: "Inter", -apple-system, sans-serif;
-  --rv-font-accent: "Montserrat", sans-serif;
+  --rv-font-display: "Plus Jakarta Sans", system-ui, sans-serif;
+  --rv-font-primary: "Plus Jakarta Sans", system-ui, sans-serif;
+  --rv-font-accent: "Plus Jakarta Sans", system-ui, sans-serif;
 }
 
 .reviewsSection {
@@ -36,8 +36,8 @@
   background: linear-gradient(
     135deg,
     var(--rv-ivory) 0%,
-    #d4f0ea 50%,
-    #dff2ed 100%
+    #eff6ff 50%,
+    #e0f2fe 100%
   );
   position: relative;
   overflow: hidden;
@@ -49,12 +49,12 @@
   background:
     radial-gradient(
       circle at 15% 80%,
-      rgba(63, 158, 143, 0.1) 0%,
+      rgba(37, 99, 235, 0.1) 0%,
       transparent 50%
     ),
     radial-gradient(
       circle at 85% 15%,
-      rgba(63, 158, 143, 0.07) 0%,
+      rgba(37, 99, 235, 0.07) 0%,
       transparent 50%
     );
   pointer-events: none;
@@ -240,7 +240,7 @@
 .reviewCard:hover {
   transform: translateY(-7px);
   box-shadow: var(--rv-shadow-elevated);
-  border-color: rgba(63, 158, 143, 0.4);
+  border-color: rgba(37, 99, 235, 0.4);
 }
 
 /* ─── Card internals ─────────────────────────────────── */
@@ -269,7 +269,7 @@
   font-weight: 700;
   font-size: 0.95rem;
   flex-shrink: 0;
-  box-shadow: 0 4px 14px rgba(63, 158, 143, 0.3);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
   letter-spacing: 0.5px;
 }
 
@@ -327,7 +327,7 @@
 .starEmpty {
   width: 15px;
   height: 15px;
-  color: #d4ede8;
+  color: #eff6ff;
 }
 
 .tripBadge {
@@ -370,7 +370,7 @@
   width: 20px;
   height: 20px;
   color: var(--rv-accent-glow);
-  color: rgba(63, 158, 143, 0.25);
+  color: rgba(37, 99, 235, 0.25);
 }
 
 .cardFooter {
@@ -378,7 +378,7 @@
   gap: 0.6rem;
   margin-top: auto;
   padding-top: 0.25rem;
-  border-top: 1px solid rgba(63, 158, 143, 0.07);
+  border-top: 1px solid rgba(37, 99, 235, 0.07);
 }
 
 .likeButton,
@@ -401,13 +401,13 @@
 }
 
 .likeButton:hover {
-  background: rgba(63, 158, 143, 0.07);
+  background: rgba(37, 99, 235, 0.07);
   border-color: var(--rv-accent);
   color: var(--rv-obsidian);
 }
 
 .shareButton:hover {
-  background: rgba(63, 158, 143, 0.07);
+  background: rgba(37, 99, 235, 0.07);
   border-color: var(--rv-accent);
   color: var(--rv-obsidian);
 }
@@ -466,7 +466,7 @@
   border-color: var(--rv-accent);
   color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(63, 158, 143, 0.3);
+  box-shadow: 0 8px 22px rgba(37, 99, 235, 0.3);
 }
 
 .controlButton svg {
@@ -520,7 +520,7 @@
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(63, 158, 143, 0.08) 0%,
+    rgba(37, 99, 235, 0.08) 0%,
     transparent 70%
   );
   pointer-events: none;
@@ -567,13 +567,13 @@
   text-transform: uppercase;
   cursor: pointer;
   transition: all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 4px 18px rgba(63, 158, 143, 0.3);
+  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.3);
 }
 
 .ctaButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(63, 158, 143, 0.45);
-  background: linear-gradient(135deg, #2e8b7a 0%, #3f9e8f 100%);
+  box-shadow: 0 10px 28px rgba(37, 99, 235, 0.45);
+  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
 }
 
 .ctaIcon {
@@ -583,7 +583,7 @@
 
 /* ─── Rating Summary ─────────────────────────────────── */
 .ratingSummary {
-  background: linear-gradient(135deg, var(--rv-ivory) 0%, #dff2ed 100%);
+  background: linear-gradient(135deg, var(--rv-ivory) 0%, #e0f2fe 100%);
   border-radius: var(--rv-radius-lg);
   padding: 1.75rem;
   border: 1px solid var(--rv-accent-border);
@@ -646,7 +646,7 @@
 .barContainer {
   flex: 1;
   height: 6px;
-  background: rgba(63, 158, 143, 0.12);
+  background: rgba(37, 99, 235, 0.12);
   border-radius: 999px;
   overflow: hidden;
 }
@@ -809,7 +809,7 @@
   overflow-y: auto;
   box-shadow:
     0 32px 80px rgba(12, 31, 29, 0.35),
-    0 0 0 1px rgba(63, 158, 143, 0.2);
+    0 0 0 1px rgba(37, 99, 235, 0.2);
   animation: fadeInUp 0.3s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
@@ -887,8 +887,8 @@
 }
 .modalInput:focus,
 .modalTextarea:focus {
-  border-color: var(--rv-accent, #3f9e8f);
-  box-shadow: 0 0 0 3px rgba(63, 158, 143, 0.15);
+  border-color: var(--rv-accent, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
   background: #fff;
 }
 .modalTextarea {
@@ -955,7 +955,7 @@
   padding: 0.8rem 1.5rem;
   background: var(
     --rv-accent-gradient,
-    linear-gradient(135deg, #3f9e8f, #5fb8a8)
+    linear-gradient(135deg, #2563eb, #60a5fa)
   );
   color: #fff;
   border: none;
@@ -996,7 +996,7 @@
   border-radius: 50%;
   background: var(
     --rv-accent-gradient,
-    linear-gradient(135deg, #3f9e8f, #5fb8a8)
+    linear-gradient(135deg, #2563eb, #60a5fa)
   );
   display: flex;
   align-items: center;
