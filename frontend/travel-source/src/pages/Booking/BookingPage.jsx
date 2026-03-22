@@ -1,8 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchTripDetail, createBooking } from "../../services/api";
 import { getAuthData } from "../../utils/auth";
 import styles from "./BookingPage.module.css";
+
+// Helper Date Formatter
+const formatDate = (dateStr) => {
+  if (!dateStr) return { formatted: "", month: "" };
+  try {
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return { formatted: "Invalid", month: "" };
+    const day = date.toLocaleDateString("en-US", { day: "2-digit" });
+    const month = date.toLocaleDateString("en-US", { month: "short" });
+    return {
+      formatted: `${day}-${month}`,
+      month,
+    };
+  } catch (e) {
+    return { formatted: "Error", month: "" };
+  }
+};
 
 const BookingPage = () => {
   const { id } = useParams();
@@ -11,12 +28,21 @@ const BookingPage = () => {
   const [trip, setTrip] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+
+  // User input state
   const [formData, setFormData] = useState({
     full_name: "",
     email: "",
     phone: "",
     persons: 1,
   });
+
+  // UI Selection State
+  const [selectedItinerary, setSelectedItinerary] = useState(0);
+  const [selectedMonth, setSelectedMonth] = useState("All");
+  const [selectedBatchIdx, setSelectedBatchIdx] = useState(0);
+  const [selectedOccupancyIndex, setSelectedOccupancyIndex] = useState(0);
+  const [couponCode, setCouponCode] = useState("");
 
   useEffect(() => {
     const auth = getAuthData();
@@ -41,11 +67,7 @@ const BookingPage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]:
-        name === "persons" ? Math.max(1, parseInt(value, 10) || 1) : value,
-    });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const incrementPersons = () => {
@@ -59,16 +81,53 @@ const BookingPage = () => {
     }));
   };
 
-  const totalAmount = trip ? trip.price * formData.persons : 0;
-  const serviceFee = 500;
-  const grandTotal = totalAmount + serviceFee;
+  // Batches Processing
+  const processedBatches = useMemo(() => {
+    if (!trip || !trip.batches) return [];
+    return trip.batches.map((batch, idx) => {
+      const start = formatDate(batch.startDate);
+      const end = formatDate(batch.endDate);
+      return {
+        ...batch,
+        originalIndex: idx,
+        displayDate: `${start.formatted} To ${end.formatted}`,
+        startMonth: start.month,
+      };
+    });
+  }, [trip]);
+
+  const availableMonths = useMemo(() => {
+    const months = new Set(processedBatches.map((b) => b.startMonth).filter(Boolean));
+    return ["All", ...Array.from(months)];
+  }, [processedBatches]);
+
+  const filteredBatches = useMemo(() => {
+    if (selectedMonth === "All") return processedBatches;
+    return processedBatches.filter((b) => b.startMonth === selectedMonth);
+  }, [processedBatches, selectedMonth]);
+
+  // Pricing Options Processing
+  const priceOptions = useMemo(() => {
+    if (!trip) return [];
+    return Array.isArray(trip.price_options) && trip.price_options.length > 0
+      ? trip.price_options
+      : [{ occupancy: "Trip Package", price: trip.price }];
+  }, [trip]);
+
+  const currentOption = priceOptions[selectedOccupancyIndex] || priceOptions[0];
+
+  // Calculations
+  const basePrice = currentOption?.price || 0;
+  const amount = basePrice * formData.persons;
+  const gst = amount * 0.05; // 5% GST
+  const grandTotal = amount + gst;
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency: "INR",
-      maximumFractionDigits: 0,
-    }).format(price);
+      minimumFractionDigits: 2,
+    }).format(price || 0);
   };
 
   const handleSubmit = async (e) => {
@@ -83,6 +142,9 @@ const BookingPage = () => {
         phone: formData.phone,
         persons: formData.persons,
         total_amount: grandTotal,
+        // Assuming backend supports these or ignores them:
+        // batch_index: selectedBatchIdx,
+        // occupancy_type: currentOption.occupancy
       };
 
       await createBooking(bookingPayload);
@@ -106,14 +168,14 @@ const BookingPage = () => {
 
   if (!trip) return null;
 
+  const itineraryLabel =
+    trip.pickup_location && trip.drop_location
+      ? `${trip.pickup_location} to ${trip.drop_location}`
+      : "Standard Itinerary";
+
   return (
     <div className={styles.pageWrapper}>
-      {/* Background decoration */}
-      <div className={styles.bgDecoration}></div>
-      <div className={styles.bgDecoration2}></div>
-
       <div className={styles.container}>
-        {/* Back Navigation */}
         <button
           className={styles.backButton}
           onClick={() => navigate(`/trips/${id}`)}
@@ -125,344 +187,317 @@ const BookingPage = () => {
               clipRule="evenodd"
             />
           </svg>
-          Back to Trip
+          Back to trips
         </button>
 
         <div className={styles.bookingLayout}>
-          {/* Left: Trip Summary Card */}
-          <div className={styles.tripSummaryCard}>
-            <div className={styles.tripImageWrapper}>
-              <img
-                src={trip.image}
-                alt={trip.title}
-                className={styles.tripImage}
-              />
-              <div className={styles.tripImageOverlay}></div>
-              <div className={styles.tripBadge}>
-                <svg
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  width="14"
-                  height="14"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-                Premium Trip
+          {/* LEFT COLUMN */}
+          <div className={styles.leftColumn}>
+            {/* Trip Header Card */}
+            <div className={styles.card}>
+              <h1 className={styles.cardTitleBig}>
+                {trip.title} | {trip.location || "India"} | {trip.duration_days}{" "}
+                Days
+              </h1>
+            </div>
+
+            {/* Itineraries Card */}
+            <div className={styles.card}>
+              <h2 className={styles.cardTitle}>Itineraries</h2>
+              <div
+                className={`${styles.radioRow} ${
+                  selectedItinerary === 0 ? styles.radioRowActive : ""
+                }`}
+                onClick={() => setSelectedItinerary(0)}
+              >
+                <div className={styles.radioLeft}>
+                  <div className={styles.radioCircle}>
+                    {selectedItinerary === 0 && (
+                      <div className={styles.radioCircleInner}></div>
+                    )}
+                  </div>
+                  <span className={styles.radioLabel}>{itineraryLabel}</span>
+                </div>
+                {selectedItinerary === 0 && (
+                  <span className={styles.pillSelected}>Selected</span>
+                )}
               </div>
             </div>
 
-            <div className={styles.tripDetails}>
-              <h2 className={styles.tripTitle}>{trip.title}</h2>
-
-              <div className={styles.tripMeta}>
-                {trip.duration_days && (
-                  <div className={styles.metaItem}>
-                    <svg
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      width="16"
-                      height="16"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span>{trip.duration_days} Days{trip.duration_nights > 0 ? " / " + trip.duration_nights + " Nights" : ""}</span>
+            {/* Batches Card */}
+            {processedBatches.length > 0 && (
+              <div className={styles.card}>
+                <div className={styles.batchesHeader}>
+                  <h2 className={styles.cardTitle} style={{ margin: 0 }}>
+                    Batches
+                  </h2>
+                  <div className={styles.monthFilters}>
+                    {availableMonths.map((month) => (
+                      <span
+                        key={month}
+                        className={`${styles.monthFilter} ${
+                          selectedMonth === month
+                            ? styles.monthFilterActive
+                            : ""
+                        }`}
+                        onClick={() => setSelectedMonth(month)}
+                      >
+                        {month}
+                      </span>
+                    ))}
                   </div>
-                )}
+                </div>
 
-                {trip.location && (
-                  <div className={styles.metaItem}>
-                    <svg
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      width="16"
-                      height="16"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span>
-                      {trip.location}
-                      {trip.country ? `, ${trip.country}` : ""}
+                <div className={styles.batchesGrid}>
+                  {filteredBatches.map((batch) => {
+                    const status = batch.status || "Available";
+                    const isFull = status === "Full";
+                    const isFillingFast = status === "Filling Fast";
+                    const isActive = selectedBatchIdx === batch.originalIndex;
+
+                    let pillClass = styles.pillAvailable;
+                    if (isFull) pillClass = styles.pillFull;
+                    else if (isFillingFast) pillClass = styles.pillFillingFast;
+
+                    return (
+                      <div
+                        key={batch.originalIndex}
+                        className={`${styles.batchItem} ${
+                          isActive ? styles.batchItemActive : ""
+                        } ${isFull ? styles.batchItemDisabled : ""}`}
+                        onClick={() => {
+                          if (!isFull) setSelectedBatchIdx(batch.originalIndex);
+                        }}
+                      >
+                        <div className={styles.radioLeft}>
+                          <div className={styles.radioCircle}>
+                            {isActive && (
+                              <div className={styles.radioCircleInner}></div>
+                            )}
+                          </div>
+                          <span
+                            className={styles.radioLabel}
+                            style={{ fontSize: "0.9rem" }}
+                          >
+                            {batch.displayDate}
+                          </span>
+                        </div>
+                        <span className={pillClass}>{status}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Occupancy Card */}
+            {priceOptions && priceOptions.length > 0 && (
+              <div className={styles.card}>
+                <div className={styles.occupancyHeader}>
+                  <div>
+                    <h2 className={styles.cardTitle} style={{ margin: 0 }}>
+                      Occupancy
+                    </h2>
+                    <span className={styles.occupancySubtext}>
+                      (Room Arrangement or Room Sharing)
                     </span>
                   </div>
-                )}
-              </div>
+                  <div className={styles.occupancyTabs}>
+                    {priceOptions.map((opt, idx) => (
+                      <div
+                        key={idx}
+                        className={`${styles.occTab} ${
+                          selectedOccupancyIndex === idx
+                            ? styles.occTabActive
+                            : ""
+                        }`}
+                        onClick={() => setSelectedOccupancyIndex(idx)}
+                      >
+                        {opt.occupancy}
+                        <span>({formData.persons} members)</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
-              <div className={styles.pricePerPerson}>
-                <span className={styles.priceLabel}>Price per person</span>
-                <span className={styles.priceValue}>
-                  {formatPrice(trip.price)}
-                </span>
+                <div className={styles.occDetails}>
+                  <div className={styles.occHeader}>
+                    Volvo Bus or Tempo Traveller
+                    <svg
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      width="16"
+                      height="16"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                  <div className={styles.occRow}>
+                    <div>
+                      <div className={styles.occLabel}>Occupancy</div>
+                      <div className={styles.occValue}>
+                        {currentOption.occupancy}
+                      </div>
+                    </div>
+                    <div>
+                      <div className={styles.occLabel}>Price</div>
+                      <div className={styles.occValue}>
+                        {formatPrice(currentOption.price).split(".")[0]}
+                      </div>
+                    </div>
+                    <div>
+                      <div className={styles.occLabel}>Qty.</div>
+                      <div className={styles.qtyControl}>
+                        <button
+                          type="button"
+                          className={styles.qtyBtn}
+                          onClick={decrementPersons}
+                          disabled={formData.persons <= 1}
+                        >
+                          -
+                        </button>
+                        <span className={styles.qtyValue}>
+                          {formData.persons}
+                        </span>
+                        <button
+                          type="button"
+                          className={styles.qtyBtn}
+                          onClick={incrementPersons}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Guarantees */}
-            <div className={styles.guarantees}>
-              <div className={styles.guaranteeItem}>
-                <svg
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  width="16"
-                  height="16"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span>Best Price Guarantee</span>
-              </div>
-              <div className={styles.guaranteeItem}>
-                <svg
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  width="16"
-                  height="16"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span>Flexible Cancellation</span>
-              </div>
-              <div className={styles.guaranteeItem}>
-                <svg
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  width="16"
-                  height="16"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span>24/7 Support</span>
-              </div>
+            {/* Traveler Details Card */}
+            <div className={styles.card}>
+              <h2 className={styles.cardTitle}>Traveler Details</h2>
+              <form id="booking-form" onSubmit={handleSubmit}>
+                <div className={styles.formGrid}>
+                  <div className={styles.formGroup}>
+                    <label className={styles.formLabel}>Full Name</label>
+                    <input
+                      name="full_name"
+                      type="text"
+                      required
+                      value={formData.full_name}
+                      onChange={handleChange}
+                      placeholder="Enter full name"
+                      className={styles.formInput}
+                    />
+                  </div>
+                  <div className={styles.formGroup}>
+                    <label className={styles.formLabel}>Email Address</label>
+                    <input
+                      name="email"
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="Enter email address"
+                      className={styles.formInput}
+                    />
+                  </div>
+                  <div className={styles.formGroup}>
+                    <label className={styles.formLabel}>Phone Number</label>
+                    <input
+                      name="phone"
+                      type="tel"
+                      required
+                      value={formData.phone}
+                      onChange={handleChange}
+                      placeholder="e.g. 9876543210"
+                      className={styles.formInput}
+                    />
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
 
-          {/* Right: Booking Form */}
-          <div className={styles.bookingFormCard}>
-            <div className={styles.formHeader}>
-              <h1 className={styles.formTitle}>Book Your Trip</h1>
-              <p className={styles.formSubtitle}>
-                Fill in your details to reserve your spot
-              </p>
-            </div>
-
-            <form className={styles.form} onSubmit={handleSubmit}>
-              <div className={styles.formGroup}>
-                <label className={styles.label} htmlFor="full_name">
-                  <svg
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    width="16"
-                    height="16"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Full Name
-                </label>
-                <input
-                  id="full_name"
-                  name="full_name"
-                  type="text"
-                  placeholder="Enter your full name"
-                  value={formData.full_name}
-                  onChange={handleChange}
-                  required
-                  className={styles.input}
-                />
+          {/* RIGHT COLUMN (STICKY) */}
+          <div className={styles.rightColumn}>
+            <div className={`${styles.card} ${styles.sidebarSticky}`}>
+              <div className={styles.amountToPay}>
+                <span className={styles.amountToPayLabel}>Amount to Pay</span>
+                <span className={styles.amountToPayValue}>
+                  {formatPrice(grandTotal)}
+                </span>
               </div>
 
-              <div className={styles.formGroup}>
-                <label className={styles.label} htmlFor="email">
-                  <svg
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    width="16"
-                    height="16"
-                  >
-                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                  </svg>
-                  Email Address
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="your.email@example.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className={styles.input}
-                />
+              <div className={styles.summaryTable}>
+                <div className={styles.summaryHeader}>
+                  <span>Travel Mode</span>
+                  <span>Rider</span>
+                  <span>Occupancy</span>
+                </div>
+                <div className={styles.summaryRow}>
+                  <span>Volvo Bus or Tempo Traveller</span>
+                  <span>-</span>
+                  <span>{currentOption.occupancy}</span>
+                </div>
               </div>
 
-              <div className={styles.formGroup}>
-                <label className={styles.label} htmlFor="phone">
-                  <svg
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    width="16"
-                    height="16"
-                  >
-                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-                  </svg>
-                  Phone Number
-                </label>
-                <input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  placeholder="+91 98765 43210"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  required
-                  className={styles.input}
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label className={styles.label}>
-                  <svg
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    width="16"
-                    height="16"
-                  >
-                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
-                  </svg>
-                  Number of Travelers
-                </label>
-                <div className={styles.personsSelector}>
-                  <button
-                    type="button"
-                    className={styles.personBtn}
-                    onClick={decrementPersons}
-                    disabled={formData.persons <= 1}
-                  >
-                    <svg
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      width="16"
-                      height="16"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
-                  <span className={styles.personsCount}>
-                    {formData.persons}
-                  </span>
-                  <button
-                    type="button"
-                    className={styles.personBtn}
-                    onClick={incrementPersons}
-                  >
-                    <svg
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      width="16"
-                      height="16"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+              <div className={styles.couponsSection}>
+                <div className={styles.sectionHeader}>
+                  <span className={styles.sectionTitle}>Coupons & Offers</span>
+                  <span className={styles.viewAll}>View All</span>
+                </div>
+                <div className={styles.couponInputWrapper}>
+                  <input
+                    type="text"
+                    placeholder="Apply Coupon"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value)}
+                    className={styles.couponInput}
+                  />
+                  <button type="button" className={styles.applyBtn}>
+                    &gt;
                   </button>
                 </div>
               </div>
 
-              {/* Price Breakdown */}
-              <div className={styles.priceBreakdown}>
-                <div className={styles.breakdownRow}>
-                  <span>
-                    {formatPrice(trip.price)} × {formData.persons} traveler
-                    {formData.persons > 1 ? "s" : ""}
-                  </span>
-                  <span>{formatPrice(totalAmount)}</span>
+              <div className={styles.costBreakdown}>
+                <div className={styles.costRow}>
+                  <span>Amount</span>
+                  <span>{formatPrice(amount)}</span>
                 </div>
-                <div className={styles.breakdownRow}>
-                  <span>Service fee</span>
-                  <span>{formatPrice(serviceFee)}</span>
+                <div className={styles.costRow}>
+                  <span>GST (5%)</span>
+                  <span>{formatPrice(gst)}</span>
                 </div>
-                <div className={styles.breakdownDivider}></div>
-                <div className={styles.breakdownTotal}>
-                  <span>Total Amount</span>
+                <div className={styles.costRow}>
+                  <span>Subtotal</span>
+                  <span>{formatPrice(grandTotal)}</span>
+                </div>
+
+                <div className={styles.costTotal}>
+                  <span>Amount To Pay</span>
                   <span>{formatPrice(grandTotal)}</span>
                 </div>
               </div>
 
-              {/* Submit Button */}
               <button
                 type="submit"
-                className={styles.submitButton}
+                form="booking-form"
+                className={styles.proceedBtn}
                 disabled={submitting}
               >
                 {submitting ? (
-                  <>
-                    <div className={styles.buttonSpinner}></div>
-                    Processing...
-                  </>
+                  <div className={styles.spinner}></div>
                 ) : (
-                  <>
-                    <svg
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      width="18"
-                      height="18"
-                    >
-                      <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
-                      <path
-                        fillRule="evenodd"
-                        d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    Proceed to Payment
-                  </>
+                  "Proceed to Payment"
                 )}
               </button>
-
-              <p className={styles.secureNote}>
-                <svg
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  width="14"
-                  height="14"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                Your payment information is secure and encrypted
-              </p>
-            </form>
+            </div>
           </div>
         </div>
       </div>
