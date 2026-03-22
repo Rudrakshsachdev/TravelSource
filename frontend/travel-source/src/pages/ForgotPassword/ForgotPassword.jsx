@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { requestPasswordReset, verifyResetOTP, resetPassword } from "../../services/api";
 import styles from "./ForgotPassword.module.css";
+import heroImg from "../../assets/login-hero.png";
 
 const ForgotPassword = () => {
     const navigate = useNavigate();
@@ -17,13 +18,14 @@ const ForgotPassword = () => {
     const handleEmailSubmit = async (e) => {
         e.preventDefault();
         setError("");
+        setSuccess("");
         setLoading(true);
         try {
             await requestPasswordReset(email);
             setStep(2);
             setSuccess("Reset code sent to your email!");
         } catch (err) {
-            setError(err.message);
+            setError(err.message || "Failed to send reset code. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -32,13 +34,14 @@ const ForgotPassword = () => {
     const handleOtpSubmit = async (e) => {
         e.preventDefault();
         setError("");
+        setSuccess("");
         setLoading(true);
         try {
             await verifyResetOTP(email, otp);
             setStep(3);
             setSuccess("Code verified! Set your new password.");
         } catch (err) {
-            setError(err.message);
+            setError(err.message || "Invalid or expired code.");
         } finally {
             setLoading(false);
         }
@@ -47,6 +50,7 @@ const ForgotPassword = () => {
     const handlePasswordResetSubmit = async (e) => {
         e.preventDefault();
         setError("");
+        setSuccess("");
         if (newPassword !== confirmPassword) {
             setError("Passwords do not match");
             return;
@@ -61,7 +65,7 @@ const ForgotPassword = () => {
             setSuccess("Password reset successfully! Redirecting to login...");
             setTimeout(() => navigate("/login"), 3000);
         } catch (err) {
-            setError(err.message);
+            setError(err.message || "Failed to reset password. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -69,146 +73,242 @@ const ForgotPassword = () => {
 
     return (
         <div className={styles.loginPage}>
-            <div className={styles.backgroundOverlay}></div>
-            <div className={styles.vignetteOverlay} />
-            <div className={styles.worldMapOverlay} />
-            <div className={styles.routeLinesOverlay} />
-            <div className={styles.noiseOverlay} />
-            <div className={styles.particlesLayer}>
-                {[1, 2, 3].map((n) => (
-                    <span key={n} className={`${styles.particle} ${styles[`particle${n}`]}`} />
-                ))}
-            </div>
+            {/* ── Background Decorative Circles ── */}
+            <div className={styles.bgDecorCircle1} />
+            <div className={styles.bgDecorCircle2} />
+            <div className={styles.bgDecorCircle3} />
+            <div className={styles.bgDecorCircle4} />
 
-            <div className={styles.container}>
-                <div className={styles.headerSection}>
-                    <div className={styles.logoIcon}>
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            {/* ── Split Card ── */}
+            <div className={styles.splitCard}>
+                {/* ── Left Panel — Image & Branding ── */}
+                <div className={styles.leftPanel}>
+                    <img
+                        src={heroImg}
+                        alt="Traveler on mountain cliff"
+                        className={styles.leftPanelImage}
+                    />
+                    <div className={styles.leftPanelOverlay} />
+                    <div className={styles.leftPanelContent}>
+                        <h2 className={styles.brandName}>Travel Professor</h2>
+                        <p className={styles.brandTagline}>
+                            Travel is the only purchase that enriches you in ways beyond
+                            material wealth
+                        </p>
+                    </div>
+                </div>
+
+                {/* ── Right Panel — Form ── */}
+                <div className={styles.rightPanel}>
+                    {/* Logo in Header */}
+                    <div className={styles.logoWrapper}>
+                        <img src="/logog.png" alt="Travel Professor Logo" className={styles.logoImg} />
+                    </div>
+
+                    {/* Airplane Decorative Path */}
+                    <div className={styles.airplanePath}>
+                        <svg viewBox="0 0 200 100" fill="none">
+                            <path
+                                d="M10 80 Q60 10 120 30 Q160 45 185 15"
+                                stroke="#2563eb"
+                                strokeWidth="2"
+                                strokeDasharray="6 5"
+                                fill="none"
+                                opacity="0.5"
+                            />
+                            <g transform="translate(180, 8) rotate(-35)">
+                                <path
+                                    d="M0 6 L4 0 L8 6 L5 5 L5 12 L3 12 L3 5 Z"
+                                    fill="#2563eb"
+                                    opacity="0.8"
+                                />
+                            </g>
                         </svg>
                     </div>
-                    <h1 className={styles.heading}>
-                        {step === 1 && "Forgot Password"}
-                        {step === 2 && "Verification Code"}
-                        {step === 3 && "Reset Password"}
-                    </h1>
-                    <p className={styles.subtitle}>
-                        {step === 1 && "Enter your registered email to receive a recovery code"}
-                        {step === 2 && "We've sent a 6-digit code to your email adress"}
-                        {step === 3 && "Create a secure new password for your account"}
-                    </p>
-                </div>
 
-                {error && (
-                    <div className={styles.errorContainer}>
-                        <p className={styles.error}>{error}</p>
+                    {/* Form Header */}
+                    <div className={styles.formHeader}>
+                        <h1 className={styles.welcomeTitle}>
+                            {step === 1 && "Forgot Password"}
+                            {step === 2 && "Verification"}
+                            {step === 3 && "Reset Password"}
+                        </h1>
+                        <p className={styles.welcomeSubtitle}>
+                            {step === 1 && "Enter registered email to recover account"}
+                            {step === 2 && "Enter the 6-digit code sent to your email"}
+                            {step === 3 && "Create a secure new password"}
+                        </p>
                     </div>
-                )}
 
-                {success && !error && (
-                    <div className={styles.successContainer}>
-                        <p className={styles.success}>{success}</p>
+                    {/* Error Display */}
+                    {error && (
+                        <div className={styles.errorContainer}>
+                            <svg className={styles.errorIcon} viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                            </svg>
+                            <p className={styles.error}>{error}</p>
+                        </div>
+                    )}
+
+                    {/* Success Display */}
+                    {success && !error && (
+                        <div className={styles.successContainer}>
+                            <svg className={styles.successIcon} viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
+                            <p className={styles.success}>{success}</p>
+                        </div>
+                    )}
+
+                    {/* Step 1: Email Form */}
+                    {step === 1 && (
+                        <form className={styles.form} onSubmit={handleEmailSubmit}>
+                            <div className={styles.inputGroup}>
+                                <label className={styles.inputLabel}>Email Address</label>
+                                <div className={styles.inputWrapper}>
+                                    <div className={styles.inputIcon}>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <rect x="2" y="4" width="20" height="16" rx="3" />
+                                            <path d="M22 7L12 13L2 7" />
+                                        </svg>
+                                    </div>
+                                    <input
+                                        type="email"
+                                        placeholder="your@email.com"
+                                        className={styles.input}
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                        disabled={loading}
+                                    />
+                                </div>
+                            </div>
+                            <button className={`${styles.button} ${loading ? styles.buttonLoading : ""}`} type="submit" disabled={loading}>
+                                {loading ? (
+                                    <>
+                                        <span className={styles.loadingSpinner}></span>
+                                        <span>Sending...</span>
+                                    </>
+                                ) : (
+                                    <span>Send Reset Code</span>
+                                )}
+                            </button>
+                        </form>
+                    )}
+
+                    {/* Step 2: OTP Form */}
+                    {step === 2 && (
+                        <form className={styles.form} onSubmit={handleOtpSubmit}>
+                            <div className={styles.inputGroup}>
+                                <label className={styles.inputLabel}>Verification Code</label>
+                                <div className={styles.inputWrapper}>
+                                    <div className={styles.inputIcon}>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" />
+                                            <path d="M7 11V7a5 5 0 0110 0v4" />
+                                        </svg>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        placeholder="6-Digit OTP"
+                                        className={styles.input}
+                                        value={otp}
+                                        onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                                        required
+                                        disabled={loading}
+                                    />
+                                </div>
+                            </div>
+                            <button className={`${styles.button} ${loading ? styles.buttonLoading : ""}`} type="submit" disabled={loading}>
+                                {loading ? (
+                                    <>
+                                        <span className={styles.loadingSpinner}></span>
+                                        <span>Verifying...</span>
+                                    </>
+                                ) : (
+                                    <span>Verify Code</span>
+                                )}
+                            </button>
+                            <div className={styles.footer}>
+                                <button type="button" className={styles.linkButton} onClick={() => setStep(1)} disabled={loading}>
+                                    ← Edit Email
+                                </button>
+                            </div>
+                        </form>
+                    )}
+
+                    {/* Step 3: Password Form */}
+                    {step === 3 && (
+                        <form className={styles.form} onSubmit={handlePasswordResetSubmit}>
+                            <div className={styles.inputGroup}>
+                                <label className={styles.inputLabel}>New Password</label>
+                                <div className={styles.inputWrapper}>
+                                    <div className={styles.inputIcon}>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" />
+                                            <path d="M7 11V7a5 5 0 0110 0v4" />
+                                        </svg>
+                                    </div>
+                                    <input
+                                        type="password"
+                                        placeholder="••••••••••••"
+                                        className={styles.input}
+                                        value={newPassword}
+                                        onChange={(e) => setNewPassword(e.target.value)}
+                                        required
+                                        disabled={loading}
+                                    />
+                                </div>
+                            </div>
+                            <div className={styles.inputGroup}>
+                                <label className={styles.inputLabel}>Confirm Password</label>
+                                <div className={styles.inputWrapper}>
+                                    <div className={styles.inputIcon}>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" />
+                                            <path d="M7 11V7a5 5 0 0110 0v4" />
+                                        </svg>
+                                    </div>
+                                    <input
+                                        type="password"
+                                        placeholder="••••••••••••"
+                                        className={styles.input}
+                                        value={confirmPassword}
+                                        onChange={(e) => setConfirmPassword(e.target.value)}
+                                        required
+                                        disabled={loading}
+                                    />
+                                </div>
+                            </div>
+                            <button className={`${styles.button} ${loading ? styles.buttonLoading : ""}`} type="submit" disabled={loading}>
+                                {loading ? (
+                                    <>
+                                        <span className={styles.loadingSpinner}></span>
+                                        <span>Resetting...</span>
+                                    </>
+                                ) : (
+                                    <span>Reset Password</span>
+                                )}
+                            </button>
+                        </form>
+                    )}
+
+                    {/* Footer Back to Login Link */}
+                    <div className={styles.footer}>
+                        <p className={styles.footerRegister}>
+                            Remember password?{" "}
+                            <Link to="/login" className={styles.footerLink}>
+                                Back to Login
+                            </Link>
+                        </p>
                     </div>
-                )}
-
-                {step === 1 && (
-                    <form className={styles.form} onSubmit={handleEmailSubmit}>
-                        <div className={styles.inputGroup}>
-                            <div className={styles.inputIcon}>
-                                <svg viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                                </svg>
-                            </div>
-                            <input
-                                type="email"
-                                placeholder="Email Address"
-                                className={styles.input}
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                                disabled={loading}
-                            />
-                        </div>
-                        <button className={`${styles.button} ${loading ? styles.buttonLoading : ""}`} type="submit" disabled={loading}>
-                            {loading ? "Sending..." : "Send Reset Code"}
-                        </button>
-                    </form>
-                )}
-
-                {step === 2 && (
-                    <form className={styles.form} onSubmit={handleOtpSubmit}>
-                        <div className={styles.inputGroup}>
-                            <div className={styles.inputIcon}>
-                                <svg viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                            <input
-                                type="text"
-                                placeholder="6-Digit Code"
-                                className={styles.input}
-                                value={otp}
-                                onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                                required
-                                disabled={loading}
-                            />
-                        </div>
-                        <button className={`${styles.button} ${loading ? styles.buttonLoading : ""}`} type="submit" disabled={loading}>
-                            {loading ? "Verifying..." : "Verify Code"}
-                        </button>
-                        <button type="button" className={styles.linkButton} onClick={() => setStep(1)} disabled={loading}>
-                            Back to Email
-                        </button>
-                    </form>
-                )}
-
-                {step === 3 && (
-                    <form className={styles.form} onSubmit={handlePasswordResetSubmit}>
-                        <div className={styles.inputGroup}>
-                            <div className={styles.inputIcon}>
-                                <svg viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                            <input
-                                type="password"
-                                placeholder="New Password"
-                                className={styles.input}
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                                required
-                                disabled={loading}
-                            />
-                        </div>
-                        <div className={styles.inputGroup}>
-                            <div className={styles.inputIcon}>
-                                <svg viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                            <input
-                                type="password"
-                                placeholder="Confirm New Password"
-                                className={styles.input}
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                required
-                                disabled={loading}
-                            />
-                        </div>
-                        <button className={`${styles.button} ${loading ? styles.buttonLoading : ""}`} type="submit" disabled={loading}>
-                            {loading ? "Resetting..." : "Reset Password"}
-                        </button>
-                    </form>
-                )}
-
-                <div className={styles.footer}>
-                    <button className={styles.footerLink} onClick={() => navigate("/login")}>
-                        Back to Login
-                    </button>
                 </div>
+            </div>
+
+            {/* ── Bottom Decorative Elements ── */}
+            <div className={styles.bottomDecor}>
+                <div className={styles.bottomCircleDecor} />
+                <div className={styles.bottomCircleDecorInner} />
             </div>
         </div>
     );
