@@ -150,9 +150,8 @@ const InterestsPicker = ({ selected, onChange }) => {
         {INTEREST_OPTIONS.map((opt) => (
           <button
             key={opt.id}
-            className={`${styles.interestChip} ${
-              draft.includes(opt.id) ? styles.interestChipActive : ""
-            }`}
+            className={`${styles.interestChip} ${draft.includes(opt.id) ? styles.interestChipActive : ""
+              }`}
             onClick={() => toggle(opt.id)}
             type="button"
           >

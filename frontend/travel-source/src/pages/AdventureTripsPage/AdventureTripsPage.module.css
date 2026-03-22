@@ -33,7 +33,7 @@
   width: 100%;
   min-height: calc(100vh - 80px);
   padding: 80px 0 120px;
-  background: #f8fafb;
+  background: #f8fafb url("../../assets/blue-bg.png") center/cover no-repeat;
 }
 
 .topAccent {
