@@ -1,0 +1,336 @@
+/* ═══════════════════════════════════════════════════════════════
+   TripsGrid — Card Grid + Pagination + No-Results
+   ═══════════════════════════════════════════════════════════════ */
+
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600&family=Montserrat:wght@400;500;600;700&display=swap");
+
+:root {
+  --color-obsidian: #1a3a35;
+  --color-charcoal: #2d5c54;
+  --color-steel: #3d7a70;
+  --color-silver: #b8ddd6;
+  --color-ivory: #e8f6f3;
+  --color-snow: #ffffff;
+  --color-accent: #3f9e8f;
+  --color-accent-gradient: linear-gradient(135deg, #3f9e8f 0%, #5fb8a8 100%);
+  --color-accent-border: rgba(63, 158, 143, 0.25);
+  --shadow-accent: 0 4px 20px rgba(63, 158, 143, 0.2);
+  --shadow-subtle: 0 2px 16px rgba(26, 58, 53, 0.06);
+  --radius-lg: 20px;
+  --radius-md: 12px;
+  --radius-sm: 6px;
+  --radius-pill: 1000px;
+  --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-quick: all 0.2s ease;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-primary: "Inter", -apple-system, sans-serif;
+  --font-accent: "Montserrat", -apple-system, sans-serif;
+}
+
+/* ─── Main Content ─── */
+.mainContent {
+  position: relative;
+  padding: 3rem 0 4rem;
+  z-index: 2;
+}
+
+.contentContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ─── Content Header ─── */
+.contentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(63, 158, 143, 0.1);
+}
+
+.headerLeft { flex: 1; }
+
+.resultsTitle { margin-bottom: 0.4rem; }
+
+.resultsBadge {
+  display: inline-block;
+  font-family: var(--font-accent);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+  background: var(--color-ivory);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-sm);
+}
+
+.resultsHeading {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--color-obsidian);
+  line-height: 1.15;
+}
+
+.resultsCount {
+  font-family: var(--font-primary);
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--color-accent);
+}
+
+.resultsSubtitle {
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  color: var(--color-steel);
+  line-height: 1.5;
+}
+
+.headerRight { display: flex; align-items: center; }
+
+.viewControls {
+  display: flex;
+  gap: 0.25rem;
+  background: var(--color-ivory);
+  padding: 0.3rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(63, 158, 143, 0.06);
+}
+
+.viewButton {
+  background: none;
+  border: none;
+  padding: 0.5rem 0.9rem;
+  font-family: var(--font-primary);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--color-steel);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: var(--transition-quick);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.viewButton:hover {
+  background: var(--color-snow);
+  color: var(--color-obsidian);
+  box-shadow: var(--shadow-subtle);
+}
+
+.viewIcon { width: 14px; height: 14px; }
+
+/* ─── Trips Grid ─── */
+.tripsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(370px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3.5rem;
+}
+
+.tripCardWrapper {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: fadeSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes fadeSlideIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Pagination ─── */
+.luxuryPagination {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-items: center;
+  margin-bottom: 4rem;
+}
+
+.paginationInfo {
+  font-family: var(--font-primary);
+  font-size: 0.82rem;
+  color: var(--color-steel);
+  letter-spacing: 0.2px;
+}
+
+.infoNumber {
+  font-weight: 600;
+  color: var(--color-obsidian);
+}
+
+.paginationControls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.pageButton {
+  background: none;
+  border: 1.5px solid var(--color-silver);
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-primary);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--color-obsidian);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.pageButton:hover:not(.pageButtonDisabled) {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: rgba(63, 158, 143, 0.04);
+  transform: translateY(-1px);
+}
+.pageButtonDisabled { opacity: 0.35; cursor: not-allowed; }
+.pageButtonIcon { width: 14px; height: 14px; }
+
+.pageNumbers { display: flex; align-items: center; gap: 0.35rem; }
+
+.pageNumber {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1.5px solid transparent;
+  border-radius: 50%;
+  font-family: var(--font-primary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-steel);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+.pageNumber:hover {
+  border-color: var(--color-accent-border);
+  color: var(--color-obsidian);
+  background: rgba(63, 158, 143, 0.04);
+}
+.pageNumber:active { transform: scale(0.93); }
+
+.pageNumberActive {
+  background: var(--color-accent-gradient);
+  border-color: var(--color-accent);
+  color: var(--color-snow);
+  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(63, 158, 143, 0.3);
+}
+.pageNumberActive:hover {
+  box-shadow: 0 6px 20px rgba(63, 158, 143, 0.4);
+  color: var(--color-snow);
+  background: var(--color-accent-gradient);
+}
+
+.pageDots {
+  color: var(--color-steel);
+  font-size: 0.85rem;
+  padding: 0 0.25rem;
+}
+
+/* ─── No Results ─── */
+.noResults { text-align: center; padding: 5rem 2rem; }
+
+.noResultsIllustration {
+  width: 160px; height: 160px;
+  margin: 0 auto 2rem;
+  position: relative;
+}
+
+.compassAnimation { width: 100%; height: 100%; position: relative; }
+
+.compassRing {
+  width: 100%; height: 100%;
+  border: 2px solid var(--color-accent);
+  border-radius: 50%;
+  position: relative;
+  animation: compassRotate 25s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes compassRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.compassNeedle {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  width: 55px; height: 55px;
+  border-right: 2px solid var(--color-accent);
+  border-bottom: 2px solid var(--color-accent);
+}
+
+.noResultsContent { max-width: 480px; margin: 0 auto; }
+
+.noResultsTitle {
+  font-family: var(--font-display);
+  font-size: 1.75rem; font-weight: 600;
+  color: var(--color-obsidian);
+  margin-bottom: 0.75rem;
+}
+
+.noResultsMessage {
+  font-family: var(--font-primary);
+  font-size: 0.95rem; color: var(--color-steel);
+  line-height: 1.65; margin-bottom: 2rem;
+}
+
+.noResultsActions {
+  display: flex; gap: 0.75rem; justify-content: center;
+}
+
+.noResultsButton {
+  background: var(--color-accent-gradient);
+  color: var(--color-snow); border: none;
+  padding: 0.85rem 1.75rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-primary);
+  font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: var(--transition-smooth);
+  letter-spacing: 0.5px;
+}
+.noResultsButton:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-accent);
+}
+
+.noResultsButtonSecondary {
+  background: none;
+  border: 1.5px solid var(--color-silver);
+  color: var(--color-obsidian);
+  padding: 0.85rem 1.75rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-primary);
+  font-size: 0.82rem; font-weight: 500;
+  cursor: pointer; transition: var(--transition-smooth);
+  letter-spacing: 0.5px;
+}
+.noResultsButtonSecondary:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 1200px) {
+  .contentContainer { padding: 0 1.5rem; }
+  .tripsGrid { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
+}
+@media (max-width: 1024px) {
+  .contentHeader { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .headerRight { width: 100%; justify-content: flex-end; }
+}
+@media (max-width: 768px) {
+  .contentContainer { padding: 0 1rem; }
+  .tripsGrid { grid-template-columns: 1fr; }
+}
