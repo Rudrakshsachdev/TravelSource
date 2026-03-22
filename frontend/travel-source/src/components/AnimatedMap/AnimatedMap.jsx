@@ -50,22 +50,22 @@ const AnimatedMap = () => {
                         <g className={styles.pins}>
                             {/* USA Pin */}
                             <g transform="translate(180, 240)">
-                                <path d="M0 0 C-10 -20, -10 -35, 0 -35 C10 -35, 10 -20, 0 0" fill="#EF4444" />
+                                <path d="M0 0 C-10 -20, -10 -35, 0 -35 C10 -35, 10 -20, 0 0" fill="#2563eb" />
                                 <circle cx="0" cy="-25" r="4" fill="white" />
                             </g>
                             {/* UK/Europe Pin */}
                             <g transform="translate(480, 180)">
-                                <path d="M0 0 C-10 -20, -10 -35, 0 -35 C10 -35, 10 -20, 0 0" fill="#EF4444" />
+                                <path d="M0 0 C-10 -20, -10 -35, 0 -35 C10 -35, 10 -20, 0 0" fill="#2563eb" />
                                 <circle cx="0" cy="-25" r="4" fill="white" />
                             </g>
                             {/* India Pin */}
                             <g transform="translate(710, 310)">
-                                <path d="M0 0 C-10 -20, -10 -35, 0 -35 C10 -35, 10 -20, 0 0" fill="#EF4444" />
+                                <path d="M0 0 C-10 -20, -10 -35, 0 -35 C10 -35, 10 -20, 0 0" fill="#2563eb" />
                                 <circle cx="0" cy="-25" r="4" fill="white" />
                             </g>
                             {/* Australia Pin */}
                             <g transform="translate(880, 480)">
-                                <path d="M0 0 C-10 -20, -10 -35, 0 -35 C10 -35, 10 -20, 0 0" fill="#EF4444" />
+                                <path d="M0 0 C-10 -20, -10 -35, 0 -35 C10 -35, 10 -20, 0 0" fill="#2563eb" />
                                 <circle cx="0" cy="-25" r="4" fill="white" />
                             </g>
                         </g>
@@ -76,7 +76,7 @@ const AnimatedMap = () => {
                             className={styles.routePath}
                             d="M180 240 Q330 100 480 180 Q600 250 710 310 Q800 400 880 480"
                             fill="none"
-                            stroke="#EF4444"
+                            stroke="#2563eb"
                             strokeWidth="2"
                             strokeDasharray="6,8"
                         />
@@ -86,7 +86,7 @@ const AnimatedMap = () => {
                             <path
                                 className={styles.airplane}
                                 d="M-10-8 L10 0 L-10 8 L-6 0 Z"
-                                fill="black"
+                                fill="#1d4ed8"
                             >
                                 <animateMotion
                                     dur="12s"
