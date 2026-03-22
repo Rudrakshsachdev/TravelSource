@@ -27,6 +27,7 @@ import AdventureTrips from "./AdventureTrips";
 import CategoryNav from "./CategoryNav";
 import AnimatedMap from "../AnimatedMap/AnimatedMap";
 import PersonalizationSection from "./PersonalizationSection";
+import { PopularDestinations } from "../PopularDestinations";
 
 // Extracted modular components
 import TripsLoadingState from "./TripsLoadingState";
@@ -260,6 +261,7 @@ const TripsList = () => {
       <PanoramaBanner />
       <ModernHero />
       <HeroCards />
+      <PopularDestinations />
       <CategoryNav onCategoryChange={handleCategoryChange} />
       <InternationalTrips />
       <IndiaTrips />
