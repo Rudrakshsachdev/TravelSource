@@ -5,6 +5,7 @@ import { WhyChooseUs } from "../components/WhyChooseUs";
 import { JourneyInFrames } from "../components/JourneyInFrames";
 import ContactUs from "../components/ContactUs";
 import { TrendingDestinations } from "../components/TrendingDestinations";
+import { NightAdventure } from "../components/NightAdventure";
 
 const Home = () => {
   return (
@@ -12,6 +13,7 @@ const Home = () => {
       <HeroSection />
       <TripsList />
       <TrendingDestinations />
+      <NightAdventure />
       <Reviews />
       <WhyChooseUs />
       <JourneyInFrames />
