@@ -12,6 +12,7 @@ from .review_serializer import ReviewSerializer
 from .sitestat_serializer import SiteStatSerializer
 from .international_trip_serializer import InternationalTripSerializer, InternationalSectionConfigSerializer
 from .india_trip_serializer import IndiaTripSerializer, IndiaSectionConfigSerializer
+from .north_india_trip_serializer import NorthIndiaTripSerializer, NorthIndiaSectionConfigSerializer
 from .honeymoon_serializer import HoneymoonTripSerializer, HoneymoonSectionConfigSerializer
 from .himalayan_serializer import HimalayanTripSerializer, HimalayanSectionConfigSerializer
 from .backpacking_serializer import BackpackingTripSerializer, BackpackingSectionConfigSerializer

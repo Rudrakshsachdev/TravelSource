@@ -10,6 +10,7 @@ import ModernHero from "./ModernHero";
 import HeroCards from "./HeroCards";
 import InternationalTrips from "./InternationalTrips";
 import IndiaTrips from "./IndiaTrips";
+import NorthIndiaTrips from "./NorthIndiaTrips";
 import HoneymoonTrips from "./HoneymoonTrips";
 import HimalayanTreks from "./HimalayanTreks";
 import BackpackingTrips from "./BackpackingTrips";
@@ -611,6 +612,9 @@ const TripsList = () => {
       <CommunityTrips />
       <FestivalTrips />
       <AdventureTrips />
+
+      {/* North India Trips Scrolling Showcase */}
+      <NorthIndiaTrips />
 
       {/* Premium Animated Map Section */}
       <AnimatedMap />

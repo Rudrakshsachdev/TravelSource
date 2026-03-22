@@ -36,7 +36,13 @@ const AdminTrips = () => {
     is_international: false,
     state: "",
     is_india_trip: false,
+    show_in_india_section: false,
+    india_display_order: 0,
     india_featured_priority: 0,
+    is_north_india_trip: false,
+    show_in_north_india_section: false,
+    north_india_display_order: 0,
+    north_india_featured_priority: 0,
     is_honeymoon: false,
     is_himalayan_trek: false,
     is_backpacking_trip: false,
@@ -201,7 +207,13 @@ const AdminTrips = () => {
       is_international: trip.is_international || false,
       state: trip.state || "",
       is_india_trip: trip.is_india_trip || false,
+      show_in_india_section: trip.show_in_india_section || false,
+      india_display_order: trip.india_display_order || 0,
       india_featured_priority: trip.india_featured_priority || 0,
+      is_north_india_trip: trip.is_north_india_trip || false,
+      show_in_north_india_section: trip.show_in_north_india_section || false,
+      north_india_display_order: trip.north_india_display_order || 0,
+      north_india_featured_priority: trip.north_india_featured_priority || 0,
       is_honeymoon: trip.is_honeymoon || false,
       is_himalayan_trek: trip.is_himalayan_trek || false,
       is_backpacking_trip: trip.is_backpacking_trip || false,
@@ -248,7 +260,13 @@ const AdminTrips = () => {
       is_international: false,
       state: "",
       is_india_trip: false,
+      show_in_india_section: false,
+      india_display_order: 0,
       india_featured_priority: 0,
+      is_north_india_trip: false,
+      show_in_north_india_section: false,
+      north_india_display_order: 0,
+      north_india_featured_priority: 0,
       is_honeymoon: false,
       is_himalayan_trek: false,
       is_backpacking_trip: false,
@@ -318,7 +336,10 @@ const AdminTrips = () => {
         price: Number(formData.price),
         duration_days: Number(formData.duration_days),
         duration_nights: Number(formData.duration_nights),
+        india_display_order: Number(formData.india_display_order) || 0,
         india_featured_priority: Number(formData.india_featured_priority) || 0,
+        north_india_display_order: Number(formData.north_india_display_order) || 0,
+        north_india_featured_priority: Number(formData.north_india_featured_priority) || 0,
         itinerary,
 
         highlights,
@@ -1151,6 +1172,90 @@ const AdminTrips = () => {
                         marginTop: "4px",
                       }}
                     >
+                      Higher number = more prominent placement
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* NORTH INDIA SHOWCASE SETTINGS */}
+              <div className={styles.formSection}>
+                <h3 className={styles.sectionTitle}>
+                  <svg className={styles.sectionIcon} viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clipRule="evenodd" />
+                  </svg>
+                  North India Showcase
+                </h3>
+
+                <div className={styles.formGrid}>
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        name="is_north_india_trip"
+                        checked={formData.is_north_india_trip}
+                        onChange={handleCheckboxChange}
+                        style={{ width: "18px", height: "18px", accentColor: "#3f9e8f" }}
+                      />
+                      North India Trip
+                    </label>
+                    <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
+                      Mark this trip as a North Indian destination
+                    </span>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        name="show_in_north_india_section"
+                        checked={formData.show_in_north_india_section}
+                        onChange={handleCheckboxChange}
+                        style={{ width: "18px", height: "18px", accentColor: "#3f9e8f" }}
+                      />
+                      Show in Scrolling Section
+                    </label>
+                    <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
+                      Display in the auto-scrolling North India showcase
+                    </span>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Display Order</label>
+                    <div className={styles.inputWrapper}>
+                      <svg className={styles.inputIcon} viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" />
+                      </svg>
+                      <input
+                        className={styles.input}
+                        name="north_india_display_order"
+                        type="number"
+                        placeholder="0"
+                        value={formData.north_india_display_order}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
+                      Lower number appears first in the scrolling section
+                    </span>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Featured Priority</label>
+                    <div className={styles.inputWrapper}>
+                      <svg className={styles.inputIcon} viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <input
+                        className={styles.input}
+                        name="north_india_featured_priority"
+                        type="number"
+                        placeholder="0"
+                        value={formData.north_india_featured_priority}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
                       Higher number = more prominent placement
                     </span>
                   </div>

@@ -9,6 +9,7 @@ import Signup from "./pages/Signup/Signup";
 import Profile from "./pages/Profile/Profile";
 import InternationalTripsPage from "./pages/InternationalTrips/InternationalTripsPage";
 import IndiaTripsPage from "./pages/IndiaTrips/IndiaTripsPage";
+import NorthIndiaTripsPage from "./pages/NorthIndiaTrips/NorthIndiaTripsPage";
 import HimalayanTripsPage from "./pages/HimalayanTrips/HimalayanTripsPage";
 import CommunityTripsPage from "./pages/CommunityTrips/CommunityTripsPage";
 import FestivalTripsPage from "./pages/FestivalTrips/FestivalTripsPage";
@@ -110,6 +111,15 @@ function App() {
         element={
           <Layout>
             <IndiaTripsPage />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/north-india-trips"
+        element={
+          <Layout>
+            <NorthIndiaTripsPage />
           </Layout>
         }
       />

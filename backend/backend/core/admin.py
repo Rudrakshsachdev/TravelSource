@@ -1,5 +1,5 @@
+from .models import Trip, Profile, Enquiry, SiteStat, InternationalSectionConfig, IndiaSectionConfig, NorthIndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, AdventureSectionConfig, Category
 from django.contrib import admin
-from .models import Trip, Profile, Enquiry, SiteStat, InternationalSectionConfig, IndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, AdventureSectionConfig, Category
 # Register your models here.
 
 
@@ -18,6 +18,7 @@ class TripAdmin(admin.ModelAdmin):
         "title", "location", "country", "state", "category", "price", "is_active", "is_featured",
         "is_international", "show_in_international_section", "display_order",
         "is_india_trip", "show_in_india_section", "india_display_order",
+        "is_north_india_trip", "show_in_north_india_section", "north_india_display_order",
         "is_honeymoon", "show_in_honeymoon_section", "honeymoon_display_order",
         "is_himalayan_trek", "show_in_himalayan_section", "himalayan_display_order",
         "is_backpacking_trip", "show_in_backpacking_section", "backpacking_display_order",
@@ -27,10 +28,11 @@ class TripAdmin(admin.ModelAdmin):
         "is_festival_trip", "show_in_festival_section", "festival_display_order",
         "is_adventure_trip", "show_in_adventure_section", "adventure_display_order",
     )
-    list_filter = ("is_active", "is_featured", "category", "is_international", "show_in_international_section", "is_india_trip", "show_in_india_section")
+    list_filter = ("is_active", "is_featured", "category", "is_international", "show_in_international_section", "is_india_trip", "show_in_india_section", "is_north_india_trip", "show_in_north_india_section")
     list_editable = (
         "is_international", "show_in_international_section", "display_order",
         "is_india_trip", "show_in_india_section", "india_display_order",
+        "is_north_india_trip", "show_in_north_india_section", "north_india_display_order",
         "is_honeymoon", "show_in_honeymoon_section", "honeymoon_display_order",
         "is_himalayan_trek", "show_in_himalayan_section", "himalayan_display_order",
         "is_backpacking_trip", "show_in_backpacking_section", "backpacking_display_order",
@@ -56,6 +58,10 @@ class TripAdmin(admin.ModelAdmin):
         ("India Showcase", {
             "fields": ("is_india_trip", "show_in_india_section", "india_display_order", "india_featured_priority"),
             "description": "Control how this trip appears in the India Trips scrolling section.",
+        }),
+        ("North India Showcase", {
+            "fields": ("is_north_india_trip", "show_in_north_india_section", "north_india_display_order", "north_india_featured_priority"),
+            "description": "Control how this trip appears in the North India Trips scrolling section.",
         }),
         ("Honeymoon Showcase", {
             "fields": ("is_honeymoon", "show_in_honeymoon_section", "honeymoon_display_order"),
@@ -121,6 +127,17 @@ class IndiaSectionConfigAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         # Only allow one instance (singleton)
         return not IndiaSectionConfig.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+        
+@admin.register(NorthIndiaSectionConfig)
+class NorthIndiaSectionConfigAdmin(admin.ModelAdmin):
+    list_display = ("title", "is_enabled", "scroll_speed")
+    list_editable = ("is_enabled", "scroll_speed")
+
+    def has_add_permission(self, request):
+        return not NorthIndiaSectionConfig.objects.exists()
 
     def has_delete_permission(self, request, obj=None):
         return False

@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, AdventureSectionConfig, Category
+from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, NorthIndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, AdventureSectionConfig, Category
 
 from .serializers import (
     TripSerializer,
@@ -22,6 +22,8 @@ from .serializers import (
     InternationalSectionConfigSerializer,
     IndiaTripSerializer,
     IndiaSectionConfigSerializer,
+    NorthIndiaTripSerializer,
+    NorthIndiaSectionConfigSerializer,
     HoneymoonTripSerializer,
     HoneymoonSectionConfigSerializer,
     HimalayanTripSerializer,
@@ -734,6 +736,50 @@ def admin_india_config(request):
         return Response(serializer.data)
 
     serializer = IndiaSectionConfigSerializer(config, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data)
+
+
+# ─── North India Trips ────────────────────────────────────────────────────────
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def north_india_trips(request):
+    """Return active North India trips for the scrolling showcase section."""
+    config = NorthIndiaSectionConfig.load()
+    if not config.is_enabled:
+        return Response({"config": {"is_enabled": False}, "trips": []})
+
+    trips = Trip.objects.filter(
+        is_active=True,
+        is_north_india_trip=True,
+        show_in_north_india_section=True,
+    ).order_by("north_india_display_order", "-id")
+
+    config_serializer = NorthIndiaSectionConfigSerializer(config)
+    trip_serializer = NorthIndiaTripSerializer(trips, many=True)
+
+    return Response({
+        "config": config_serializer.data,
+        "trips": trip_serializer.data,
+    })
+
+
+@api_view(["GET", "PATCH"])
+@permission_classes([IsAuthenticated])
+def admin_north_india_config(request):
+    """Admin: get or update the North India section configuration."""
+    if not hasattr(request.user, "profile") or request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    config = NorthIndiaSectionConfig.load()
+
+    if request.method == "GET":
+        serializer = NorthIndiaSectionConfigSerializer(config)
+        return Response(serializer.data)
+
+    serializer = NorthIndiaSectionConfigSerializer(config, data=request.data, partial=True)
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(serializer.data)

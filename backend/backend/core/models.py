@@ -50,6 +50,12 @@ class Trip(models.Model):
     india_display_order = models.IntegerField(default=0, help_text="Order in the India section (lower = first)")
     india_featured_priority = models.IntegerField(default=0, help_text="Featured priority (higher = more prominent)")
 
+    # North India showcase fields
+    is_north_india_trip = models.BooleanField(default=False, help_text="Mark as North India trip")
+    show_in_north_india_section = models.BooleanField(default=False, help_text="Show in the scrolling North India section")
+    north_india_display_order = models.IntegerField(default=0, help_text="Order in the North India section (lower = first)")
+    north_india_featured_priority = models.IntegerField(default=0, help_text="Featured priority (higher = more prominent)")
+
     # Honeymoon showcase fields
     is_honeymoon = models.BooleanField(default=False, help_text="Mark as honeymoon trip")
     show_in_honeymoon_section = models.BooleanField(default=False, help_text="Show in the scrolling honeymoon section")
@@ -284,6 +290,31 @@ class IndiaSectionConfig(models.Model):
 
     def __str__(self):
         return f"India Section ({'Enabled' if self.is_enabled else 'Disabled'})"
+
+    def save(self, *args, **kwargs):
+        # Enforce singleton: always use pk=1
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+
+class NorthIndiaSectionConfig(models.Model):
+    """Singleton settings for the North India Trips showcase section."""
+    is_enabled = models.BooleanField(default=True, help_text="Enable the North India trips scrolling section")
+    title = models.CharField(max_length=200, default="Explore North India Trips")
+    subtitle = models.CharField(max_length=300, blank=True, default="", help_text="Optional subtitle below the heading")
+    scroll_speed = models.PositiveIntegerField(default=60, help_text="Animation duration in seconds (higher = slower)")
+
+    class Meta:
+        verbose_name = "North India Section Config"
+        verbose_name_plural = "North India Section Config"
+
+    def __str__(self):
+        return f"North India Section ({'Enabled' if self.is_enabled else 'Disabled'})"
 
     def save(self, *args, **kwargs):
         # Enforce singleton: always use pk=1
