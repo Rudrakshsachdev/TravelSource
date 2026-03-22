@@ -5,16 +5,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600&family=Montserrat:wght@400;500;600;700&display=swap");
 
 :root {
-  --color-obsidian: #1a3a35;
-  --color-charcoal: #2d5c54;
-  --color-steel: #3d7a70;
-  --color-silver: #b8ddd6;
-  --color-ivory: #e8f6f3;
+  --color-obsidian: #0f172a;
+  --color-charcoal: #1e293b;
+  --color-steel: #475569;
+  --color-silver: #93c5fd;
+  --color-ivory: #f8fafc;
   --color-snow: #ffffff;
-  --color-accent: #3f9e8f;
-  --color-accent-light: #7ecfc0;
-  --color-accent-dark: #2e8b7a;
-  --color-accent-gradient: linear-gradient(135deg, #3f9e8f 0%, #5fb8a8 100%);
+  --color-accent: #2563eb;
+  --color-accent-light: #60a5fa;
+  --color-accent-dark: #1d4ed8;
+  --color-accent-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
   --shadow-accent: 0 4px 20px rgba(63, 158, 143, 0.2);
   --radius-lg: 20px;
   --radius-pill: 1000px;
@@ -26,7 +26,7 @@
 
 /* ─── Travel Stats ─── */
 .travelStatsSection {
-  background: linear-gradient(135deg, var(--color-ivory) 0%, #d4f0ea 50%, #dff2ed 100%);
+  background: linear-gradient(135deg, var(--color-ivory) 0%, #eff6ff 50%, #e0e7ff 100%);
   border-radius: var(--radius-lg);
   padding: 3rem 3.5rem;
   margin-bottom: 2rem;
@@ -136,7 +136,7 @@
 
 /* Content panel */
 .featuredContent {
-  background: linear-gradient(145deg, var(--color-ivory) 0%, #dff2ed 55%, #cceae3 100%);
+  background: linear-gradient(145deg, var(--color-ivory) 0%, #e0e7ff 55%, #dbeafe 100%);
   padding: 3.2rem 3rem 3rem;
   display: flex; flex-direction: column; justify-content: center;
   position: relative; z-index: 2;
@@ -217,7 +217,7 @@
 /* Visual panel */
 .featuredVisual {
   position: relative;
-  background: linear-gradient(140deg, #1a4a42 0%, #2e8b7a 35%, #3f9e8f 65%, #5fbcac 100%);
+  background: linear-gradient(140deg, #1e3a8a 0%, #1d4ed8 35%, #2563eb 65%, #3b82f6 100%);
   overflow: hidden;
   display: flex; align-items: center; justify-content: center;
 }
@@ -280,7 +280,7 @@
 }
 .featuredChipDot {
   width: 6px; height: 6px; border-radius: 50%;
-  background: #7ecfc0; flex-shrink: 0;
+  background: #60a5fa; flex-shrink: 0;
   box-shadow: 0 0 6px rgba(126, 207, 192, 0.7);
   animation: dotGlow 2.5s ease-in-out infinite;
 }

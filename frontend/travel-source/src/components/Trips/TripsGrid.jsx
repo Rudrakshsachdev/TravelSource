@@ -35,32 +35,6 @@ const TripsGrid = ({
                 : "Handpicked experiences from our global portfolio"}
             </p>
           </div>
-
-          <div className={styles.headerRight}>
-            <div className={styles.viewControls}>
-              <button className={styles.viewButton}>
-                <span className={styles.viewIcon}>
-                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="1.5" />
-                    <rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="1.5" />
-                    <rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="1.5" />
-                    <rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="1.5" />
-                  </svg>
-                </span>
-                Grid
-              </button>
-              <button className={styles.viewButton}>
-                <span className={styles.viewIcon}>
-                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="3" y="4" width="18" height="4" rx="1" stroke="currentColor" strokeWidth="1.5" />
-                    <rect x="3" y="10" width="18" height="4" rx="1" stroke="currentColor" strokeWidth="1.5" />
-                    <rect x="3" y="16" width="18" height="4" rx="1" stroke="currentColor" strokeWidth="1.5" />
-                  </svg>
-                </span>
-                List
-              </button>
-            </div>
-          </div>
         </div>
 
         {/* Trips Grid */}

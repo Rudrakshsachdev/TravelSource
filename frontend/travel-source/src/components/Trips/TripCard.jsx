@@ -155,7 +155,7 @@ const TripCard = ({ trip, index, onView }) => {
           <span className={styles.metaTag}>
             <ClockIcon />
             {trip.duration_days
-              ? `${trip.duration_days}D / ${trip.duration_nights}N`
+              ? `${trip.duration_days}D${trip.duration_nights > 0 ? ` / ${trip.duration_nights}N` : ""}`
               : "6N/7D"}
           </span>
 

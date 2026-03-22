@@ -3,11 +3,11 @@
    Clean, white, professional design matching reference screenshots
    ═══════════════════════════════════════════════════════════════ */
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap");
 
 /* ── VARIABLES ── */
 .page {
-  --td-font: "Inter", system-ui, -apple-system, sans-serif;
+  --td-font: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
   --td-blue: #2563eb;
   --td-blue-hover: #1d4ed8;
   --td-green: #22c55e;
