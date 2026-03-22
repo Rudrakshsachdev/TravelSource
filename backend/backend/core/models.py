@@ -50,6 +50,18 @@ class Trip(models.Model):
     india_display_order = models.IntegerField(default=0, help_text="Order in the India section (lower = first)")
     india_featured_priority = models.IntegerField(default=0, help_text="Featured priority (higher = more prominent)")
 
+    # Himachal showcase fields
+    is_himachal_trip = models.BooleanField(default=False, help_text="Mark as Himachal trip")
+    show_in_himachal_section = models.BooleanField(default=False, help_text="Show in the scrolling Himachal section")
+    himachal_display_order = models.IntegerField(default=0, help_text="Order in the Himachal section (lower = first)")
+    himachal_featured_priority = models.IntegerField(default=0, help_text="Featured priority (higher = more prominent)")
+
+    # Uttarakhand showcase fields
+    is_uttarakhand_trip = models.BooleanField(default=False, help_text="Mark as Uttarakhand trip")
+    show_in_uttarakhand_section = models.BooleanField(default=False, help_text="Show in the scrolling Uttarakhand section")
+    uttarakhand_display_order = models.IntegerField(default=0, help_text="Order in the Uttarakhand section (lower = first)")
+    uttarakhand_featured_priority = models.IntegerField(default=0, help_text="Featured priority (higher = more prominent)")
+
     # North India showcase fields
     is_north_india_trip = models.BooleanField(default=False, help_text="Mark as North India trip")
     show_in_north_india_section = models.BooleanField(default=False, help_text="Show in the scrolling North India section")
@@ -552,3 +564,54 @@ class TripGalleryImage(models.Model):
 
     def __str__(self):
         return f"{self.trip.title} — {self.get_image_type_display()} #{self.display_order}"
+
+
+class HimachalSectionConfig(models.Model):
+    """Singleton settings for the Himachal Trips showcase section."""
+    is_enabled = models.BooleanField(default=True, help_text="Enable the Himachal trips scrolling section")
+    title = models.CharField(max_length=200, default="Explore Himachal Pradesh")
+    subtitle = models.CharField(max_length=300, blank=True, default="", help_text="Optional subtitle below the heading")
+    scroll_speed = models.PositiveIntegerField(default=60, help_text="Animation duration in seconds (higher = slower)")
+
+    class Meta:
+        verbose_name = "Himachal Section Config"
+        verbose_name_plural = "Himachal Section Config"
+
+    def __str__(self):
+        return f"Himachal Section ({'Enabled' if self.is_enabled else 'Disabled'})"
+
+    def save(self, *args, **kwargs):
+        # Enforce singleton: always use pk=1
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+
+class UttarakhandSectionConfig(models.Model):
+    """Singleton settings for the Uttarakhand Trips showcase section."""
+    is_enabled = models.BooleanField(default=True, help_text="Enable the Uttarakhand trips scrolling section")
+    title = models.CharField(max_length=200, default="Explore Uttarakhand")
+    subtitle = models.CharField(max_length=300, blank=True, default="", help_text="Optional subtitle below the heading")
+    scroll_speed = models.PositiveIntegerField(default=60, help_text="Animation duration in seconds (higher = slower)")
+
+    class Meta:
+        verbose_name = "Uttarakhand Section Config"
+        verbose_name_plural = "Uttarakhand Section Config"
+
+    def __str__(self):
+        return f"Uttarakhand Section ({'Enabled' if self.is_enabled else 'Disabled'})"
+
+    def save(self, *args, **kwargs):
+        # Enforce singleton: always use pk=1
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+

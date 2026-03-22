@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, NorthIndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, AdventureSectionConfig, Category
+from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, NorthIndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, AdventureSectionConfig, HimachalSectionConfig, UttarakhandSectionConfig, Category
 
 from .serializers import (
     TripSerializer,
@@ -39,7 +39,12 @@ from .serializers import (
     FestivalTripSerializer,
     FestivalSectionConfigSerializer,
     AdventureTripSerializer,
+    AdventureTripSerializer,
     AdventureSectionConfigSerializer,
+    HimachalTripSerializer,
+    HimachalSectionConfigSerializer,
+    UttarakhandTripSerializer,
+    UttarakhandSectionConfigSerializer,
     CategorySerializer,
     #TripGalleryImageSerializer,
 )
@@ -70,6 +75,8 @@ def trip_list(request):
     is_honeymoon_trip = request.query_params.get("is_honeymoon_trip")
     is_backpacking_trip = request.query_params.get("is_backpacking_trip")
     is_adventure_trip = request.query_params.get("is_adventure_trip")
+    is_himachal_trip = request.query_params.get("is_himachal_trip")
+    is_uttarakhand_trip = request.query_params.get("is_uttarakhand_trip")
     
     if category_slug:
         trips = trips.filter(category__slug=category_slug)
@@ -97,6 +104,12 @@ def trip_list(request):
         
     if is_adventure_trip and is_adventure_trip.lower() == "true":
         trips = trips.filter(is_adventure_trip=True)
+        
+    if is_himachal_trip and is_himachal_trip.lower() == "true":
+        trips = trips.filter(is_himachal_trip=True)
+        
+    if is_uttarakhand_trip and is_uttarakhand_trip.lower() == "true":
+        trips = trips.filter(is_uttarakhand_trip=True)
         
     serializer = TripSerializer(trips, many=True)
     return Response(serializer.data)
@@ -780,6 +793,94 @@ def admin_north_india_config(request):
         return Response(serializer.data)
 
     serializer = NorthIndiaSectionConfigSerializer(config, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data)
+
+
+# ─── Himachal Trips ─────────────────────────────────────────────────────────
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def himachal_trips(request):
+    """Return active Himachal trips for the scrolling showcase section."""
+    config = HimachalSectionConfig.load()
+    if not config.is_enabled:
+        return Response({"config": {"is_enabled": False}, "trips": []})
+
+    trips = Trip.objects.filter(
+        is_active=True,
+        is_himachal_trip=True,
+        show_in_himachal_section=True,
+    ).order_by("himachal_display_order", "-id")
+
+    config_serializer = HimachalSectionConfigSerializer(config)
+    trip_serializer = HimachalTripSerializer(trips, many=True)
+
+    return Response({
+        "config": config_serializer.data,
+        "trips": trip_serializer.data,
+    })
+
+
+@api_view(["GET", "PATCH"])
+@permission_classes([IsAuthenticated])
+def admin_himachal_config(request):
+    """Admin: get or update the Himachal section configuration."""
+    if not hasattr(request.user, "profile") or request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    config = HimachalSectionConfig.load()
+
+    if request.method == "GET":
+        serializer = HimachalSectionConfigSerializer(config)
+        return Response(serializer.data)
+
+    serializer = HimachalSectionConfigSerializer(config, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data)
+
+
+# ─── Uttarakhand Trips ──────────────────────────────────────────────────────
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def uttarakhand_trips(request):
+    """Return active Uttarakhand trips for the scrolling showcase section."""
+    config = UttarakhandSectionConfig.load()
+    if not config.is_enabled:
+        return Response({"config": {"is_enabled": False}, "trips": []})
+
+    trips = Trip.objects.filter(
+        is_active=True,
+        is_uttarakhand_trip=True,
+        show_in_uttarakhand_section=True,
+    ).order_by("uttarakhand_display_order", "-id")
+
+    config_serializer = UttarakhandSectionConfigSerializer(config)
+    trip_serializer = UttarakhandTripSerializer(trips, many=True)
+
+    return Response({
+        "config": config_serializer.data,
+        "trips": trip_serializer.data,
+    })
+
+
+@api_view(["GET", "PATCH"])
+@permission_classes([IsAuthenticated])
+def admin_uttarakhand_config(request):
+    """Admin: get or update the Uttarakhand section configuration."""
+    if not hasattr(request.user, "profile") or request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    config = UttarakhandSectionConfig.load()
+
+    if request.method == "GET":
+        serializer = UttarakhandSectionConfigSerializer(config)
+        return Response(serializer.data)
+
+    serializer = UttarakhandSectionConfigSerializer(config, data=request.data, partial=True)
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(serializer.data)

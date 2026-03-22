@@ -19,6 +19,8 @@ from .views import (
     community_trips, admin_community_config,
     festival_trips, admin_festival_config,
     adventure_trips, admin_adventure_config,
+    himachal_trips, admin_himachal_config,
+    uttarakhand_trips, admin_uttarakhand_config,
     featured_trips,
     request_password_reset, verify_reset_otp, reset_password,
     category_list, admin_categories,
@@ -82,5 +84,8 @@ urlpatterns = [
     path("v1/admin/festival-config/", admin_festival_config),
     path("v1/trips/adventure/", adventure_trips),
     path("v1/admin/adventure-config/", admin_adventure_config),
+    path("v1/trips/himachal/", himachal_trips),
+    path("v1/admin/himachal-config/", admin_himachal_config),
+    path("v1/trips/uttarakhand/", uttarakhand_trips),
+    path("v1/admin/uttarakhand-config/", admin_uttarakhand_config),
 ]
-

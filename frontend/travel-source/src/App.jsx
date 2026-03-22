@@ -11,6 +11,8 @@ import InternationalTripsPage from "./pages/InternationalTrips/InternationalTrip
 import IndiaTripsPage from "./pages/IndiaTrips/IndiaTripsPage";
 import NorthIndiaTripsPage from "./pages/NorthIndiaTrips/NorthIndiaTripsPage";
 import HimalayanTripsPage from "./pages/HimalayanTrips/HimalayanTripsPage";
+import HimachalTripsPage from "./pages/HimachalTrips/HimachalTripsPage";
+import UttarakhandTripsPage from "./pages/UttarakhandTrips/UttarakhandTripsPage";
 import CommunityTripsPage from "./pages/CommunityTrips/CommunityTripsPage";
 import FestivalTripsPage from "./pages/FestivalTrips/FestivalTripsPage";
 import HoneymoonTripsPage from "./pages/HoneymoonTrips/HoneymoonTripsPage";
@@ -120,6 +122,24 @@ function App() {
         element={
           <Layout>
             <NorthIndiaTripsPage />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/himachal-pradesh"
+        element={
+          <Layout>
+            <HimachalTripsPage />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/uttarakhand"
+        element={
+          <Layout>
+            <UttarakhandTripsPage />
           </Layout>
         }
       />

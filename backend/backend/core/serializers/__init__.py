@@ -23,4 +23,6 @@ from .festival_serializer import FestivalTripSerializer, FestivalSectionConfigSe
 from .adventure_serializer import AdventureTripSerializer, AdventureSectionConfigSerializer
 from .category_serializer import CategorySerializer
 
+from .himachal_serializer import HimachalTripSerializer, HimachalSectionConfigSerializer
+from .uttarakhand_serializer import UttarakhandTripSerializer, UttarakhandSectionConfigSerializer
 

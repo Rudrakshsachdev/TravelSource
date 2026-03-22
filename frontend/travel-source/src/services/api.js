@@ -806,6 +806,85 @@ export const updateBackpackingConfig = async (data) => {
   return res.json();
 };
 
+// ─── Himachal Trips ────────────────────────────────────────────────────────
+
+export const fetchHimachalTrips = async () => {
+  const res = await fetch(`${API_BASE_URL}/v1/trips/himachal/`);
+  if (!res.ok) throw new Error("Failed to fetch Himachal trips");
+  return res.json();
+};
+
+export const fetchAllHimachalTrips = async () => {
+  const response = await fetch(`${API_BASE_URL}/v1/trips/?is_himachal_trip=true`);
+  if (!response.ok) {
+    throw new Error("Failed to load all Himachal trips");
+  }
+  return response.json();
+};
+
+export const fetchHimachalConfig = async () => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/himachal-config/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Failed to fetch Himachal config");
+  return res.json();
+};
+
+export const updateHimachalConfig = async (data) => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/himachal-config/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to update Himachal config");
+  return res.json();
+};
+
+// ─── Uttarakhand Trips ─────────────────────────────────────────────────────
+
+export const fetchUttarakhandTrips = async () => {
+  const res = await fetch(`${API_BASE_URL}/v1/trips/uttarakhand/`);
+  if (!res.ok) throw new Error("Failed to fetch Uttarakhand trips");
+  return res.json();
+};
+
+export const fetchAllUttarakhandTrips = async () => {
+  const response = await fetch(`${API_BASE_URL}/v1/trips/?is_uttarakhand_trip=true`);
+  if (!response.ok) {
+    throw new Error("Failed to load all Uttarakhand trips");
+  }
+  return response.json();
+};
+
+export const fetchUttarakhandConfig = async () => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/uttarakhand-config/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Failed to fetch Uttarakhand config");
+  return res.json();
+};
+
+export const updateUttarakhandConfig = async (data) => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/uttarakhand-config/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to update Uttarakhand config");
+  return res.json();
+};
+
+
 export const fetchSummerTrips = async () => {
   const res = await fetch(`${API_BASE_URL}/v1/trips/summer/`);
   if (!res.ok) throw new Error("Failed to fetch Summer trips");

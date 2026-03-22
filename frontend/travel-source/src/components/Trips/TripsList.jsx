@@ -15,6 +15,8 @@ import ModernHero from "./ModernHero";
 import HeroCards from "./HeroCards";
 import InternationalTrips from "./InternationalTrips";
 import IndiaTrips from "./IndiaTrips";
+import HimachalTrips from "./HimachalTrips";
+import UttarakhandTrips from "./UttarakhandTrips";
 import NorthIndiaTrips from "./NorthIndiaTrips";
 import HoneymoonTrips from "./HoneymoonTrips";
 import HimalayanTreks from "./HimalayanTreks";
@@ -265,6 +267,8 @@ const TripsList = () => {
       <CategoryNav onCategoryChange={handleCategoryChange} />
       <InternationalTrips />
       <IndiaTrips />
+      <HimachalTrips />
+      <UttarakhandTrips />
       <HoneymoonTrips />
       <HimalayanTreks />
       <BackpackingTrips />
