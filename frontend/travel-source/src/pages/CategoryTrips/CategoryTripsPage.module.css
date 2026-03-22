@@ -1,0 +1,436 @@
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap");
+
+:root {
+  --hs-green: #a3e635;
+  --hs-blue: #2563eb;
+  --hs-blue-dark: #1d4ed8;
+  --hs-dark: #0c0f14;
+  --hs-white: #ffffff;
+  --hs-muted: #94a3b8;
+  --hs-font: "Plus Jakarta Sans", system-ui, sans-serif;
+  --hs-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --hs-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.page {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  font-family: var(--hs-font);
+}
+
+/* ═══ Cinematic Hero ═══ */
+.hero {
+  height: 440px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--hs-dark);
+}
+
+.heroBg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 0.6;
+  animation: subtleZoom 20s infinite alternate linear;
+}
+
+@keyframes subtleZoom {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.1); }
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(12, 15, 20, 0.9) 0%,
+      rgba(12, 15, 20, 0.6) 40%,
+      rgba(12, 15, 20, 0.95) 100%
+    );
+}
+
+/* Animated Glows */
+.heroGlowOne,
+.heroGlowTwo,
+.heroNoise {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.heroGlowOne {
+  width: 500px;
+  height: 500px;
+  top: -20%;
+  left: -10%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--grad-start, rgba(37, 99, 235, 0.4)) 0%, transparent 70%);
+  filter: blur(50px);
+  animation: floatGlow 14s ease-in-out infinite alternate;
+}
+
+.heroGlowTwo {
+  width: 400px;
+  height: 400px;
+  right: -5%;
+  bottom: -10%;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--grad-end, rgba(163, 230, 53, 0.3)) 0%, transparent 70%);
+  filter: blur(50px);
+  animation: floatGlow 12s ease-in-out infinite alternate-reverse;
+}
+
+.heroNoise {
+  inset: 0;
+  opacity: 0.05;
+  mix-blend-mode: soft-light;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.5) 0.7px, transparent 0.7px);
+  background-size: 3px 3px;
+  z-index: 2;
+}
+
+@keyframes floatGlow {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(5%, -5%, 0) scale(1.1); }
+}
+
+.heroContent {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  color: var(--hs-white);
+  max-width: 800px;
+  padding: 0 20px;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--hs-ease) forwards;
+}
+
+.breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+  padding: 8px 18px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 100px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.3s var(--hs-ease);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.breadcrumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--hs-white);
+  transform: translateY(-2px);
+}
+
+.catInfo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.catEmoji {
+  font-size: 3.5rem;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
+}
+
+.title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 900;
+  letter-spacing: -1px;
+  line-height: 1.1;
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.tripCount {
+  font-size: 1.15rem;
+  color: #c4d2e5;
+  font-weight: 500;
+  margin-top: 12px;
+}
+
+/* ═══ Content Grid ═══ */
+.content {
+  padding: 60px 0 100px;
+  position: relative;
+  z-index: 10;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.tripsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 32px;
+}
+
+/* ═══ Trip Card Premium ═══ */
+.tripCard {
+  background: var(--hs-white);
+  border-radius: 24px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  transition: all 0.5s var(--hs-spring);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+  opacity: 0;
+  animation: fadeUp 0.6s var(--hs-ease) forwards;
+}
+
+.tripCard:nth-child(1) { animation-delay: 0.1s; }
+.tripCard:nth-child(2) { animation-delay: 0.2s; }
+.tripCard:nth-child(3) { animation-delay: 0.3s; }
+.tripCard:nth-child(n+4) { animation-delay: 0.4s; }
+
+.tripCard:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 24px 50px -12px rgba(37, 99, 235, 0.15);
+  border-color: var(--hs-blue);
+}
+
+.imageContainer {
+  position: relative;
+  height: 240px;
+  overflow: hidden;
+}
+
+.tripImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s var(--hs-ease);
+}
+
+.tripCard:hover .tripImage {
+  transform: scale(1.08);
+}
+
+/* Overlay gradient for text readability over images */
+.imageContainer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.5) 100%);
+  pointer-events: none;
+}
+
+.priceTag {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-weight: 800;
+  color: #0f172a;
+  font-size: 0.95rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+  border: 1px solid rgba(255,255,255,0.5);
+}
+
+.featureBadge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: var(--hs-white);
+  padding: 6px 12px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  z-index: 2;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+}
+
+.tripDetails {
+  padding: 24px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.tripLocation {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--hs-blue);
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tripTitle {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 16px;
+  line-height: 1.4;
+  letter-spacing: -0.5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.metaInfo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.metaItem svg {
+  color: #94a3b8;
+}
+
+.tripFooter {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--hs-blue);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.viewLink {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s var(--hs-ease);
+}
+
+.tripCard:hover .viewLink {
+  transform: translateX(4px);
+  color: var(--hs-blue-dark);
+}
+
+/* State Handlers */
+.loadingWrapper {
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.spinner {
+  width: 44px;
+  height: 44px;
+  border: 3px solid rgba(37, 99, 235, 0.1);
+  border-top-color: var(--hs-blue);
+  border-radius: 50%;
+  animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.errorWrapper, .emptyState {
+  padding: 100px 20px;
+  text-align: center;
+  animation: fadeUp 0.6s ease forwards;
+}
+
+.errorText {
+  color: #b91c1c;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.backButton {
+  display: inline-block;
+  margin-top: 24px;
+  background: var(--hs-blue);
+  color: var(--hs-white);
+  padding: 14px 32px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.3s var(--hs-ease);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
+}
+
+.backButton:hover {
+  background: var(--hs-blue-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(37, 99, 235, 0.35);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    height: 380px;
+  }
+  
+  .title {
+    font-size: 2.2rem;
+  }
+
+  .tripsGrid {
+    grid-template-columns: 1fr;
+  }
+}

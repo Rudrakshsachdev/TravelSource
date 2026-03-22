@@ -23,6 +23,8 @@ import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
 import TermsOfService from "./pages/Legal/TermsOfService";
 import RefundPolicy from "./pages/Legal/RefundPolicy";
 import TripDetailNew from "./components/TripDetailNew/TripDetailNew";
+import PackagesPage from "./pages/Packages/PackagesPage";
+import CategoryTripsPage from "./pages/CategoryTrips/CategoryTripsPage";
 
 // Admin
 import AdminLayout from "./admin/AdminLayout";
@@ -167,6 +169,15 @@ function App() {
       />
 
       <Route
+        path="/packages"
+        element={
+          <Layout>
+            <PackagesPage />
+          </Layout>
+        }
+      />
+
+      <Route
         path="/trips/:id/book"
         element={
           <Layout>
@@ -229,6 +240,16 @@ function App() {
         element={
           <Layout>
             <RefundPolicy />
+          </Layout>
+        }
+      />
+
+      {/* DYNAMIC CATEGORY ROUTE (Catch-all for slugs) */}
+      <Route
+        path="/:categorySlug"
+        element={
+          <Layout>
+            <CategoryTripsPage />
           </Layout>
         }
       />

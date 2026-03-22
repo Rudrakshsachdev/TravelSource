@@ -493,6 +493,16 @@ const Navbar = () => {
                 </button>
               </li>
 
+              <li className={styles.navItem} role="none">
+                <button
+                  className={styles.navLink}
+                  onClick={() => go("/packages")}
+                  role="menuitem"
+                >
+                  Packages
+                </button>
+              </li>
+
               {/* Menu items with mega dropdowns */}
               {desktopMenusToRender.map((menu) => (
                 <li
@@ -887,6 +897,9 @@ const Navbar = () => {
             <div className={styles.mobileNavSection}>
               <button className={styles.mobileNavTitle} onClick={() => go("/")}>
                 🏠 Home
+              </button>
+              <button className={styles.mobileNavTitle} onClick={() => go("/packages")}>
+                ✨ Packages
               </button>
               {desktopMenus.map((menu) => (
                 <div key={menu.key}>
