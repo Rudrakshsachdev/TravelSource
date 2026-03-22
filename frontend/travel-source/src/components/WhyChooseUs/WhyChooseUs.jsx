@@ -1,6 +1,22 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./WhyChooseUs.module.css";
-import { fetchSiteStats } from "../../services/api";
+import { fetchSiteStats, fetchTrips } from "../../services/api";
+
+/* ── Star icon for India cards ── */
+const StarIcon = () => (
+  <svg viewBox="0 0 24 24" width="14" height="14" style={{ fill: "#f59e0b" }}>
+    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+  </svg>
+);
+
+const ArrowIcon = ({ direction }) => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    {direction === "left"
+      ? <polyline points="15 18 9 12 15 6" />
+      : <polyline points="9 18 15 12 9 6" />}
+  </svg>
+);
 
 const features = [
   {
@@ -8,35 +24,35 @@ const features = [
     title: "Expertly Curated Itineraries",
     description:
       "Carefully designed travel plans by local experts who know the destinations inside out.",
-    color: "#3f9e8f",
+    color: "#2563eb",
   },
   {
     icon: "🛡️",
     title: "Safety First Approach",
     description:
       "Your safety is our priority with 24/7 support and verified accommodations.",
-    color: "#5fb8a8",
+    color: "#3b82f6",
   },
   {
     icon: "💎",
     title: "Premium Experiences",
     description:
       "Access exclusive experiences and hidden gems not found in typical tour packages.",
-    color: "#2d7a6e",
+    color: "#1d4ed8",
   },
   {
     icon: "🤝",
     title: "Personalized Service",
     description:
       "Tailored journeys that match your preferences, pace, and travel style.",
-    color: "#7ecfc0",
+    color: "#60a5fa",
   },
   {
     icon: "✈️",
     title: "Customizable Travel Packages",
     description:
       "Tailor-made itineraries, flexible dates, and add-ons & upgrades available to suit your needs.",
-    color: "#3f9e8f",
+    color: "#2563eb",
     highlights: [
       "Tailor-made itineraries",
       "Flexible dates",
@@ -56,19 +72,91 @@ const images = [
 ];
 
 const WhyChooseUs = () => {
+  const navigate = useNavigate();
   const [hoveredImage, setHoveredImage] = useState(null);
   const [activeFeature, setActiveFeature] = useState(0);
   const [siteStats, setSiteStats] = useState([]);
   const [animatedValues, setAnimatedValues] = useState({});
+  const [showcaseTrips, setShowcaseTrips] = useState([]);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
   const counterRef = useRef(null);
+  const tripsScrollRef = useRef(null);
   const hasAnimated = useRef(false);
 
   // Fetch stats from backend
   useEffect(() => {
     fetchSiteStats()
       .then((data) => setSiteStats(data))
-      .catch(() => {});
+      .catch(() => { });
   }, []);
+
+  // Fetch all trips for the card section
+  useEffect(() => {
+    fetchTrips()
+      .then((data) => {
+        // limit to 10 trips to not overwhelm the UI
+        if (data && data.length > 0) {
+          setShowcaseTrips(data.slice(0, 10));
+        }
+      })
+      .catch(() => { });
+  }, []);
+
+  // Update scroll bounds for arrows
+  const updateScrollState = useCallback(() => {
+    const el = tripsScrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 8);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 8);
+  }, []);
+
+  useEffect(() => {
+    const el = tripsScrollRef.current;
+    if (!el) return;
+    el.addEventListener("scroll", updateScrollState, { passive: true });
+    updateScrollState();
+    return () => el.removeEventListener("scroll", updateScrollState);
+  }, [showcaseTrips, updateScrollState]);
+
+  // Auto-scroll the trips carousel every 3.5 seconds
+  useEffect(() => {
+    if (showcaseTrips.length === 0) return;
+
+    const interval = setInterval(() => {
+      const container = tripsScrollRef.current;
+      if (!container) return;
+
+      const isAtEnd =
+        container.scrollLeft + container.clientWidth >= container.scrollWidth - 10;
+
+      if (isAtEnd) {
+        // Scroll back to the very beginning when reaching the end
+        container.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        // Scroll right by approximately one card width + gap
+        container.scrollBy({ left: 344, behavior: "smooth" });
+      }
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [showcaseTrips]);
+
+  const scrollMap = (dir) => {
+    tripsScrollRef.current?.scrollBy({
+      left: dir === "left" ? -344 : 344,
+      behavior: "smooth",
+    });
+  };
+
+  const getImageUrl = (imagePath) => {
+    if (!imagePath || imagePath.trim() === "") return "";
+    if (imagePath.startsWith("http")) return imagePath;
+    const backendUrl =
+      import.meta.env.VITE_API_BASE_URL?.replace("/api", "") ||
+      "http://localhost:8000";
+    return `${backendUrl}${imagePath}`;
+  };
 
   // Animate counters when they scroll into view
   const animateCounters = useCallback(() => {
@@ -252,6 +340,67 @@ const WhyChooseUs = () => {
             </div>
           </div>
         </div>
+
+        {/* ── All Trips Cards Section ── */}
+        {showcaseTrips.length > 0 && (
+          <div className={styles.indiaTripsSection}>
+            <div className={styles.navHeaderContainer}>
+              <div className={styles.galleryHeader} style={{ marginBottom: 0, textAlign: 'left' }}>
+                <h3 className={styles.galleryTitle}>Explore Incredible Destinations</h3>
+                <p className={styles.gallerySubtitle}>
+                  Our most popular adventures, from Himalayan mountains to tropical beaches
+                </p>
+              </div>
+              <div className={styles.navGroup}>
+                <button
+                  className={`${styles.navBtn} ${!canScrollLeft ? styles.navBtnDisabled : ""}`}
+                  onClick={() => scrollMap("left")}
+                  disabled={!canScrollLeft}
+                  aria-label="Scroll left"
+                >
+                  <ArrowIcon direction="left" />
+                </button>
+                <button
+                  className={`${styles.navBtn} ${!canScrollRight ? styles.navBtnDisabled : ""}`}
+                  onClick={() => scrollMap("right")}
+                  disabled={!canScrollRight}
+                  aria-label="Scroll right"
+                >
+                  <ArrowIcon direction="right" />
+                </button>
+              </div>
+            </div>
+
+            <div className={styles.indiaTripsScroll}>
+              {showcaseTrips.map((trip) => (
+                <div
+                  key={trip.id}
+                  className={styles.indiaTripCard}
+                  onClick={() => navigate(`/trips/${trip.id}`)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === "Enter" && navigate(`/trips/${trip.id}`)}
+                >
+                  <div className={styles.indiaTripImgWrap}>
+                    <img
+                      src={getImageUrl(trip.image)}
+                      alt={trip.title}
+                      className={styles.indiaTripImg}
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className={styles.indiaTripInfo}>
+                    <h4 className={styles.indiaTripTitle}>{trip.title}</h4>
+                    <div className={styles.indiaTripRating}>
+                      <StarIcon /><StarIcon /><StarIcon /><StarIcon /><StarIcon />
+                      <span className={styles.indiaTripReviews}>(8k+)</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Image Gallery */}
         <div className={styles.gallerySection}>

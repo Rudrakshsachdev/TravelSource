@@ -1,34 +1,33 @@
 /* ═══════════════════════════════════════════════════════════════
    Why Choose Us — Travel Professor
-   Teal / aqua theme matching Hero & Navbar
+   Blue theme matching Navbar & Hero
    ═══════════════════════════════════════════════════════════════ */
 
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600&family=Montserrat:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap");
 
 :root {
-  --wcu-bg: #f2faf8;
-  --wcu-bg-alt: #e8f6f3;
-  --wcu-text: #1a3a35;
-  --wcu-text-light: #2d5c54;
-  --wcu-text-muted: #4a7a72;
-  --wcu-accent: #3f9e8f;
-  --wcu-accent-light: #7ecfc0;
-  --wcu-accent-dark: #2d7a6e;
-  --wcu-accent-subtle: rgba(63, 158, 143, 0.08);
-  --wcu-accent-border: rgba(63, 158, 143, 0.2);
-  --wcu-accent-gradient: linear-gradient(135deg, #3f9e8f 0%, #5fb8a8 100%);
+  --wcu-bg: #f8fafc;
+  --wcu-bg-alt: #eff6ff;
+  --wcu-text: #0f172a;
+  --wcu-text-light: #1e293b;
+  --wcu-text-muted: #475569;
+  --wcu-accent: #2563eb;
+  --wcu-accent-light: #60a5fa;
+  --wcu-accent-dark: #1d4ed8;
+  --wcu-accent-subtle: rgba(37, 99, 235, 0.08);
+  --wcu-accent-border: rgba(37, 99, 235, 0.15);
+  --wcu-accent-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
   --wcu-white: #ffffff;
   --wcu-surface: rgba(255, 255, 255, 0.92);
-  --wcu-shadow-sm: 0 2px 12px rgba(30, 80, 70, 0.06);
-  --wcu-shadow-md: 0 8px 32px rgba(30, 80, 70, 0.1);
-  --wcu-shadow-lg: 0 16px 48px rgba(30, 80, 70, 0.12);
+  --wcu-shadow-sm: 0 2px 12px rgba(15, 23, 42, 0.06);
+  --wcu-shadow-md: 0 8px 32px rgba(15, 23, 42, 0.1);
+  --wcu-shadow-lg: 0 16px 48px rgba(15, 23, 42, 0.12);
   --wcu-radius-lg: 20px;
   --wcu-radius-md: 12px;
   --wcu-radius-sm: 8px;
-  --wcu-font-display: "Playfair Display", Georgia, serif;
-  --wcu-font-body:
-    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --wcu-font-accent: "Montserrat", -apple-system, sans-serif;
+  --wcu-font-display: "Plus Jakarta Sans", system-ui, sans-serif;
+  --wcu-font-body: "Plus Jakarta Sans", system-ui, sans-serif;
+  --wcu-font-accent: "Plus Jakarta Sans", system-ui, sans-serif;
 }
 
 /* --- Section --- */
@@ -45,12 +44,12 @@
   background:
     radial-gradient(
       ellipse at 15% 80%,
-      rgba(63, 158, 143, 0.07) 0%,
+      rgba(37, 99, 235, 0.07) 0%,
       transparent 55%
     ),
     radial-gradient(
       ellipse at 85% 15%,
-      rgba(126, 207, 192, 0.06) 0%,
+      rgba(96, 165, 250, 0.06) 0%,
       transparent 55%
     );
   pointer-events: none;
@@ -167,7 +166,7 @@
 .highlight {
   color: var(--wcu-accent-dark);
   font-weight: 700;
-  background: rgba(63, 158, 143, 0.1);
+  background: rgba(37, 99, 235, 0.1);
   padding: 1px 6px;
   border-radius: 4px;
 }
@@ -252,7 +251,7 @@
   background: var(--wcu-white);
   border-radius: var(--wcu-radius-md);
   padding: 22px 24px;
-  border: 1.5px solid rgba(63, 158, 143, 0.12);
+  border: 1.5px solid rgba(37, 99, 235, 0.12);
   transition:
     transform 0.3s ease,
     border-color 0.3s ease,
@@ -278,7 +277,7 @@
 .featureCard:hover {
   transform: translateY(-3px);
   border-color: var(--wcu-accent);
-  box-shadow: 0 8px 28px rgba(63, 158, 143, 0.12);
+  box-shadow: 0 8px 28px rgba(37, 99, 235, 0.12);
 }
 
 .featureCard:hover::after {
@@ -289,7 +288,7 @@
   border-color: var(--wcu-accent);
   background: linear-gradient(
     135deg,
-    rgba(63, 158, 143, 0.04) 0%,
+    rgba(37, 99, 235, 0.04) 0%,
     transparent 100%
   );
 }
@@ -339,7 +338,7 @@
   right: 22px;
   width: 20px;
   height: 20px;
-  color: rgba(63, 158, 143, 0.3);
+  color: rgba(37, 99, 235, 0.3);
   transition:
     color 0.25s ease,
     transform 0.25s ease;
@@ -388,15 +387,15 @@
     transform 0.3s ease,
     box-shadow 0.3s ease,
     background 0.3s ease;
-  box-shadow: 0 4px 18px rgba(26, 58, 53, 0.25);
+  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.25);
   position: relative;
   overflow: hidden;
 }
 
 .ctaButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(26, 58, 53, 0.35);
-  background: #0f2e29;
+  box-shadow: 0 8px 28px rgba(37, 99, 235, 0.35);
+  background: #1e3a8a;
 }
 
 .ctaButton:active {
@@ -476,7 +475,7 @@
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(26, 58, 53, 0.7) 0%,
+    rgba(15, 23, 42, 0.7) 0%,
     transparent 55%
   );
   opacity: 0;
@@ -556,7 +555,7 @@
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(63, 158, 143, 0.08) 0%,
+    rgba(37, 99, 235, 0.08) 0%,
     transparent 70%
   );
   filter: blur(16px);
@@ -856,5 +855,160 @@
 
   .counterCard {
     padding: 20px 14px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   India Trips Card Section
+   ═══════════════════════════════════════════════════════════════ */
+
+.indiaTripsSection {
+  margin-bottom: 72px;
+}
+
+.indiaTripsScroll {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 12px 4px 20px;
+  scrollbar-width: none; /* Firefox */
+}
+
+.indiaTripsScroll::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.indiaTripCard {
+  flex: 0 0 320px;
+  scroll-snap-align: start;
+  background: var(--wcu-white);
+  border-radius: var(--wcu-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--wcu-shadow-sm);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.indiaTripCard:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--wcu-shadow-md);
+}
+
+.indiaTripImgWrap {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.indiaTripImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.45s ease;
+}
+
+.indiaTripCard:hover .indiaTripImg {
+  transform: scale(1.06);
+}
+
+.indiaTripInfo {
+  padding: 14px 16px 16px;
+}
+
+.indiaTripTitle {
+  font-family: var(--wcu-font-body);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--wcu-text);
+  margin: 0 0 10px 0;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.indiaTripRating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.indiaTripReviews {
+  font-family: var(--wcu-font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--wcu-text-muted);
+  margin-left: 6px;
+}
+
+.navHeaderContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 24px;
+}
+
+.navGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1.5px solid var(--wcu-accent-border);
+  background: var(--wcu-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--wcu-text-light);
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: var(--wcu-shadow-sm);
+}
+
+.navBtn:hover:not(:disabled) {
+  background: var(--wcu-accent);
+  border-color: var(--wcu-accent);
+  color: var(--wcu-white);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+  transform: translateY(-2px);
+}
+
+.navBtnDisabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .indiaTripCard {
+    flex: 0 0 200px;
+  }
+
+  .indiaTripsSection {
+    margin-bottom: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .indiaTripCard {
+    flex: 0 0 170px;
+  }
+
+  .indiaTripTitle {
+    font-size: 0.84rem;
+  }
+
+  .indiaTripInfo {
+    padding: 10px 12px 14px;
   }
 }
