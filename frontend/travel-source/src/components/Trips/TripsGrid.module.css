@@ -132,6 +132,23 @@
   margin-bottom: 3.5rem;
 }
 
+@media (max-width: 768px) {
+  .tripsGrid {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  .tripsGrid::-webkit-scrollbar {
+    display: none; /* WebKit */
+  }
+}
+
 .tripCardWrapper {
   opacity: 0;
   transform: translateY(24px);
