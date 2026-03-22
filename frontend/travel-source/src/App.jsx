@@ -24,7 +24,7 @@ import TermsOfService from "./pages/Legal/TermsOfService";
 import RefundPolicy from "./pages/Legal/RefundPolicy";
 import TripDetailNew from "./components/TripDetailNew/TripDetailNew";
 import PackagesPage from "./pages/Packages/PackagesPage";
-import CategoryTripsPage from "./pages/CategoryTrips/CategoryTripsPage";
+import PremiumCategoryTripsPage from "./pages/CategoryTrips/PremiumCategoryTripsPage";
 
 // Admin
 import AdminLayout from "./admin/AdminLayout";
@@ -249,7 +249,7 @@ function App() {
         path="/:categorySlug"
         element={
           <Layout>
-            <CategoryTripsPage />
+            <PremiumCategoryTripsPage />
           </Layout>
         }
       />
