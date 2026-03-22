@@ -234,7 +234,11 @@ class Booking(models.Model):
     )
 
     admin_note = models.TextField(blank=True, null=True)
-    
+
+    itinerary = models.CharField(max_length=200, blank=True, default="")
+    batch_details = models.CharField(max_length=200, blank=True, default="")
+    occupancy_details = models.CharField(max_length=200, blank=True, default="")
+
     travel_date = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

@@ -142,9 +142,11 @@ const BookingPage = () => {
         phone: formData.phone,
         persons: formData.persons,
         total_amount: grandTotal,
-        // Assuming backend supports these or ignores them:
-        // batch_index: selectedBatchIdx,
-        // occupancy_type: currentOption.occupancy
+        itinerary: itineraryLabel,
+        batch_details: processedBatches[selectedBatchIdx]
+          ? processedBatches[selectedBatchIdx].displayDate
+          : "",
+        occupancy_details: currentOption.occupancy || "Base Price",
       };
 
       await createBooking(bookingPayload);

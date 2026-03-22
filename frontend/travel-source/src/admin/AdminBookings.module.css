@@ -514,6 +514,91 @@
   color: #64748b;
 }
 
+/* View Details Button */
+.viewDetailsBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 0;
+  background: none;
+  border: 1px dashed #cbd5e1;
+  border-radius: var(--radius-md);
+  font-family: var(--font-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #3b82f6;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  margin-bottom: 20px;
+}
+
+.viewDetailsBtn:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
+
+.viewDetailsBtn svg {
+  flex-shrink: 0;
+}
+
+.chevronDown {
+  transition: transform 0.3s ease;
+  transform: rotate(0deg);
+}
+
+.chevronUp {
+  transition: transform 0.3s ease;
+  transform: rotate(180deg);
+}
+
+/* Expanded Details Panel */
+.detailsPanel {
+  background: linear-gradient(135deg, #f0f9ff 0%, #f8fafc 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 24px;
+  margin-bottom: 20px;
+  animation: slideDown 0.25s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.detailsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.detailItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detailLabel {
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.detailValue {
+  font-size: 0.95rem;
+  color: #1e293b;
+  font-weight: 600;
+  word-break: break-word;
+}
+
 @media (max-width: 992px) {
   .bookingsContainer {
     grid-template-columns: 1fr;

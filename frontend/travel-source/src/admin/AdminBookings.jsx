@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { fetchAdminBookings, updateBookingStatus } from "../services/api";
 import styles from "./AdminBookings.module.css";
 
 const AdminBookings = () => {
+  const navigate = useNavigate();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -231,8 +233,41 @@ const AdminBookings = () => {
                       <span className={styles.infoLabel}>Phone</span>
                       <span className={styles.infoValue}>{booking.phone}</span>
                     </div>
+                    {booking.itinerary && (
+                      <div className={styles.infoItem}>
+                        <span className={styles.infoLabel}>Itinerary</span>
+                        <span className={styles.infoValue}>{booking.itinerary}</span>
+                      </div>
+                    )}
+                    {booking.batch_details && (
+                      <div className={styles.infoItem}>
+                        <span className={styles.infoLabel}>Batch</span>
+                        <span className={styles.infoValue}>{booking.batch_details}</span>
+                      </div>
+                    )}
+                    {booking.occupancy_details && (
+                      <div className={styles.infoItem}>
+                        <span className={styles.infoLabel}>Occupancy</span>
+                        <span className={styles.infoValue}>{booking.occupancy_details}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
+
+                {/* View Details — Navigate to Detail Page */}
+                <button
+                  className={styles.viewDetailsBtn}
+                  onClick={() => navigate(`/admin/bookings/${booking.id}`, { state: { booking } })}
+                >
+                  <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                    <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                  </svg>
+                  View Details
+                  <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
+                    <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </button>
 
                 <div className={styles.paymentSection}>
                   <div className={styles.amountBox}>

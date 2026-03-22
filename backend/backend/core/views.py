@@ -428,25 +428,25 @@ def create_booking(request):
         
         trip = Trip.objects.get(id=trip_id)
 
-        total_amount = trip.price * persons
+        # Use the frontend-calculated total (includes GST + occupancy pricing)
+        frontend_total = request.data.get("total_amount")
+        if frontend_total:
+            total_amount = float(frontend_total)
+        else:
+            total_amount = trip.price * persons
 
         booking = Booking.objects.create(
-            user = request.user,
-
-            trip = trip,
-
-            full_name = request.data.get("full_name"),
-
-            email = request.data.get("email"),
-
-            phone = request.data.get("phone"),
-            
-            travel_date = request.data.get("travel_date"),
-
-            persons = persons,
-
-            total_amount = total_amount,
-
+            user=request.user,
+            trip=trip,
+            full_name=request.data.get("full_name"),
+            email=request.data.get("email"),
+            phone=request.data.get("phone"),
+            travel_date=request.data.get("travel_date"),
+            persons=persons,
+            total_amount=total_amount,
+            itinerary=request.data.get("itinerary", ""),
+            batch_details=request.data.get("batch_details", ""),
+            occupancy_details=request.data.get("occupancy_details", ""),
         )
 
         serializer = BookingCreateSerializer(booking)

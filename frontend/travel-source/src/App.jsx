@@ -33,6 +33,7 @@ import AdminTrips from "./admin/AdminTrips";
 import AdminUsers from "./admin/AdminUsers";
 import AdminContactMessage from "./admin/AdminContactMessage";
 import AdminBookings from "./admin/AdminBookings";
+import AdminBookingDetail from "./admin/AdminBookingDetail";
 
 function App() {
   return (
@@ -245,6 +246,7 @@ function App() {
         <Route path="enquiries" element={<AdminEnquiries />} />
         <Route path="trips" element={<AdminTrips />} />
         <Route path="bookings" element={<AdminBookings />} />
+        <Route path="bookings/:bookingId" element={<AdminBookingDetail />} />
         <Route path="users" element={<AdminUsers />} />
         <Route path="contact-messages" element={<AdminContactMessage />} />
       </Route>
