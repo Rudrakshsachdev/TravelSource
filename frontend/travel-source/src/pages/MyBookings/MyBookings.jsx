@@ -86,8 +86,12 @@ const MyBookings = () => {
           </div>
         ) : (
           <div className={styles.bookingsGrid}>
-            {bookings.map((booking) => (
-              <div key={booking.id} className={styles.bookingCard}>
+            {bookings.map((booking, index) => (
+              <div 
+                key={booking.id} 
+                className={styles.bookingCard}
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
                 <div className={styles.cardHeader}>
                   <div className={styles.statusBadge} data-status={booking.status}>
                     {getStatusIcon(booking.status)}
