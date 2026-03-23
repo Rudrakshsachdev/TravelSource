@@ -730,7 +730,7 @@ const Navbar = () => {
                         role="menuitem"
                       >
                         <User size={16} />
-                        My Journeys
+                        My Enquiries
                       </button>
                       <button
                         className={styles.userDropdownItem}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchMyEnquiries } from "../../services/api";
+import { Calendar, MessageSquare, HelpCircle, MapPin } from "lucide-react";
 import styles from "./Profile.module.css";
 
 const Profile = () => {
@@ -24,49 +25,73 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className={styles.state}>
-        Loading your enquiries…
+      <div className={styles.pageWrapper}>
+        <div className={styles.loaderContainer}>
+          <div className={styles.loader}></div>
+          <p>Fetching your enquiries...</p>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className={styles.stateError}>
-        {error}
-      </div>
-    );
-  }
-
-  if (enquiries.length === 0) {
-    return (
-      <div className={styles.state}>
-        You haven’t made any enquiries yet.
+      <div className={styles.pageWrapper}>
+        <div className={styles.errorContainer}>
+          <HelpCircle size={48} className={styles.errorIcon} />
+          <h2>Oops!</h2>
+          <p>{error}</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className={styles.container}>
-      <h2 className={styles.heading}>My Enquiries</h2>
+    <div className={styles.pageWrapper}>
+      <div className={styles.topAccent} />
+      
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h2 className={styles.heading}>My Enquiries</h2>
+          <p className={styles.subHeading}>Keep track of all the trips you've enquired about.</p>
+        </div>
 
-      <div className={styles.list}>
-        {enquiries.map((enquiry) => (
-          <div key={enquiry.id} className={styles.card}>
-            <div className={styles.cardHeader}>
-              <h4 className={styles.trip}>
-                {enquiry.trip_title}
-              </h4>
-              <span className={styles.date}>
-                {new Date(enquiry.created_at).toLocaleDateString()}
-              </span>
-            </div>
-
-            <p className={styles.message}>
-              {enquiry.message || "No message provided."}
-            </p>
+        {enquiries.length === 0 ? (
+          <div className={styles.emptyState}>
+            <MessageSquare size={48} className={styles.emptyIcon} />
+            <h3>No enquiries yet</h3>
+            <p>You haven't made any trip enquiries yet. Explore our trips and ask us anything!</p>
+            <a href="/packages" className={styles.exploreBtn}>Explore Trips</a>
           </div>
-        ))}
+        ) : (
+          <div className={styles.list}>
+            {enquiries.map((enquiry, index) => (
+              <div 
+                key={enquiry.id} 
+                className={styles.card}
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className={styles.cardHeader}>
+                  <div className={styles.tripInfo}>
+                    <MapPin size={18} className={styles.tripIcon} />
+                    <h4 className={styles.trip}>{enquiry.trip_title}</h4>
+                  </div>
+                  <span className={styles.date}>
+                    <Calendar size={14} />
+                    {new Date(enquiry.created_at).toLocaleDateString()}
+                  </span>
+                </div>
+
+                <div className={styles.messageBox}>
+                  <MessageSquare size={16} className={styles.msgIcon} />
+                  <p className={styles.message}>
+                    {enquiry.message || "No specific message provided."}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
