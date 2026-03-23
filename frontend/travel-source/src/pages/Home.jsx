@@ -7,6 +7,7 @@ import { JourneyInFrames } from "../components/JourneyInFrames";
 import { DiscoverJourney } from "../components/DiscoverJourney";
 import ContactUs from "../components/ContactUs";
 import { TrendingDestinations } from "../components/TrendingDestinations";
+import { LongWeekendBanner } from "../components/LongWeekendBanner/LongWeekendBanner";
 import { NightAdventure } from "../components/NightAdventure";
 
 const Home = () => {
@@ -16,6 +17,7 @@ const Home = () => {
       <TripsList />
       <PromoBanner />
       <TrendingDestinations />
+      <LongWeekendBanner />
       <NightAdventure />
       <Reviews />
       <WhyChooseUs />
