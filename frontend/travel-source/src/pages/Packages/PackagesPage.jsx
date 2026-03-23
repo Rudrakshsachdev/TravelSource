@@ -8,6 +8,10 @@ import HimalayanTreks from "../../components/Trips/HimalayanTreks";
 import FestivalTrips from "../../components/Trips/FestivalTrips";
 import CommunityTrips from "../../components/Trips/CommunityTrips";
 
+import { PopularDestinations } from "../../components/PopularDestinations/PopularDestinations";
+import { NightAdventure } from "../../components/NightAdventure/NightAdventure";
+
+
 
 /* ── Tiny SVG icon components ────────────────────────────────── */
 
@@ -181,15 +185,24 @@ const PackagesPage = () => {
         </div>
       </div>
 
-      {/* Requested Curated Sections */}
+      
+
+      {/* Categories Row Sections */}
       <div style={{ paddingBottom: "100px" }}>
         <InternationalTrips />
         <HimalayanTreks />
         <FestivalTrips />
         <CommunityTrips />
       </div>
+
+      {/* Curated Highlight Sections */}
+      <div>
+        <PopularDestinations />
+        <NightAdventure />
+      </div>
     </main>
   );
 };
+
 
 export default PackagesPage;
