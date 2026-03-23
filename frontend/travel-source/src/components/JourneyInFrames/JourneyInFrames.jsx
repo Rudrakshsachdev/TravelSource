@@ -1,52 +1,8 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight, MapPin, Camera } from "lucide-react";
+import { fetchJourneyInFramesTrips } from "../../services/api";
+import GalleryModal from "./GalleryModal";
 import styles from "./JourneyInFrames.module.css";
-
-/* ── DATA ─────────────────────────────────────────────────── */
-const frames = [
-    {
-        id: 1,
-        location: "Dubai",
-        label: "UAE",
-        image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=900&q=85",
-    },
-    {
-        id: 2,
-        location: "Bhutan",
-        label: "South Asia",
-        image: "https://images.unsplash.com/photo-1578593139801-667ec3ec5ec1?auto=format&fit=crop&w=900&q=85",
-    },
-    {
-        id: 3,
-        location: "Kerala",
-        label: "India",
-        image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=900&q=85",
-    },
-    {
-        id: 4,
-        location: "Meghalaya",
-        label: "India",
-        image: "https://images.unsplash.com/photo-1601362840469-51e4405559bf?auto=format&fit=crop&w=900&q=85",
-    },
-    {
-        id: 5,
-        location: "Kashmir",
-        label: "India",
-        image: "https://images.unsplash.com/photo-1598091383021-15ddea10925d?auto=format&fit=crop&w=900&q=85",
-    },
-    {
-        id: 6,
-        location: "Leh Ladakh",
-        label: "India",
-        image: "https://images.unsplash.com/photo-1581791538302-03537b9c9f4d?auto=format&fit=crop&w=900&q=85",
-    },
-    {
-        id: 7,
-        location: "Spiti Valley",
-        label: "India",
-        image: "https://images.unsplash.com/photo-1570530739989-b57041a75c13?auto=format&fit=crop&w=900&q=85",
-    },
-];
 
 const CARD_W = 280;   // card width px
 const CARD_GAP = 24;  // gap px
@@ -54,15 +10,41 @@ const STEP = CARD_W + CARD_GAP;
 
 /* ── COMPONENT ────────────────────────────────────────────── */
 export default function JourneyInFrames() {
+    const [trips, setTrips] = useState([]);
+    const [loading, setLoading] = useState(true);
+    
+    // Carousel state
     const [current, setCurrent] = useState(0);
     const [animating, setAnimating] = useState(false);
     const [visible, setVisible] = useState(false);
     const [visibleCards, setVisibleCards] = useState(4);
     const [isDragging, setIsDragging] = useState(false);
+    
+    // Modal State
+    const [selectedTrip, setSelectedTrip] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    
     const dragStart = useRef(0);
     const sectionRef = useRef(null);
 
-    const total = frames.length;
+    // Fetch Trips
+    useEffect(() => {
+        let isMounted = true;
+        const loadTrips = async () => {
+            try {
+                const data = await fetchJourneyInFramesTrips();
+                if (isMounted) setTrips(data);
+            } catch (err) {
+                console.error("Failed to fetch Journey in Frames trips:", err);
+            } finally {
+                if (isMounted) setLoading(false);
+            }
+        };
+        loadTrips();
+        return () => { isMounted = false; };
+    }, []);
+
+    const total = trips.length;
     const maxIdx = Math.max(0, total - visibleCards);
 
     /* Responsive visible count */
@@ -81,13 +63,14 @@ export default function JourneyInFrames() {
 
     /* Scroll-in reveal */
     useEffect(() => {
+        if (loading || trips.length === 0) return;
         const obs = new IntersectionObserver(
             ([e]) => { if (e.isIntersecting) setVisible(true); },
             { threshold: 0.12 }
         );
         if (sectionRef.current) obs.observe(sectionRef.current);
         return () => obs.disconnect();
-    }, []);
+    }, [loading, trips.length]);
 
     const go = useCallback((dir) => {
         if (animating) return;
@@ -126,7 +109,28 @@ export default function JourneyInFrames() {
         };
     };
 
+    const handleCardClick = (trip) => {
+        if (isDragging) return;
+        setSelectedTrip(trip);
+        setIsModalOpen(true);
+    };
+
+    // Keep current index in sync if window resizes and maxIdx drops
+    useEffect(() => {
+        if (current > maxIdx && maxIdx >= 0) {
+            setCurrent(maxIdx);
+        }
+    }, [maxIdx, current]);
+
     const translateX = -(current * STEP);
+
+    if (loading) {
+        return null; // Don't show section while loading, or could add a skeleton
+    }
+
+    if (trips.length === 0) {
+        return null; // hide if no trips are mapped to this section
+    }
 
     return (
         <section
@@ -137,7 +141,6 @@ export default function JourneyInFrames() {
 
                 {/* ── HEADER ─────────────────────────────────── */}
                 <div className={styles.header}>
-                    {/* Eyebrow pill — same pattern as Reviews */}
                     <div className={styles.eyebrow}>
                         <Camera size={10} strokeWidth={2.5} />
                         Our Gallery
@@ -183,16 +186,20 @@ export default function JourneyInFrames() {
                                     : "transform 0.7s cubic-bezier(0.25, 0.8, 0.25, 1)",
                             }}
                         >
-                            {frames.map((f, idx) => (
+                            {trips.map((trip, idx) => (
                                 <div
-                                    key={f.id}
+                                    key={trip.id}
                                     className={styles.card}
                                     style={window.innerWidth > 600 ? cardTransform(idx) : {}}
+                                    onClick={() => handleCardClick(trip)}
+                                    role="button"
+                                    tabIndex={0}
+                                    onKeyDown={(e) => { if (e.key === 'Enter') handleCardClick(trip); }}
                                 >
                                     <div className={styles.gradientOverlay} />
                                     <img
-                                        src={f.image}
-                                        alt={f.location}
+                                        src={trip.image || "/images/placeholder.svg"}
+                                        alt={trip.title}
                                         className={styles.img}
                                         loading="lazy"
                                         draggable="false"
@@ -204,7 +211,7 @@ export default function JourneyInFrames() {
                                             strokeWidth={0}
                                             className={styles.pinIcon}
                                         />
-                                        {f.location}
+                                        {trip.title}
                                     </div>
                                 </div>
                             ))}
@@ -215,7 +222,7 @@ export default function JourneyInFrames() {
                     <button
                         className={styles.arrow}
                         onClick={() => go("next")}
-                        disabled={current >= maxIdx}
+                        disabled={current >= maxIdx || maxIdx <= 0}
                         aria-label="Next"
                     >
                         <ChevronRight size={20} strokeWidth={2.5} />
@@ -223,18 +230,27 @@ export default function JourneyInFrames() {
                 </div>
 
                 {/* ── DOTS ───────────────────────────────────── */}
-                <div className={styles.dotsRow}>
-                    {Array.from({ length: maxIdx + 1 }).map((_, i) => (
-                        <button
-                            key={i}
-                            className={`${styles.dot} ${i === current ? styles.dotActive : ""}`}
-                            onClick={() => setCurrent(i)}
-                            aria-label={`Go to set ${i + 1}`}
-                        />
-                    ))}
-                </div>
-
+                {maxIdx > 0 && (
+                    <div className={styles.dotsRow}>
+                        {Array.from({ length: maxIdx + 1 }).map((_, i) => (
+                            <button
+                                key={i}
+                                className={`${styles.dot} ${i === current ? styles.dotActive : ""}`}
+                                onClick={() => setCurrent(i)}
+                                aria-label={`Go to set ${i + 1}`}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
+
+            {/* Gallery Modal */}
+            {isModalOpen && selectedTrip && (
+                <GalleryModal 
+                    trip={selectedTrip} 
+                    onClose={() => setIsModalOpen(false)} 
+                />
+            )}
         </section>
     );
 }

@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, NorthIndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, AdventureSectionConfig, HimachalSectionConfig, UttarakhandSectionConfig, Category
+from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, NorthIndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, AdventureSectionConfig, HimachalSectionConfig, UttarakhandSectionConfig, Category, TripGalleryImage
 
 from .serializers import (
     TripSerializer,
@@ -46,7 +46,7 @@ from .serializers import (
     UttarakhandTripSerializer,
     UttarakhandSectionConfigSerializer,
     CategorySerializer,
-    #TripGalleryImageSerializer,
+    TripGalleryImageSerializer,
 )
 
 from django.shortcuts import get_object_or_404
@@ -796,6 +796,65 @@ def admin_north_india_config(request):
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(serializer.data)
+
+
+# ─── Journey in Frames / Gallery ──────────────────────────────────────────────
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def journey_in_frames_trips(request):
+    """Return trips designated to appear in the Journey in Frames section."""
+    trips = Trip.objects.filter(
+        is_active=True,
+        show_in_journey_in_frames=True,
+    ).order_by("journey_in_frames_order", "-id")
+
+    serializer = TripSerializer(trips, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET", "POST"])
+@permission_classes([AllowAny])
+def trip_gallery_images(request):
+    """
+    GET: List gallery images (optionally filter by ?trip_id=)
+    POST (Admin only): Add a new gallery image.
+    """
+    if request.method == "GET":
+        images = TripGalleryImage.objects.all()
+        trip_id = request.query_params.get("trip_id")
+        if trip_id:
+            images = images.filter(trip_id=trip_id)
+        
+        # Optionally filter by type, e.g., ?type=GALLERY
+        image_type = request.query_params.get("type")
+        if image_type:
+            images = images.filter(image_type=image_type.upper())
+            
+        serializer = TripGalleryImageSerializer(images, many=True)
+        return Response(serializer.data)
+
+    # POST validation
+    if not hasattr(request.user, "profile") or request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    serializer = TripGalleryImageSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data, status=201)
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def delete_trip_gallery_image(request, pk):
+    """Admin only: Delete a gallery image."""
+    if not hasattr(request.user, "profile") or request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    image = get_object_or_404(TripGalleryImage, pk=pk)
+    image.delete()
+    return Response({"detail": "Image deleted successfully"}, status=204)
+
 
 
 # ─── Himachal Trips ─────────────────────────────────────────────────────────

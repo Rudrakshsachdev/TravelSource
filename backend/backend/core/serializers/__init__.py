@@ -26,3 +26,6 @@ from .category_serializer import CategorySerializer
 from .himachal_serializer import HimachalTripSerializer, HimachalSectionConfigSerializer
 from .uttarakhand_serializer import UttarakhandTripSerializer, UttarakhandSectionConfigSerializer
 
+from .gallery_serializer import TripGalleryImageSerializer
+
+

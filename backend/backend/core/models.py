@@ -108,6 +108,10 @@ class Trip(models.Model):
     is_featured = models.BooleanField(default=False, help_text="Mark as featured trip (shows in Featured Destination section)")
     featured_highlights = models.JSONField(blank=True, null=True, help_text="List of highlight labels for floating chips, e.g. [\"Ubud · Rice Terraces\", \"Tanah Lot · Temples\"]")
 
+    # Journey in Frames showcase
+    show_in_journey_in_frames = models.BooleanField(default=False, help_text="Show in the Journey in Frames gallery section")
+    journey_in_frames_order = models.IntegerField(default=0, help_text="Order in the Journey in Frames section (lower = first)")
+
     # ── Trip Detail Page (JustWravel-style) ──
     gallery_image_urls = models.JSONField(blank=True, null=True, help_text="List of Cloudinary image URLs for the photo gallery")
     batches = models.JSONField(blank=True, null=True, help_text='List of batch objects, e.g. [{"startDate": "...", "endDate": "...", "status": "Available/Filling Fast/Full"}]')

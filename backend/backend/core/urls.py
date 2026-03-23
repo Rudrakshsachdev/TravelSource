@@ -24,6 +24,7 @@ from .views import (
     featured_trips,
     request_password_reset, verify_reset_otp, reset_password,
     category_list, admin_categories,
+    journey_in_frames_trips, trip_gallery_images, delete_trip_gallery_image,
 )
 
 urlpatterns = [
@@ -88,4 +89,7 @@ urlpatterns = [
     path("v1/admin/himachal-config/", admin_himachal_config),
     path("v1/trips/uttarakhand/", uttarakhand_trips),
     path("v1/admin/uttarakhand-config/", admin_uttarakhand_config),
+    path("v1/gallery/journey-frames/", journey_in_frames_trips),
+    path("v1/gallery/images/", trip_gallery_images),
+    path("v1/gallery/images/<int:pk>/", delete_trip_gallery_image),
 ]

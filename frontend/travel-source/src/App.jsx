@@ -39,6 +39,7 @@ import AdminUsers from "./admin/AdminUsers";
 import AdminContactMessage from "./admin/AdminContactMessage";
 import AdminBookings from "./admin/AdminBookings";
 import AdminBookingDetail from "./admin/AdminBookingDetail";
+import AdminJourneyFrames from "./admin/AdminJourneyFrames";
 
 function App() {
   return (
@@ -300,6 +301,7 @@ function App() {
         <Route path="bookings/:bookingId" element={<AdminBookingDetail />} />
         <Route path="users" element={<AdminUsers />} />
         <Route path="contact-messages" element={<AdminContactMessage />} />
+        <Route path="journey-frames" element={<AdminJourneyFrames />} />
       </Route>
     </Routes>
   );

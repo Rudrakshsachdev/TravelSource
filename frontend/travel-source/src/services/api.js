@@ -1067,6 +1067,45 @@ export const resetPassword = async (email, newPassword) => {
   return result;
 };
 
+// ─── Journey in Frames (Gallery) ────────────────────────────────────────────
+
+export const fetchJourneyInFramesTrips = async () => {
+  const res = await fetch(`${API_BASE_URL}/v1/gallery/journey-frames/`);
+  if (!res.ok) throw new Error("Failed to fetch Journey in Frames trips");
+  return res.json();
+};
+
+export const fetchTripGalleryImages = async (tripId = "") => {
+  const url = tripId ? `${API_BASE_URL}/v1/gallery/images/?trip_id=${tripId}&type=GALLERY` : `${API_BASE_URL}/v1/gallery/images/?type=GALLERY`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Failed to fetch gallery images");
+  return res.json();
+};
+
+export const addTripGalleryImage = async (data) => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/gallery/images/`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to add gallery image");
+  return res.json();
+};
+
+export const deleteTripGalleryImage = async (id) => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/gallery/images/${id}/`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Failed to delete gallery image");
+  return true;
+};
+
 /** Fetch featured trips for the Featured Destination highlight section */
 export const fetchFeaturedTrips = async () => {
   const res = await fetch(`${API_BASE_URL}/v1/trips/featured/`);
