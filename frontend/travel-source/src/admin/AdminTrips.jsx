@@ -62,6 +62,9 @@ const AdminTrips = () => {
     featured_highlights: [],
     is_adventure_trip: false,
     is_festival_trip: false,
+    is_good_friday_trip: false,
+    show_in_good_friday_section: false,
+    good_friday_display_order: 0,
     overview: "",
     pickup_location: "",
     drop_location: "",
@@ -237,6 +240,10 @@ const AdminTrips = () => {
       is_monsoon_trek: trip.is_monsoon_trek || false,
       is_community_trip: trip.is_community_trip || false,
       is_festival_trip: trip.is_festival_trip || false,
+      is_adventure_trip: trip.is_adventure_trip || false,
+      is_good_friday_trip: trip.is_good_friday_trip || false,
+      show_in_good_friday_section: trip.show_in_good_friday_section || false,
+      good_friday_display_order: trip.good_friday_display_order || 0,
       category: trip.category || "",
       is_featured: trip.is_featured || false,
       featured_highlights: Array.isArray(trip.featured_highlights) ? trip.featured_highlights : [],
@@ -298,6 +305,9 @@ const AdminTrips = () => {
       is_monsoon_trek: false,
       is_community_trip: false,
       is_festival_trip: false,
+      is_good_friday_trip: false,
+      show_in_good_friday_section: false,
+      good_friday_display_order: 0,
       category: "",
       is_featured: false,
       featured_highlights: [],
@@ -368,6 +378,7 @@ const AdminTrips = () => {
         himachal_featured_priority: Number(formData.himachal_featured_priority) || 0,
         uttarakhand_display_order: Number(formData.uttarakhand_display_order) || 0,
         uttarakhand_featured_priority: Number(formData.uttarakhand_featured_priority) || 0,
+        good_friday_display_order: Number(formData.good_friday_display_order) || 0,
         itinerary,
 
         highlights,
@@ -1453,6 +1464,71 @@ const AdminTrips = () => {
                     </div>
                     <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
                       Higher number = more prominent placement
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* GOOD FRIDAY SHOWCASE SETTINGS */}
+              <div className={styles.formSection}>
+                <h3 className={styles.sectionTitle}>
+                  <svg className={styles.sectionIcon} viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M5 5a3 3 0 015-2.236A3 3 0 0114.83 6H16a2 2 0 110 4h-5V9a1 1 0 10-2 0v1H4a2 2 0 110-4h1.17C5.06 5.687 5 5.35 5 5zm4 1V5a1 1 0 10-1 1h1zm3 0a1 1 0 10-1-1v1h1z" clipRule="evenodd" />
+                    <path d="M9 11H3v5a2 2 0 002 2h4v-7zM11 18h4a2 2 0 002-2v-5h-6v7z" />
+                  </svg>
+                  Good Friday Showcase
+                </h3>
+
+                <div className={styles.formGrid}>
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        name="is_good_friday_trip"
+                        checked={formData.is_good_friday_trip}
+                        onChange={handleCheckboxChange}
+                        style={{ width: "18px", height: "18px", accentColor: "#f97316" }}
+                      />
+                      Good Friday Trip
+                    </label>
+                    <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
+                      Mark this trip as a Good Friday special deal
+                    </span>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        name="show_in_good_friday_section"
+                        checked={formData.show_in_good_friday_section}
+                        onChange={handleCheckboxChange}
+                        style={{ width: "18px", height: "18px", accentColor: "#f97316" }}
+                      />
+                      Show in Scrolling Section
+                    </label>
+                    <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
+                      Display in the auto-scrolling Good Friday showcase
+                    </span>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Display Order</label>
+                    <div className={styles.inputWrapper}>
+                      <svg className={styles.inputIcon} viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" />
+                      </svg>
+                      <input
+                        className={styles.input}
+                        name="good_friday_display_order"
+                        type="number"
+                        placeholder="0"
+                        value={formData.good_friday_display_order}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
+                      Lower number appears first in the scrolling section
                     </span>
                   </div>
                 </div>

@@ -25,6 +25,7 @@ from .views import (
     request_password_reset, verify_reset_otp, reset_password,
     category_list, admin_categories,
     journey_in_frames_trips, trip_gallery_images, delete_trip_gallery_image,
+    good_friday_trips, all_good_friday_trips,
 )
 
 urlpatterns = [
@@ -92,4 +93,6 @@ urlpatterns = [
     path("v1/gallery/journey-frames/", journey_in_frames_trips),
     path("v1/gallery/images/", trip_gallery_images),
     path("v1/gallery/images/<int:pk>/", delete_trip_gallery_image),
+    path("v1/trips/good-friday/", good_friday_trips),
+    path("v1/trips/good-friday/all/", all_good_friday_trips),
 ]

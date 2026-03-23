@@ -63,6 +63,10 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
 
+import random
+import string
+from .models import PasswordResetOTP
+
 @api_view(["GET"])
 def trip_list(request):
     trips = Trip.objects.filter(is_active=True)
@@ -1208,9 +1212,25 @@ def admin_community_config(request):
 
 
 
-import random
-import string
-from .models import PasswordResetOTP
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def good_friday_trips(request):
+    """Fetch trips that are explicitly selected for the Good Friday trips showcase."""
+    trips = Trip.objects.filter(is_active=True, show_in_good_friday_section=True).order_by('good_friday_display_order')
+    serializer = TripSerializer(trips, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def all_good_friday_trips(request):
+    """Fetch all trips labeled as Good Friday trips."""
+    trips = Trip.objects.filter(is_active=True, is_good_friday_trip=True).order_by('id')
+    serializer = TripSerializer(trips, many=True)
+    return Response(serializer.data)
+
+
+
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
@@ -1384,4 +1404,4 @@ def admin_adventure_config(request):
     serializer = AdventureSectionConfigSerializer(config, data=request.data, partial=True)
     serializer.is_valid(raise_exception=True)
     serializer.save()
-    return Response(serializer.data)
+    return Response(serializer.data)

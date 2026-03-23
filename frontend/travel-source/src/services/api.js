@@ -573,6 +573,22 @@ export const fetchAllInternationalTrips = async () => {
   return response.json();
 };
 
+export const fetchGoodFridayTrips = async () => {
+  const response = await fetch(`${API_BASE_URL}/v1/trips/good-friday/`);
+  if (!response.ok) {
+    throw new Error("Failed to load Good Friday trips");
+  }
+  return response.json();
+};
+
+export const fetchAllGoodFridayTrips = async () => {
+  const response = await fetch(`${API_BASE_URL}/v1/trips/good-friday/all/`);
+  if (!response.ok) {
+    throw new Error("Failed to load all Good Friday trips");
+  }
+  return response.json();
+};
+
 /** Fetch India trips + section config for the scrolling showcase */
 export const fetchIndiaTrips = async () => {
   const res = await fetch(`${API_BASE_URL}/v1/trips/india/`);

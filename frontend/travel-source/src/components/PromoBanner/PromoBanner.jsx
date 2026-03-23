@@ -28,7 +28,7 @@ export default function PromoBanner() {
   }, []);
 
   const handleNavigate = () => {
-    navigate("/packages");
+    navigate("/good-friday");
   };
 
   return (

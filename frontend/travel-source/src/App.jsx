@@ -28,6 +28,7 @@ import RefundPolicy from "./pages/Legal/RefundPolicy";
 import TripDetailNew from "./components/TripDetailNew/TripDetailNew";
 import PackagesPage from "./pages/Packages/PackagesPage";
 import PremiumCategoryTripsPage from "./pages/CategoryTrips/PremiumCategoryTripsPage";
+import GoodFridayTripsPage from "./pages/GoodFridayTrips/GoodFridayTripsPage";
 
 // Admin
 import AdminLayout from "./admin/AdminLayout";
@@ -105,6 +106,15 @@ function App() {
         element={
           <Layout>
             <InternationalTripsPage />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/good-friday"
+        element={
+          <Layout>
+            <GoodFridayTripsPage />
           </Layout>
         }
       />

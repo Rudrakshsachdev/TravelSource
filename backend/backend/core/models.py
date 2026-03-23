@@ -104,6 +104,11 @@ class Trip(models.Model):
     show_in_adventure_section = models.BooleanField(default=False, help_text="Show in the scrolling Adventure section")
     adventure_display_order = models.IntegerField(default=0, help_text="Order in the Adventure section (lower = first)")
 
+    # Good Friday showcase fields
+    is_good_friday_trip = models.BooleanField(default=False, help_text="Mark as Good Friday trip")
+    show_in_good_friday_section = models.BooleanField(default=False, help_text="Show in the scrolling Good Friday section")
+    good_friday_display_order = models.IntegerField(default=0, help_text="Order in the Good Friday section (lower = first)")
+
     # Featured trip showcase
     is_featured = models.BooleanField(default=False, help_text="Mark as featured trip (shows in Featured Destination section)")
     featured_highlights = models.JSONField(blank=True, null=True, help_text="List of highlight labels for floating chips, e.g. [\"Ubud · Rice Terraces\", \"Tanah Lot · Temples\"]")
