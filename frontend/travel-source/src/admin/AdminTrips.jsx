@@ -65,6 +65,10 @@ const AdminTrips = () => {
     is_good_friday_trip: false,
     show_in_good_friday_section: false,
     good_friday_display_order: 0,
+    is_long_weekend_trip: false,
+    show_in_long_weekend_section: false,
+    long_weekend_display_order: 0,
+    long_weekend_featured_priority: 0,
     overview: "",
     pickup_location: "",
     drop_location: "",
@@ -244,6 +248,10 @@ const AdminTrips = () => {
       is_good_friday_trip: trip.is_good_friday_trip || false,
       show_in_good_friday_section: trip.show_in_good_friday_section || false,
       good_friday_display_order: trip.good_friday_display_order || 0,
+      is_long_weekend_trip: trip.is_long_weekend_trip || false,
+      show_in_long_weekend_section: trip.show_in_long_weekend_section || false,
+      long_weekend_display_order: trip.long_weekend_display_order || 0,
+      long_weekend_featured_priority: trip.long_weekend_featured_priority || 0,
       category: trip.category || "",
       is_featured: trip.is_featured || false,
       featured_highlights: Array.isArray(trip.featured_highlights) ? trip.featured_highlights : [],
@@ -308,6 +316,10 @@ const AdminTrips = () => {
       is_good_friday_trip: false,
       show_in_good_friday_section: false,
       good_friday_display_order: 0,
+      is_long_weekend_trip: false,
+      show_in_long_weekend_section: false,
+      long_weekend_display_order: 0,
+      long_weekend_featured_priority: 0,
       category: "",
       is_featured: false,
       featured_highlights: [],
@@ -379,6 +391,8 @@ const AdminTrips = () => {
         uttarakhand_display_order: Number(formData.uttarakhand_display_order) || 0,
         uttarakhand_featured_priority: Number(formData.uttarakhand_featured_priority) || 0,
         good_friday_display_order: Number(formData.good_friday_display_order) || 0,
+        long_weekend_display_order: Number(formData.long_weekend_display_order) || 0,
+        long_weekend_featured_priority: Number(formData.long_weekend_featured_priority) || 0,
         itinerary,
 
         highlights,
@@ -1530,6 +1544,84 @@ const AdminTrips = () => {
                     <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
                       Lower number appears first in the scrolling section
                     </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* LONG WEEKEND SHOWCASE SETTINGS */}
+              <div className={styles.formSection}>
+                <h3 className={styles.sectionTitle}>
+                  <svg className={styles.sectionIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
+                  </svg>
+                  Long Weekend Showcase
+                </h3>
+
+                <div className={styles.formGrid}>
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        name="is_long_weekend_trip"
+                        checked={formData.is_long_weekend_trip}
+                        onChange={handleCheckboxChange}
+                        style={{ width: "18px", height: "18px", accentColor: "#e67e22" }}
+                      />
+                      Long Weekend Trip
+                    </label>
+                    <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
+                      Mark this trip as a Long Weekend special
+                    </span>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        name="show_in_long_weekend_section"
+                        checked={formData.show_in_long_weekend_section}
+                        onChange={handleCheckboxChange}
+                        style={{ width: "18px", height: "18px", accentColor: "#e67e22" }}
+                      />
+                      Show in Scrolling Section
+                    </label>
+                    <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
+                      Display in the auto-scrolling Long Weekend showcase
+                    </span>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Display Order</label>
+                    <div className={styles.inputWrapper}>
+                      <svg className={styles.inputIcon} viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" />
+                      </svg>
+                      <input
+                        className={styles.input}
+                        name="long_weekend_display_order"
+                        type="number"
+                        placeholder="0"
+                        value={formData.long_weekend_display_order}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Featured Priority</label>
+                    <div className={styles.inputWrapper}>
+                      <svg className={styles.inputIcon} viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <input
+                        className={styles.input}
+                        name="long_weekend_featured_priority"
+                        type="number"
+                        placeholder="0"
+                        value={formData.long_weekend_featured_priority}
+                        onChange={handleChange}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

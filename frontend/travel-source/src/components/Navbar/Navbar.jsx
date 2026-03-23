@@ -24,6 +24,7 @@ import {
   Globe,
   Heart,
   Sparkles,
+  Calendar,
 } from "lucide-react";
 import tpLogo from "../../assets/logog.png";
 import { useMagnetic } from "../../hooks/useMagnetic";
@@ -39,6 +40,7 @@ const SECTION_ICONS = {
   monsoon: CloudSun,
   community: Users,
   festival: Star,
+  long_weekend: Calendar,
 };
 const SECTION_LABELS = {
   international: "International Trips",
@@ -50,6 +52,7 @@ const SECTION_LABELS = {
   monsoon: "Monsoon Treks",
   community: "Community Trips",
   festival: "Festival Trips",
+  long_weekend: "Long Weekend Trips",
 };
 const NAV_SECTION_ORDER = [
   "international",
@@ -61,6 +64,7 @@ const NAV_SECTION_ORDER = [
   "monsoon",
   "community",
   "festival",
+  "long_weekend",
 ];
 const DESKTOP_PRIMARY_MENU_LIMIT = 4;
 
@@ -153,6 +157,7 @@ const Navbar = () => {
           monsoon,
           community,
           festival,
+          long_weekend,
         } = await fetchNavbarContent();
 
         setTripsCount(trips.length);
@@ -167,6 +172,7 @@ const Navbar = () => {
           monsoon,
           community,
           festival,
+          long_weekend,
         };
 
         const tripTypeMenus = NAV_SECTION_ORDER.map((sectionKey) => {

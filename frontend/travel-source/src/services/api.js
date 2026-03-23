@@ -1163,6 +1163,7 @@ export const fetchNavbarContent = async () => {
     monsoonData,
     communityData,
     festivalData,
+    longWeekendData,
   ] = await Promise.allSettled([
     fetchTrips(),
     fetchCategories(),
@@ -1176,6 +1177,7 @@ export const fetchNavbarContent = async () => {
     fetchMonsoonTrips(),
     fetchCommunityTrips(),
     fetchFestivalTrips(),
+    fetchLongWeekendTrips(),
   ]);
 
   return {
@@ -1218,6 +1220,10 @@ export const fetchNavbarContent = async () => {
     festival:
       festivalData.status === "fulfilled"
         ? festivalData.value
+        : { config: { is_enabled: false }, trips: [] },
+    long_weekend:
+      longWeekendData.status === "fulfilled"
+        ? longWeekendData.value
         : { config: { is_enabled: false }, trips: [] },
   };
 };
@@ -1310,5 +1316,43 @@ export const fetchApplicableCoupons = async (tripId, bookingAmount) => {
   );
 
   if (!res.ok) return { best_coupon: null, all_coupons: [] };
+    return res.json();
+};
+
+/** Fetch Long Weekend trips + section config for the scrolling showcase */
+export const fetchLongWeekendTrips = async () => {
+  const res = await fetch(`${API_BASE_URL}/v1/trips/long-weekend/`);
+  if (!res.ok) throw new Error("Failed to fetch Long Weekend trips");
+  return res.json();
+};
+
+export const fetchAllLongWeekendTrips = async () => {
+  const res = await fetch(`${API_BASE_URL}/v1/trips/?is_long_weekend_trip=true`);
+  if (!res.ok) throw new Error("Failed to load all Long Weekend trips");
+  return res.json();
+};
+
+/** Fetch Long Weekend section config (ADMIN) */
+export const fetchLongWeekendConfig = async () => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/long-weekend-config/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Failed to fetch Long Weekend config");
+  return res.json();
+};
+
+/** Update Long Weekend section config (ADMIN) */
+export const updateLongWeekendConfig = async (data) => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/long-weekend-config/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to update Long Weekend config");
   return res.json();
 };

@@ -109,6 +109,12 @@ class Trip(models.Model):
     show_in_good_friday_section = models.BooleanField(default=False, help_text="Show in the scrolling Good Friday section")
     good_friday_display_order = models.IntegerField(default=0, help_text="Order in the Good Friday section (lower = first)")
 
+    # Long Weekend showcase fields
+    is_long_weekend_trip = models.BooleanField(default=False, help_text="Mark as Long Weekend trip")
+    show_in_long_weekend_section = models.BooleanField(default=False, help_text="Show in the scrolling Long Weekend section")
+    long_weekend_display_order = models.IntegerField(default=0, help_text="Order in the Long Weekend section (lower = first)")
+    long_weekend_featured_priority = models.IntegerField(default=0, help_text="Featured priority (higher = more prominent)")
+
     # Featured trip showcase
     is_featured = models.BooleanField(default=False, help_text="Mark as featured trip (shows in Featured Destination section)")
     featured_highlights = models.JSONField(blank=True, null=True, help_text="List of highlight labels for floating chips, e.g. [\"Ubud · Rice Terraces\", \"Tanah Lot · Temples\"]")
@@ -615,6 +621,31 @@ class UttarakhandSectionConfig(models.Model):
 
     def __str__(self):
         return f"Uttarakhand Section ({'Enabled' if self.is_enabled else 'Disabled'})"
+
+    def save(self, *args, **kwargs):
+        # Enforce singleton: always use pk=1
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+
+class LongWeekendSectionConfig(models.Model):
+    """Singleton settings for the Long Weekend Trips showcase section."""
+    is_enabled = models.BooleanField(default=True, help_text="Enable the Long Weekend trips scrolling section")
+    title = models.CharField(max_length=200, default="Long Weekend Gateways")
+    subtitle = models.CharField(max_length=300, blank=True, default="", help_text="Optional subtitle below the heading")
+    scroll_speed = models.PositiveIntegerField(default=60, help_text="Animation duration in seconds (higher = slower)")
+
+    class Meta:
+        verbose_name = "Long Weekend Section Config"
+        verbose_name_plural = "Long Weekend Section Config"
+
+    def __str__(self):
+        return f"Long Weekend Section ({'Enabled' if self.is_enabled else 'Disabled'})"
 
     def save(self, *args, **kwargs):
         # Enforce singleton: always use pk=1

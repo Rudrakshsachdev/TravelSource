@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, NorthIndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, AdventureSectionConfig, HimachalSectionConfig, UttarakhandSectionConfig, Category, TripGalleryImage, Coupon
+from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, NorthIndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, AdventureSectionConfig, HimachalSectionConfig, UttarakhandSectionConfig, LongWeekendSectionConfig, Category, TripGalleryImage, Coupon
 from .coupon_service import validate_coupon, record_coupon_usage, get_applicable_coupons
 
 from .serializers import (
@@ -40,12 +40,13 @@ from .serializers import (
     FestivalTripSerializer,
     FestivalSectionConfigSerializer,
     AdventureTripSerializer,
-    AdventureTripSerializer,
     AdventureSectionConfigSerializer,
     HimachalTripSerializer,
     HimachalSectionConfigSerializer,
     UttarakhandTripSerializer,
     UttarakhandSectionConfigSerializer,
+    LongWeekendTripSerializer,
+    LongWeekendSectionConfigSerializer,
     CategorySerializer,
     TripGalleryImageSerializer,
     CouponSerializer,
@@ -84,6 +85,7 @@ def trip_list(request):
     is_adventure_trip = request.query_params.get("is_adventure_trip")
     is_himachal_trip = request.query_params.get("is_himachal_trip")
     is_uttarakhand_trip = request.query_params.get("is_uttarakhand_trip")
+    is_long_weekend_trip = request.query_params.get("is_long_weekend_trip")
     
     if category_slug:
         trips = trips.filter(category__slug=category_slug)
@@ -117,6 +119,12 @@ def trip_list(request):
         
     if is_uttarakhand_trip and is_uttarakhand_trip.lower() == "true":
         trips = trips.filter(is_uttarakhand_trip=True)
+
+    if is_long_weekend_trip and is_long_weekend_trip.lower() == "true":
+        trips = trips.filter(is_long_weekend_trip=True)
+        
+    if is_long_weekend_trip and is_long_weekend_trip.lower() == "true":
+        trips = trips.filter(is_long_weekend_trip=True)
         
     serializer = TripSerializer(trips, many=True)
     return Response(serializer.data)
@@ -1433,6 +1441,51 @@ def admin_adventure_config(request):
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(serializer.data)
+
+
+# ─── Long Weekend Section ───────────────────────────────────────────────────────────
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def long_weekend_trips(request):
+    """Return active long weekend trips for the scrolling showcase section."""
+    config = LongWeekendSectionConfig.load()
+    if not config.is_enabled:
+        return Response({"config": {"is_enabled": False}, "trips": []})
+
+    trips = Trip.objects.filter(
+        is_active=True,
+        is_long_weekend_trip=True,
+        show_in_long_weekend_section=True,
+    ).order_by("long_weekend_display_order", "-id")
+
+    config_serializer = LongWeekendSectionConfigSerializer(config)
+    trip_serializer = LongWeekendTripSerializer(trips, many=True)
+
+    return Response({
+        "config": config_serializer.data,
+        "trips": trip_serializer.data,
+    })
+
+
+@api_view(["GET", "PATCH"])
+@permission_classes([IsAuthenticated])
+def admin_long_weekend_config(request):
+    """Admin: get or update the Long Weekend section configuration."""
+    if not hasattr(request.user, "profile") or request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    config = LongWeekendSectionConfig.load()
+
+    if request.method == "GET":
+        serializer = LongWeekendSectionConfigSerializer(config)
+        return Response(serializer.data)
+
+    serializer = LongWeekendSectionConfigSerializer(config, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data)
+
 
 # ─── Coupons ──────────────────────────────────────────────────────────────────
 

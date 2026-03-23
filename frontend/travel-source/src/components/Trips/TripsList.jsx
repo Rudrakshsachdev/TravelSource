@@ -26,6 +26,7 @@ import MonsoonTreks from "./MonsoonTreks";
 import CommunityTrips from "./CommunityTrips";
 import FestivalTrips from "./FestivalTrips";
 import AdventureTrips from "./AdventureTrips";
+import LongWeekendTrips from "./LongWeekendTrips";
 import CategoryNav from "./CategoryNav";
 import AnimatedMap from "../AnimatedMap/AnimatedMap";
 import PersonalizationSection from "./PersonalizationSection";
@@ -277,6 +278,7 @@ const TripsList = () => {
       <CommunityTrips />
       <FestivalTrips />
       <AdventureTrips />
+      <LongWeekendTrips />
       <NorthIndiaTrips />
       <AnimatedMap />
 
