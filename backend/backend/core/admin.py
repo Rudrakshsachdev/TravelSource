@@ -19,7 +19,7 @@ class TripAdmin(admin.ModelAdmin):
         "is_international", "show_in_international_section", "display_order",
         "is_india_trip", "show_in_india_section", "india_display_order",
         "is_north_india_trip", "show_in_north_india_section", "north_india_display_order",
-        "is_honeymoon", "show_in_honeymoon_section", "honeymoon_display_order",
+        "is_honeymoon", "show_in_honeymoon_section", "honeymoon_display_order", "honeymoon_featured_priority",
         "is_himalayan_trek", "show_in_himalayan_section", "himalayan_display_order",
         "is_backpacking_trip", "show_in_backpacking_section", "backpacking_display_order",
         "is_summer_trek", "show_in_summer_section", "summer_display_order",
@@ -34,7 +34,7 @@ class TripAdmin(admin.ModelAdmin):
         "is_international", "show_in_international_section", "display_order",
         "is_india_trip", "show_in_india_section", "india_display_order",
         "is_north_india_trip", "show_in_north_india_section", "north_india_display_order",
-        "is_honeymoon", "show_in_honeymoon_section", "honeymoon_display_order",
+        "is_honeymoon", "show_in_honeymoon_section", "honeymoon_display_order", "honeymoon_featured_priority",
         "is_himalayan_trek", "show_in_himalayan_section", "himalayan_display_order",
         "is_backpacking_trip", "show_in_backpacking_section", "backpacking_display_order",
         "is_summer_trek", "show_in_summer_section", "summer_display_order",
@@ -66,7 +66,7 @@ class TripAdmin(admin.ModelAdmin):
             "description": "Control how this trip appears in the North India Trips scrolling section.",
         }),
         ("Honeymoon Showcase", {
-            "fields": ("is_honeymoon", "show_in_honeymoon_section", "honeymoon_display_order"),
+            "fields": ("is_honeymoon", "show_in_honeymoon_section", "honeymoon_display_order", "honeymoon_featured_priority"),
             "description": "Control how this trip appears in the Honeymoon Trips scrolling section.",
         }),
         ("Himalayan Showcase", {

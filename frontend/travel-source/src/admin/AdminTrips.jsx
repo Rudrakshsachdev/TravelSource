@@ -52,6 +52,9 @@ const AdminTrips = () => {
     uttarakhand_display_order: 0,
     uttarakhand_featured_priority: 0,
     is_honeymoon: false,
+    show_in_honeymoon_section: false,
+    honeymoon_display_order: 0,
+    honeymoon_featured_priority: 0,
     is_himalayan_trek: false,
     is_backpacking_trip: false,
     is_summer_trek: false,
@@ -238,6 +241,9 @@ const AdminTrips = () => {
       uttarakhand_display_order: trip.uttarakhand_display_order || 0,
       uttarakhand_featured_priority: trip.uttarakhand_featured_priority || 0,
       is_honeymoon: trip.is_honeymoon || false,
+      show_in_honeymoon_section: trip.show_in_honeymoon_section || false,
+      honeymoon_display_order: trip.honeymoon_display_order || 0,
+      honeymoon_featured_priority: trip.honeymoon_featured_priority || 0,
       is_himalayan_trek: trip.is_himalayan_trek || false,
       is_backpacking_trip: trip.is_backpacking_trip || false,
       is_summer_trek: trip.is_summer_trek || false,
@@ -307,6 +313,9 @@ const AdminTrips = () => {
       uttarakhand_display_order: 0,
       uttarakhand_featured_priority: 0,
       is_honeymoon: false,
+      show_in_honeymoon_section: false,
+      honeymoon_display_order: 0,
+      honeymoon_featured_priority: 0,
       is_himalayan_trek: false,
       is_backpacking_trip: false,
       is_summer_trek: false,
@@ -388,6 +397,8 @@ const AdminTrips = () => {
         north_india_featured_priority: Number(formData.north_india_featured_priority) || 0,
         himachal_display_order: Number(formData.himachal_display_order) || 0,
         himachal_featured_priority: Number(formData.himachal_featured_priority) || 0,
+        honeymoon_display_order: Number(formData.honeymoon_display_order) || 0,
+        honeymoon_featured_priority: Number(formData.honeymoon_featured_priority) || 0,
         uttarakhand_display_order: Number(formData.uttarakhand_display_order) || 0,
         uttarakhand_featured_priority: Number(formData.uttarakhand_featured_priority) || 0,
         good_friday_display_order: Number(formData.good_friday_display_order) || 0,
@@ -1544,6 +1555,84 @@ const AdminTrips = () => {
                     <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
                       Lower number appears first in the scrolling section
                     </span>
+                  </div>
+                </div>
+              </div>
+              
+              {/* HONEYMOON SHOWCASE SETTINGS */}
+              <div className={styles.formSection}>
+                <h3 className={styles.sectionTitle}>
+                  <svg className={styles.sectionIcon} viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                  </svg>
+                  Honeymoon Showcase
+                </h3>
+
+                <div className={styles.formGrid}>
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        name="is_honeymoon"
+                        checked={formData.is_honeymoon}
+                        onChange={handleCheckboxChange}
+                        style={{ width: "18px", height: "18px", accentColor: "#ec4899" }}
+                      />
+                      Honeymoon Trip
+                    </label>
+                    <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
+                      Mark this trip as a Honeymoon getaway
+                    </span>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        name="show_in_honeymoon_section"
+                        checked={formData.show_in_honeymoon_section}
+                        onChange={handleCheckboxChange}
+                        style={{ width: "18px", height: "18px", accentColor: "#ec4899" }}
+                      />
+                      Show in Scrolling Section
+                    </label>
+                    <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
+                      Display in the auto-scrolling Honeymoon showcase
+                    </span>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Display Order</label>
+                    <div className={styles.inputWrapper}>
+                      <svg className={styles.inputIcon} viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" />
+                      </svg>
+                      <input
+                        className={styles.input}
+                        name="honeymoon_display_order"
+                        type="number"
+                        placeholder="0"
+                        value={formData.honeymoon_display_order}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Featured Priority</label>
+                    <div className={styles.inputWrapper}>
+                      <svg className={styles.inputIcon} viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <input
+                        className={styles.input}
+                        name="honeymoon_featured_priority"
+                        type="number"
+                        placeholder="0"
+                        value={formData.honeymoon_featured_priority}
+                        onChange={handleChange}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

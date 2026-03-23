@@ -72,6 +72,7 @@ class Trip(models.Model):
     is_honeymoon = models.BooleanField(default=False, help_text="Mark as honeymoon trip")
     show_in_honeymoon_section = models.BooleanField(default=False, help_text="Show in the scrolling honeymoon section")
     honeymoon_display_order = models.IntegerField(default=0, help_text="Order in the honeymoon section (lower = first)")
+    honeymoon_featured_priority = models.IntegerField(default=0, help_text="Featured priority (higher = more prominent)")
 
     # Himalayan showcase fields
     is_himalayan_trek = models.BooleanField(default=False, help_text="Mark as Himalayan trek")

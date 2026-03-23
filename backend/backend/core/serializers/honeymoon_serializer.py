@@ -17,6 +17,7 @@ class HoneymoonTripSerializer(serializers.ModelSerializer):
             "image",
             "short_description",
             "honeymoon_display_order",
+            "honeymoon_featured_priority",
         ]
 
 

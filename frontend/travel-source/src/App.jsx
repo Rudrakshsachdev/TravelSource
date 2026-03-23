@@ -195,6 +195,15 @@ function App() {
       />
 
       <Route
+        path="/honeymoon-getaways"
+        element={
+          <Layout>
+            <HoneymoonTripsPage />
+          </Layout>
+        }
+      />
+      {/* Alias for backward compatibility */}
+      <Route
         path="/honeymoon-trips"
         element={
           <Layout>

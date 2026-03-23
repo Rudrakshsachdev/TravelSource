@@ -646,7 +646,7 @@ export const fetchHoneymoonTrips = async () => {
 };
 
 export const fetchAllHoneymoonTrips = async () => {
-  const response = await fetch(`${API_BASE_URL}/v1/trips/?is_honeymoon_trip=true`);
+  const response = await fetch(`${API_BASE_URL}/v1/trips/?is_honeymoon=true`);
   if (!response.ok) {
     throw new Error("Failed to load all Honeymoon trips");
   }

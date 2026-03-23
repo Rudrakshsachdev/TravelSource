@@ -54,6 +54,8 @@ class TripSerializer(serializers.ModelSerializer):
             "uttarakhand_featured_priority",
             "is_honeymoon",
             "show_in_honeymoon_section",
+            "honeymoon_display_order",
+            "honeymoon_featured_priority",
             "is_himalayan_trek",
             "show_in_himalayan_section",
             "is_backpacking_trip",

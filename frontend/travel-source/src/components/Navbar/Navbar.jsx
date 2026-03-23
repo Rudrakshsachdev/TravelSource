@@ -66,6 +66,18 @@ const NAV_SECTION_ORDER = [
   "festival",
   "long_weekend",
 ];
+const SECTION_PATHS = {
+  international: "/international-trips",
+  india: "/india-trips",
+  honeymoon: "/honeymoon-getaways",
+  himalayan: "/himalayan-trips",
+  backpacking: "/backpacking-trips",
+  summer: "/summer-trips",
+  monsoon: "/monsoon-trips",
+  community: "/community-trips",
+  festival: "/festival-trips",
+  long_weekend: "/long-weekend-trips",
+};
 const DESKTOP_PRIMARY_MENU_LIMIT = 4;
 
 const formatMenuHeader = (label) => label.toUpperCase();
@@ -656,11 +668,15 @@ const Navbar = () => {
                           <div className={styles.dropdownDivider} />
                           <button
                             className={styles.dropdownFooter}
-                            onClick={() =>
-                              menu.footer.categorySlug
-                                ? goToSection("trips-grid")
-                                : goToSection("trips-grid")
-                            }
+                            onClick={() => {
+                              if (menu.footer.categorySlug) {
+                                go(`/${menu.footer.categorySlug}`);
+                              } else if (menu.footer.sectionKey) {
+                                go(SECTION_PATHS[menu.footer.sectionKey] || "/");
+                              } else {
+                                goToSection("trips-grid");
+                              }
+                            }}
                             role="menuitem"
                           >
                             {menu.footer.label}
