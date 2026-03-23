@@ -267,6 +267,8 @@ class Booking(models.Model):
     occupancy_details = models.CharField(max_length=200, blank=True, default="")
 
     travel_date = models.DateField(null=True, blank=True)
+    coupon_code = models.CharField(max_length=50, blank=True, null=True, help_text="Coupon code applied during booking")
+    discount_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0, help_text="Discount amount applied")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -624,3 +626,29 @@ class UttarakhandSectionConfig(models.Model):
         obj, _ = cls.objects.get_or_create(pk=1)
         return obj
 
+
+class Coupon(models.Model):
+    DISCOUNT_TYPES = (
+        ('PERCENTAGE', 'Percentage'),
+        ('FLAT', 'Flat Amount'),
+    )
+
+    code = models.CharField(max_length=50, unique=True, help_text="Unique coupon code (e.g. SUMMER20)")
+    discount_type = models.CharField(max_length=20, choices=DISCOUNT_TYPES, default='PERCENTAGE')
+    discount_value = models.DecimalField(max_digits=10, decimal_places=2, help_text="Percentage or Flat amount")
+    max_discount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, help_text="Max discount cap for percentage coupons")
+    min_booking_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0, help_text="Minimum booking total required to apply coupon")
+    
+    is_active = models.BooleanField(default=True, help_text="Toggle to enable/disable the coupon")
+    expiry_date = models.DateTimeField(null=True, blank=True, help_text="Coupon expiration date")
+    
+    usage_limit = models.PositiveIntegerField(default=0, help_text="Max times coupon can be used overall (0 = unlimited)")
+    times_used = models.PositiveIntegerField(default=0, help_text="Counter for successful uses")
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name="coupons", help_text="Restrict to specific user (optional)")
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE, null=True, blank=True, related_name="coupons", help_text="Restrict to specific trip (optional)")
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.code} - {self.discount_value}{'%' if self.discount_type == 'PERCENTAGE' else ' INR'}"

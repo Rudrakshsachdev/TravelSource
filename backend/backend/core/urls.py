@@ -26,6 +26,8 @@ from .views import (
     category_list, admin_categories,
     journey_in_frames_trips, trip_gallery_images, delete_trip_gallery_image,
     good_friday_trips, all_good_friday_trips,
+    validate_coupon_view, admin_coupons, admin_coupon_detail,
+    applicable_coupons_view,
 )
 
 urlpatterns = [
@@ -95,4 +97,10 @@ urlpatterns = [
     path("v1/gallery/images/<int:pk>/", delete_trip_gallery_image),
     path("v1/trips/good-friday/", good_friday_trips),
     path("v1/trips/good-friday/all/", all_good_friday_trips),
+    
+    # Coupons
+    path("v1/coupons/validate/", validate_coupon_view),
+    path("v1/coupons/applicable/", applicable_coupons_view),
+    path("v1/admin/coupons/", admin_coupons),
+    path("v1/admin/coupons/<int:pk>/", admin_coupon_detail),
 ]

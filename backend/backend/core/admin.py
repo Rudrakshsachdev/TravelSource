@@ -1,4 +1,4 @@
-from .models import Trip, Profile, Enquiry, SiteStat, InternationalSectionConfig, IndiaSectionConfig, NorthIndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, AdventureSectionConfig, Category
+from .models import Trip, Profile, Enquiry, SiteStat, InternationalSectionConfig, IndiaSectionConfig, NorthIndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, AdventureSectionConfig, Category, Coupon
 from django.contrib import admin
 # Register your models here.
 
@@ -260,3 +260,11 @@ class EnquiryAdmin(admin.ModelAdmin):
     search_fields = ("name", "email", "phone")
 
 
+@admin.register(Coupon)
+class CouponAdmin(admin.ModelAdmin):
+    list_display = ("code", "discount_type", "discount_value", "is_active", "expiry_date", "times_used", "usage_limit")
+    list_filter = ("is_active", "discount_type", "trip")
+    search_fields = ("code", "user__username", "trip__title")
+    list_editable = ("is_active",)
+    autocomplete_fields = ("user", "trip")
+    

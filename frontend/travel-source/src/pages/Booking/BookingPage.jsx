@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchTripDetail, createBooking } from "../../services/api";
+import { fetchTripDetail, createBooking, validateCoupon, fetchApplicableCoupons } from "../../services/api";
 import { getAuthData } from "../../utils/auth";
 import styles from "./BookingPage.module.css";
 
@@ -43,6 +43,14 @@ const BookingPage = () => {
   const [selectedBatchIdx, setSelectedBatchIdx] = useState(0);
   const [selectedOccupancyIndex, setSelectedOccupancyIndex] = useState(0);
   const [couponCode, setCouponCode] = useState("");
+  const [couponResult, setCouponResult] = useState(null);
+  const [couponError, setCouponError] = useState("");
+  const [couponLoading, setCouponLoading] = useState(false);
+
+  // Coupon recommendation state
+  const [availableCoupons, setAvailableCoupons] = useState([]);
+  const [bestCoupon, setBestCoupon] = useState(null);
+  const [showCouponList, setShowCouponList] = useState(false);
 
   useEffect(() => {
     const auth = getAuthData();
@@ -120,7 +128,11 @@ const BookingPage = () => {
   const basePrice = currentOption?.price || 0;
   const amount = basePrice * formData.persons;
   const gst = amount * 0.05; // 5% GST
-  const grandTotal = amount + gst;
+  let grandTotal = amount + gst;
+  
+  // Apply coupon discount if any
+  const discountAmount = couponResult?.discount_amount || 0;
+  grandTotal = Math.max(0, grandTotal - discountAmount);
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat("en-IN", {
@@ -128,6 +140,79 @@ const BookingPage = () => {
       currency: "INR",
       minimumFractionDigits: 2,
     }).format(price || 0);
+  };
+
+  // Fetch applicable coupons whenever the booking amount changes
+  useEffect(() => {
+    if (!trip) return;
+    const bookingAmt = amount + gst;
+    if (bookingAmt <= 0) return;
+
+    const loadCoupons = async () => {
+      try {
+        const data = await fetchApplicableCoupons(trip.id, bookingAmt);
+        setAvailableCoupons(data.all_coupons || []);
+        setBestCoupon(data.best_coupon || null);
+      } catch {
+        setAvailableCoupons([]);
+        setBestCoupon(null);
+      }
+    };
+    loadCoupons();
+  }, [trip, amount, gst]);
+
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) return;
+    
+    setCouponLoading(true);
+    setCouponError("");
+    setCouponResult(null);
+
+    // Calculate the subtotal before discount to send to the backend validator
+    const bookingAmountBeforeDiscount = amount + gst;
+
+    try {
+      const result = await validateCoupon({
+        code: couponCode.trim(),
+        trip_id: trip.id,
+        booking_amount: bookingAmountBeforeDiscount
+      });
+      setCouponResult(result);
+    } catch (err) {
+      setCouponError(err.message || "Invalid coupon configuration.");
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setCouponCode("");
+    setCouponResult(null);
+    setCouponError("");
+  };
+
+  // One-click apply from the recommendation list
+  const handleApplyFromList = async (code) => {
+    setCouponCode(code);
+    setCouponLoading(true);
+    setCouponError("");
+    setCouponResult(null);
+
+    const bookingAmountBeforeDiscount = amount + gst;
+
+    try {
+      const result = await validateCoupon({
+        code: code,
+        trip_id: trip.id,
+        booking_amount: bookingAmountBeforeDiscount,
+      });
+      setCouponResult(result);
+      setShowCouponList(false);
+    } catch (err) {
+      setCouponError(err.message || "Failed to apply coupon.");
+    } finally {
+      setCouponLoading(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -147,6 +232,8 @@ const BookingPage = () => {
           ? processedBatches[selectedBatchIdx].displayDate
           : "",
         occupancy_details: currentOption.occupancy || "Base Price",
+        coupon_code: couponResult?.valid ? couponCode.trim() : "",
+        discount_amount: couponResult?.discount_amount || 0,
       };
 
       await createBooking(bookingPayload);
@@ -451,20 +538,83 @@ const BookingPage = () => {
               <div className={styles.couponsSection}>
                 <div className={styles.sectionHeader}>
                   <span className={styles.sectionTitle}>Coupons & Offers</span>
-                  <span className={styles.viewAll}>View All</span>
+                  {availableCoupons.length > 0 && !couponResult?.valid && (
+                    <span
+                      className={styles.viewAll}
+                      onClick={() => setShowCouponList(!showCouponList)}
+                    >
+                      {showCouponList ? "Hide" : `View All (${availableCoupons.length})`}
+                    </span>
+                  )}
                 </div>
-                <div className={styles.couponInputWrapper}>
-                  <input
-                    type="text"
-                    placeholder="Apply Coupon"
-                    value={couponCode}
-                    onChange={(e) => setCouponCode(e.target.value)}
-                    className={styles.couponInput}
-                  />
-                  <button type="button" className={styles.applyBtn}>
-                    &gt;
-                  </button>
-                </div>
+                
+                {couponResult?.valid ? (
+                  <div className={styles.couponAppliedBlock}>
+                    <div className={styles.couponAppliedHeader}>
+                      <span className={styles.appliedCode}>{couponCode.toUpperCase()}</span>
+                      <button onClick={handleRemoveCoupon} className={styles.removeCouponBtn}>Remove</button>
+                    </div>
+                    <p className={styles.couponSuccessMsg}>{couponResult.message}</p>
+                  </div>
+                ) : (
+                  <>
+                    {/* Best Offer Card */}
+                    {bestCoupon && (
+                      <div
+                        className={styles.bestOfferCard}
+                        onClick={() => handleApplyFromList(bestCoupon.code)}
+                      >
+                        <div className={styles.bestOfferBadge}>★ Best Offer</div>
+                        <div className={styles.bestOfferBody}>
+                          <span className={styles.bestOfferCode}>{bestCoupon.code}</span>
+                          <span className={styles.bestOfferDesc}>{bestCoupon.description}</span>
+                        </div>
+                        <span className={styles.bestOfferSave}>Save {formatPrice(bestCoupon.discount_amount)}</span>
+                      </div>
+                    )}
+
+                    {/* Toggleable list of all coupons */}
+                    {showCouponList && (
+                      <div className={styles.couponListContainer}>
+                        {availableCoupons.map((c) => (
+                          <div key={c.code} className={styles.couponListItem}>
+                            <div className={styles.couponListLeft}>
+                              <span className={styles.couponListCode}>{c.code}</span>
+                              <span className={styles.couponListDesc}>{c.description}</span>
+                            </div>
+                            <button
+                              className={styles.couponListApplyBtn}
+                              onClick={() => handleApplyFromList(c.code)}
+                            >
+                              Apply
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Manual input field */}
+                    <div className={styles.couponInputWrapper}>
+                      <input
+                        type="text"
+                        placeholder="Enter coupon code"
+                        value={couponCode}
+                        onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                        className={styles.couponInput}
+                        disabled={couponLoading}
+                      />
+                      <button 
+                        type="button" 
+                        onClick={handleApplyCoupon} 
+                        className={styles.applyBtn}
+                        disabled={couponLoading || !couponCode.trim()}
+                      >
+                        {couponLoading ? "..." : "Apply"}
+                      </button>
+                    </div>
+                  </>
+                )}
+                {couponError && <p className={styles.couponErrorMsg}>{couponError}</p>}
               </div>
 
               <div className={styles.costBreakdown}>
@@ -478,8 +628,15 @@ const BookingPage = () => {
                 </div>
                 <div className={styles.costRow}>
                   <span>Subtotal</span>
-                  <span>{formatPrice(grandTotal)}</span>
+                  <span>{formatPrice(amount + gst)}</span>
                 </div>
+
+                {couponResult?.valid && (
+                  <div className={`${styles.costRow} ${styles.discountRow}`}>
+                    <span>Coupon Discount</span>
+                    <span>-{formatPrice(couponResult.discount_amount)}</span>
+                  </div>
+                )}
 
                 <div className={styles.costTotal}>
                   <span>Amount To Pay</span>

@@ -41,6 +41,7 @@ import AdminContactMessage from "./admin/AdminContactMessage";
 import AdminBookings from "./admin/AdminBookings";
 import AdminBookingDetail from "./admin/AdminBookingDetail";
 import AdminJourneyFrames from "./admin/AdminJourneyFrames";
+import AdminCoupons from "./admin/AdminCoupons";
 
 function App() {
   return (
@@ -312,6 +313,7 @@ function App() {
         <Route path="users" element={<AdminUsers />} />
         <Route path="contact-messages" element={<AdminContactMessage />} />
         <Route path="journey-frames" element={<AdminJourneyFrames />} />
+        <Route path="coupons" element={<AdminCoupons />} />
       </Route>
     </Routes>
   );

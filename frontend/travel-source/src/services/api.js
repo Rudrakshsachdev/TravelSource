@@ -1202,3 +1202,94 @@ export const fetchNavbarContent = async () => {
         : { config: { is_enabled: false }, trips: [] },
   };
 };
+
+// ─── Coupons ───────────────────────────────────────────────────────────────
+
+export const validateCoupon = async (data) => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/coupons/validate/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.message || "Failed to validate coupon");
+  }
+
+  return res.json();
+};
+
+export const fetchAdminCoupons = async () => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/coupons/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (!res.ok) throw new Error("Failed to fetch coupons");
+  return res.json();
+};
+
+export const createAdminCoupon = async (data) => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/coupons/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.detail || "Failed to create coupon");
+  }
+  return res.json();
+};
+
+export const updateAdminCoupon = async (id, data) => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/coupons/${id}/`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.detail || "Failed to update coupon");
+  }
+  return res.json();
+};
+
+export const deleteAdminCoupon = async (id) => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/coupons/${id}/`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (!res.ok) throw new Error("Failed to delete coupon");
+  return true;
+};
+
+export const fetchApplicableCoupons = async (tripId, bookingAmount) => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(
+    `${API_BASE_URL}/v1/coupons/applicable/?trip_id=${tripId}&booking_amount=${bookingAmount}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+
+  if (!res.ok) return { best_coupon: null, all_coupons: [] };
+  return res.json();
+};

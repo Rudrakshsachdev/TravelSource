@@ -3,7 +3,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, NorthIndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, AdventureSectionConfig, HimachalSectionConfig, UttarakhandSectionConfig, Category, TripGalleryImage
+from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, NorthIndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, AdventureSectionConfig, HimachalSectionConfig, UttarakhandSectionConfig, Category, TripGalleryImage, Coupon
+from .coupon_service import validate_coupon, record_coupon_usage, get_applicable_coupons
 
 from .serializers import (
     TripSerializer,
@@ -47,6 +48,8 @@ from .serializers import (
     UttarakhandSectionConfigSerializer,
     CategorySerializer,
     TripGalleryImageSerializer,
+    CouponSerializer,
+    CouponValidateSerializer,
 )
 
 from django.shortcuts import get_object_or_404
@@ -447,12 +450,15 @@ def create_booking(request):
         
         trip = Trip.objects.get(id=trip_id)
 
-        # Use the frontend-calculated total (includes GST + occupancy pricing)
+        coupon_code = request.data.get("coupon_code", "")
+        discount_amount = request.data.get("discount_amount", 0)
+
+        # Validate total amount optionally
         frontend_total = request.data.get("total_amount")
         if frontend_total:
             total_amount = float(frontend_total)
         else:
-            total_amount = trip.price * persons
+            total_amount = float(trip.price * persons) - float(discount_amount)
 
         booking = Booking.objects.create(
             user=request.user,
@@ -466,7 +472,17 @@ def create_booking(request):
             itinerary=request.data.get("itinerary", ""),
             batch_details=request.data.get("batch_details", ""),
             occupancy_details=request.data.get("occupancy_details", ""),
+            coupon_code=coupon_code,
+            discount_amount=discount_amount
         )
+
+        # If booking is successful and coupon is used, record usage
+        if coupon_code:
+            try:
+                coupon = Coupon.objects.get(code__iexact=coupon_code)
+                record_coupon_usage(coupon)
+            except Coupon.DoesNotExist:
+                pass # Coupon might be invalid or deleted, but booking still succeeds
 
         serializer = BookingCreateSerializer(booking)
 
@@ -1405,3 +1421,103 @@ def admin_adventure_config(request):
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(serializer.data)
+
+# ─── Coupons ──────────────────────────────────────────────────────────────────
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def validate_coupon_view(request):
+    """Validate a coupon and return discount details."""
+    serializer = CouponValidateSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    
+    code = serializer.validated_data["code"]
+    trip_id = serializer.validated_data.get("trip_id")
+    booking_amount = serializer.validated_data["booking_amount"]
+    
+    result = validate_coupon(
+        code=code,
+        user_id=request.user.id,
+        trip_id=trip_id,
+        booking_amount=booking_amount
+    )
+    
+    # We remove the actual Coupon model instance from the API response
+    result.pop("coupon", None)
+    
+    if not result["valid"]:
+        return Response(result, status=400)
+    
+    return Response(result, status=200)
+
+@api_view(["GET", "POST"])
+@permission_classes([IsAuthenticated])
+def admin_coupons(request):
+    """Admin: list all coupons or create a new coupon."""
+    if not hasattr(request.user, "profile") or request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    if request.method == "GET":
+        coupons = Coupon.objects.all().order_by("-created_at")
+        serializer = CouponSerializer(coupons, many=True)
+        return Response(serializer.data)
+
+    # POST - Create
+    serializer = CouponSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data, status=201)
+
+@api_view(["GET", "PUT", "DELETE"])
+@permission_classes([IsAuthenticated])
+def admin_coupon_detail(request, pk):
+    """Admin: retrieve, update, or delete a specific coupon."""
+    if not hasattr(request.user, "profile") or request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    coupon = get_object_or_404(Coupon, pk=pk)
+
+    if request.method == "GET":
+        serializer = CouponSerializer(coupon)
+        return Response(serializer.data)
+
+    elif request.method == "PUT":
+        serializer = CouponSerializer(coupon, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    elif request.method == "DELETE":
+        coupon.delete()
+        return Response({"detail": "Coupon deleted successfully"}, status=204)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def applicable_coupons_view(request):
+    """
+    Returns all coupons applicable to this user + trip + booking amount.
+    The response includes a 'best_coupon' (highest discount) and the full list.
+
+    Query params:
+      - trip_id (int, required)
+      - booking_amount (decimal, required)
+    """
+    trip_id = request.query_params.get("trip_id")
+    booking_amount = request.query_params.get("booking_amount", 0)
+
+    if not trip_id or not booking_amount:
+        return Response({"detail": "trip_id and booking_amount are required."}, status=400)
+
+    try:
+        booking_amount = float(booking_amount)
+    except (ValueError, TypeError):
+        return Response({"detail": "booking_amount must be a number."}, status=400)
+
+    result = get_applicable_coupons(
+        user_id=request.user.id,
+        trip_id=trip_id,
+        booking_amount=booking_amount,
+    )
+
+    return Response(result, status=200)

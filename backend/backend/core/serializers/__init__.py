@@ -27,5 +27,6 @@ from .himachal_serializer import HimachalTripSerializer, HimachalSectionConfigSe
 from .uttarakhand_serializer import UttarakhandTripSerializer, UttarakhandSectionConfigSerializer
 
 from .gallery_serializer import TripGalleryImageSerializer
+from .coupon_serializer import CouponSerializer, CouponValidateSerializer
 
 
