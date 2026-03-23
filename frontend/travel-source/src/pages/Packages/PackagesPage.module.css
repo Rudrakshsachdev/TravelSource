@@ -1,8 +1,8 @@
 /* ═══════════════════════════════════════════════════════════════
-   PackagesPage — Premium Dedicated Page Styles (Matching India Trips)
+   PackagesPage — Premium Dedicated Page Styles
    ═══════════════════════════════════════════════════════════════ */
 
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 
 /* ─── Keyframes ─────────────────────────────────────────────── */
 
@@ -174,16 +174,6 @@
   transform: scale(1.08);
 }
 
-.placeholderImgWrap {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, #1e293b, #0f172a);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 0;
-}
-
 /* ─── Gradient Overlays ─────────────────────────────────────── */
 
 .gradientTop {
@@ -218,25 +208,31 @@
   pointer-events: none;
 }
 
-/* ─── Top Badges (Emoji wrapper) ────────────────────────────── */
+/* ─── Badge ─────────────────────────────────────────────────── */
 
-.badgeEmoji {
+.badge {
   position: absolute;
   top: 20px;
-  left: 20px;
+  left: 0;
   z-index: 3;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  font-size: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  gap: 5px;
+  padding: 6px 18px 6px 14px;
+  background: linear-gradient(135deg, #1d4ed8, #2563eb);
+  color: #fff;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 0 10px 10px 0;
+  letter-spacing: 0.04em;
+  box-shadow: 0 3px 12px rgba(37, 99, 235, 0.4);
+  text-transform: uppercase;
+}
+
+.badge::before {
+  content: "★";
+  font-size: 0.65rem;
 }
 
 /* ─── Content Overlay ───────────────────────────────────────── */
@@ -255,8 +251,8 @@
 
 .cardTitle {
   font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 1.35rem;
-  font-weight: 800;
+  font-size: 1.25rem;
+  font-weight: 700;
   color: #fff;
   margin: 0;
   line-height: 1.35;
@@ -267,20 +263,48 @@
   overflow: hidden;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
   transition: transform 0.35s ease;
-  letter-spacing: -0.01em;
 }
 
 .card:hover .cardTitle {
   transform: translateX(3px);
 }
 
-/* Meta Strip (Trip count etc) */
+/* Location Chip */
+.locChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 20px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  width: fit-content;
+  transition: all 0.3s ease;
+}
+
+.card:hover .locChip {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.locChip svg {
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+/* Meta Strip */
 .metaStrip {
   display: flex;
   align-items: center;
   gap: 10px;
   font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.85);
   margin-top: 2px;
@@ -289,18 +313,23 @@
 .metaTag {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
 }
 
 .metaTag svg {
   flex-shrink: 0;
-  opacity: 0.8;
-  color: #60a5fa;
-  width: 14px;
-  height: 14px;
+  opacity: 0.75;
 }
 
-/* Footer (Explore Link) */
+.metaDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+}
+
+/* Footer (Price & Stars) */
 .cardFoot {
   display: flex;
   justify-content: space-between;
@@ -310,35 +339,32 @@
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.exploreText {
+.price {
   font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: rgba(255,255,255,0.8);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  transition: color 0.3s ease;
-}
-
-.card:hover .exploreText {
-  color: #60a5fa;
-}
-
-.arrowIcon {
-  width: 32px;
-  height: 32px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 1.35rem;
+  font-weight: 800;
   color: #fff;
-  transition: all 0.3s ease;
+  letter-spacing: -0.01em;
 }
 
-.card:hover .arrowIcon {
-  background: #2563eb;
-  transform: translateX(3px);
+.stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5px;
+}
+
+.starSvg {
+  width: 12px;
+  height: 12px;
+  fill: #fbbf24;
+}
+
+.reviewCount {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.65);
+  margin-left: 5px;
 }
 
 /* ─── Skeleton Loading ──────────────────────────────────────── */
@@ -414,41 +440,86 @@
 
 /* Tablets */
 @media (max-width: 1024px) {
-  .pageContainer { padding: 60px 0 100px; }
-  .inner { padding: 0 32px; }
-  .pageHeader { margin-bottom: 56px; }
+  .pageContainer {
+    padding: 60px 0 100px;
+  }
+  
+  .inner {
+    padding: 0 32px;
+  }
+  
+  .pageHeader {
+    margin-bottom: 56px;
+  }
+
   .grid {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 24px;
   }
-  .card, .skelCard { height: 440px; }
+  
+  .card, .skelCard {
+    height: 440px;
+  }
 }
 
 /* Mobile */
 @media (max-width: 768px) {
-  .pageContainer { padding: 40px 0 80px; }
-  .inner { padding: 0 20px; }
-  .pageHeader { margin-bottom: 40px; }
-  .heading { font-size: 2.2rem; }
+  .pageContainer {
+    padding: 40px 0 80px;
+  }
+
+  .inner {
+    padding: 0 20px;
+  }
+
+  .pageHeader {
+    margin-bottom: 40px;
+  }
+
+  .heading {
+    font-size: 2.2rem;
+  }
+
   .grid {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
   }
-  .card, .skelCard { height: 400px; }
+
+  .card, .skelCard {
+    height: 400px;
+  }
 }
 
 /* Very Small Mobile */
 @media (max-width: 480px) {
-  .pageContainer { padding: 32px 0 64px; }
-  .inner { padding: 0 16px; }
-  .heading { font-size: 1.8rem; }
+  .pageContainer {
+    padding: 32px 0 64px;
+  }
+
+  .inner {
+    padding: 0 16px;
+  }
+
+  .heading {
+    font-size: 1.8rem;
+  }
+
   .grid {
     grid-template-columns: 1fr;
     gap: 24px;
   }
-  .card, .skelCard { height: 420px; }
-  .content { padding: 0 20px 22px; }
-  .card:hover { transform: translateY(-4px); }
+
+  .card, .skelCard {
+    height: 420px;
+  }
+
+  .content {
+    padding: 0 20px 22px;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+  }
 }
 
 /* ─── Reduced Motion ────────────────────────────────────────── */
@@ -459,8 +530,15 @@
     animation: none !important;
   }
 
-  .card:hover { transform: none; }
-  .img, .cardTitle { transition: none; }
-  .skelShimmer, .eyebrowDot { animation: none; }
+  .card:hover {
+    transform: none;
+  }
+  
+  .img, .cardTitle, .locChip {
+    transition: none;
+  }
+  
+  .skelShimmer, .eyebrowDot {
+    animation: none;
+  }
 }
-
