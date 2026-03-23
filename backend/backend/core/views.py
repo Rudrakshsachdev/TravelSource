@@ -507,6 +507,18 @@ def user_bookings(request):
     return Response(serializer.data)
 
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def user_booking_detail(request, pk):
+    try:
+        booking = Booking.objects.select_related("trip").get(pk=pk, user=request.user)
+        serializer = BookingListSerializer(booking)
+        return Response(serializer.data)
+    except Booking.DoesNotExist:
+        return Response({"error": "Booking not found or unauthorized"}, status=404)
+
+
+
     
 
 @api_view(["GET"])

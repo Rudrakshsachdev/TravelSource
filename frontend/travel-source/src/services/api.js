@@ -446,6 +446,25 @@ export const fetchMyBookings = async () => {
   return res.json();
 };
 
+export const fetchMyBookingDetail = async (id) => {
+  const token = localStorage.getItem("accessToken");
+
+  const res = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/v1/bookings/my/${id}/`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch booking details");
+  }
+
+  return res.json();
+};
+
 export const fetchAdminBookings = async () => {
   const token = localStorage.getItem("accessToken");
 

@@ -20,6 +20,7 @@ import AdventureTripsPage from "./pages/AdventureTripsPage/AdventureTripsPage";
 import BackpackingTripsPage from "./pages/BackpackingTrips/BackpackingTripsPage";
 import ContactUs from "./components/ContactUs/ContactUs";
 import MyBookings from "./pages/MyBookings/MyBookings";
+import DetailedMyBookings from "./pages/DetailedMyBookings/DetailedMyBookings";
 import BookingPage from "./pages/Booking/BookingPage";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
@@ -245,6 +246,17 @@ function App() {
           <ProtectedRoute allowedRole="USER">
             <Layout>
               <MyBookings />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/detailed-mybookings/:id"
+        element={
+          <ProtectedRoute allowedRole="USER">
+            <Layout>
+              <DetailedMyBookings />
             </Layout>
           </ProtectedRoute>
         }

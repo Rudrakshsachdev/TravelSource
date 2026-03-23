@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { fetchMyBookings } from "../../services/api";
 import styles from "./MyBookings.module.css";
 import {
@@ -13,6 +14,7 @@ import {
 } from "lucide-react";
 
 const MyBookings = () => {
+  const navigate = useNavigate();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -150,7 +152,12 @@ const MyBookings = () => {
                 )}
 
                 <div className={styles.cardFooter}>
-                  <button className={styles.viewDetailBtn}>View Full Itinerary</button>
+                  <button 
+                    className={styles.viewDetailBtn}
+                    onClick={() => navigate(`/detailed-mybookings/${booking.id}`)}
+                  >
+                    View Full Itinerary
+                  </button>
                 </div>
               </div>
             ))}
