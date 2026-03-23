@@ -10,7 +10,7 @@ import CommunityTrips from "../../components/Trips/CommunityTrips";
 
 import { PopularDestinations } from "../../components/PopularDestinations/PopularDestinations";
 import { NightAdventure } from "../../components/NightAdventure/NightAdventure";
-
+import { PromoBanner } from "../../components/PromoBanner";
 
 
 /* ── Tiny SVG icon components ────────────────────────────────── */
@@ -197,6 +197,7 @@ const PackagesPage = () => {
 
       {/* Curated Highlight Sections */}
       <div>
+        <PromoBanner />
         <PopularDestinations />
         <NightAdventure />
       </div>

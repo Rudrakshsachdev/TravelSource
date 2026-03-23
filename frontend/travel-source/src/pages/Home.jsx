@@ -1,5 +1,6 @@
 import { HeroSection } from "../components/HeroSection";
 import { TripsList } from "../components/Trips";
+import { PromoBanner } from "../components/PromoBanner";
 import { Reviews } from "../components/Reviews";
 import { WhyChooseUs } from "../components/WhyChooseUs";
 import { JourneyInFrames } from "../components/JourneyInFrames";
@@ -13,6 +14,7 @@ const Home = () => {
     <>
       <HeroSection />
       <TripsList />
+      <PromoBanner />
       <TrendingDestinations />
       <NightAdventure />
       <Reviews />
