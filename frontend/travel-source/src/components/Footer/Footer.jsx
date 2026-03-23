@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styles from "./Footer.module.css";
-import skylineImg from "../../assets/footer.png";
-
+import tpLogo from "../../assets/logog.png"; // Using the official logo
+import blackFooter from "../../assets/black-footer.png"
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -24,11 +24,7 @@ const Footer = () => {
           {/* Brand Column */}
           <div className={styles.brandCol}>
             <Link to="/" className={styles.logo}>
-              <span className={styles.logoIcon}>✦</span>
-              <div className={styles.logoText}>
-                <span className={styles.logoTitle}>Travel Professor</span>
-                <span className={styles.logoTagline}>Curated Journeys</span>
-              </div>
+              <img src={tpLogo} alt="Travel Professor Logo" className={styles.logoImg} />
             </Link>
             <p className={styles.brandDesc}>
               We transform ordinary trips into extraordinary journeys with
@@ -72,7 +68,7 @@ const Footer = () => {
                 aria-label="Facebook"
               >
                 <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+                  <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
                 </svg>
               </a>
               {/* Twitter / X */}
@@ -234,9 +230,9 @@ const Footer = () => {
 
       </div>
 
-      {/* ── Skyline Graphic (Full Width) ── */}
-      <div className={styles.skylineWrapper}>
-        <img src={skylineImg} alt="" className={styles.skylineImage} />
+      {/* ── Footer Graphic ── */}
+      <div className={styles.graphicWrapper}>
+        <img src={blackFooter} alt="" className={styles.graphicImage} />
       </div>
 
       <div className={styles.container} style={{ paddingTop: 0 }}>
