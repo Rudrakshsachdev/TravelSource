@@ -82,10 +82,11 @@
 .galleryGrid {
   display: grid;
   grid-template-columns: 1.4fr 1fr;
+  grid-template-rows: minmax(0, 1fr);
   gap: 8px;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 20px 24px 0;
+  padding: 70px 24px 0;
   height: 480px;
 }
 
@@ -94,6 +95,7 @@
   border-radius: 20px;
   overflow: hidden;
   cursor: pointer;
+  min-height: 0;
 }
 
 .galleryMain:hover .galleryImg {
@@ -125,9 +127,10 @@
 
 .gallerySide {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
   gap: 8px;
+  min-height: 0;
 }
 
 .gallerySideItem {
@@ -135,6 +138,7 @@
   border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
+  min-height: 0;
 }
 
 .gallerySideItem:hover .galleryImg {
@@ -233,7 +237,7 @@
 
 .mainLayout {
   max-width: 1400px;
-  margin: 0 auto;
+  margin: 40px auto 0;
   padding: 0 24px 60px;
   display: grid;
   grid-template-columns: 1fr 380px;
