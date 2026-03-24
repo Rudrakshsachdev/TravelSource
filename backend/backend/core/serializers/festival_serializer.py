@@ -14,7 +14,7 @@ class FestivalTripSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'title', 'location', 'price', 'duration_days', 
             'short_description', 'image', 'category',
-            'is_festival_trip', 'show_in_festival_section', 'festival_display_order'
+            'is_festival_trip', 'show_in_festival_section', 'festival_display_order', 'festival_featured_priority'
         ]
 
 class FestivalSectionConfigSerializer(serializers.ModelSerializer):

@@ -188,7 +188,7 @@ function App() {
       />
 
       <Route
-        path="/festival-trips"
+        path="/festival-getaways"
         element={
           <Layout>
             <FestivalTripsPage />

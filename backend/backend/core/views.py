@@ -1380,7 +1380,7 @@ def festival_trips(request):
         is_active=True,
         is_festival_trip=True,
         show_in_festival_section=True
-    ).order_by("festival_display_order")
+    ).order_by("-festival_featured_priority", "festival_display_order", "-id")
     
     return Response({
         "config": FestivalSectionConfigSerializer(config).data,

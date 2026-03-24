@@ -74,6 +74,8 @@ class TripSerializer(serializers.ModelSerializer):
             "show_in_community_section",
             "is_festival_trip",
             "show_in_festival_section",
+            "festival_display_order",
+            "festival_featured_priority",
             "is_long_weekend_trip",
             "show_in_long_weekend_section",
             "long_weekend_display_order",

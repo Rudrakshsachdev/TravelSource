@@ -102,6 +102,7 @@ class Trip(models.Model):
     is_festival_trip = models.BooleanField(default=False, help_text="Mark as Festival trip")
     show_in_festival_section = models.BooleanField(default=False, help_text="Show in the scrolling Festival section")
     festival_display_order = models.IntegerField(default=0, help_text="Order in the Festival section (lower = first)")
+    festival_featured_priority = models.IntegerField(default=0, help_text="Featured priority (higher = more prominent)")
 
     # Adventure showcase fields
     is_adventure_trip = models.BooleanField(default=False, help_text="Mark as Adventure trip")

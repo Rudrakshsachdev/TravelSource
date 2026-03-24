@@ -90,7 +90,7 @@ class TripAdmin(admin.ModelAdmin):
             "description": "Control how this trip appears in the Community Trips scrolling section.",
         }),
         ("Festival Showcase", {
-            "fields": ("is_festival_trip", "show_in_festival_section", "festival_display_order"),
+            "fields": ("is_festival_trip", "show_in_festival_section", "festival_display_order", "festival_featured_priority"),
             "description": "Control how this trip appears in the Festival Trips scrolling section.",
         }),
         ("Adventure Showcase", {

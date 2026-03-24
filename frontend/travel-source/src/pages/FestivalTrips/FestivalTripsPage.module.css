@@ -1,5 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════
-   FestivalTripsPage — Premium Dedicated Page Styles
+   FestivalTripsPage — Radiant Festival Getaways Styles
+   (Matched with India Trips Premium Aesthetic)
    ═══════════════════════════════════════════════════════════════ */
 
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
@@ -21,9 +22,9 @@
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-@keyframes pulseGlow {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
+@keyframes pulseGold {
+  0%, 100% { opacity: 0.6; box-shadow: 0 0 10px rgba(243, 156, 18, 0.4); }
+  50% { opacity: 1; box-shadow: 0 0 20px rgba(243, 156, 18, 0.8); }
 }
 
 /* ─── Page Container ────────────────────────────────────────── */
@@ -33,7 +34,8 @@
   width: 100%;
   min-height: calc(100vh - 80px);
   padding: 80px 0 120px;
-  background: #f8fafb;
+  background: #fffdf9; /* Warm off-white for festive feel */
+  font-family: "Plus Jakarta Sans", sans-serif;
 }
 
 .topAccent {
@@ -41,17 +43,16 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
-  /* Festive Sunset Gold/Red Gradient */
+  height: 4px;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    #ff9f43 25%,
-    #ee5253 50%,
-    #ff9f43 75%,
+    #f39c12 25%,
+    #e67e22 50%,
+    #f1c40f 75%,
     transparent 100%
   );
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 .inner {
@@ -76,42 +77,39 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-family: "Plus Jakarta Sans", sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #ee5253; /* Festive theme */
+  color: #d35400;
   margin-bottom: 16px;
 }
 
 .eyebrowDot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #ff9f43, #ee5253);
-  animation: pulseGlow 2.4s ease-in-out infinite;
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+  animation: pulseGold 2.4s ease-in-out infinite;
 }
 
 .heading {
-  font-family: "Plus Jakarta Sans", sans-serif;
   font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 800;
-  color: #0f1f2e;
+  color: #2c3e50;
   margin: 0 0 16px;
   line-height: 1.15;
   letter-spacing: -0.025em;
 }
 
 .subheading {
-  font-family: "Plus Jakarta Sans", sans-serif;
   font-size: clamp(1rem, 1.5vw, 1.15rem);
-  color: #5a6f7e;
+  color: #7f8c8d;
   margin: 0;
   line-height: 1.6;
 }
 
-/* ─── Grid Auto-fill Layout ─────────────────────────────────── */
+/* ─── Grid Auto-fill ────────────────────────────────────────── */
 
 .grid {
   display: grid;
@@ -132,8 +130,8 @@
   cursor: pointer;
   background: #111;
   box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.08),
-    0 1px 4px rgba(0, 0, 0, 0.04);
+    0 10px 30px rgba(0, 0, 0, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.04);
   transition:
     transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
@@ -144,16 +142,11 @@
 }
 
 .card:hover {
-  transform: translateY(-10px) scale(1.02);
+  transform: translateY(-12px) scale(1.02);
   z-index: 10;
   box-shadow:
-    0 24px 56px rgba(0, 0, 0, 0.16),
-    0 8px 24px rgba(0, 0, 0, 0.08);
-}
-
-.card:focus-visible {
-  outline: 3px solid #ff9f43;
-  outline-offset: 3px;
+    0 32px 64px rgba(211, 84, 0, 0.15),
+    0 12px 28px rgba(0, 0, 0, 0.1);
 }
 
 /* ─── Card Image ────────────────────────────────────────────── */
@@ -168,28 +161,27 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .card:hover .img {
-  transform: scale(1.08);
+  transform: scale(1.1);
 }
 
-/* ─── Gradient Overlays ─────────────────────────────────────── */
+/* ─── Overlays ──────────────────────────────────────────────── */
 
 .gradientTop {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 120px;
+  height: 140px;
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.25) 0%,
+    rgba(0, 0, 0, 0.3) 0%,
     transparent 100%
   );
   z-index: 1;
-  pointer-events: none;
 }
 
 .gradientBot {
@@ -197,44 +189,41 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 70%;
+  height: 75%;
   background: linear-gradient(
     180deg,
     transparent 0%,
-    rgba(14, 2, 0, 0.6) 35%,
-    rgba(14, 2, 0, 0.94) 75%,
-    #0c0200 100% /* Slight warm fiery tint at very bottom */
+    rgba(44, 62, 80, 0.4) 30%,
+    rgba(44, 62, 80, 0.85) 70%,
+    #1a252f 100%
   );
   z-index: 1;
-  pointer-events: none;
 }
 
 /* ─── Badge ─────────────────────────────────────────────────── */
 
 .badge {
   position: absolute;
-  top: 20px;
+  top: 24px;
   left: 0;
   z-index: 3;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 6px 18px 6px 14px;
-  /* Festive badge */
-  background: linear-gradient(135deg, #ff9f43, #ee5253);
+  gap: 6px;
+  padding: 8px 20px 8px 16px;
+  background: linear-gradient(135deg, #f39c12, #e67e22);
   color: #fff;
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 0.7rem;
-  font-weight: 700;
-  border-radius: 0 10px 10px 0;
-  letter-spacing: 0.04em;
-  box-shadow: 0 3px 12px rgba(238, 82, 83, 0.4);
+  font-size: 0.72rem;
+  font-weight: 800;
+  border-radius: 0 12px 12px 0;
+  letter-spacing: 0.06em;
+  box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
   text-transform: uppercase;
 }
 
 .badge::before {
-  content: "★";
-  font-size: 0.65rem;
+  content: "✨";
+  font-size: 0.75rem;
 }
 
 /* ─── Content Overlay ───────────────────────────────────────── */
@@ -245,90 +234,72 @@
   left: 0;
   right: 0;
   z-index: 2;
-  padding: 0 24px 26px;
+  padding: 0 28px 32px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .cardTitle {
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: 1.4rem;
+  font-weight: 800;
   color: #fff;
   margin: 0;
-  line-height: 1.35;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-  transition: transform 0.35s ease;
+  line-height: 1.25;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  transition: transform 0.4s ease;
 }
 
 .card:hover .cardTitle {
-  transform: translateX(3px);
+  transform: translateX(5px);
 }
 
 /* Location Chip */
 .locChip {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 20px;
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.95);
+  gap: 7px;
+  padding: 7px 16px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 30px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: white;
   width: fit-content;
   transition: all 0.3s ease;
 }
 
 .card:hover .locChip {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.locChip svg {
-  flex-shrink: 0;
-  opacity: 0.9;
+  background: rgba(243, 156, 18, 0.3);
+  border-color: rgba(243, 156, 18, 0.5);
 }
 
 /* Meta Strip */
 .metaStrip {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 0.78rem;
+  gap: 12px;
+  font-size: 0.82rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.85);
-  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 4px;
 }
 
 .metaTag {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-}
-
-.metaTag svg {
-  flex-shrink: 0;
-  opacity: 0.75;
+  gap: 6px;
 }
 
 .metaDot {
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.4);
-  flex-shrink: 0;
+  background: #f1c40f;
+  box-shadow: 0 0 8px rgba(241, 196, 15, 0.6);
 }
 
 /* Footer (Price & Stars) */
@@ -336,37 +307,37 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 6px;
-  padding-top: 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 8px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .price {
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #f1c40f;
   letter-spacing: -0.01em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .stars {
   display: inline-flex;
   align-items: center;
-  gap: 1.5px;
+  gap: 2px;
 }
 
 .starSvg {
-  width: 12px;
-  height: 12px;
-  fill: #ff9f43; /* Festive star matching theme */
+  width: 14px;
+  height: 14px;
+  fill: #f39c12;
+  filter: drop-shadow(0 0 2px rgba(243, 156, 18, 0.4));
 }
 
 .reviewCount {
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 0.68rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.65);
-  margin-left: 5px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.75);
+  margin-left: 6px;
 }
 
 /* ─── Skeleton Loading ──────────────────────────────────────── */
@@ -375,7 +346,7 @@
   width: 100%;
   height: 480px;
   border-radius: 20px;
-  background: #e4e9ed;
+  background: #f3f3f3;
   position: relative;
   overflow: hidden;
 }
@@ -386,10 +357,10 @@
   background: linear-gradient(
     105deg,
     transparent 30%,
-    rgba(255, 255, 255, 0.6) 50%,
+    rgba(243, 156, 18, 0.1) 50%,
     transparent 70%
   );
-  animation: shimmerSlide 1.8s ease-in-out infinite;
+  animation: shimmerSlide 2s ease-in-out infinite;
 }
 
 /* ─── Empty & Error States ──────────────────────────────────── */
@@ -397,150 +368,66 @@
 .emptyState,
 .errorState {
   text-align: center;
-  padding: 80px 20px;
-  background: #fff;
-  border-radius: 24px;
-  box-shadow: 0 10px 40px rgba(238, 82, 83, 0.05);
-  max-width: 600px;
-  margin: 0 auto;
+  padding: 80px 40px;
+  background: white;
+  border-radius: 30px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.04);
+  max-width: 640px;
+  margin: 40px auto;
+  border: 1px solid #fef5e7;
 }
 
 .emptyState h2,
 .errorState h2 {
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #0f1f2e;
-  margin-bottom: 12px;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #2c3e50;
+  margin-bottom: 16px;
 }
 
 .emptyState p,
 .errorState p {
-  color: #5a6f7e;
-  font-size: 1rem;
-  margin-bottom: 24px;
+  color: #7f8c8d;
+  font-size: 1.1rem;
+  margin-bottom: 32px;
 }
 
 .retryBtn {
-  padding: 12px 28px;
-  border-radius: 12px;
-  background: #ee5253; /* Festive red button */
+  padding: 14px 36px;
+  border-radius: 15px;
+  background: #f39c12;
   color: white;
   border: none;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.3s;
+  box-shadow: 0 8px 20px rgba(243, 156, 18, 0.3);
 }
 
 .retryBtn:hover {
-  background: #da4647;
+  background: #e67e22;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(243, 156, 18, 0.4);
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   RESPONSIVE DESIGN
-   ═══════════════════════════════════════════════════════════════ */
+/* ─── Responsive ────────────────────────────────────────────── */
 
-/* Tablets */
 @media (max-width: 1024px) {
-  .pageContainer {
-    padding: 60px 0 100px;
-  }
-  
-  .inner {
-    padding: 0 32px;
-  }
-  
-  .pageHeader {
-    margin-bottom: 56px;
-  }
-
-  .grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 24px;
-  }
-  
-  .card, .skelCard {
-    height: 440px;
-  }
+  .inner { padding: 0 32px; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .card, .skelCard { height: 440px; }
 }
 
-/* Mobile */
 @media (max-width: 768px) {
-  .pageContainer {
-    padding: 40px 0 80px;
-  }
-
-  .inner {
-    padding: 0 20px;
-  }
-
-  .pageHeader {
-    margin-bottom: 40px;
-  }
-
-  .heading {
-    font-size: 2.2rem;
-  }
-
-  .grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-  }
-
-  .card, .skelCard {
-    height: 400px;
-  }
+  .inner { padding: 0 20px; }
+  .heading { font-size: 2.2rem; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+  .card, .skelCard { height: 400px; }
+  .content { padding: 0 24px 28px; }
 }
 
-/* Very Small Mobile */
 @media (max-width: 480px) {
-  .pageContainer {
-    padding: 32px 0 64px;
-  }
-
-  .inner {
-    padding: 0 16px;
-  }
-
-  .heading {
-    font-size: 1.8rem;
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-
-  .card, .skelCard {
-    height: 420px;
-  }
-
-  .content {
-    padding: 0 20px 22px;
-  }
-
-  .card:hover {
-    transform: translateY(-4px);
-  }
-}
-
-/* ─── Reduced Motion ────────────────────────────────────────── */
-@media (prefers-reduced-motion: reduce) {
-  .grid, .pageHeader, .card {
-    opacity: 1;
-    transform: none;
-    animation: none !important;
-  }
-
-  .card:hover {
-    transform: none;
-  }
-  
-  .img, .cardTitle, .locChip {
-    transition: none;
-  }
-  
-  .skelShimmer, .eyebrowDot {
-    animation: none;
-  }
+  .inner { padding: 0 16px; }
+  .heading { font-size: 1.8rem; }
+  .grid { grid-template-columns: 1fr; }
 }

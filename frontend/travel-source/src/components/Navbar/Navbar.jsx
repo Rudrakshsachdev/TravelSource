@@ -51,7 +51,7 @@ const SECTION_LABELS = {
   summer: "Summer Getaways",
   monsoon: "Monsoon Getaways",
   community: "Community Trips",
-  festival: "Festival Trips",
+  festival: "Festival Getaways",
   long_weekend: "Long Weekend Trips",
 };
 const NAV_SECTION_ORDER = [
@@ -75,7 +75,7 @@ const SECTION_PATHS = {
   summer: "/summer-getaways",
   monsoon: "/monsoon-getaways",
   community: "/community-trips",
-  festival: "/festival-trips",
+  festival: "/festival-getaways",
   long_weekend: "/long-weekend-trips",
 };
 const DESKTOP_PRIMARY_MENU_LIMIT = 4;
