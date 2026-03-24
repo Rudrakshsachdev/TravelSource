@@ -21,7 +21,7 @@ class TripAdmin(admin.ModelAdmin):
         "is_north_india_trip", "show_in_north_india_section", "north_india_display_order",
         "is_honeymoon", "show_in_honeymoon_section", "honeymoon_display_order", "honeymoon_featured_priority",
         "is_himalayan_trek", "show_in_himalayan_section", "himalayan_display_order",
-        "is_backpacking_trip", "show_in_backpacking_section", "backpacking_display_order",
+        "is_backpacking_trip", "show_in_backpacking_section", "backpacking_display_order", "backpacking_featured_priority",
         "is_summer_trek", "show_in_summer_section", "summer_display_order",
         "is_monsoon_trek", "show_in_monsoon_section", "monsoon_display_order",
         "is_community_trip", "show_in_community_section", "community_display_order",
@@ -36,7 +36,7 @@ class TripAdmin(admin.ModelAdmin):
         "is_north_india_trip", "show_in_north_india_section", "north_india_display_order",
         "is_honeymoon", "show_in_honeymoon_section", "honeymoon_display_order", "honeymoon_featured_priority",
         "is_himalayan_trek", "show_in_himalayan_section", "himalayan_display_order",
-        "is_backpacking_trip", "show_in_backpacking_section", "backpacking_display_order",
+        "is_backpacking_trip", "show_in_backpacking_section", "backpacking_display_order", "backpacking_featured_priority",
         "is_summer_trek", "show_in_summer_section", "summer_display_order",
         "is_monsoon_trek", "show_in_monsoon_section", "monsoon_display_order",
         "is_community_trip", "show_in_community_section", "community_display_order",
@@ -74,7 +74,7 @@ class TripAdmin(admin.ModelAdmin):
             "description": "Control how this trip appears in the Himalayan Treks scrolling section.",
         }),
         ("Backpacking Showcase", {
-            "fields": ("is_backpacking_trip", "show_in_backpacking_section", "backpacking_display_order"),
+            "fields": ("is_backpacking_trip", "show_in_backpacking_section", "backpacking_display_order", "backpacking_featured_priority"),
             "description": "Control how this trip appears in the Backpacking Trips scrolling section.",
         }),
         ("Summer Showcase", {

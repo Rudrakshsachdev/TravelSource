@@ -764,7 +764,7 @@ def india_trips(request):
         is_active=True,
         is_india_trip=True,
         show_in_india_section=True,
-    ).order_by("india_display_order", "-id")
+    ).order_by("-india_featured_priority", "india_display_order", "-id")
 
     config_serializer = IndiaSectionConfigSerializer(config)
     trip_serializer = IndiaTripSerializer(trips, many=True)
@@ -808,7 +808,7 @@ def north_india_trips(request):
         is_active=True,
         is_north_india_trip=True,
         show_in_north_india_section=True,
-    ).order_by("north_india_display_order", "-id")
+    ).order_by("-north_india_featured_priority", "north_india_display_order", "-id")
 
     config_serializer = NorthIndiaSectionConfigSerializer(config)
     trip_serializer = NorthIndiaTripSerializer(trips, many=True)
@@ -911,7 +911,7 @@ def himachal_trips(request):
         is_active=True,
         is_himachal_trip=True,
         show_in_himachal_section=True,
-    ).order_by("himachal_display_order", "-id")
+    ).order_by("-himachal_featured_priority", "himachal_display_order", "-id")
 
     config_serializer = HimachalSectionConfigSerializer(config)
     trip_serializer = HimachalTripSerializer(trips, many=True)
@@ -955,7 +955,7 @@ def uttarakhand_trips(request):
         is_active=True,
         is_uttarakhand_trip=True,
         show_in_uttarakhand_section=True,
-    ).order_by("uttarakhand_display_order", "-id")
+    ).order_by("-uttarakhand_featured_priority", "uttarakhand_display_order", "-id")
 
     config_serializer = UttarakhandSectionConfigSerializer(config)
     trip_serializer = UttarakhandTripSerializer(trips, many=True)
@@ -997,7 +997,7 @@ def honeymoon_trips(request):
         is_active=True,
         is_honeymoon=True,
         show_in_honeymoon_section=True,
-    ).order_by("honeymoon_display_order", "-id")
+    ).order_by("-honeymoon_featured_priority", "honeymoon_display_order", "-id")
 
     config_serializer = HoneymoonSectionConfigSerializer(config)
     trip_serializer = HoneymoonTripSerializer(trips, many=True)
@@ -1085,7 +1085,7 @@ def backpacking_trips(request):
         is_active=True,
         is_backpacking_trip=True,
         show_in_backpacking_section=True,
-    ).order_by("backpacking_display_order", "-id")
+    ).order_by("-backpacking_featured_priority", "backpacking_display_order", "-id")
 
     config_serializer = BackpackingSectionConfigSerializer(config)
     trip_serializer = BackpackingTripSerializer(trips, many=True)
@@ -1457,7 +1457,7 @@ def long_weekend_trips(request):
         is_active=True,
         is_long_weekend_trip=True,
         show_in_long_weekend_section=True,
-    ).order_by("long_weekend_display_order", "-id")
+    ).order_by("-long_weekend_featured_priority", "long_weekend_display_order", "-id")
 
     config_serializer = LongWeekendSectionConfigSerializer(config)
     trip_serializer = LongWeekendTripSerializer(trips, many=True)

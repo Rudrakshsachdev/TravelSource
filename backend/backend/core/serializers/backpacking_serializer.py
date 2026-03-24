@@ -15,6 +15,7 @@ class BackpackingTripSerializer(serializers.ModelSerializer):
             "image",
             "short_description",
             "backpacking_display_order",
+            "backpacking_featured_priority",
         ]
 
 

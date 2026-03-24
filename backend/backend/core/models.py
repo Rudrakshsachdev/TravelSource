@@ -83,6 +83,7 @@ class Trip(models.Model):
     is_backpacking_trip = models.BooleanField(default=False, help_text="Mark as Backpacking trip")
     show_in_backpacking_section = models.BooleanField(default=False, help_text="Show in the scrolling Backpacking section")
     backpacking_display_order = models.IntegerField(default=0, help_text="Order in the Backpacking section (lower = first)")
+    backpacking_featured_priority = models.IntegerField(default=0, help_text="Featured priority (higher = more prominent)")
 
     is_summer_trek = models.BooleanField(default=False, help_text="Mark as Summer trek")
     show_in_summer_section = models.BooleanField(default=False, help_text="Show in the scrolling Summer section")

@@ -60,6 +60,8 @@ class TripSerializer(serializers.ModelSerializer):
             "show_in_himalayan_section",
             "is_backpacking_trip",
             "show_in_backpacking_section",
+            "backpacking_display_order",
+            "backpacking_featured_priority",
             "is_summer_trek",
             "show_in_summer_section",
             "is_monsoon_trek",

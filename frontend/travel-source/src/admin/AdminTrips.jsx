@@ -57,6 +57,9 @@ const AdminTrips = () => {
     honeymoon_featured_priority: 0,
     is_himalayan_trek: false,
     is_backpacking_trip: false,
+    show_in_backpacking_section: false,
+    backpacking_display_order: 0,
+    backpacking_featured_priority: 0,
     is_summer_trek: false,
     is_monsoon_trek: false,
     is_community_trip: false,
@@ -246,6 +249,9 @@ const AdminTrips = () => {
       honeymoon_featured_priority: trip.honeymoon_featured_priority || 0,
       is_himalayan_trek: trip.is_himalayan_trek || false,
       is_backpacking_trip: trip.is_backpacking_trip || false,
+      show_in_backpacking_section: trip.show_in_backpacking_section || false,
+      backpacking_display_order: trip.backpacking_display_order || 0,
+      backpacking_featured_priority: trip.backpacking_featured_priority || 0,
       is_summer_trek: trip.is_summer_trek || false,
       is_monsoon_trek: trip.is_monsoon_trek || false,
       is_community_trip: trip.is_community_trip || false,
@@ -318,6 +324,9 @@ const AdminTrips = () => {
       honeymoon_featured_priority: 0,
       is_himalayan_trek: false,
       is_backpacking_trip: false,
+      show_in_backpacking_section: false,
+      backpacking_display_order: 0,
+      backpacking_featured_priority: 0,
       is_summer_trek: false,
       is_monsoon_trek: false,
       is_community_trip: false,
@@ -404,6 +413,8 @@ const AdminTrips = () => {
         good_friday_display_order: Number(formData.good_friday_display_order) || 0,
         long_weekend_display_order: Number(formData.long_weekend_display_order) || 0,
         long_weekend_featured_priority: Number(formData.long_weekend_featured_priority) || 0,
+        backpacking_display_order: Number(formData.backpacking_display_order) || 0,
+        backpacking_featured_priority: Number(formData.backpacking_featured_priority) || 0,
         itinerary,
 
         highlights,
@@ -1708,6 +1719,84 @@ const AdminTrips = () => {
                         type="number"
                         placeholder="0"
                         value={formData.long_weekend_featured_priority}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* BACKPACKING SHOWCASE SETTINGS */}
+              <div className={styles.formSection}>
+                <h3 className={styles.sectionTitle}>
+                  <svg className={styles.sectionIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M16 3H8L4 7V17L8 21H16L20 17V7L16 3Z" /><path d="M8 7V21" /><path d="M16 7V21" /><path d="M4 11H20" /><path d="M4 17H20" />
+                  </svg>
+                  Backpacking Showcase
+                </h3>
+
+                <div className={styles.formGrid}>
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        name="is_backpacking_trip"
+                        checked={formData.is_backpacking_trip}
+                        onChange={handleCheckboxChange}
+                        style={{ width: "18px", height: "18px", accentColor: "#27ae60" }}
+                      />
+                      Backpacking Trip
+                    </label>
+                    <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
+                      Mark this trip as a Backpacking adventure
+                    </span>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        name="show_in_backpacking_section"
+                        checked={formData.show_in_backpacking_section}
+                        onChange={handleCheckboxChange}
+                        style={{ width: "18px", height: "18px", accentColor: "#27ae60" }}
+                      />
+                      Show in Scrolling Section
+                    </label>
+                    <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
+                      Display in the auto-scrolling Backpacking showcase
+                    </span>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Display Order</label>
+                    <div className={styles.inputWrapper}>
+                      <svg className={styles.inputIcon} viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" />
+                      </svg>
+                      <input
+                        className={styles.input}
+                        name="backpacking_display_order"
+                        type="number"
+                        placeholder="0"
+                        value={formData.backpacking_display_order}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Featured Priority</label>
+                    <div className={styles.inputWrapper}>
+                      <svg className={styles.inputIcon} viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <input
+                        className={styles.input}
+                        name="backpacking_featured_priority"
+                        type="number"
+                        placeholder="0"
+                        value={formData.backpacking_featured_priority}
                         onChange={handleChange}
                       />
                     </div>
