@@ -926,6 +926,14 @@ export const fetchSummerTrips = async () => {
   return res.json();
 };
 
+export const fetchAllSummerTrips = async () => {
+  const response = await fetch(`${API_BASE_URL}/v1/trips/?is_summer_trek=true`);
+  if (!response.ok) {
+    throw new Error("Failed to load all Summer trips");
+  }
+  return response.json();
+};
+
 export const fetchSummerConfig = async () => {
   const token = localStorage.getItem("accessToken");
   const res = await fetch(`${API_BASE_URL}/v1/admin/summer-config/`, {

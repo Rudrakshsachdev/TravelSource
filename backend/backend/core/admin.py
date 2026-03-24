@@ -22,7 +22,7 @@ class TripAdmin(admin.ModelAdmin):
         "is_honeymoon", "show_in_honeymoon_section", "honeymoon_display_order", "honeymoon_featured_priority",
         "is_himalayan_trek", "show_in_himalayan_section", "himalayan_display_order",
         "is_backpacking_trip", "show_in_backpacking_section", "backpacking_display_order", "backpacking_featured_priority",
-        "is_summer_trek", "show_in_summer_section", "summer_display_order",
+        "is_summer_trek", "show_in_summer_section", "summer_display_order", "summer_featured_priority",
         "is_monsoon_trek", "show_in_monsoon_section", "monsoon_display_order",
         "is_community_trip", "show_in_community_section", "community_display_order",
         "is_festival_trip", "show_in_festival_section", "festival_display_order",
@@ -37,7 +37,7 @@ class TripAdmin(admin.ModelAdmin):
         "is_honeymoon", "show_in_honeymoon_section", "honeymoon_display_order", "honeymoon_featured_priority",
         "is_himalayan_trek", "show_in_himalayan_section", "himalayan_display_order",
         "is_backpacking_trip", "show_in_backpacking_section", "backpacking_display_order", "backpacking_featured_priority",
-        "is_summer_trek", "show_in_summer_section", "summer_display_order",
+        "is_summer_trek", "show_in_summer_section", "summer_display_order", "summer_featured_priority",
         "is_monsoon_trek", "show_in_monsoon_section", "monsoon_display_order",
         "is_community_trip", "show_in_community_section", "community_display_order",
         "is_festival_trip", "show_in_festival_section", "festival_display_order",
@@ -78,8 +78,8 @@ class TripAdmin(admin.ModelAdmin):
             "description": "Control how this trip appears in the Backpacking Trips scrolling section.",
         }),
         ("Summer Showcase", {
-            "fields": ("is_summer_trek", "show_in_summer_section", "summer_display_order"),
-            "description": "Control how this trip appears in the Summer Treks scrolling section.",
+            "fields": ("is_summer_trek", "show_in_summer_section", "summer_display_order", "summer_featured_priority"),
+            "description": "Control how this trip appears in the Summer Getaways scrolling section.",
         }),
         ("Monsoon Showcase", {
             "fields": ("is_monsoon_trek", "show_in_monsoon_section", "monsoon_display_order"),

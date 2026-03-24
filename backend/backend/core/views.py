@@ -1129,7 +1129,7 @@ def summer_trips(request):
         is_active=True,
         is_summer_trek=True,
         show_in_summer_section=True,
-    ).order_by("summer_display_order", "-id")
+    ).order_by("-summer_featured_priority", "summer_display_order", "-id")
 
     config_serializer = SummerSectionConfigSerializer(config)
     trip_serializer = SummerTripSerializer(trips, many=True)

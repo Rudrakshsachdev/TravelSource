@@ -15,6 +15,7 @@ class SummerTripSerializer(serializers.ModelSerializer):
             "image",
             "short_description",
             "summer_display_order",
+            "summer_featured_priority",
         ]
 
 class SummerSectionConfigSerializer(serializers.ModelSerializer):

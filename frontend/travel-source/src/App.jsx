@@ -18,6 +18,7 @@ import FestivalTripsPage from "./pages/FestivalTrips/FestivalTripsPage";
 import HoneymoonTripsPage from "./pages/HoneymoonTrips/HoneymoonTripsPage";
 import AdventureTripsPage from "./pages/AdventureTripsPage/AdventureTripsPage";
 import BackpackingTripsPage from "./pages/BackpackingTrips/BackpackingTripsPage";
+import SummerTripsPage from "./pages/SummerTrips/SummerTripsPage";
 import ContactUs from "./components/ContactUs/ContactUs";
 import MyBookings from "./pages/MyBookings/MyBookings";
 import DetailedMyBookings from "./pages/DetailedMyBookings/DetailedMyBookings";
@@ -226,6 +227,15 @@ function App() {
         element={
           <Layout>
             <BackpackingTripsPage />
+          </Layout>
+        }
+      />
+
+      <Route
+        path="/summer-getaways"
+        element={
+          <Layout>
+            <SummerTripsPage />
           </Layout>
         }
       />

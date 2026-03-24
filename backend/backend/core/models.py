@@ -88,6 +88,7 @@ class Trip(models.Model):
     is_summer_trek = models.BooleanField(default=False, help_text="Mark as Summer trek")
     show_in_summer_section = models.BooleanField(default=False, help_text="Show in the scrolling Summer section")
     summer_display_order = models.IntegerField(default=0, help_text="Order in the Summer section (lower = first)")
+    summer_featured_priority = models.IntegerField(default=0, help_text="Featured priority (higher = more prominent)")
 
     is_monsoon_trek = models.BooleanField(default=False, help_text="Mark as Monsoon trek")
     show_in_monsoon_section = models.BooleanField(default=False, help_text="Show in the scrolling Monsoon section")
@@ -436,7 +437,7 @@ class BackpackingSectionConfig(models.Model):
 class SummerSectionConfig(models.Model):
     """Singleton settings for the Summer Treks showcase section."""
     is_enabled = models.BooleanField(default=True, help_text="Enable the Summer treks scrolling section")
-    title = models.CharField(max_length=200, default="Vibrant Summer Treks")
+    title = models.CharField(max_length=200, default="Summer Getaways")
     subtitle = models.CharField(max_length=300, blank=True, default="", help_text="Optional subtitle below the heading")
     scroll_speed = models.PositiveIntegerField(default=60, help_text="Animation duration in seconds (higher = slower)")
 
