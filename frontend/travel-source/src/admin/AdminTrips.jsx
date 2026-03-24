@@ -77,6 +77,10 @@ const AdminTrips = () => {
     show_in_festival_section: false,
     festival_display_order: 0,
     festival_featured_priority: 0,
+    is_biking_trip: false,
+    show_in_biking_section: false,
+    biking_display_order: 0,
+    biking_featured_priority: 0,
     is_good_friday_trip: false,
     show_in_good_friday_section: false,
     good_friday_display_order: 0,
@@ -2068,6 +2072,88 @@ const AdminTrips = () => {
                         type="number"
                         placeholder="0"
                         value={formData.festival_featured_priority}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* BIKING SHOWCASE SETTINGS */}
+              <div className={styles.formSection}>
+                <h3 className={styles.sectionTitle}>
+                  <svg className={styles.sectionIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <circle cx="8" cy="12" r="2"></circle>
+                    <circle cx="16" cy="12" r="2"></circle>
+                    <path d="M10 12h4"></path>
+                    <path d="M12 10v4"></path>
+                  </svg>
+                  Biking Trips Showcase
+                </h3>
+
+                <div className={styles.formGrid}>
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        name="is_biking_trip"
+                        checked={formData.is_biking_trip}
+                        onChange={handleCheckboxChange}
+                        style={{ width: "18px", height: "18px", accentColor: "#e67e22" }}
+                      />
+                      Biking Trip
+                    </label>
+                    <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
+                      Mark this trip for the Biking collection
+                    </span>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        name="show_in_biking_section"
+                        checked={formData.show_in_biking_section}
+                        onChange={handleCheckboxChange}
+                        style={{ width: "18px", height: "18px", accentColor: "#e67e22" }}
+                      />
+                      Show in Scrolling Section
+                    </label>
+                    <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
+                      Display in the auto-scrolling Biking showcase
+                    </span>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Display Order</label>
+                    <div className={styles.inputWrapper}>
+                      <svg className={styles.inputIcon} viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" />
+                      </svg>
+                      <input
+                        className={styles.input}
+                        name="biking_display_order"
+                        type="number"
+                        placeholder="0"
+                        value={formData.biking_display_order}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Featured Priority</label>
+                    <div className={styles.inputWrapper}>
+                      <svg className={styles.inputIcon} viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <input
+                        className={styles.input}
+                        name="biking_featured_priority"
+                        type="number"
+                        placeholder="0"
+                        value={formData.biking_featured_priority}
                         onChange={handleChange}
                       />
                     </div>

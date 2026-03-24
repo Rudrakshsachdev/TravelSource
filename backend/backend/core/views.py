@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, NorthIndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, AdventureSectionConfig, HimachalSectionConfig, UttarakhandSectionConfig, LongWeekendSectionConfig, Category, TripGalleryImage, Coupon
+from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, NorthIndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, AdventureSectionConfig, BikingSectionConfig, HimachalSectionConfig, UttarakhandSectionConfig, LongWeekendSectionConfig, Category, TripGalleryImage, Coupon
 from .coupon_service import validate_coupon, record_coupon_usage, get_applicable_coupons
 
 from .serializers import (
@@ -41,6 +41,8 @@ from .serializers import (
     FestivalSectionConfigSerializer,
     AdventureTripSerializer,
     AdventureSectionConfigSerializer,
+    BikingTripSerializer,
+    BikingSectionConfigSerializer,
     HimachalTripSerializer,
     HimachalSectionConfigSerializer,
     UttarakhandTripSerializer,
@@ -1438,6 +1440,43 @@ def admin_adventure_config(request):
     
     # PATCH
     serializer = AdventureSectionConfigSerializer(config, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data)
+
+
+# ─── Biking Section ───────────────────────────────────────────────────────────
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def biking_trips(request):
+    """Public: return biking section config and its active trips."""
+    config = BikingSectionConfig.load()
+    trips = Trip.objects.filter(
+        is_active=True,
+        is_biking_trip=True,
+        show_in_biking_section=True
+    ).order_by("-biking_featured_priority", "biking_display_order", "-id")
+    
+    return Response({
+        "config": BikingSectionConfigSerializer(config).data,
+        "trips": BikingTripSerializer(trips, many=True).data
+    })
+
+
+@api_view(["GET", "PATCH"])
+@permission_classes([IsAuthenticated])
+def admin_biking_config(request):
+    """Admin: get or update biking section configuration."""
+    if not hasattr(request.user, "profile") or request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+        
+    config = BikingSectionConfig.load()
+    if request.method == "GET":
+        return Response(BikingSectionConfigSerializer(config).data)
+    
+    # PATCH
+    serializer = BikingSectionConfigSerializer(config, data=request.data, partial=True)
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(serializer.data)

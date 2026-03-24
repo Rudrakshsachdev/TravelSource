@@ -41,6 +41,7 @@ const SECTION_ICONS = {
   community: Users,
   festival: Star,
   long_weekend: Calendar,
+  biking: Bike,
 };
 const SECTION_LABELS = {
   international: "International Trips",
@@ -53,6 +54,7 @@ const SECTION_LABELS = {
   community: "Community Trips",
   festival: "Festival Getaways",
   long_weekend: "Long Weekend Trips",
+  biking: "Biking Expeditions",
 };
 const NAV_SECTION_ORDER = [
   "international",
@@ -65,6 +67,7 @@ const NAV_SECTION_ORDER = [
   "community",
   "festival",
   "long_weekend",
+  "biking",
 ];
 const SECTION_PATHS = {
   international: "/international-trips",
@@ -77,6 +80,7 @@ const SECTION_PATHS = {
   community: "/community-trips",
   festival: "/festival-getaways",
   long_weekend: "/long-weekend-trips",
+  biking: "/biking-trips",
 };
 const DESKTOP_PRIMARY_MENU_LIMIT = 4;
 

@@ -1372,3 +1372,41 @@ export const updateLongWeekendConfig = async (data) => {
   if (!res.ok) throw new Error("Failed to update Long Weekend config");
   return res.json();
 };
+
+/** Fetch Biking trips + section config for the scrolling showcase */
+export const fetchBikingTrips = async () => {
+  const res = await fetch(`${API_BASE_URL}/v1/trips/biking/`);
+  if (!res.ok) throw new Error("Failed to fetch Biking trips");
+  return res.json();
+};
+
+export const fetchAllBikingTrips = async () => {
+  const res = await fetch(`${API_BASE_URL}/v1/trips/?is_biking_trip=true`);
+  if (!res.ok) throw new Error("Failed to load all Biking trips");
+  return res.json();
+};
+
+/** Fetch Biking section config (ADMIN) */
+export const fetchBikingConfig = async () => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/biking-config/`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Failed to fetch Biking config");
+  return res.json();
+};
+
+/** Update Biking section config (ADMIN) */
+export const updateBikingConfig = async (data) => {
+  const token = localStorage.getItem("accessToken");
+  const res = await fetch(`${API_BASE_URL}/v1/admin/biking-config/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to update Biking config");
+  return res.json();
+};

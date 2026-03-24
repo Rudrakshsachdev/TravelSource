@@ -104,6 +104,12 @@ class Trip(models.Model):
     festival_display_order = models.IntegerField(default=0, help_text="Order in the Festival section (lower = first)")
     festival_featured_priority = models.IntegerField(default=0, help_text="Featured priority (higher = more prominent)")
 
+    # Biking showcase fields
+    is_biking_trip = models.BooleanField(default=False, help_text="Mark as Biking trip")
+    show_in_biking_section = models.BooleanField(default=False, help_text="Show in the scrolling Biking section")
+    biking_display_order = models.IntegerField(default=0, help_text="Order in the Biking section (lower = first)")
+    biking_featured_priority = models.IntegerField(default=0, help_text="Featured priority (higher = more prominent)")
+
     # Adventure showcase fields
     is_adventure_trip = models.BooleanField(default=False, help_text="Mark as Adventure trip")
     show_in_adventure_section = models.BooleanField(default=False, help_text="Show in the scrolling Adventure section")
@@ -527,6 +533,31 @@ class FestivalSectionConfig(models.Model):
 
     def __str__(self):
         return f"Festival Section ({'Enabled' if self.is_enabled else 'Disabled'})"
+
+    def save(self, *args, **kwargs):
+        # Enforce singleton: always use pk=1
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+
+class BikingSectionConfig(models.Model):
+    """Singleton settings for the Biking Trips showcase section."""
+    is_enabled = models.BooleanField(default=True, help_text="Enable the Biking trips scrolling section")
+    title = models.CharField(max_length=200, default="Epic Biking Trips")
+    subtitle = models.CharField(max_length=300, blank=True, default="", help_text="Optional subtitle below the heading")
+    scroll_speed = models.PositiveIntegerField(default=60, help_text="Animation duration in seconds (higher = slower)")
+
+    class Meta:
+        verbose_name = "Biking Section Config"
+        verbose_name_plural = "Biking Section Config"
+
+    def __str__(self):
+        return f"Biking Section ({'Enabled' if self.is_enabled else 'Disabled'})"
 
     def save(self, *args, **kwargs):
         # Enforce singleton: always use pk=1

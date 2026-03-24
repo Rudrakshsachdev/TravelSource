@@ -21,6 +21,7 @@ from .monsoon_serializer import MonsoonTripSerializer, MonsoonSectionConfigSeria
 from .community_serializer import CommunityTripSerializer, CommunitySectionConfigSerializer
 from .festival_serializer import FestivalTripSerializer, FestivalSectionConfigSerializer
 from .adventure_serializer import AdventureTripSerializer, AdventureSectionConfigSerializer
+from .biking_serializer import BikingTripSerializer, BikingSectionConfigSerializer
 from .category_serializer import CategorySerializer
 
 from .himachal_serializer import HimachalTripSerializer, HimachalSectionConfigSerializer
