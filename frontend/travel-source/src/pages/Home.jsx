@@ -1,4 +1,5 @@
 import { HeroSection } from "../components/HeroSection";
+import { BestSellers } from "../components/BestSellers";
 import { TripsList } from "../components/Trips";
 import { PromoBanner } from "../components/PromoBanner";
 import { Reviews } from "../components/Reviews";
@@ -16,6 +17,7 @@ const Home = () => {
       <HeroSection />
       <TripsList />
       <PromoBanner />
+      <BestSellers />
       <TrendingDestinations />
       <LongWeekendBanner />
       <NightAdventure />
