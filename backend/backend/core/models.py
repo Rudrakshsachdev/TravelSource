@@ -93,6 +93,7 @@ class Trip(models.Model):
     is_monsoon_trek = models.BooleanField(default=False, help_text="Mark as Monsoon trek")
     show_in_monsoon_section = models.BooleanField(default=False, help_text="Show in the scrolling Monsoon section")
     monsoon_display_order = models.IntegerField(default=0, help_text="Order in the Monsoon section (lower = first)")
+    monsoon_featured_priority = models.IntegerField(default=0, help_text="Featured priority (higher = more prominent)")
 
     is_community_trip = models.BooleanField(default=False, help_text="Mark as Community trip")
     show_in_community_section = models.BooleanField(default=False, help_text="Show in the scrolling Community section")
@@ -469,6 +470,14 @@ class MonsoonSectionConfig(models.Model):
     class Meta:
         verbose_name = "Monsoon Section Config"
         verbose_name_plural = "Monsoon Section Config"
+
+    def __str__(self):
+        return f"Monsoon Section ({'Enabled' if self.is_enabled else 'Disabled'})"
+
+    def save(self, *args, **kwargs):
+        # Enforce singleton: always use pk=1
+        self.pk = 1
+        super().save(*args, **kwargs)
 
     @classmethod
     def load(cls):

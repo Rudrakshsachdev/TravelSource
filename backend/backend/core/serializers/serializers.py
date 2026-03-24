@@ -68,6 +68,8 @@ class TripSerializer(serializers.ModelSerializer):
             "summer_featured_priority",
             "is_monsoon_trek",
             "show_in_monsoon_section",
+            "monsoon_display_order",
+            "monsoon_featured_priority",
             "is_community_trip",
             "show_in_community_section",
             "is_festival_trip",

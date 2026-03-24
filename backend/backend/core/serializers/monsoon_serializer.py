@@ -6,7 +6,7 @@ class MonsoonTripSerializer(serializers.ModelSerializer):
         model = Trip
         fields = [
             'id', 'title', 'location', 'image', 'price', 'duration_days',
-            'monsoon_display_order'
+            'monsoon_display_order', 'monsoon_featured_priority'
         ]
 
 class MonsoonSectionConfigSerializer(serializers.ModelSerializer):

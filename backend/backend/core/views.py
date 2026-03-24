@@ -1169,7 +1169,7 @@ def monsoon_trips(request):
         is_active=True,
         is_monsoon_trek=True,
         show_in_monsoon_section=True,
-    ).order_by("monsoon_display_order", "-id")
+    ).order_by("-monsoon_featured_priority", "monsoon_display_order", "-id")
 
     config_serializer = MonsoonSectionConfigSerializer(config)
     trip_serializer = MonsoonTripSerializer(trips, many=True)

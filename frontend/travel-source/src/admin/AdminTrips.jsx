@@ -65,6 +65,9 @@ const AdminTrips = () => {
     summer_display_order: 0,
     summer_featured_priority: 0,
     is_monsoon_trek: false,
+    show_in_monsoon_section: false,
+    monsoon_display_order: 0,
+    monsoon_featured_priority: 0,
     is_community_trip: false,
     category: "",
     is_featured: false,
@@ -260,6 +263,9 @@ const AdminTrips = () => {
       summer_display_order: trip.summer_display_order || 0,
       summer_featured_priority: trip.summer_featured_priority || 0,
       is_monsoon_trek: trip.is_monsoon_trek || false,
+      show_in_monsoon_section: trip.show_in_monsoon_section || false,
+      monsoon_display_order: trip.monsoon_display_order || 0,
+      monsoon_featured_priority: trip.monsoon_featured_priority || 0,
       is_community_trip: trip.is_community_trip || false,
       is_festival_trip: trip.is_festival_trip || false,
       is_adventure_trip: trip.is_adventure_trip || false,
@@ -338,6 +344,9 @@ const AdminTrips = () => {
       summer_display_order: 0,
       summer_featured_priority: 0,
       is_monsoon_trek: false,
+      show_in_monsoon_section: false,
+      monsoon_display_order: 0,
+      monsoon_featured_priority: 0,
       is_community_trip: false,
       is_festival_trip: false,
       is_adventure_trip: false,
@@ -427,6 +436,8 @@ const AdminTrips = () => {
         backpacking_featured_priority: Number(formData.backpacking_featured_priority) || 0,
         summer_display_order: Number(formData.summer_display_order) || 0,
         summer_featured_priority: Number(formData.summer_featured_priority) || 0,
+        monsoon_display_order: Number(formData.monsoon_display_order) || 0,
+        monsoon_featured_priority: Number(formData.monsoon_featured_priority) || 0,
         itinerary,
 
         highlights,
@@ -1888,6 +1899,86 @@ const AdminTrips = () => {
                         type="number"
                         placeholder="0"
                         value={formData.summer_featured_priority}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* MONSOON GETAWAYS SHOWCASE SETTINGS */}
+              <div className={styles.formSection}>
+                <h3 className={styles.sectionTitle}>
+                  <svg className={styles.sectionIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+                    <path d="M12 8c-2.209 0-4 1.791-4 4s1.791 4 4 4 4-1.791 4-4-1.791-4-4-4z" />
+                    <path d="M12 2v2" stroke="#3498db" />
+                  </svg>
+                  Monsoon Getaways Showcase
+                </h3>
+
+                <div className={styles.formGrid}>
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        name="is_monsoon_trek"
+                        checked={formData.is_monsoon_trek}
+                        onChange={handleCheckboxChange}
+                        style={{ width: "18px", height: "18px", accentColor: "#3498db" }}
+                      />
+                      Monsoon Trip
+                    </label>
+                    <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
+                      Mark this trip for the Monsoon collection
+                    </span>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        name="show_in_monsoon_section"
+                        checked={formData.show_in_monsoon_section}
+                        onChange={handleCheckboxChange}
+                        style={{ width: "18px", height: "18px", accentColor: "#3498db" }}
+                      />
+                      Show in Scrolling Section
+                    </label>
+                    <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
+                      Display in the auto-scrolling Monsoon showcase
+                    </span>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Display Order</label>
+                    <div className={styles.inputWrapper}>
+                      <svg className={styles.inputIcon} viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" />
+                      </svg>
+                      <input
+                        className={styles.input}
+                        name="monsoon_display_order"
+                        type="number"
+                        placeholder="0"
+                        value={formData.monsoon_display_order}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Featured Priority</label>
+                    <div className={styles.inputWrapper}>
+                      <svg className={styles.inputIcon} viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <input
+                        className={styles.input}
+                        name="monsoon_featured_priority"
+                        type="number"
+                        placeholder="0"
+                        value={formData.monsoon_featured_priority}
                         onChange={handleChange}
                       />
                     </div>

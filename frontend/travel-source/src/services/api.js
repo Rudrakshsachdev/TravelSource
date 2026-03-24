@@ -963,6 +963,14 @@ export const fetchMonsoonTrips = async () => {
   return res.json();
 };
 
+export const fetchAllMonsoonTrips = async () => {
+  const response = await fetch(`${API_BASE_URL}/v1/trips/?is_monsoon_trek=true`);
+  if (!response.ok) {
+    throw new Error("Failed to load all Monsoon trips");
+  }
+  return response.json();
+};
+
 export const fetchMonsoonConfig = async () => {
   const token = localStorage.getItem("accessToken");
   const res = await fetch(`${API_BASE_URL}/v1/admin/monsoon-config/`, {
