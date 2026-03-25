@@ -1,0 +1,459 @@
+/* ═══════════════════════════════════════════════════════════════
+   MobileHero.module.css — premium app-like mobile hero
+   Brand: #3b82f6 · #2563eb · #1d4ed8  |  Gold: #e8c981
+   Only visible ≤ 767 px (component-level conditional render)
+   ═══════════════════════════════════════════════════════════════ */
+
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+
+/* ─────────────────────────────────────────
+   BASE WRAPPER
+   ───────────────────────────────────────── */
+
+.mobileHero,
+.mobileHero * {
+  box-sizing: border-box;
+}
+
+.mobileHero {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 14px 24px;
+  overflow: hidden;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  background: #f0f5ff;
+}
+
+/* Subtle gradient decoration at top */
+.bgGradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(
+    180deg,
+    rgba(59, 130, 246, 0.08) 0%,
+    rgba(37, 99, 235, 0.03) 60%,
+    transparent 100%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ─────────────────────────────────────────
+   1. SEARCH BAR
+   ───────────────────────────────────────── */
+
+.searchBar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 999px;
+  padding: 10px 14px;
+  gap: 8px;
+  box-shadow:
+    0 2px 8px rgba(59, 130, 246, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.searchBar:focus-within {
+  box-shadow:
+    0 4px 16px rgba(59, 130, 246, 0.14),
+    0 2px 6px rgba(0, 0, 0, 0.06);
+  border-color: rgba(59, 130, 246, 0.28);
+}
+
+.searchIcon {
+  flex-shrink: 0;
+  color: #94a3b8;
+  transition: color 0.2s ease;
+}
+
+.searchBar:focus-within .searchIcon {
+  color: #3b82f6;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #1e293b;
+  outline: none;
+  line-height: 1.4;
+}
+
+.searchInput::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+/* ─────────────────────────────────────────
+   2. TRUST BADGES
+   ───────────────────────────────────────── */
+
+.badgeScroll {
+  position: relative;
+  z-index: 1;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.badgeScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.badgeTrack {
+  display: flex;
+  gap: 8px;
+  padding: 2px 0;
+  width: max-content;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid rgba(59, 130, 246, 0.12);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #334155;
+  white-space: nowrap;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.badge:active {
+  transform: scale(0.97);
+}
+
+.badge svg {
+  color: #f59e0b;
+  flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────
+   3. PROMO BANNER
+   ───────────────────────────────────────── */
+
+.banner {
+  position: relative;
+  z-index: 1;
+  border-radius: 18px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  box-shadow:
+    0 8px 28px rgba(29, 78, 216, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.bannerImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+}
+
+.bannerOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 18px;
+  background: linear-gradient(
+    180deg,
+    transparent 20%,
+    rgba(29, 78, 216, 0.35) 55%,
+    rgba(29, 78, 216, 0.85) 100%
+  );
+}
+
+.bannerTag {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.bannerTitle {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+  margin: 0 0 6px 0;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+.bannerTitle span {
+  font-weight: 600;
+  font-size: 15px;
+  opacity: 0.9;
+}
+
+.bannerPrice {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 5px 12px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #e8c981, #d4a853);
+  font-size: 12px;
+  font-weight: 700;
+  color: #1a1a2e;
+  letter-spacing: 0.2px;
+}
+
+/* ─────────────────────────────────────────
+   4. CATEGORY CIRCLES
+   ───────────────────────────────────────── */
+
+.catScroll {
+  position: relative;
+  z-index: 1;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.catScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.catTrack {
+  display: flex;
+  gap: 16px;
+  padding: 4px 0;
+  justify-content: space-evenly;
+  min-width: 100%;
+}
+
+.catItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  scroll-snap-align: center;
+  padding: 2px;
+  transition: transform 0.2s ease;
+  min-width: 60px;
+}
+
+.catItem:active {
+  transform: scale(0.94);
+}
+
+.catCircle {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: #fff !important;
+}
+
+.catItem:active .catCircle {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.catLabel {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #475569;
+  text-align: center;
+  line-height: 1.3;
+  max-width: 72px;
+}
+
+/* ─────────────────────────────────────────
+   5. OCCASION TABS
+   ───────────────────────────────────────── */
+
+.tabs {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 8px;
+  padding: 0 4px;
+}
+
+.tab {
+  flex: 0 0 auto;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1.5px solid #cbd5e1;
+  background: #ffffff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.tab:active {
+  transform: scale(0.96);
+}
+
+.tabActive {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+}
+
+/* ─────────────────────────────────────────
+   6. TRIP CARDS
+   ───────────────────────────────────────── */
+
+.cardsRow {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.1),
+    0 1px 4px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cardImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cardOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+  background: linear-gradient(
+    180deg,
+    transparent 40%,
+    rgba(15, 23, 42, 0.7) 100%
+  );
+}
+
+.cardBadge {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 6px rgba(22, 163, 74, 0.3);
+}
+
+.cardTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* ─────────────────────────────────────────
+   ENTRANCE ANIMATION
+   ───────────────────────────────────────── */
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.searchBar {
+  animation: slideUp 0.45s ease both;
+  animation-delay: 0.05s;
+}
+
+.badgeScroll {
+  animation: slideUp 0.45s ease both;
+  animation-delay: 0.12s;
+}
+
+.banner {
+  animation: slideUp 0.5s ease both;
+  animation-delay: 0.2s;
+}
+
+.catScroll {
+  animation: slideUp 0.45s ease both;
+  animation-delay: 0.28s;
+}
+
+.tabs {
+  animation: slideUp 0.45s ease both;
+  animation-delay: 0.35s;
+}
+
+.cardsRow {
+  animation: slideUp 0.5s ease both;
+  animation-delay: 0.42s;
+}
