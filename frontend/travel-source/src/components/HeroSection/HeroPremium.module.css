@@ -144,6 +144,7 @@
 /* ── CTAs ── */
 .ctas {
   display: flex;
+  flex-direction: column;
   gap: 8px;
   width: 100%;
   margin-bottom: 14px;
@@ -288,6 +289,7 @@
   }
 
   .ctas {
+    flex-direction: row;
     max-width: 420px;
     margin-bottom: 20px;
   }
