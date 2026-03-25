@@ -5,3 +5,4 @@ export { default as MonsoonTreks } from "./MonsoonTreks";
 export { default as CommunityTrips } from "./CommunityTrips";
 export { default as FestivalTrips } from "./FestivalTrips";
 export { default as AdventureTrips } from "./AdventureTrips";
+export { default as OccasionTrips } from "./OccasionTrips";

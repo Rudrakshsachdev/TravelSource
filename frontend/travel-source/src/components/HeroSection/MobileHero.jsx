@@ -4,6 +4,7 @@ import {
   Search, Star, ShieldCheck, Globe, MapPin,
   Tent, Plane, Mountain, Frame,
 } from "lucide-react";
+import { OccasionTrips } from "../Trips";
 import styles from "./MobileHero.module.css";
 
 /* ═══════════════════════════════════════════════════════════════
@@ -21,10 +22,10 @@ const BADGES = [
 ];
 
 const CATEGORIES = [
-  { icon: <Tent size={22} />, label: "Long Weekend", color: "#f59e0b" },
-  { icon: <Plane size={22} />, label: "International", color: "#3b82f6" },
-  { icon: <Mountain size={22} />, label: "Ladakh", color: "#8b5cf6" },
-  { icon: <Frame size={22} />, label: "Spiti", color: "#10b981" },
+  { icon: <Tent size={22} />, label: "Long Weekend", color: "#f59e0b", href: "/long-weekend-trips" },
+  { icon: <Plane size={22} />, label: "International", color: "#3b82f6", href: "/international-trips" },
+  { icon: <Mountain size={22} />, label: "India", color: "#8b5cf6", href: "/india-trips" },
+  { icon: <Frame size={22} />, label: "Himachal Pradesh", color: "#10b981", href: "/himachal-pradesh" },
 ];
 
 const OCCASIONS = ["Good Friday", "Independence Day"];
@@ -93,7 +94,12 @@ const MobileHero = () => {
       </div>
 
       {/* ── 3. Promo Banner ── */}
-      <div className={styles.banner}>
+      <div 
+        className={styles.banner} 
+        onClick={() => navigate('/good-friday')}
+        role="button"
+        tabIndex={0}
+      >
         <img
           src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=80"
           alt="Good Friday Long Weekend Trips"
@@ -115,7 +121,14 @@ const MobileHero = () => {
       <div className={styles.catScroll}>
         <div className={styles.catTrack}>
           {CATEGORIES.map((c, i) => (
-            <button className={styles.catItem} key={i} type="button">
+            <button
+              className={styles.catItem}
+              key={i}
+              type="button"
+              onClick={() => {
+                if (c.href) navigate(c.href);
+              }}
+            >
               <span
                 className={styles.catCircle}
                 style={{
@@ -131,32 +144,8 @@ const MobileHero = () => {
         </div>
       </div>
 
-      {/* ── 5. Occasion Tabs ── */}
-      <div className={styles.tabs}>
-        {OCCASIONS.map((o, i) => (
-          <button
-            key={i}
-            type="button"
-            className={`${styles.tab} ${i === activeTab ? styles.tabActive : ""}`}
-            onClick={() => setActiveTab(i)}
-          >
-            {o}
-          </button>
-        ))}
-      </div>
-
-      {/* ── 6. Trip Cards ── */}
-      <div className={styles.cardsRow}>
-        {TRIP_CARDS.map((t, i) => (
-          <div className={styles.card} key={i}>
-            <img src={t.image} alt={t.title} className={styles.cardImg} loading="lazy" />
-            <div className={styles.cardOverlay}>
-              <span className={styles.cardBadge}>{t.badge}</span>
-              <span className={styles.cardTitle}>{t.title}</span>
-            </div>
-          </div>
-        ))}
-      </div>
+      {/* ── 5. Dynamic Occasion Tabs & Cards ── */}
+      <OccasionTrips />
     </section>
   );
 };
