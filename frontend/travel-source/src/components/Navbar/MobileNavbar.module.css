@@ -1,0 +1,293 @@
+.mobileDrawer {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: linear-gradient(180deg, #3b82f6 0%, #cbd5e1 50%, #f1f5f9 100%);
+  transform: translateX(-100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  padding-bottom: 30px;
+}
+
+.drawerOpen {
+  transform: translateX(0);
+}
+
+.drawerContent {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ──────────────────────────────────────────
+   HEADER
+   ────────────────────────────────────────── */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.logoWrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.logo {
+  height: 48px;
+  width: auto;
+  border-radius: 8px; /* Depending on the logo style */
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+  color: #ffffff;
+}
+
+.brandTitle {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+}
+
+.brandSubtitle {
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  opacity: 0.8;
+  text-transform: uppercase;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.iconBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.iconBtn:active {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(0.96);
+}
+
+/* ──────────────────────────────────────────
+   USER CARD
+   ────────────────────────────────────────── */
+.userCardScroll {
+  width: 100%;
+}
+
+.userCard {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+}
+
+.avatarWrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1.5px solid #dbeafe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #3b82f6;
+  flex-shrink: 0;
+}
+
+.avatarLetter {
+  font-size: 22px;
+  font-weight: 700;
+  color: #3b82f6;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.userName {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.authLink {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 12px;
+  color: #3b82f6;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* ──────────────────────────────────────────
+   GRID NAVIGATION
+   ────────────────────────────────────────── */
+.navGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.navItem {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 14px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid transparent;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-height: 56px;
+  position: relative;
+}
+
+.navItem:active {
+  transform: scale(0.97);
+}
+
+.itemLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.itemIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+}
+
+.itemLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e293b;
+  text-align: left;
+  line-height: 1.25;
+}
+
+.itemCaret {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+/* Highlight variation */
+.navItemHighlight {
+  border: 2px solid #10b981;
+  background: #f0fdf4;
+}
+
+.itemLabelHighlight {
+  color: #047857;
+}
+
+.liveBadge {
+  position: absolute;
+  bottom: -6px;
+  right: 12px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 8px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+}
+
+/* ──────────────────────────────────────────
+   FOOTER (Location & Contact)
+   ────────────────────────────────────────── */
+.footerSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.locationCard, .contactCard {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.locationCard p {
+  margin: 0;
+  font-size: 12px;
+  color: #475569;
+  line-height: 1.5;
+  font-weight: 500;
+  text-align: center;
+}
+
+.contactCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
+}
+
+.contactIconWrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.contactInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.contactLabel {
+  font-size: 12px;
+  color: #475569;
+  font-weight: 500;
+}
+
+.contactNumber {
+  font-size: 17px;
+  color: #0f172a;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
