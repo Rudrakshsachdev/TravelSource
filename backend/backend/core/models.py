@@ -120,6 +120,12 @@ class Trip(models.Model):
     show_in_good_friday_section = models.BooleanField(default=False, help_text="Show in the scrolling Good Friday section")
     good_friday_display_order = models.IntegerField(default=0, help_text="Order in the Good Friday section (lower = first)")
 
+    # All Girls Group Showcase fields
+    is_girls_trip = models.BooleanField(default=False, help_text="Mark as All Girls Group trip")
+    show_in_girls_section = models.BooleanField(default=False, help_text="Show in the scrolling Girls Trips section")
+    girls_display_order = models.IntegerField(default=0, help_text="Order in the Girls Trips section (lower = first)")
+    girls_featured_priority = models.IntegerField(default=0, help_text="Featured priority (higher = more prominent)")
+
     # Long Weekend showcase fields
     is_long_weekend_trip = models.BooleanField(default=False, help_text="Mark as Long Weekend trip")
     show_in_long_weekend_section = models.BooleanField(default=False, help_text="Show in the scrolling Long Weekend section")
@@ -690,6 +696,31 @@ class LongWeekendSectionConfig(models.Model):
 
     def __str__(self):
         return f"Long Weekend Section ({'Enabled' if self.is_enabled else 'Disabled'})"
+
+    def save(self, *args, **kwargs):
+        # Enforce singleton: always use pk=1
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+
+class GirlsSectionConfig(models.Model):
+    """Singleton settings for the All Girls Group Tours showcase section."""
+    is_enabled = models.BooleanField(default=True, help_text="Enable the All Girls Group trips scrolling section")
+    title = models.CharField(max_length=200, default="All Girls Group Tours")
+    subtitle = models.CharField(max_length=300, blank=True, default="", help_text="Optional subtitle below the heading")
+    scroll_speed = models.PositiveIntegerField(default=60, help_text="Animation duration in seconds (higher = slower)")
+
+    class Meta:
+        verbose_name = "Girls Section Config"
+        verbose_name_plural = "Girls Section Config"
+
+    def __str__(self):
+        return f"Girls Section ({'Enabled' if self.is_enabled else 'Disabled'})"
 
     def save(self, *args, **kwargs):
         # Enforce singleton: always use pk=1

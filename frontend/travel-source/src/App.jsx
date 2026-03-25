@@ -34,6 +34,7 @@ import PackagesPage from "./pages/Packages/PackagesPage";
 import PremiumCategoryTripsPage from "./pages/CategoryTrips/PremiumCategoryTripsPage";
 import GoodFridayTripsPage from "./pages/GoodFridayTrips/GoodFridayTripsPage";
 import LongWeekendTripsPage from "./pages/Trips/LongWeekendTripsPage";
+import GirlsTripsPage from "./pages/GirlsTrips/GirlsTripsPage";
 
 // Admin
 import AdminLayout from "./admin/AdminLayout";
@@ -139,6 +140,15 @@ function App() {
         element={
           <Layout>
             <LongWeekendTripsPage />
+          </Layout>
+        }
+      />
+      
+      <Route
+        path="/all-girls-group-tours"
+        element={
+          <Layout>
+            <GirlsTripsPage />
           </Layout>
         }
       />

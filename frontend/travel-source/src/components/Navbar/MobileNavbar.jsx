@@ -59,8 +59,8 @@ const NAV_ITEMS = [
   {
     id: "all-girls",
     label: "All Girls Group Tours",
-    icon: <Users size={18} color="#475569" />,
-    path: "/community-trips",
+    icon: <Heart size={18} color="#ff69b4" />,
+    path: "/all-girls-group-tours",
   },
   {
     id: "mice",

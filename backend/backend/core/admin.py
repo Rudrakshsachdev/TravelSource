@@ -1,4 +1,4 @@
-from .models import Trip, Profile, Enquiry, SiteStat, InternationalSectionConfig, IndiaSectionConfig, NorthIndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, AdventureSectionConfig, BikingSectionConfig, LongWeekendSectionConfig, Category, Coupon
+from .models import Trip, Profile, Enquiry, SiteStat, InternationalSectionConfig, IndiaSectionConfig, NorthIndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, AdventureSectionConfig, BikingSectionConfig, LongWeekendSectionConfig, HimachalSectionConfig, UttarakhandSectionConfig, GirlsSectionConfig, Category, Coupon
 from django.contrib import admin
 # Register your models here.
 
@@ -29,6 +29,7 @@ class TripAdmin(admin.ModelAdmin):
         "is_adventure_trip", "show_in_adventure_section", "adventure_display_order",
         "is_biking_trip", "show_in_biking_section", "biking_display_order",
         "is_good_friday_trip", "show_in_good_friday_section", "good_friday_display_order",
+        "is_girls_trip", "show_in_girls_section", "girls_display_order",
     )
     list_filter = ("is_active", "is_featured", "category", "is_international", "show_in_international_section", "is_india_trip", "show_in_india_section", "is_north_india_trip", "show_in_north_india_section")
     list_editable = (
@@ -45,6 +46,7 @@ class TripAdmin(admin.ModelAdmin):
         "is_adventure_trip", "show_in_adventure_section", "adventure_display_order",
         "is_biking_trip", "show_in_biking_section", "biking_display_order",
         "is_good_friday_trip", "show_in_good_friday_section", "good_friday_display_order",
+        "is_girls_trip", "show_in_girls_section", "girls_display_order",
     )
     search_fields = ("title", "location", "country", "state")
     ordering = ("display_order", "-id")
@@ -110,6 +112,10 @@ class TripAdmin(admin.ModelAdmin):
         ("Long Weekend Showcase", {
             "fields": ("is_long_weekend_trip", "show_in_long_weekend_section", "long_weekend_display_order", "long_weekend_featured_priority"),
             "description": "Control how this trip appears in the Long Weekend Trips scrolling section.",
+        }),
+        ("All Girls Group Showcase", {
+            "fields": ("is_girls_trip", "show_in_girls_section", "girls_display_order", "girls_featured_priority"),
+            "description": "Control how this trip appears in the All Girls Group Tours scrolling section.",
         }),
         ("Featured Showcase", {
             "fields": ("is_featured", "featured_highlights"),
@@ -270,6 +276,18 @@ class LongWeekendSectionConfigAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return not LongWeekendSectionConfig.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(GirlsSectionConfig)
+class GirlsSectionConfigAdmin(admin.ModelAdmin):
+    list_display = ("title", "is_enabled", "scroll_speed")
+    list_editable = ("is_enabled", "scroll_speed")
+
+    def has_add_permission(self, request):
+        return not GirlsSectionConfig.objects.exists()
 
     def has_delete_permission(self, request, obj=None):
         return False

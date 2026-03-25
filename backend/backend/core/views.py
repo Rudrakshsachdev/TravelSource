@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, NorthIndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, AdventureSectionConfig, BikingSectionConfig, HimachalSectionConfig, UttarakhandSectionConfig, LongWeekendSectionConfig, Category, TripGalleryImage, Coupon
+from .models import Trip, Enquiry, ContactMessage, Booking, TripView, Review, SiteStat, InternationalSectionConfig, IndiaSectionConfig, NorthIndiaSectionConfig, HoneymoonSectionConfig, HimalayanSectionConfig, BackpackingSectionConfig, SummerSectionConfig, MonsoonSectionConfig, CommunitySectionConfig, FestivalSectionConfig, AdventureSectionConfig, BikingSectionConfig, HimachalSectionConfig, UttarakhandSectionConfig, LongWeekendSectionConfig, GirlsSectionConfig, Category, TripGalleryImage, Coupon
 from .coupon_service import validate_coupon, record_coupon_usage, get_applicable_coupons
 
 from .serializers import (
@@ -49,6 +49,8 @@ from .serializers import (
     UttarakhandSectionConfigSerializer,
     LongWeekendTripSerializer,
     LongWeekendSectionConfigSerializer,
+    GirlsTripSerializer,
+    GirlsSectionConfigSerializer,
     CategorySerializer,
     TripGalleryImageSerializer,
     CouponSerializer,
@@ -88,6 +90,7 @@ def trip_list(request):
     is_himachal_trip = request.query_params.get("is_himachal_trip")
     is_uttarakhand_trip = request.query_params.get("is_uttarakhand_trip")
     is_long_weekend_trip = request.query_params.get("is_long_weekend_trip")
+    is_girls_trip = request.query_params.get("is_girls_trip")
     
     if category_slug:
         trips = trips.filter(category__slug=category_slug)
@@ -124,9 +127,9 @@ def trip_list(request):
 
     if is_long_weekend_trip and is_long_weekend_trip.lower() == "true":
         trips = trips.filter(is_long_weekend_trip=True)
-        
-    if is_long_weekend_trip and is_long_weekend_trip.lower() == "true":
-        trips = trips.filter(is_long_weekend_trip=True)
+
+    if is_girls_trip and is_girls_trip.lower() == "true":
+        trips = trips.filter(is_girls_trip=True)
         
     serializer = TripSerializer(trips, many=True)
     return Response(serializer.data)
@@ -797,6 +800,47 @@ def admin_india_config(request):
 
 
 # ─── North India Trips ────────────────────────────────────────────────────────
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def girls_trips(request):
+    """Return active All Girls Group trips for the scrolling showcase section."""
+    config = GirlsSectionConfig.load()
+    if not config.is_enabled:
+        return Response({"config": {"is_enabled": False}, "trips": []})
+
+    trips = Trip.objects.filter(
+        is_active=True,
+        is_girls_trip=True,
+        show_in_girls_section=True,
+    ).order_by("-girls_featured_priority", "girls_display_order", "-id")
+
+    config_serializer = GirlsSectionConfigSerializer(config)
+    trip_serializer = GirlsTripSerializer(trips, many=True)
+
+    return Response({
+        "config": config_serializer.data,
+        "trips": trip_serializer.data,
+    })
+
+
+@api_view(["GET", "PATCH"])
+@permission_classes([IsAuthenticated])
+def admin_girls_config(request):
+    """Admin: get or update the girls section configuration."""
+    if not hasattr(request.user, "profile") or request.user.profile.role != "ADMIN":
+        return Response({"detail": "Not authorized"}, status=403)
+
+    config = GirlsSectionConfig.load()
+
+    if request.method == "GET":
+        serializer = GirlsSectionConfigSerializer(config)
+        return Response(serializer.data)
+
+    serializer = GirlsSectionConfigSerializer(config, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data)
 
 @api_view(["GET"])
 @permission_classes([AllowAny])

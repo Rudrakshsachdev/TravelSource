@@ -22,6 +22,7 @@ from .community_serializer import CommunityTripSerializer, CommunitySectionConfi
 from .festival_serializer import FestivalTripSerializer, FestivalSectionConfigSerializer
 from .adventure_serializer import AdventureTripSerializer, AdventureSectionConfigSerializer
 from .biking_serializer import BikingTripSerializer, BikingSectionConfigSerializer
+from .girls_trip_serializer import GirlsTripSerializer, GirlsSectionConfigSerializer
 from .category_serializer import CategorySerializer
 
 from .himachal_serializer import HimachalTripSerializer, HimachalSectionConfigSerializer

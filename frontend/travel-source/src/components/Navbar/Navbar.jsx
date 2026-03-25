@@ -43,6 +43,7 @@ const SECTION_ICONS = {
   festival: Star,
   long_weekend: Calendar,
   biking: Bike,
+  girls: Heart,
 };
 const SECTION_LABELS = {
   international: "International Trips",
@@ -56,6 +57,7 @@ const SECTION_LABELS = {
   festival: "Festival Getaways",
   long_weekend: "Long Weekend Trips",
   biking: "Biking Expeditions",
+  girls: "All Girls Group Tours",
 };
 const NAV_SECTION_ORDER = [
   "international",
@@ -69,6 +71,7 @@ const NAV_SECTION_ORDER = [
   "festival",
   "long_weekend",
   "biking",
+  "girls",
 ];
 const SECTION_PATHS = {
   international: "/international-trips",
@@ -82,6 +85,7 @@ const SECTION_PATHS = {
   festival: "/festival-getaways",
   long_weekend: "/long-weekend-trips",
   biking: "/biking-trips",
+  girls: "/all-girls-group-tours",
 };
 const DESKTOP_PRIMARY_MENU_LIMIT = 4;
 
@@ -175,6 +179,7 @@ const Navbar = () => {
           community,
           festival,
           long_weekend,
+          girls,
         } = await fetchNavbarContent();
 
         setTripsCount(trips.length);
@@ -190,6 +195,7 @@ const Navbar = () => {
           community,
           festival,
           long_weekend,
+          girls,
         };
 
         const tripTypeMenus = NAV_SECTION_ORDER.map((sectionKey) => {

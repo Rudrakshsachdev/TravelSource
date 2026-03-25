@@ -88,6 +88,10 @@ const AdminTrips = () => {
     show_in_long_weekend_section: false,
     long_weekend_display_order: 0,
     long_weekend_featured_priority: 0,
+    is_girls_trip: false,
+    show_in_girls_section: false,
+    girls_display_order: 0,
+    girls_featured_priority: 0,
     overview: "",
     pickup_location: "",
     drop_location: "",
@@ -286,6 +290,10 @@ const AdminTrips = () => {
       show_in_long_weekend_section: trip.show_in_long_weekend_section || false,
       long_weekend_display_order: trip.long_weekend_display_order || 0,
       long_weekend_featured_priority: trip.long_weekend_featured_priority || 0,
+      is_girls_trip: trip.is_girls_trip || false,
+      show_in_girls_section: trip.show_in_girls_section || false,
+      girls_display_order: trip.girls_display_order || 0,
+      girls_featured_priority: trip.girls_featured_priority || 0,
       category: trip.category || "",
       is_featured: trip.is_featured || false,
       featured_highlights: Array.isArray(trip.featured_highlights) ? trip.featured_highlights : [],
@@ -370,6 +378,10 @@ const AdminTrips = () => {
       show_in_long_weekend_section: false,
       long_weekend_display_order: 0,
       long_weekend_featured_priority: 0,
+      is_girls_trip: false,
+      show_in_girls_section: false,
+      girls_display_order: 0,
+      girls_featured_priority: 0,
       category: "",
       is_featured: false,
       featured_highlights: [],
@@ -453,6 +465,8 @@ const AdminTrips = () => {
         monsoon_featured_priority: Number(formData.monsoon_featured_priority) || 0,
         festival_display_order: Number(formData.festival_display_order) || 0,
         festival_featured_priority: Number(formData.festival_featured_priority) || 0,
+        girls_display_order: Number(formData.girls_display_order) || 0,
+        girls_featured_priority: Number(formData.girls_featured_priority) || 0,
         itinerary,
 
         highlights,
@@ -1764,6 +1778,86 @@ const AdminTrips = () => {
                 </div>
               </div>
 
+              {/* ALL GIRLS GROUP SHOWCASE SETTINGS */}
+              <div className={styles.formSection}>
+                <h3 className={styles.sectionTitle}>
+                  <svg className={styles.sectionIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z" />
+                    <path d="M12 7v10" />
+                    <path d="M8 12h8" />
+                  </svg>
+                  All Girls Group Showcase
+                </h3>
+
+                <div className={styles.formGrid}>
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        name="is_girls_trip"
+                        checked={formData.is_girls_trip}
+                        onChange={handleCheckboxChange}
+                        style={{ width: "18px", height: "18px", accentColor: "#ff69b4" }}
+                      />
+                      All Girls Group Trip
+                    </label>
+                    <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
+                      Mark this trip as an exclusively for girls tour
+                    </span>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}>
+                      <input
+                        type="checkbox"
+                        name="show_in_girls_section"
+                        checked={formData.show_in_girls_section}
+                        onChange={handleCheckboxChange}
+                        style={{ width: "18px", height: "18px", accentColor: "#ff69b4" }}
+                      />
+                      Show in Scrolling Section
+                    </label>
+                    <span style={{ fontSize: "0.8rem", color: "#6b7280", marginTop: "4px" }}>
+                      Display in the auto-scrolling Girls Trips showcase
+                    </span>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Display Order</label>
+                    <div className={styles.inputWrapper}>
+                      <svg className={styles.inputIcon} viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" />
+                      </svg>
+                      <input
+                        className={styles.input}
+                        name="girls_display_order"
+                        type="number"
+                        placeholder="0"
+                        value={formData.girls_display_order}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.inputLabel}>Featured Priority</label>
+                    <div className={styles.inputWrapper}>
+                      <svg className={styles.inputIcon} viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <input
+                        className={styles.input}
+                        name="girls_featured_priority"
+                        type="number"
+                        placeholder="0"
+                        value={formData.girls_featured_priority}
+                        onChange={handleChange}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* BACKPACKING SHOWCASE SETTINGS */}
               <div className={styles.formSection}>
                 <h3 className={styles.sectionTitle}>
@@ -2853,6 +2947,7 @@ const AdminTrips = () => {
                     { name: "is_community_trip", label: "Community" },
                     { name: "is_festival_trip", label: "Festival" },
                     { name: "is_adventure_trip", label: "Adventure" },
+                    { name: "is_girls_trip", label: "Girls Trip" },
                   ].map((field) => (
                     <label key={field.name} className={styles.checkboxLabel} style={{ background: "#f8fafc", padding: "10px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
                       <input
@@ -3181,8 +3276,21 @@ const AdminTrips = () => {
                             🎆 Festival
                           </span>
                         )}
-
-
+                        {trip.is_girls_trip && (
+                          <span
+                            className={styles.metaItem}
+                            style={{
+                              background: "rgba(255, 105, 180, 0.1)",
+                              color: "#ff69b4",
+                              padding: "2px 8px",
+                              borderRadius: "12px",
+                              fontSize: "0.75rem",
+                              fontWeight: 600,
+                            }}
+                          >
+                            👭 Girls Trip
+                          </span>
+                        )}
                       </div>
                     </div>
 

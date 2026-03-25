@@ -19,6 +19,7 @@ import HimachalTrips from "./HimachalTrips";
 import UttarakhandTrips from "./UttarakhandTrips";
 import NorthIndiaTrips from "./NorthIndiaTrips";
 import HoneymoonTrips from "./HoneymoonTrips";
+import GirlsTrips from "./GirlsTrips";
 import HimalayanTreks from "./HimalayanTreks";
 import BackpackingTrips from "./BackpackingTrips";
 import SummerTreks from "./SummerTreks";
@@ -272,6 +273,7 @@ const TripsList = () => {
       <HimachalTrips />
       <UttarakhandTrips />
       <HoneymoonTrips />
+      <GirlsTrips />
       <HimalayanTreks />
       <BackpackingTrips />
       <SummerTreks />

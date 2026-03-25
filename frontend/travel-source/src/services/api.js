@@ -1180,6 +1180,7 @@ export const fetchNavbarContent = async () => {
     communityData,
     festivalData,
     longWeekendData,
+    girlsData,
   ] = await Promise.allSettled([
     fetchTrips(),
     fetchCategories(),
@@ -1194,6 +1195,7 @@ export const fetchNavbarContent = async () => {
     fetchCommunityTrips(),
     fetchFestivalTrips(),
     fetchLongWeekendTrips(),
+    fetchGirlsTrips(),
   ]);
 
   return {
@@ -1240,6 +1242,10 @@ export const fetchNavbarContent = async () => {
     long_weekend:
       longWeekendData.status === "fulfilled"
         ? longWeekendData.value
+        : { config: { is_enabled: false }, trips: [] },
+    girls:
+      girlsData.status === "fulfilled"
+        ? girlsData.value
         : { config: { is_enabled: false }, trips: [] },
   };
 };
@@ -1410,3 +1416,39 @@ export const updateBikingConfig = async (data) => {
   if (!res.ok) throw new Error("Failed to update Biking config");
   return res.json();
 };
+
+export const fetchGirlsTrips = async () => {
+    const res = await fetch(`${API_BASE_URL}/v1/trips/girls/`);
+    if (!res.ok) throw new Error("Failed to fetch Girls Trips showcase");
+    return res.json();
+};
+
+export const fetchAllGirlsTrips = async () => {
+    const res = await fetch(`${API_BASE_URL}/v1/trips/?is_girls_trip=true`);
+    if (!res.ok) throw new Error("Failed to fetch all Girls Trips");
+    return res.json();
+};
+
+export const fetchGirlsConfig = async () => {
+    const token = localStorage.getItem("accessToken");
+    const res = await fetch(`${API_BASE_URL}/v1/admin/girls-config/`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) throw new Error("Failed to fetch Girls Trips config");
+    return res.json();
+};
+
+export const updateGirlsConfig = async (data) => {
+    const token = localStorage.getItem("accessToken");
+    const res = await fetch(`${API_BASE_URL}/v1/admin/girls-config/`, {
+        method: "PATCH",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error("Failed to update Girls Trips config");
+    return res.json();
+};
+
