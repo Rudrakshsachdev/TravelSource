@@ -1,0 +1,408 @@
+/* ═══════════════════════════════════════════════════════════════
+   HeroPremium.module.css — Mobile-first cinematic hero
+   Brand: #3b82f6 · #2563eb · #1d4ed8
+   *** NO :root variables — all values are inline to avoid
+       CSS variable conflicts across modules ***
+   ═══════════════════════════════════════════════════════════════ */
+
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+
+/* ─────────────────────────────────────────
+   BASE (MOBILE-FIRST)
+   ───────────────────────────────────────── */
+
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Background ── */
+.bgWrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.bgImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  opacity: 0;
+  transition: opacity 1.4s ease;
+  will-change: opacity;
+}
+
+.bgOn { opacity: 1; }
+
+/* ── Overlay ── */
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg,
+      rgba(29,78,216,0.78) 0%,
+      rgba(37,99,235,0.58) 35%,
+      rgba(59,130,246,0.42) 55%,
+      rgba(29,78,216,0.62) 80%,
+      rgba(30,64,175,0.82) 100%);
+}
+
+/* ── Content ── */
+.inner {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 80px 16px 24px;
+  gap: 0;
+}
+
+/* ── Badge ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.4px;
+  margin-bottom: 12px;
+  /* anim */
+  opacity: 0;
+  transform: translateY(12px);
+  transition: all 0.5s ease 0.05s;
+}
+
+.badge svg { color: #e8c981; }
+
+/* ── Heading ── */
+.heading {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.18;
+  letter-spacing: -0.2px;
+  margin: 0 0 8px 0;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.12);
+  /* anim */
+  opacity: 0;
+  transform: translateY(16px);
+  transition: all 0.6s ease 0.12s;
+}
+
+.glow {
+  font-style: italic;
+  background: linear-gradient(135deg, #e8c981 0%, #d4a853 35%, #fff 65%, rgba(196,210,250,0.9) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 100%;
+  animation: shimmer 6s ease-in-out infinite alternate;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* ── Subtext ── */
+.sub {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: rgba(255,255,255,0.82);
+  line-height: 1.5;
+  max-width: 290px;
+  margin: 0 0 14px 0;
+  /* anim */
+  opacity: 0;
+  transform: translateY(14px);
+  transition: all 0.6s ease 0.2s;
+}
+
+/* ── CTAs ── */
+.ctas {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 14px;
+  /* anim */
+  opacity: 0;
+  transform: translateY(12px);
+  transition: all 0.6s ease 0.28s;
+}
+
+.ctaMain {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: #fff;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(37,99,235,0.30);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ctaMain:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(37,99,235,0.40);
+}
+
+.arrow {
+  transition: transform 0.2s ease;
+}
+.ctaMain:hover .arrow {
+  transform: translateX(3px);
+}
+
+.ctaAlt {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid rgba(255,255,255,0.30);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.07);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #fff;
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-size: 13px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ctaAlt:hover {
+  background: rgba(255,255,255,0.13);
+  border-color: rgba(255,255,255,0.50);
+}
+
+/* ── Search Wrap ── */
+.searchWrap {
+  width: 100%;
+  margin-bottom: 14px;
+  /* anim */
+  opacity: 0;
+  transform: translateY(14px);
+  transition: all 0.7s ease 0.36s;
+}
+
+/* ── Trust Stats ── */
+.stats {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  gap: 0;
+  padding-bottom: 6px;
+  /* anim */
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.6s ease 0.48s;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.statNum {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.4px;
+}
+
+.statTxt {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  font-size: 9px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.2px;
+}
+
+/* ── Scroll Indicator ── */
+.scrollBtn {
+  display: none; /* hidden on mobile */
+}
+
+/* ── Entrance ── */
+.show .badge,
+.show .heading,
+.show .sub,
+.show .ctas,
+.show .searchWrap,
+.show .stats {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─────────────────────────────────────────
+   TABLET (≥ 600px)
+   ───────────────────────────────────────── */
+@media (min-width: 600px) {
+  .inner {
+    padding: 100px 24px 32px;
+  }
+
+  .heading {
+    font-size: 2.2rem;
+  }
+
+  .sub {
+    font-size: 0.9rem;
+    max-width: 420px;
+    margin-bottom: 18px;
+  }
+
+  .ctas {
+    max-width: 420px;
+    margin-bottom: 20px;
+  }
+
+  .ctaMain, .ctaAlt {
+    padding: 13px 20px;
+    font-size: 14px;
+  }
+
+  .statNum {
+    font-size: 20px;
+  }
+
+  .statTxt {
+    font-size: 11px;
+  }
+
+  .badge {
+    font-size: 12px;
+    padding: 8px 18px;
+    margin-bottom: 18px;
+  }
+}
+
+/* ─────────────────────────────────────────
+   DESKTOP (≥ 1024px)
+   ───────────────────────────────────────── */
+@media (min-width: 1024px) {
+  .hero {
+    min-height: 100vh;
+  }
+
+  .inner {
+    flex: 1;
+    justify-content: center;
+    padding: 140px 32px 60px;
+  }
+
+  .badge {
+    padding: 10px 22px;
+    font-size: 13px;
+    margin-bottom: 32px;
+  }
+
+  .heading {
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    margin-bottom: 24px;
+  }
+
+  .sub {
+    font-size: 1.08rem;
+    max-width: 600px;
+    margin-bottom: 32px;
+    line-height: 1.7;
+  }
+
+  .ctas {
+    max-width: 440px;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .ctaMain {
+    padding: 16px 36px;
+    font-size: 15px;
+    border-radius: 12px;
+    box-shadow: 0 8px 28px rgba(37,99,235,0.35);
+  }
+
+  .ctaAlt {
+    padding: 15px 32px;
+    font-size: 15px;
+    border-radius: 12px;
+  }
+
+  .searchWrap {
+    max-width: 840px;
+    margin-bottom: 40px;
+  }
+
+  .stats {
+    gap: 48px;
+    justify-content: center;
+  }
+
+  .statNum {
+    font-size: 24px;
+  }
+
+  .statTxt {
+    font-size: 12.5px;
+  }
+
+  /* Scroll indicator — visible on desktop */
+  .scrollBtn {
+    display: block;
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    border: 0;
+    background: transparent;
+    color: rgba(255,255,255,0.45);
+    cursor: pointer;
+    padding: 8px;
+    animation: bob 2s ease-in-out infinite;
+  }
+
+  .scrollBtn:hover {
+    color: #fff;
+  }
+
+  @keyframes bob {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50%     { transform: translateX(-50%) translateY(8px); }
+  }
+}

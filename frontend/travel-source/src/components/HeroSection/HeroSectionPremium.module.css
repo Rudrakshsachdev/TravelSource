@@ -394,121 +394,69 @@
 
 @media (max-width: 768px) {
   .hero {
-    min-height: 100vh;
+    min-height: auto;
   }
 
   .content {
-    padding: 115px 20px 36px;
+    padding: 88px 16px 24px;
     justify-content: flex-start;
-    padding-top: 120px;
+    gap: 0;
   }
 
   .badge {
-    margin-bottom: 24px;
-    font-size: 12px;
-    padding: 8px 18px;
-  }
-
-  .heading {
-    font-size: clamp(1.9rem, 7vw, 2.6rem);
-    margin-bottom: 18px;
-  }
-
-  .subtext {
-    font-size: 0.92rem;
-    max-width: 420px;
-    margin-bottom: 22px;
-    line-height: 1.6;
-  }
-
-  .ctaRow {
-    margin-bottom: 28px;
-    gap: 12px;
-  }
-
-  .ctaPrimary,
-  .ctaSecondary {
-    padding: 13px 26px;
-    font-size: 14px;
-    border-radius: 11px;
-  }
-
-  .searchSection {
-    margin-bottom: 32px;
-    max-width: 100%;
-  }
-
-  .trustBar {
-    gap: 24px;
-    width: 100%;
-    justify-content: space-around;
-  }
-
-  .trustNumber {
-    font-size: 20px;
-  }
-
-  .trustLabel {
+    margin-bottom: 12px;
     font-size: 11px;
-  }
-
-  .scrollIndicator {
-    bottom: 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  .content {
-    padding: 108px 14px 28px;
-  }
-
-  .badge {
-    font-size: 11px;
-    padding: 7px 14px;
-    margin-bottom: 20px;
+    padding: 6px 14px;
     gap: 6px;
   }
 
   .heading {
-    font-size: 1.7rem;
-    margin-bottom: 14px;
-    letter-spacing: -0.2px;
+    font-size: 1.75rem;
+    margin-bottom: 10px;
+    line-height: 1.2;
   }
 
   .subtext {
-    font-size: 0.85rem;
-    margin-bottom: 18px;
-    max-width: 320px;
-    line-height: 1.55;
+    font-size: 0.82rem;
+    max-width: 340px;
+    margin-bottom: 16px;
+    line-height: 1.5;
   }
 
   .ctaRow {
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 22px;
+    margin-bottom: 16px;
+    gap: 8px;
+    flex-direction: row;
     width: 100%;
   }
 
-  .ctaPrimary,
-  .ctaSecondary {
-    width: 100%;
+  .ctaPrimary {
+    flex: 1;
     justify-content: center;
-    padding: 13px 20px;
-    font-size: 13.5px;
+    padding: 11px 16px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+
+  .ctaSecondary {
+    flex: 1;
+    justify-content: center;
+    padding: 11px 16px;
+    font-size: 13px;
+    border-radius: 10px;
   }
 
   .searchSection {
-    margin-bottom: 24px;
+    margin-bottom: 16px;
+    max-width: 100%;
   }
 
-  /* Trust stats as 2×2 grid on small mobile */
   .trustBar {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px 12px;
+    display: flex;
+    gap: 0;
     width: 100%;
-    max-width: 280px;
-    margin: 0 auto;
+    justify-content: space-evenly;
+    padding-bottom: 8px;
   }
 
   .trustItem {
@@ -516,11 +464,12 @@
   }
 
   .trustNumber {
-    font-size: 18px;
+    font-size: 17px;
   }
 
   .trustLabel {
-    font-size: 10.5px;
+    font-size: 9.5px;
+    letter-spacing: 0.2px;
   }
 
   .scrollIndicator {
@@ -528,3 +477,60 @@
   }
 }
 
+@media (max-width: 480px) {
+  .content {
+    padding: 80px 14px 20px;
+  }
+
+  .badge {
+    font-size: 10px;
+    padding: 5px 12px;
+    margin-bottom: 10px;
+    gap: 4px;
+  }
+
+  .heading {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+  }
+
+  .subtext {
+    font-size: 0.78rem;
+    margin-bottom: 12px;
+    max-width: 280px;
+    line-height: 1.45;
+  }
+
+  .ctaRow {
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .ctaPrimary {
+    padding: 10px 12px;
+    font-size: 12.5px;
+  }
+
+  .ctaSecondary {
+    padding: 10px 12px;
+    font-size: 12.5px;
+  }
+
+  .searchSection {
+    margin-bottom: 12px;
+  }
+
+  .trustBar {
+    justify-content: space-around;
+    padding-bottom: 4px;
+  }
+
+  .trustNumber {
+    font-size: 15px;
+  }
+
+  .trustLabel {
+    font-size: 9px;
+  }
+}

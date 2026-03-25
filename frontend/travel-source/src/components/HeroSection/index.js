@@ -1,1 +1,1 @@
-export { default as HeroSection } from "./HeroSectionPremium";
+export { default as HeroSection } from "./HeroPremium";
