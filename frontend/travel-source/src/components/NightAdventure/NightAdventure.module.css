@@ -115,6 +115,19 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-bottom: -4px;
+  gap: 12px;
+}
+
+.cardMeta span:first-child {
+  flex-shrink: 0;
+}
+
+.cardMeta span:last-child {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: right;
+  flex: 1;
 }
 
 .cardTitle {
@@ -156,12 +169,12 @@
 }
 
 @media (max-width: 1024px) {
-  .section { padding: 80px 40px; }
+  .section { padding: 80px 40px 100px; }
   .grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
 }
 
 @media (max-width: 768px) {
-  .section { padding: 60px 20px; min-height: auto; }
+  .section { padding: 80px 20px 100px; min-height: auto; }
   .header { margin-bottom: 40px; }
   .heading { font-size: 2.4rem; }
   .subheading { font-size: 1rem; }
@@ -171,7 +184,7 @@
 }
 
 @media (max-width: 480px) {
-  .section { padding: 40px 16px; }
+  .section { padding: 80px 16px 100px; }
   .eyebrow { font-size: 0.75rem; letter-spacing: 0.2em; }
   .heading { font-size: 1.85rem; line-height: 1.15; }
   .subheading { font-size: 0.95rem; }
