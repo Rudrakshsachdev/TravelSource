@@ -118,11 +118,6 @@ const MobileNavbar = ({ isOpen, onClose }) => {
         <div className={styles.header}>
           <div className={styles.logoWrap} onClick={() => handleAction("/")}>
             <img src={tpLogo} alt="Travel Professor" className={styles.logo} />
-            <div className={styles.brandText}>
-              {/* Optional brand text if logo image doesn't include it */}
-              <span className={styles.brandTitle}>Travel Professor</span>
-              <span className={styles.brandSubtitle}>A SOCIAL TRAVEL COMMUNITY</span>
-            </div>
           </div>
           <div className={styles.headerActions}>
             <a href="tel:+919797972175" className={styles.iconBtn} aria-label="Call us">
@@ -200,7 +195,7 @@ const MobileNavbar = ({ isOpen, onClose }) => {
 
           <a href="tel:+919797972175" className={styles.contactCard}>
             <div className={styles.contactIconWrap}>
-              <Phone size={20} color="#fff" fill="#fff" />
+              <Phone size={20} fill="currentColor" />
             </div>
             <div className={styles.contactInfo}>
               <span className={styles.contactLabel}>Call Us</span>
